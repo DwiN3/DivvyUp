@@ -28,9 +28,9 @@ public class Person {
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "receipt_count")
-    private int receiptCount;
+    @Column(name = "receipts_count")
+    private int receiptsCount;
 
-    @Column(name = "total_amount")
-    private Double totalAmount;
+    @Column(name = "total_purchase_amount")
+    private Double totalPurchaseAmount;
 }

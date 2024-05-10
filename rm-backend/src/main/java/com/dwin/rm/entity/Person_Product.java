@@ -26,8 +26,8 @@ public class Person_Product {
     @JoinColumn(name = "person_id")
     private Person personId;
 
-    @Column(name = "parts_count", nullable = false)
-    private int partsCount;
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
 
     @Column(name = "is_compensation", nullable = false)
     private boolean isCompensation;

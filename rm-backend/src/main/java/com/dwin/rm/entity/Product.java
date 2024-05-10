@@ -35,6 +35,6 @@ public class Product {
     @Column(name = "parts_amount")
     private boolean divisible;
 
-    @Column(name = "parts_count")
-    private int partsCount;
+    @Column(name = "max_quantity")
+    private int maxQuantity;
 }
