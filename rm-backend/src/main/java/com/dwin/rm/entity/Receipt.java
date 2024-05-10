@@ -5,32 +5,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "person")
-public class Person {
-
+@Table(name = "receipt")
+public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "person_id")
-    private int personId;
+    @Column(name = "receipt_id")
+    private int receiptId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "receipt_name", nullable = false)
+    private String receiptName;
 
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "date")
+    private Date date;
 
-    @Column(name = "receipt_count")
-    private int receiptCount;
-
-    @Column(name = "total_amount")
+    @Column(name = "total_amount", nullable = false)
     private Double totalAmount;
 }
