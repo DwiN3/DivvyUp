@@ -1,4 +1,5 @@
 package com.dwin.rm.entity;
+import com.dwin.rm.security.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
