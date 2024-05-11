@@ -9,20 +9,20 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/rm/")
+@RequestMapping("/rm/auth/")
 public class AuthenticationController {
 
     private final AuthenticationService service;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request){
-        ResponseEntity<TokenResponse> response = service.register(request);
+        ResponseEntity<AuthenticationResponse> response = service.register(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
-    @PostMapping("/auth")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request){
-        ResponseEntity<TokenResponse> response = service.auth(request);
+        ResponseEntity<AuthenticationResponse> response = service.auth(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 }

@@ -24,7 +24,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<TokenResponse> register(RegisterRequest request) {
+    public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
         } else if (repository.findByUsername(request.getUsername()).isPresent()) {
@@ -41,10 +41,10 @@ public class AuthenticationService {
         repository.save(user);
 
         var jwtToken = jwtService.generateTokem(user);
-        return ResponseEntity.ok(TokenResponse.builder().token(jwtToken).build());
+        return ResponseEntity.ok(AuthenticationResponse.builder().token(jwtToken).build());
     }
 
-    public ResponseEntity<TokenResponse> auth(AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> auth(AuthenticationRequest request) {
         try {
 
             if(!repository.findByUsername(request.getUsername()).isPresent()){
@@ -62,7 +62,7 @@ public class AuthenticationService {
             var user = repository.findByUsername(request.getUsername()).orElseThrow();
 
             var jwtToken = jwtService.generateTokem(user);
-            return ResponseEntity.ok(TokenResponse.builder().token(jwtToken).build());
+            return ResponseEntity.ok(AuthenticationResponse.builder().token(jwtToken).build());
 
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
