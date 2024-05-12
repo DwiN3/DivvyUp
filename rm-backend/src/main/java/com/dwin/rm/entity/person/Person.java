@@ -1,13 +1,10 @@
-package com.dwin.rm.entity;
+package com.dwin.rm.entity.person;
 import com.dwin.rm.security.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -19,9 +16,8 @@ public class Person {
     @Column(name = "person_id")
     private int personId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User userId;
+    @Column(name = "added_by_user_id")
+    private int addedByUserId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -34,4 +30,6 @@ public class Person {
 
     @Column(name = "total_purchase_amount")
     private Double totalPurchaseAmount;
+
+
 }
