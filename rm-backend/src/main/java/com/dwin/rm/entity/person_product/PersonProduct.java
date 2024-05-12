@@ -8,22 +8,28 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "person_product")
-public class Person_Product {
+public class PersonProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_product_id")
     private int personProductId;
 
-    @Column(name = "product_id")
+    @Column(name = "added_by_user_id", nullable = false)
+    private int addedByUserId;
+
+    @Column(name = "product_id", nullable = false)
     private int productId;
 
-    @Column(name = "person_id")
+    @Column(name = "person_id", nullable = false)
     private int personId;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "part_of_price")
+    private double partOfPrice;
+
+    @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "is_compensation", nullable = false)
+    @Column(name = "is_compensation")
     private boolean isCompensation;
 
     @Column(name = "compensation_amount")

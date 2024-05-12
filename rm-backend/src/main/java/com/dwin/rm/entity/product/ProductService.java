@@ -34,7 +34,7 @@ public class ProductService {
 
         var product = Product.builder()
                 .receiptId(receiptId)
-                .userId(user.getUserId())
+                .addedByUserId(user.getUserId())
                 .productName(request.getProductName())
                 .price(request.getPrice())
                 .packagePrice(request.getPackagePrice())
@@ -58,7 +58,7 @@ public class ProductService {
         }
 
         var product = productOptional.get();
-        if (product.getUserId() != user.getUserId()) {
+        if (product.getAddedByUserId() != user.getUserId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -88,7 +88,7 @@ public class ProductService {
         }
 
         var product = productOptional.get();
-        if (product.getUserId() != user.getUserId()) {
+        if (product.getAddedByUserId() != user.getUserId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -108,7 +108,7 @@ public class ProductService {
         }
 
         var product = productOptional.get();
-        if (product.getUserId() != user.getUserId()) {
+        if (product.getAddedByUserId() != user.getUserId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -129,7 +129,7 @@ public class ProductService {
 
         List<Product> allProducts = productRepository.findAllByReceiptId(receiptId);
         List<Product> userProducts = allProducts.stream()
-                .filter(product -> product.getUserId() == user.getUserId())
+                .filter(product -> product.getAddedByUserId() == user.getUserId())
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(userProducts);

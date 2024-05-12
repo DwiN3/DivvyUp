@@ -17,8 +17,8 @@ public class Product {
     @Column(name = "receipt_id")
     private int receiptId;
 
-    @Column(name = "user_id")
-    private int userId;
+    @Column(name = "added_by_user_id")
+    private int addedByUserId;
 
     @Column(name = "product_name", nullable = false)
     private String productName;
