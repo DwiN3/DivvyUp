@@ -6,6 +6,4 @@ import lombok.Data;
 public class AddPersonRequest {
     private String name;
     private String surname;
-    private int receiptsCount;
-    private double totalPurchaseAmount;
 }

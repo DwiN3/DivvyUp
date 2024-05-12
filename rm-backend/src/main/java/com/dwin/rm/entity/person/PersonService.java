@@ -1,9 +1,9 @@
 package com.dwin.rm.entity.person;
 
+import com.dwin.rm.entity.person.Response.AddPersonResponse;
 import com.dwin.rm.entity.person.Request.AddPersonRequest;
 import com.dwin.rm.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.patterns.PerObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,6 @@ public class PersonService {
                 .addedByUserId(user.getUserId())
                 .name(request.getName())
                 .surname(request.getSurname())
-                .receiptsCount(request.getReceiptsCount())
-                .totalPurchaseAmount(request.getTotalPurchaseAmount())
                 .build();
 
         personRepository.save(person);
@@ -44,11 +42,9 @@ public class PersonService {
         if (existingPerson.getAddedByUserId() != user.getUserId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        // Update person details
+
         existingPerson.setName(request.getName());
         existingPerson.setSurname(request.getSurname());
-        existingPerson.setReceiptsCount(request.getReceiptsCount());
-        existingPerson.setTotalPurchaseAmount(request.getTotalPurchaseAmount());
         personRepository.save(existingPerson);
         return ResponseEntity.ok().build();
     }

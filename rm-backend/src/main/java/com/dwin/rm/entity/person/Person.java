@@ -30,6 +30,4 @@ public class Person {
 
     @Column(name = "total_purchase_amount")
     private Double totalPurchaseAmount;
-
-
 }
