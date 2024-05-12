@@ -1,5 +1,7 @@
 package com.dwin.rm.entity.receipt;
 
+import com.dwin.rm.entity.person_product.PersonProduct;
+import com.dwin.rm.entity.person_product.PersonProductRepository;
 import com.dwin.rm.entity.product.Product;
 import com.dwin.rm.entity.product.ProductRepository;
 import com.dwin.rm.entity.receipt.Request.AddReceiptRequest;
@@ -8,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,6 +21,7 @@ public class ReceiptService {
     private final ReceiptRepository receiptRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final PersonProductRepository personProductRepository;
 
     public ResponseEntity<?> addReceipt(AddReceiptRequest request, String currentUsername) {
         var user = userRepository.findByUsername(currentUsername).orElse(null);
@@ -66,8 +71,16 @@ public class ReceiptService {
         }
 
         List<Product> products = productRepository.findAllByReceiptId(receiptId);
+        List<Integer> productIds = new ArrayList<>();
+        for (Product product : products) {
+            productIds.add(product.getProductId());
+        }
+
+        List<PersonProduct> personProducts = personProductRepository.findAllByProductIdIn(productIds);
+        personProductRepository.deleteAll(personProducts);
         productRepository.deleteAll(products);
         receiptRepository.delete(receipt);
+
         return ResponseEntity.ok().build();
     }
 

@@ -1,6 +1,9 @@
 package com.dwin.rm.entity.product;
 
 
+import com.dwin.rm.entity.person_product.PersonProduct;
+import com.dwin.rm.entity.person_product.PersonProductRepository;
+import com.dwin.rm.entity.person_product.PersonProductService;
 import com.dwin.rm.entity.product.Request.AddProductRequest;
 import com.dwin.rm.entity.receipt.ReceiptRepository;
 import com.dwin.rm.security.user.UserRepository;
@@ -19,6 +22,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final ReceiptRepository receiptRepository;
+    private final PersonProductRepository personProductRepository;
 
     public ResponseEntity<?> addProductToReceipt(int receiptId, AddProductRequest request, String currentUsername) {
         var user = userRepository.findByUsername(currentUsername).orElse(null);
@@ -92,6 +96,9 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
+        List<PersonProduct> personProducts = personProductRepository.findAllByProductId(productId);
+        personProductRepository.deleteAll(personProducts);
+        
         productRepository.delete(product);
         return ResponseEntity.ok().build();
     }
