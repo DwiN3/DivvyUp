@@ -1,31 +1,25 @@
 package com.dwin.rm.entity;
 import com.dwin.rm.entity.person.Person;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "person_product")
 public class Person_Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_product_id")
     private int personProductId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product productId;
+    @Column(name = "product_id")
+    private int productId;
 
-    @ManyToOne
-    @JoinColumn(name = "person_id")
-    private Person personId;
+    @Column(name = "person_id")
+    private int personId;
 
     @Column(name = "quantity", nullable = false)
     private int quantity;

@@ -1,13 +1,9 @@
-package com.dwin.rm.entity;
-import com.dwin.rm.entity.receipt.Receipt;
+package com.dwin.rm.entity.product;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -18,9 +14,11 @@ public class Product {
     @Column(name = "product_id")
     private int productId;
 
-    @ManyToOne
-    @JoinColumn(name = "receipt_id")
-    private Receipt receiptId;
+    @Column(name = "receipt_id")
+    private int receiptId;
+
+    @Column(name = "user_id")
+    private int userId;
 
     @Column(name = "product_name", nullable = false)
     private String productName;
