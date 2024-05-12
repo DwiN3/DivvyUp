@@ -1,5 +1,4 @@
-package com.dwin.rm.entity;
-import com.dwin.rm.entity.person.Person;
+package com.dwin.rm.entity.person_product;
 import jakarta.persistence.*;
 import lombok.*;
 

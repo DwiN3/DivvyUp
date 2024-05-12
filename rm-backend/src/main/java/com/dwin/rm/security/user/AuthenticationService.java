@@ -1,9 +1,10 @@
-package com.dwin.rm.security.auth;
+package com.dwin.rm.security.user;
 
+import com.dwin.rm.security.user.Request.AuthenticationRequest;
+import com.dwin.rm.security.user.Request.RegisterRequest;
+import com.dwin.rm.security.user.Request.RemoveAccountRequest;
+import com.dwin.rm.security.user.Response.AuthenticationResponse;
 import com.dwin.rm.security.config.JwtService;
-import com.dwin.rm.security.user.Role;
-import com.dwin.rm.security.user.User;
-import com.dwin.rm.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +69,24 @@ public class AuthenticationService {
 
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    public ResponseEntity<?> remove(RemoveAccountRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        Optional<User> optionalUser = repository.findByUsername(currentUsername);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                repository.delete(user);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

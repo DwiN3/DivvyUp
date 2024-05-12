@@ -1,10 +1,11 @@
-package com.dwin.rm.security.auth;
+package com.dwin.rm.security.user;
 
+import com.dwin.rm.security.user.Request.RegisterRequest;
+import com.dwin.rm.security.user.Request.AuthenticationRequest;
+import com.dwin.rm.security.user.Request.RemoveAccountRequest;
+import com.dwin.rm.security.user.Response.AuthenticationResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -23,6 +24,12 @@ public class AuthenticationController {
     @PostMapping("/auth")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request){
         ResponseEntity<AuthenticationResponse> response = service.auth(request);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @DeleteMapping("/remove-account")
+    public ResponseEntity<?> removeAccount(@RequestBody RemoveAccountRequest request){
+        ResponseEntity<?> response = service.remove(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 }

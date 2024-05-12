@@ -1,4 +1,4 @@
-package com.dwin.rm.security.auth;
+package com.dwin.rm.security.user.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
