@@ -32,6 +32,27 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
+    public ResponseEntity<?> editPerson(int personId, AddPersonRequest request, String currentUsername) {
+        var user = userRepository.findByUsername(currentUsername).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        var existingPerson = personRepository.findById(personId).orElse(null);
+        if (existingPerson == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        if (existingPerson.getAddedByUserId() != user.getUserId()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        // Update person details
+        existingPerson.setName(request.getName());
+        existingPerson.setSurname(request.getSurname());
+        existingPerson.setReceiptsCount(request.getReceiptsCount());
+        existingPerson.setTotalPurchaseAmount(request.getTotalPurchaseAmount());
+        personRepository.save(existingPerson);
+        return ResponseEntity.ok().build();
+    }
+
     public ResponseEntity<?> removePerson(int personId, String currentUsername) {
         var user = userRepository.findByUsername(currentUsername).orElse(null);
         if (user == null) {
@@ -46,6 +67,21 @@ public class PersonService {
         }
         personRepository.delete(person);
         return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> showPersonById(int personId, String currentUsername) {
+        var user = userRepository.findByUsername(currentUsername).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        var person = personRepository.findById(personId).orElse(null);
+        if (person == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        if (person.getAddedByUserId() != user.getUserId()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(person);
     }
 
     public ResponseEntity<?> showPersons(String currentUsername) {

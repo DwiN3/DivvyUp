@@ -24,11 +24,27 @@ public class PersonController {
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
+    @PutMapping("/edit/{personId}")
+    public ResponseEntity<?> editPerson(@PathVariable int personId, @RequestBody AddPersonRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        ResponseEntity<?> response = personService.editPerson(personId, request, currentUsername);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
     @DeleteMapping("/remove/{personId}")
     public ResponseEntity<?> removePerson(@PathVariable int personId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         ResponseEntity<?> response = personService.removePerson(personId, currentUsername);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @GetMapping("/show/{personId}")
+    public ResponseEntity<?> showPersonById(@PathVariable int personId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        ResponseEntity<?> response = personService.showPersonById(personId, currentUsername);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
