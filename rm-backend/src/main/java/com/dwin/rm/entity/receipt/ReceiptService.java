@@ -1,11 +1,14 @@
 package com.dwin.rm.entity.receipt;
 
+import com.dwin.rm.entity.product.Product;
+import com.dwin.rm.entity.product.ProductRepository;
 import com.dwin.rm.entity.receipt.Request.AddReceiptRequest;
 import com.dwin.rm.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +16,7 @@ public class ReceiptService {
 
     private final ReceiptRepository receiptRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
     public ResponseEntity<?> addReceipt(AddReceiptRequest request, String currentUsername) {
         var user = userRepository.findByUsername(currentUsername).orElse(null);
@@ -60,6 +64,9 @@ public class ReceiptService {
         if (receipt.getAddedByUserId() != user.getUserId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+
+        List<Product> products = productRepository.findAllByReceiptId(receiptId);
+        productRepository.deleteAll(products);
         receiptRepository.delete(receipt);
         return ResponseEntity.ok().build();
     }
