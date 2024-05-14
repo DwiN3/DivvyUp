@@ -19,31 +19,41 @@ public class ReceiptController {
     public ResponseEntity<?> addReceipt(@RequestBody AddReceiptRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.addPerson(request, currentUsername);
+        return receiptService.addReceipt(request, currentUsername);
     }
 
     @PutMapping("/edit/{receiptId}")
     public ResponseEntity<?> editReceipt(@PathVariable int receiptId, @RequestBody AddReceiptRequest request) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return receiptService.editReceipt(receiptId, request, currentUsername);
     }
 
     @DeleteMapping("/remove/{receiptId}")
     public ResponseEntity<?> removeReceipt(@PathVariable int receiptId){
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return receiptService.removeReceipt(receiptId, currentUsername);
     }
 
     @GetMapping("/show/{receiptId}")
     public ResponseEntity<?> showReceiptById(@PathVariable int receiptId) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return receiptService.showReceiptById(receiptId, currentUsername);
     }
 
     @GetMapping("/show-all")
     public ResponseEntity<?> showReceipts(){
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return receiptService.showReceipts(currentUsername);
     }
 
     @PutMapping("/set-total-amount/{receiptId}")
     public ResponseEntity<?> setTotalAmount(@PathVariable int receiptId, @RequestBody SetTotalAmountReceiptRequest request){
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return receiptService.setTotalAmount(receiptId, request, currentUsername);
     }
 }

@@ -2,7 +2,7 @@ package com.dwin.rm.entity.person;
 
 import com.dwin.rm.entity.person.Request.AddPersonRequest;
 import com.dwin.rm.entity.person.Request.SetPersonReceiptsCountsRequest;
-import com.dwin.rm.entity.person.Request.SetPersonTotalPurchaseAmountRequest;
+import com.dwin.rm.entity.person.Request.SetTotalAmountReceiptRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,7 +45,7 @@ public class PersonController {
     }
 
     @PutMapping("/set-total-purchase-amount/{personId}")
-    public ResponseEntity<?> setTotalPurchaseAmount(@PathVariable int personId, @RequestBody SetPersonTotalPurchaseAmountRequest request) {
+    public ResponseEntity<?> setTotalPurchaseAmount(@PathVariable int personId, @RequestBody SetTotalAmountReceiptRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personService.setTotalPurchaseAmount(personId, request, currentUsername);

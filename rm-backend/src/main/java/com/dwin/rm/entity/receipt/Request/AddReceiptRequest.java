@@ -8,4 +8,5 @@ import java.util.Date;
 public class AddReceiptRequest {
     private String receiptName;
     private Date date;
+    private boolean isSettled;
 }

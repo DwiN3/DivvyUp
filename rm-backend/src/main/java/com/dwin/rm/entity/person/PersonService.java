@@ -2,14 +2,13 @@ package com.dwin.rm.entity.person;
 
 import com.dwin.rm.entity.person.Request.AddPersonRequest;
 import com.dwin.rm.entity.person.Request.SetPersonReceiptsCountsRequest;
-import com.dwin.rm.entity.person.Request.SetPersonTotalPurchaseAmountRequest;
+import com.dwin.rm.entity.person.Request.SetTotalAmountReceiptRequest;
 import com.dwin.rm.entity.person.Response.ShowPersonResponse;
 import com.dwin.rm.security.user.User;
 import com.dwin.rm.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -107,7 +106,7 @@ public class PersonService {
         }
     }
 
-    public ResponseEntity<?> setTotalPurchaseAmount(int personId, SetPersonTotalPurchaseAmountRequest request, String username) {
+    public ResponseEntity<?> setTotalPurchaseAmount(int personId, SetTotalAmountReceiptRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
