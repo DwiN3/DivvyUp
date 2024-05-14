@@ -1,4 +1,5 @@
 package com.dwin.rm.entity.receipt;
+import com.dwin.rm.security.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,8 +18,9 @@ public class Receipt {
     @Column(name = "receipt_id")
     private int receiptId;
 
-    @Column(name = "added_by_user_id")
-    private int addedByUserId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "receipt_name", nullable = false)
     private String receiptName;
@@ -28,4 +30,7 @@ public class Receipt {
 
     @Column(name = "total_amount")
     private Double totalAmount;
+
+    @Column(name = "settled")
+    private  boolean settled;
 }

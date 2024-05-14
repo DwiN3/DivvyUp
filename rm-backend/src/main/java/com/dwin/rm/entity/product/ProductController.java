@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/rm")
 public class ProductController {
-
+/*
     private final ProductService productService;
 
     @PostMapping("/receipt/{receiptID}/product/add")
@@ -53,5 +53,5 @@ public class ProductController {
         String currentUsername = authentication.getName();
         ResponseEntity<?> response = productService.showAllProductsFromReceipt(receiptID, currentUsername);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-    }
+    }*/
 }

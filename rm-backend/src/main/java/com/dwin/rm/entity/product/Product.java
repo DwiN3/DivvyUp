@@ -1,4 +1,5 @@
 package com.dwin.rm.entity.product;
+import com.dwin.rm.entity.receipt.Receipt;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,11 +15,9 @@ public class Product {
     @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "receipt_id")
-    private int receiptId;
-
-    @Column(name = "added_by_user_id")
-    private int addedByUserId;
+    @ManyToOne
+    @JoinColumn(name = "receipt_id")
+    private Receipt receipt;
 
     @Column(name = "product_name", nullable = false)
     private String productName;
@@ -34,4 +33,7 @@ public class Product {
 
     @Column(name = "max_quantity")
     private int maxQuantity;
+
+    @Column(name = "settled")
+    private  boolean settled;
 }

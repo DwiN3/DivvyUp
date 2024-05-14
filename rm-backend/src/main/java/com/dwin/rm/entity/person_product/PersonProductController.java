@@ -7,11 +7,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rm")
 public class PersonProductController {
-
+/*
     private final PersonProductService personProductService;
 
     @PostMapping("/product/{productId}/person-product/add")
@@ -45,4 +46,6 @@ public class PersonProductController {
         ResponseEntity<?> response = personProductService.removePersonProductById(personProductId, currentUsername);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
+
+ */
 }

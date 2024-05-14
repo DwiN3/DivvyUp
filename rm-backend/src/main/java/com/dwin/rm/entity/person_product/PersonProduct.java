@@ -1,4 +1,6 @@
 package com.dwin.rm.entity.person_product;
+import com.dwin.rm.entity.person.Person;
+import com.dwin.rm.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,14 +16,13 @@ public class PersonProduct {
     @Column(name = "person_product_id")
     private int personProductId;
 
-    @Column(name = "added_by_user_id", nullable = false)
-    private int addedByUserId;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    @Column(name = "product_id", nullable = false)
-    private int productId;
-
-    @Column(name = "person_id", nullable = false)
-    private int personId;
+    @ManyToOne
+    @JoinColumn(name = "person_id")
+    private Person person;
 
     @Column(name = "part_of_price")
     private double partOfPrice;
@@ -34,4 +35,7 @@ public class PersonProduct {
 
     @Column(name = "compensation_amount")
     private double compensationAmount;
+
+    @Column(name = "settled")
+    private  boolean settled;
 }

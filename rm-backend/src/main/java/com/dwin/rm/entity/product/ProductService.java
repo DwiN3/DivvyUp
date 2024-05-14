@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-
-    private final ProductRepository productRepository;
+   /*
     private final UserRepository userRepository;
     private final ReceiptRepository receiptRepository;
+    private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
 
     public ResponseEntity<?> addProductToReceipt(int receiptId, AddProductRequest request, String currentUsername) {
@@ -38,7 +38,6 @@ public class ProductService {
 
         var product = Product.builder()
                 .receiptId(receiptId)
-                .addedByUserId(user.getUserId())
                 .productName(request.getProductName())
                 .price(request.getPrice())
                 .packagePrice(request.getPackagePrice())
@@ -60,11 +59,8 @@ public class ProductService {
         if (productOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
         var product = productOptional.get();
-        if (product.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        // TODO: Zabezpieczenie czy użytkonik z tokena jest właścicielem
 
         if (request.getProductName() != null) {
             product.setProductName(request.getProductName());
@@ -92,9 +88,7 @@ public class ProductService {
         }
 
         var product = productOptional.get();
-        if (product.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        // TODO: Zabezpieczenie czy użytkonik z tokena jest właścicielem
 
         List<PersonProduct> personProducts = personProductRepository.findAllByProductId(productId);
         personProductRepository.deleteAll(personProducts);
@@ -115,9 +109,7 @@ public class ProductService {
         }
 
         var product = productOptional.get();
-        if (product.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        // TODO: Zabezpieczenie czy użytkonik z tokena jest właścicielem
 
         return ResponseEntity.ok(product);
     }
@@ -135,10 +127,7 @@ public class ProductService {
         }
 
         List<Product> allProducts = productRepository.findAllByReceiptId(receiptId);
-        List<Product> userProducts = allProducts.stream()
-                .filter(product -> product.getAddedByUserId() == user.getUserId())
-                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(userProducts);
-    }
+        return ResponseEntity.ok(allProducts);
+    }*/
 }

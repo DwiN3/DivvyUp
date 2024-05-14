@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PersonProductService {
-
+/*
     private final PersonProductRepository personProductRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
@@ -29,14 +29,10 @@ public class PersonProductService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        var product = productOptional.get();
-        if (product.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        // TODO: Zabezpieczenie czy użytkonik z tokena jest właścicielem
 
         PersonProduct personProduct = new PersonProduct();
         personProduct.setProductId(productId);
-        personProduct.setAddedByUserId(user.getUserId());
         personProduct.setPersonId(request.getPersonId());
         personProduct.setPartOfPrice(request.getPartOfPrice());
         personProduct.setQuantity(request.getQuantity());
@@ -64,10 +60,7 @@ public class PersonProductService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        var product = productOptional.get();
-        if (product.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        // TODO: Zabezpieczenie czy użytkonik z tokena jest właścicielem
 
         personProductRepository.delete(personProduct);
         return ResponseEntity.ok().build();
@@ -84,10 +77,7 @@ public class PersonProductService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        var product = productOptional.get();
-        if (product.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        // TODO: Zabezpieczenie czy użytkonik z tokena jest właścicielem
 
         List<PersonProduct> persons = personProductRepository.findAllByProductId(productId);
         return ResponseEntity.ok(persons);
@@ -110,11 +100,8 @@ public class PersonProductService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        var product = productOptional.get();
-        if (product.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        // TODO: Zabezpieczenie czy użytkonik z tokena jest właścicielem
 
         return ResponseEntity.ok(personProduct);
-    }
+    }*/
 }

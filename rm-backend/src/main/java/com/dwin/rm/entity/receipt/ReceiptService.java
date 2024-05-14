@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ReceiptService {
-
+/*
     private final ReceiptRepository receiptRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
@@ -123,5 +123,5 @@ public class ReceiptService {
         receipt.setTotalAmount(totalAmount);
         receiptRepository.save(receipt);
         return ResponseEntity.ok().build();
-    }
+    }*/
 }

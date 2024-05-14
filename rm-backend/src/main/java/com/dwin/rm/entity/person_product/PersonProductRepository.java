@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PersonProductRepository extends JpaRepository<PersonProduct, Integer> {
-    List<PersonProduct> findAllByProductId(int productId);
-    List<PersonProduct> findAllByProductIdIn(List<Integer> productIds);
+public interface PersonProductRepository {
+
 }

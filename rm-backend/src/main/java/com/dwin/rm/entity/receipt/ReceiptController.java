@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/rm/receipt")
 public class ReceiptController {
-
+/*
     private final ReceiptService service;
 
     @PostMapping("/add")
@@ -63,5 +63,5 @@ public class ReceiptController {
         String currentUsername = authentication.getName();
         ResponseEntity<?> response = service.setTotalAmount(receiptId, request.getTotalAmount(), currentUsername);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-    }
+    }*/
 }

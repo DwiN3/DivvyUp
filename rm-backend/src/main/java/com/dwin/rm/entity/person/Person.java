@@ -1,5 +1,6 @@
 package com.dwin.rm.entity.person;
 import com.dwin.rm.security.user.User;
+import com.dwin.rm.security.user.UserRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,14 +11,14 @@ import lombok.*;
 @Entity
 @Table(name = "person")
 public class Person {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id")
     private int personId;
 
-    @Column(name = "added_by_user_id")
-    private int addedByUserId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "name", nullable = false)
     private String name;

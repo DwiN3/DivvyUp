@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PersonService {
 
-    private final PersonRepository personRepository;
+    /*private final PersonRepository personRepository;
     private final UserRepository userRepository;
 
     public ResponseEntity<?> addPerson(AddPersonRequest request, String currentUsername) {
@@ -74,9 +74,7 @@ public class PersonService {
         if (person == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        if (person.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+
         return ResponseEntity.ok(person);
     }
 
@@ -121,5 +119,5 @@ public class PersonService {
         person.setTotalPurchaseAmount(totalPurchaseAmount);
         personRepository.save(person);
         return ResponseEntity.ok().build();
-    }
+    }*/
 }
