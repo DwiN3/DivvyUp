@@ -1,123 +1,180 @@
 package com.dwin.rm.entity.person;
 
-import com.dwin.rm.entity.person.Response.AddPersonResponse;
 import com.dwin.rm.entity.person.Request.AddPersonRequest;
+import com.dwin.rm.entity.person.Request.SetPersonReceiptsCountsRequest;
+import com.dwin.rm.entity.person.Request.SetPersonTotalPurchaseAmountRequest;
+import com.dwin.rm.entity.person.Response.ShowPersonResponse;
+import com.dwin.rm.security.user.User;
 import com.dwin.rm.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PersonService {
 
-    /*private final PersonRepository personRepository;
+    private final PersonRepository personRepository;
     private final UserRepository userRepository;
 
-    public ResponseEntity<?> addPerson(AddPersonRequest request, String currentUsername) {
-        var user = userRepository.findByUsername(currentUsername).orElse(null);
-        if (user == null) {
+    public ResponseEntity<?> addPerson(AddPersonRequest request, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Person person = Person.builder()
+                    .user(user)
+                    .name(request.getName())
+                    .surname(request.getSurname())
+                    .receiptsCount(0)
+                    .totalPurchaseAmount(0.0)
+                    .build();
+            personRepository.save(person);
+            return ResponseEntity.ok().build();
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        var person = Person.builder()
-                .addedByUserId(user.getUserId())
-                .name(request.getName())
-                .surname(request.getSurname())
-                .build();
-
-        personRepository.save(person);
-        return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editPerson(int personId, AddPersonRequest request, String currentUsername) {
-        var user = userRepository.findByUsername(currentUsername).orElse(null);
-        if (user == null) {
+    public ResponseEntity<?> editPerson(int personId, AddPersonRequest request, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Optional<Person> optionalPerson = personRepository.findById(personId);
+            if (optionalPerson.isPresent()) {
+                Person person = optionalPerson.get();
+                if (person.getUser().getUsername().equals(username)) {
+                    person.setName(request.getName());
+                    person.setSurname(request.getSurname());
+                    personRepository.save(person);
+                    return ResponseEntity.ok().build();
+                } else {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        var existingPerson = personRepository.findById(personId).orElse(null);
-        if (existingPerson == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        if (existingPerson.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        existingPerson.setName(request.getName());
-        existingPerson.setSurname(request.getSurname());
-        personRepository.save(existingPerson);
-        return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> removePerson(int personId, String currentUsername) {
-        var user = userRepository.findByUsername(currentUsername).orElse(null);
-        if (user == null) {
+    public ResponseEntity<?> removePerson(int personId, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Optional<Person> optionalPerson = personRepository.findById(personId);
+            if (optionalPerson.isPresent()) {
+                Person person = optionalPerson.get();
+                if (person.getUser().getUsername().equals(username)) {
+                    personRepository.delete(person);
+                    return ResponseEntity.ok().build();
+                } else {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        var person = personRepository.findById(personId).orElse(null);
-        if (person == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        if (person.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        personRepository.delete(person);
-        return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> showPersonById(int personId, String currentUsername) {
-        var user = userRepository.findByUsername(currentUsername).orElse(null);
-        if (user == null) {
+    public ResponseEntity<?> setReceiptsCounts(int personId, SetPersonReceiptsCountsRequest request, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Optional<Person> optionalPerson = personRepository.findById(personId);
+            if (optionalPerson.isPresent()) {
+                Person person = optionalPerson.get();
+                if (person.getUser().getUsername().equals(username)) {
+                    person.setReceiptsCount(request.getReceiptsCount());
+                    personRepository.save(person);
+                    return ResponseEntity.ok().build();
+                } else {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        var person = personRepository.findById(personId).orElse(null);
-        if (person == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        return ResponseEntity.ok(person);
     }
 
-    public ResponseEntity<?> showPersons(String currentUsername) {
-        var user = userRepository.findByUsername(currentUsername).orElse(null);
-        if (user == null) {
+    public ResponseEntity<?> setTotalPurchaseAmount(int personId, SetPersonTotalPurchaseAmountRequest request, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Optional<Person> optionalPerson = personRepository.findById(personId);
+            if (optionalPerson.isPresent()) {
+                Person person = optionalPerson.get();
+                if (person.getUser().getUsername().equals(username)) {
+                    person.setTotalPurchaseAmount(request.getTotalPurchaseAmount());
+                    personRepository.save(person);
+                    return ResponseEntity.ok().build();
+                } else {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        var persons = personRepository.findAllByAddedByUserId(user.getUserId());
-        return ResponseEntity.ok(persons);
     }
 
-    public ResponseEntity<?> setReceiptsCounts(int personId, int receiptsCount, String currentUsername) {
-        var user = userRepository.findByUsername(currentUsername).orElse(null);
-        if (user == null) {
+    public ResponseEntity<?> showPersonById(int personId, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Optional<Person> optionalPerson = personRepository.findById(personId);
+            if (optionalPerson.isPresent()) {
+                Person person = optionalPerson.get();
+                if (person.getUser().getUsername().equals(username)) {
+                    ShowPersonResponse response = ShowPersonResponse.builder()
+                            .personId(person.getPersonId())
+                            .name(person.getName())
+                            .surname(person.getSurname())
+                            .receiptsCount(person.getReceiptsCount())
+                            .totalPurchaseAmount(person.getTotalPurchaseAmount())
+                            .build();
+                    return ResponseEntity.ok(response);
+                } else {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                }
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        var person = personRepository.findById(personId).orElse(null);
-        if (person == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        if (person.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        person.setReceiptsCount(receiptsCount);
-        personRepository.save(person);
-        return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setTotalPurchaseAmount(int personId, double totalPurchaseAmount, String currentUsername) {
-        var user = userRepository.findByUsername(currentUsername).orElse(null);
-        if (user == null) {
+    public ResponseEntity<?> showPersons(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            List<Person> persons = personRepository.findByUser(user);
+            List<ShowPersonResponse> responseList = new ArrayList<>();
+            for (Person person : persons) {
+                ShowPersonResponse response = ShowPersonResponse.builder()
+                        .personId(person.getPersonId())
+                        .name(person.getName())
+                        .surname(person.getSurname())
+                        .receiptsCount(person.getReceiptsCount())
+                        .totalPurchaseAmount(person.getTotalPurchaseAmount())
+                        .build();
+                responseList.add(response);
+            }
+            return ResponseEntity.ok(responseList);
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        var person = personRepository.findById(personId).orElse(null);
-        if (person == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        if (person.getAddedByUserId() != user.getUserId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        person.setTotalPurchaseAmount(totalPurchaseAmount);
-        personRepository.save(person);
-        return ResponseEntity.ok().build();
-    }*/
+    }
 }

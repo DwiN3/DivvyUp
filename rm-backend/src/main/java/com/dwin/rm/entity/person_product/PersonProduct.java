@@ -30,12 +30,15 @@ public class PersonProduct {
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "max_quantity")
+    private int maxQuantity;
+
     @Column(name = "is_compensation")
     private boolean isCompensation;
 
     @Column(name = "compensation_amount")
     private double compensationAmount;
 
-    @Column(name = "settled")
-    private  boolean settled;
+    @Column(name = "isSettled")
+    private  boolean isSettled;
 }

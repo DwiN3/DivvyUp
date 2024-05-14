@@ -12,46 +12,32 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/rm")
 public class ProductController {
-/*
+
+
     private final ProductService productService;
 
     @PostMapping("/receipt/{receiptID}/product/add")
     public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptID, @RequestBody AddProductRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        ResponseEntity<?> response = productService.addProductToReceipt(receiptID, request, currentUsername);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        return null;
     }
 
     @PutMapping("/product/edit/{productId}")
     public ResponseEntity<?> editProduct(@PathVariable int productId, @RequestBody AddProductRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        ResponseEntity<?> response = productService.editProduct(productId, request, currentUsername);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        return null;
     }
 
     @DeleteMapping("/product/remove/{productId}")
     public ResponseEntity<?> removeProduct(@PathVariable int productId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        ResponseEntity<?> response = productService.removeProduct(productId, currentUsername);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        return null;
     }
 
     @GetMapping("/product/show/{productId}")
     public ResponseEntity<?> showProduct(@PathVariable int productId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        ResponseEntity<?> response = productService.showProduct(productId, currentUsername);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        return null;
     }
 
     @GetMapping("/receipt/{receiptID}/product/show-all")
     public ResponseEntity<?> showAllProductsFromReceipt(@PathVariable int receiptID) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        ResponseEntity<?> response = productService.showAllProductsFromReceipt(receiptID, currentUsername);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-    }*/
+        return null;
+    }
 }
