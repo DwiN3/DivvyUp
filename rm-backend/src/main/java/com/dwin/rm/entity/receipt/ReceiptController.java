@@ -1,6 +1,7 @@
 package com.dwin.rm.entity.receipt;
 
 import com.dwin.rm.entity.receipt.Request.AddReceiptRequest;
+import com.dwin.rm.entity.receipt.Request.SetIsSettledRequest;
 import com.dwin.rm.entity.receipt.Request.SetTotalAmountReceiptRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +56,12 @@ public class ReceiptController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return receiptService.setTotalAmount(receiptId, request, currentUsername);
+    }
+
+    @PutMapping("/set-is-settled/{receiptId}")
+    public ResponseEntity<?> setIsSettled(@PathVariable int receiptId, @RequestBody SetIsSettledRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return receiptService.setIsSettled(receiptId, request, currentUsername);
     }
 }

@@ -1,10 +1,12 @@
 package com.dwin.rm.entity.receipt;
 
 import com.dwin.rm.entity.receipt.Request.AddReceiptRequest;
+import com.dwin.rm.entity.receipt.Request.SetIsSettledRequest;
 import com.dwin.rm.entity.receipt.Request.SetTotalAmountReceiptRequest;
-import com.dwin.rm.entity.receipt.Request.ShowReceiptRequest;
+import com.dwin.rm.entity.receipt.Response.ShowReceiptResponse;
 import com.dwin.rm.security.user.User;
 import com.dwin.rm.security.user.UserRepository;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +23,12 @@ public class ReceiptService {
     private final UserRepository userRepository;
 
     private ResponseEntity<?> checkUser(String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
+        try {
+            Optional<User> optionalUser = userRepository.findByUsername(username);
+            if (!optionalUser.isPresent()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (MalformedJwtException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return null;
@@ -100,6 +106,24 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
+    public ResponseEntity<?> setIsSettled(int receiptId, SetIsSettledRequest request, String username) {
+        ResponseEntity<?> userCheckResponse = checkUser(username);
+        if (userCheckResponse != null)
+            return userCheckResponse;
+
+        Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
+        if (!optionalReceipt.isPresent())
+            return ResponseEntity.notFound().build();
+
+        Receipt receipt = optionalReceipt.get();
+        if (!receipt.getUser().getUsername().equals(username))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        receipt.setSettled(request.isSettled());
+        receiptRepository.save(receipt);
+        return ResponseEntity.ok().build();
+    }
+
     public ResponseEntity<?> showReceiptById(int receiptId, String username) {
         ResponseEntity<?> userCheckResponse = checkUser(username);
         if (userCheckResponse != null)
@@ -113,7 +137,7 @@ public class ReceiptService {
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        ShowReceiptRequest response = ShowReceiptRequest.builder()
+        ShowReceiptResponse response = ShowReceiptResponse.builder()
                 .receiptId(receipt.getReceiptId())
                 .receiptName(receipt.getReceiptName())
                 .date(receipt.getDate())
@@ -134,9 +158,9 @@ public class ReceiptService {
 
         User user = optionalUser.get();
         List<Receipt> receipts = receiptRepository.findByUser(user);
-        List<ShowReceiptRequest> responseList = new ArrayList<>();
+        List<ShowReceiptResponse> responseList = new ArrayList<>();
         for (Receipt receipt : receipts) {
-            ShowReceiptRequest response = ShowReceiptRequest.builder()
+            ShowReceiptResponse response = ShowReceiptResponse.builder()
                     .receiptId(receipt.getReceiptId())
                     .receiptName(receipt.getReceiptName())
                     .date(receipt.getDate())

@@ -6,6 +6,7 @@ import com.dwin.rm.entity.person.Request.SetTotalAmountReceiptRequest;
 import com.dwin.rm.entity.person.Response.ShowPersonResponse;
 import com.dwin.rm.security.user.User;
 import com.dwin.rm.security.user.UserRepository;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,12 @@ public class PersonService {
     private final UserRepository userRepository;
 
     private ResponseEntity<?> checkUser(String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
+        try {
+            Optional<User> optionalUser = userRepository.findByUsername(username);
+            if (!optionalUser.isPresent()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (MalformedJwtException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return null;
