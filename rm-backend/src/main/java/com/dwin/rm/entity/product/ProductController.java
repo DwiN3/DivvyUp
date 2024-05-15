@@ -2,6 +2,7 @@ package com.dwin.rm.entity.product;
 
 
 import com.dwin.rm.entity.product.Request.AddProductRequest;
+import com.dwin.rm.entity.receipt.Request.SetIsSettledRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,31 +14,45 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/rm")
 public class ProductController {
 
-
     private final ProductService productService;
 
     @PostMapping("/receipt/{receiptID}/product/add")
     public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptID, @RequestBody AddProductRequest request) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.addProductToReceipt(request, receiptID, currentUsername);
     }
 
-    @PutMapping("/product/edit/{productId}")
+  /*  @PutMapping("/product/edit/{productId}")
     public ResponseEntity<?> editProduct(@PathVariable int productId, @RequestBody AddProductRequest request) {
         return null;
-    }
+    }*/
 
     @DeleteMapping("/product/remove/{productId}")
     public ResponseEntity<?> removeProduct(@PathVariable int productId) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.removeProduct(productId, currentUsername);
+    }
+
+    @PutMapping("/product/set-is-settled/{productId}")
+    public ResponseEntity<?> setIsSettled(@PathVariable int productId, @RequestBody SetIsSettledRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.setIsSettled(productId, request, currentUsername);
     }
 
     @GetMapping("/product/show/{productId}")
     public ResponseEntity<?> showProduct(@PathVariable int productId) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.showProductById(productId, currentUsername);
     }
 
     @GetMapping("/receipt/{receiptID}/product/show-all")
-    public ResponseEntity<?> showAllProductsFromReceipt(@PathVariable int receiptID) {
-        return null;
+    public ResponseEntity<?> showProducts(@PathVariable int receiptID) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.showAllProductsFromReceipt(receiptID, currentUsername);
     }
 }

@@ -31,6 +31,9 @@ public class Product {
     @Column(name = "parts_amount")
     private boolean divisible;
 
+    @Column(name = "max_quantity")
+    private int maxQuantity;
+
     @Column(name = "isSettled")
     private  boolean isSettled;
 }

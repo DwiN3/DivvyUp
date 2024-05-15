@@ -30,9 +30,6 @@ public class PersonProduct {
     @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "max_quantity")
-    private int maxQuantity;
-
     @Column(name = "is_compensation")
     private boolean isCompensation;
 

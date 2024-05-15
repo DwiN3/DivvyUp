@@ -52,10 +52,10 @@ public class PersonController {
     }
 
     @GetMapping("/show/{personId}")
-    public ResponseEntity<?> showPersonById(@PathVariable int personId) {
+    public ResponseEntity<?> showPerson(@PathVariable int personId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.showPersonById(personId, currentUsername);
+        return personService.showPerson(personId, currentUsername);
     }
 
     @GetMapping("/show-all")

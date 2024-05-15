@@ -124,7 +124,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> showPersonById(int personId, String username) {
+    public ResponseEntity<?> showPerson(int personId, String username) {
         ResponseEntity<?> userCheckResponse = checkUser(username);
         if (userCheckResponse != null)
             return userCheckResponse;
