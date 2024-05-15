@@ -124,7 +124,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> showReceiptById(int receiptId, String username) {
+    public ResponseEntity<?> showReceipt(int receiptId, String username) {
         ResponseEntity<?> userCheckResponse = checkUser(username);
         if (userCheckResponse != null)
             return userCheckResponse;

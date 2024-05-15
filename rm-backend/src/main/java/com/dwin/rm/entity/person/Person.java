@@ -1,6 +1,5 @@
 package com.dwin.rm.entity.person;
 import com.dwin.rm.security.user.User;
-import com.dwin.rm.security.user.UserRepository;
 import jakarta.persistence.*;
 import lombok.*;
 

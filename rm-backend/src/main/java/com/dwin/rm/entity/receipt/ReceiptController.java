@@ -55,7 +55,7 @@ public class ReceiptController {
     public ResponseEntity<?> showReceipt(@PathVariable int receiptId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.showReceiptById(receiptId, currentUsername);
+        return receiptService.showReceipt(receiptId, currentUsername);
     }
 
     @GetMapping("/show-all")

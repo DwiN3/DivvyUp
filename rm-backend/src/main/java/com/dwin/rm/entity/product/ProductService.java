@@ -129,7 +129,7 @@ public class ProductService {
 
         ShowProductResponse response = ShowProductResponse.builder()
                 .productId(product.getProductId())
-                .receipt(product.getReceipt().getReceiptId())
+                .receiptId(product.getReceipt().getReceiptId())
                 .productName(product.getProductName())
                 .price(product.getPrice())
                 .packagePrice(product.getPackagePrice())
@@ -158,7 +158,7 @@ public class ProductService {
         for (Product product : products) {
             ShowProductResponse response = ShowProductResponse.builder()
                     .productId(product.getProductId())
-                    .receipt(product.getReceipt().getReceiptId())
+                    .receiptId(product.getReceipt().getReceiptId())
                     .productName(product.getProductName())
                     .price(product.getPrice())
                     .packagePrice(product.getPackagePrice())
