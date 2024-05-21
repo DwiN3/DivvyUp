@@ -13,6 +13,5 @@ public class ShowPersonProductResponse {
     private int quantity;
     private int maxQuantity;
     private boolean isCompensation;
-    private double compensationAmount;
     private  boolean isSettled;
 }

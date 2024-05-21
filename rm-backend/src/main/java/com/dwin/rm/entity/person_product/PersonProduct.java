@@ -36,9 +36,6 @@ public class PersonProduct {
     @Column(name = "is_compensation")
     private boolean isCompensation;
 
-    @Column(name = "compensation_amount")
-    private double compensationAmount;
-
     @Column(name = "isSettled")
     private  boolean isSettled;
 }

@@ -10,6 +10,7 @@ public class ShowProductResponse {
     private int receiptId;
     private String productName;
     private Double price;
+    private Double compensationAmount;
     private double packagePrice;
     private boolean divisible;
     private int maxQuantity;

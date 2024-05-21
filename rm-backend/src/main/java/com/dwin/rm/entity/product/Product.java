@@ -34,6 +34,9 @@ public class Product {
     @Column(name = "max_quantity")
     private int maxQuantity;
 
+    @Column(name = "compensation_amount")
+    private double compensationAmount;
+
     @Column(name = "isSettled")
     private  boolean isSettled;
 }

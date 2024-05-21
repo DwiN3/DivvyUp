@@ -50,6 +50,7 @@ public class ProductService {
                 .packagePrice(request.getPackagePrice())
                 .divisible(request.isDivisible())
                 .maxQuantity(request.getMaxQuantity())
+                .compensationAmount(0)
                 .isSettled(false)
                 .build();
 
@@ -128,6 +129,7 @@ public class ProductService {
                 .receiptId(product.getReceipt().getReceiptId())
                 .productName(product.getProductName())
                 .price(product.getPrice())
+                .compensationAmount(product.getCompensationAmount())
                 .packagePrice(product.getPackagePrice())
                 .divisible(product.isDivisible())
                 .maxQuantity(product.getMaxQuantity())
@@ -158,6 +160,7 @@ public class ProductService {
                     .receiptId(product.getReceipt().getReceiptId())
                     .productName(product.getProductName())
                     .price(product.getPrice())
+                    .compensationAmount(product.getCompensationAmount())
                     .packagePrice(product.getPackagePrice())
                     .divisible(product.isDivisible())
                     .maxQuantity(product.getMaxQuantity())

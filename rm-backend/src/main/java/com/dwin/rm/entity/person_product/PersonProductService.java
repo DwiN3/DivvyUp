@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +61,7 @@ public class PersonProductService {
         if(product.isDivisible()){
             personProduct.setQuantity(request.getQuantity());
             personProduct.setMaxQuantity(product.getMaxQuantity());
-            personProduct.setCompensation(request.isCompensation());
+            //personProduct.setCompensation(request.isCompensation());
             double partOfPrice = product.getPrice() * ((double)request.getQuantity() /product.getMaxQuantity());
             personProduct.setPartOfPrice(partOfPrice);
         }
@@ -73,6 +75,7 @@ public class PersonProductService {
         personProductRepository.save(personProduct);
 
         updateTotalPurchaseAmountForPerson(person);
+        updateCompensationAmount(product);
         return ResponseEntity.ok().build();
     }
 
@@ -92,6 +95,7 @@ public class PersonProductService {
         personProductRepository.delete(personProduct);
 
         updateTotalPurchaseAmountForPerson(personProduct.getPerson());
+        updateCompensationAmount(personProduct.getProduct());
         return ResponseEntity.ok().build();
     }
 
@@ -136,7 +140,6 @@ public class PersonProductService {
                 .maxQuantity(personProduct.getMaxQuantity())
                 .quantity(personProduct.getQuantity())
                 .isCompensation(personProduct.isCompensation())
-                .compensationAmount(personProduct.getCompensationAmount())
                 .isSettled(personProduct.isSettled())
                 .build();
         return ResponseEntity.ok(response);
@@ -166,7 +169,6 @@ public class PersonProductService {
                     .quantity(personProduct.getQuantity())
                     .maxQuantity(personProduct.getMaxQuantity())
                     .isCompensation(personProduct.isCompensation())
-                    .compensationAmount(personProduct.getCompensationAmount())
                     .isSettled(personProduct.isSettled())
                     .build();
             responseList.add(response);
@@ -184,7 +186,7 @@ public class PersonProductService {
                 int quantity = personProduct.getQuantity();
                 int maxQuantity = personProduct.getMaxQuantity();
                 boolean isCompensation = personProduct.isCompensation();
-                double compensationAmount = personProduct.getCompensationAmount();
+                double compensationAmount = personProduct.getProduct().getCompensationAmount();
 
                 if (isCompensation) {
                     totalPurchaseAmount += (quantity + compensationAmount) / maxQuantity;
@@ -194,7 +196,22 @@ public class PersonProductService {
             }
         }
 
-        person.setTotalPurchaseAmount(totalPurchaseAmount);
+        BigDecimal compensationRounded = new BigDecimal(totalPurchaseAmount).setScale(2, RoundingMode.UP);
+        person.setTotalPurchaseAmount(compensationRounded.doubleValue());
         personRepository.save(person);
+    }
+
+    public  void updateCompensationAmount(Product product){
+        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+
+        double totalCompensationAmount = product.getPrice();
+
+        for(PersonProduct personProduct : personProducts){
+            totalCompensationAmount -= personProduct.getPartOfPrice();
+        }
+
+        BigDecimal compensationRounded = new BigDecimal(totalCompensationAmount).setScale(2, RoundingMode.UP);
+        product.setCompensationAmount(compensationRounded.doubleValue());
+        productRepository.save(product);
     }
 }
