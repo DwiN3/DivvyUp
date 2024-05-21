@@ -18,31 +18,41 @@ public class ProductController {
 
     @PostMapping("/receipt/{receiptID}/product/add")
     public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptID, @RequestBody AddProductRequest request) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.addProductToReceipt(request, receiptID, currentUsername);
     }
 
-    @PutMapping("/product/edit/{productId}")
+  /*  @PutMapping("/product/edit/{productId}")
     public ResponseEntity<?> editProduct(@PathVariable int productId, @RequestBody AddProductRequest request) {
         return null;
-    }
+    }*/
 
     @DeleteMapping("/product/remove/{productId}")
     public ResponseEntity<?> removeProduct(@PathVariable int productId) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.removeProduct(productId, currentUsername);
     }
 
     @PutMapping("/product/set-is-settled/{productId}")
     public ResponseEntity<?> setIsSettled(@PathVariable int productId, @RequestBody SetIsSettledRequest request){
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.setIsSettled(productId, request, currentUsername);
     }
 
     @GetMapping("/product/show/{productId}")
     public ResponseEntity<?> showProduct(@PathVariable int productId) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.showProductById(productId, currentUsername);
     }
 
     @GetMapping("/receipt/{receiptID}/product/show-all")
     public ResponseEntity<?> showProducts(@PathVariable int receiptID) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return productService.showAllProductsFromReceipt(receiptID, currentUsername);
     }
 }
