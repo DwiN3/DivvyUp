@@ -48,33 +48,31 @@ public class PersonProductService {
         if (!person.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        PersonProduct personProduct;
-        if(product.isDivisible()){
-            personProduct = PersonProduct.builder()
+        PersonProduct personProduct = PersonProduct.builder()
                     .product(product)
                     .person(person)
-                    .partOfPrice(request.getPartOfPrice())
-                    .quantity(request.getQuantity())
                     .maxQuantity(product.getMaxQuantity())
-                    .isCompensation(request.isCompensation())
-                    .compensationAmount(request.getCompensationAmount())
                     .isSettled(false)
                     .build();
+
+
+        if(product.isDivisible()){
+            personProduct.setQuantity(request.getQuantity());
+            personProduct.setMaxQuantity(product.getMaxQuantity());
+            personProduct.setCompensation(request.isCompensation());
+            double partOfPrice = product.getPrice() * ((double)request.getQuantity() /product.getMaxQuantity());
+            personProduct.setPartOfPrice(partOfPrice);
         }
         else{
-            personProduct = PersonProduct.builder()
-                    .product(product)
-                    .person(person)
-                    .partOfPrice(1)
-                    .quantity(1)
-                    .maxQuantity(1)
-                    .isCompensation(true)
-                    .compensationAmount(request.getCompensationAmount())
-                    .isSettled(false)
-                    .build();
+            personProduct.setQuantity(1);
+            personProduct.setMaxQuantity(product.getMaxQuantity());
+            personProduct.setCompensation(true);
+            personProduct.setPartOfPrice(product.getPrice());
         }
 
         personProductRepository.save(personProduct);
+
+        updateTotalPurchaseAmountForPerson(person);
         return ResponseEntity.ok().build();
     }
 
@@ -92,6 +90,8 @@ public class PersonProductService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         personProductRepository.delete(personProduct);
+
+        updateTotalPurchaseAmountForPerson(personProduct.getPerson());
         return ResponseEntity.ok().build();
     }
 
@@ -110,6 +110,8 @@ public class PersonProductService {
 
         personProduct.setSettled(request.isSettled());
         personProductRepository.save(personProduct);
+
+        updateTotalPurchaseAmountForPerson(personProduct.getPerson());
         return ResponseEntity.ok().build();
     }
 
@@ -131,6 +133,7 @@ public class PersonProductService {
                 .productId(personProduct.getProduct().getProductId())
                 .personId(personProduct.getPerson().getPersonId())
                 .partOfPrice(personProduct.getPartOfPrice())
+                .maxQuantity(personProduct.getMaxQuantity())
                 .quantity(personProduct.getQuantity())
                 .isCompensation(personProduct.isCompensation())
                 .compensationAmount(personProduct.getCompensationAmount())
@@ -161,6 +164,7 @@ public class PersonProductService {
                     .personId(personProduct.getPerson().getPersonId())
                     .partOfPrice(personProduct.getPartOfPrice())
                     .quantity(personProduct.getQuantity())
+                    .maxQuantity(personProduct.getMaxQuantity())
                     .isCompensation(personProduct.isCompensation())
                     .compensationAmount(personProduct.getCompensationAmount())
                     .isSettled(personProduct.isSettled())
@@ -170,4 +174,27 @@ public class PersonProductService {
         return ResponseEntity.ok(responseList);
     }
 
+    public void updateTotalPurchaseAmountForPerson(Person person) {
+        List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
+
+        double totalPurchaseAmount = 0.0;
+
+        for (PersonProduct personProduct : personProducts) {
+            if (!personProduct.isSettled()) {
+                int quantity = personProduct.getQuantity();
+                int maxQuantity = personProduct.getMaxQuantity();
+                boolean isCompensation = personProduct.isCompensation();
+                double compensationAmount = personProduct.getCompensationAmount();
+
+                if (isCompensation) {
+                    totalPurchaseAmount += (quantity + compensationAmount) / maxQuantity;
+                } else {
+                    totalPurchaseAmount += quantity / maxQuantity;
+                }
+            }
+        }
+
+        person.setTotalPurchaseAmount(totalPurchaseAmount);
+        personRepository.save(person);
+    }
 }

@@ -24,7 +24,7 @@ public class PersonProduct {
     @JoinColumn(name = "person_id")
     private Person person;
 
-    @Column(name = "part_of_price")
+    @Column(name= "part_of_price")
     private double partOfPrice;
 
     @Column(name = "quantity")

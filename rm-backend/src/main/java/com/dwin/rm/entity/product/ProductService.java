@@ -42,6 +42,7 @@ public class ProductService {
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
+
         Product product = Product.builder()
                 .receipt(receipt)
                 .productName(request.getProductName())
@@ -51,6 +52,12 @@ public class ProductService {
                 .maxQuantity(request.getMaxQuantity())
                 .isSettled(false)
                 .build();
+
+        if(product.isDivisible())
+            product.setMaxQuantity(request.getMaxQuantity());
+        else
+            product.setMaxQuantity(1);
+
         productRepository.save(product);
         return ResponseEntity.ok().build();
     }

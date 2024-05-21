@@ -4,6 +4,8 @@ import com.dwin.rm.entity.person.Request.AddPersonRequest;
 import com.dwin.rm.entity.person.Request.SetPersonReceiptsCountsRequest;
 import com.dwin.rm.entity.person.Request.SetTotalAmountReceiptRequest;
 import com.dwin.rm.entity.person.Response.ShowPersonResponse;
+import com.dwin.rm.entity.person_product.PersonProduct;
+import com.dwin.rm.entity.person_product.PersonProductRepository;
 import com.dwin.rm.security.user.User;
 import com.dwin.rm.security.user.UserRepository;
 import io.jsonwebtoken.MalformedJwtException;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final PersonProductRepository personProductRepository;
     private final UserRepository userRepository;
 
     public ResponseEntity<?> addPerson(AddPersonRequest request, String username) {
@@ -161,5 +164,21 @@ public class PersonService {
             responseList.add(response);
         }
         return ResponseEntity.ok(responseList);
+    }
+
+    public void updateTotalPurchaseAmountForPerson(Person person) {
+        List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
+
+        double totalPurchaseAmount = 0.0;
+
+        for (PersonProduct personProduct : personProducts) {
+            if (!personProduct.isSettled()) {
+                double partOfPrice = personProduct.getPartOfPrice();
+                totalPurchaseAmount += partOfPrice;
+            }
+        }
+
+        person.setTotalPurchaseAmount(totalPurchaseAmount);
+        personRepository.save(person);
     }
 }
