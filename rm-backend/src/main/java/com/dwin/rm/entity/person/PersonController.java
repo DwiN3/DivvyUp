@@ -18,50 +18,36 @@ public class PersonController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addPerson(@RequestBody AddPersonRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return personService.addPerson(request, currentUsername);
+        return null;
     }
 
     @PutMapping("/edit/{personId}")
     public ResponseEntity<?> editPerson(@PathVariable int personId, @RequestBody AddPersonRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return personService.editPerson(personId, request, currentUsername);
+        return null;
     }
 
     @DeleteMapping("/remove/{personId}")
     public ResponseEntity<?> removePerson(@PathVariable int personId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return personService.removePerson(personId, currentUsername);
+        return null;
     }
 
     @PutMapping("/set-receipts-counts/{personId}")
     public ResponseEntity<?> setReceiptsCounts(@PathVariable int personId, @RequestBody SetPersonReceiptsCountsRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return personService.setReceiptsCounts(personId, request, currentUsername);
+        return null;
     }
 
     @PutMapping("/set-total-purchase-amount/{personId}")
     public ResponseEntity<?> setTotalPurchaseAmount(@PathVariable int personId, @RequestBody SetTotalAmountReceiptRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return personService.setTotalPurchaseAmount(personId, request, currentUsername);
+        return null;
     }
 
     @GetMapping("/show/{personId}")
     public ResponseEntity<?> showPerson(@PathVariable int personId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return personService.showPerson(personId, currentUsername);
+        return null;
     }
 
     @GetMapping("/show-all")
     public ResponseEntity<?> showPersons(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return personService.showPersons(currentUsername);
+        return null;
     }
 }

@@ -14,6 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PersonProductService {
 
-    //private final PersonProductRepository personProductRepository;
+    private final PersonProductRepository personProductRepository;
 
 }

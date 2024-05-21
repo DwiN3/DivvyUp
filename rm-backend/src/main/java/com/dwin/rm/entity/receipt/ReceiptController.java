@@ -18,50 +18,36 @@ public class ReceiptController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addReceipt(@RequestBody AddReceiptRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.addReceipt(request, currentUsername);
+        return null;
     }
 
     @PutMapping("/edit/{receiptId}")
     public ResponseEntity<?> editReceipt(@PathVariable int receiptId, @RequestBody AddReceiptRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.editReceipt(receiptId, request, currentUsername);
+        return null;
     }
 
     @DeleteMapping("/remove/{receiptId}")
     public ResponseEntity<?> removeReceipt(@PathVariable int receiptId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.removeReceipt(receiptId, currentUsername);
+        return null;
     }
 
     @PutMapping("/set-total-amount/{receiptId}")
     public ResponseEntity<?> setTotalAmount(@PathVariable int receiptId, @RequestBody SetTotalAmountReceiptRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.setTotalAmount(receiptId, request, currentUsername);
+        return null;
     }
 
     @PutMapping("/set-is-settled/{receiptId}")
     public ResponseEntity<?> setIsSettled(@PathVariable int receiptId, @RequestBody SetIsSettledRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.setIsSettled(receiptId, request, currentUsername);
+        return null;
     }
 
     @GetMapping("/show/{receiptId}")
     public ResponseEntity<?> showReceipt(@PathVariable int receiptId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.showReceipt(receiptId, currentUsername);
+        return null;
     }
 
     @GetMapping("/show-all")
     public ResponseEntity<?> showReceipts(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.showReceipts(currentUsername);
+        return null;
     }
 }
