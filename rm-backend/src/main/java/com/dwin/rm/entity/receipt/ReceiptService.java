@@ -1,5 +1,9 @@
 package com.dwin.rm.entity.receipt;
 
+import com.dwin.rm.entity.person_product.PersonProduct;
+import com.dwin.rm.entity.person_product.PersonProductRepository;
+import com.dwin.rm.entity.product.Product;
+import com.dwin.rm.entity.product.ProductRepository;
 import com.dwin.rm.entity.receipt.Request.AddReceiptRequest;
 import com.dwin.rm.entity.receipt.Request.SetIsSettledRequest;
 import com.dwin.rm.entity.receipt.Request.SetTotalAmountReceiptRequest;
@@ -20,6 +24,9 @@ public class ReceiptService {
 
     private final ReceiptRepository receiptRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository; // Add this repository
+    private final PersonProductRepository personProductRepository;
+
 
 
     public ResponseEntity<?> addReceipt(AddReceiptRequest request, String username) {
@@ -74,6 +81,14 @@ public class ReceiptService {
         Receipt receipt = optionalReceipt.get();
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        List<Product> products = productRepository.findByReceipt(receipt);
+        for (Product product : products) {
+            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+            personProductRepository.deleteAll(personProducts);
+        }
+        productRepository.deleteAll(products);
+        receiptRepository.delete(receipt);
 
         receiptRepository.delete(receipt);
         return ResponseEntity.ok().build();

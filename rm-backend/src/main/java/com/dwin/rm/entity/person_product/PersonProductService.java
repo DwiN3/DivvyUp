@@ -6,6 +6,7 @@ import com.dwin.rm.entity.person_product.Request.AddPersonProductRequest;
 import com.dwin.rm.entity.person_product.Response.ShowPersonProductResponse;
 import com.dwin.rm.entity.product.Product;
 import com.dwin.rm.entity.product.ProductRepository;
+import com.dwin.rm.entity.receipt.Request.SetIsSettledRequest;
 import com.dwin.rm.security.user.User;
 import com.dwin.rm.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -91,6 +92,24 @@ public class PersonProductService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         personProductRepository.delete(personProduct);
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> setIsSettled(int personProductId, SetIsSettledRequest request, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
+        if (!optionalPersonProduct.isPresent())
+            return ResponseEntity.notFound().build();
+
+        PersonProduct personProduct = optionalPersonProduct.get();
+        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        personProduct.setSettled(request.isSettled());
+        personProductRepository.save(personProduct);
         return ResponseEntity.ok().build();
     }
 

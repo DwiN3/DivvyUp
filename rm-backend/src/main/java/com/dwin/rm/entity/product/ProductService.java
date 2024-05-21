@@ -1,6 +1,8 @@
 package com.dwin.rm.entity.product;
 
 
+import com.dwin.rm.entity.person_product.PersonProduct;
+import com.dwin.rm.entity.person_product.PersonProductRepository;
 import com.dwin.rm.entity.product.Request.AddProductRequest;
 import com.dwin.rm.entity.product.Response.ShowProductResponse;
 import com.dwin.rm.entity.receipt.Receipt;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ReceiptRepository receiptRepository;
+    private final PersonProductRepository personProductRepository;
     private final UserRepository userRepository;
 
     public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
@@ -65,6 +68,9 @@ public class ProductService {
         Product product = optionalProduct.get();
         if (!product.getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+        personProductRepository.deleteAll(personProducts);
 
         productRepository.delete(product);
         return ResponseEntity.ok().build();
