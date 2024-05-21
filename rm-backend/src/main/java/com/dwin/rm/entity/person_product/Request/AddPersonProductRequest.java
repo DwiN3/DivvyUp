@@ -6,5 +6,4 @@ import lombok.Data;
 public class AddPersonProductRequest {
     private int personId;
     private int quantity;
-    private double compensationAmount;
 }

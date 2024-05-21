@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -141,6 +144,7 @@ public class PersonService {
                 .receiptsCount(person.getReceiptsCount())
                 .totalPurchaseAmount(person.getTotalPurchaseAmount())
                 .build();
+        updateTotalPurchaseAmountForPerson(person);
         return ResponseEntity.ok(response);
     }
 
@@ -162,6 +166,7 @@ public class PersonService {
                     .totalPurchaseAmount(person.getTotalPurchaseAmount())
                     .build();
             responseList.add(response);
+            updateTotalPurchaseAmountForPerson(person);
         }
         return ResponseEntity.ok(responseList);
     }
@@ -175,10 +180,15 @@ public class PersonService {
             if (!personProduct.isSettled()) {
                 double partOfPrice = personProduct.getPartOfPrice();
                 totalPurchaseAmount += partOfPrice;
+
+                if(personProduct.isCompensation()){
+                    totalPurchaseAmount += personProduct.getProduct().getCompensationAmount();
+                }
             }
         }
 
-        person.setTotalPurchaseAmount(totalPurchaseAmount);
+        BigDecimal compensationRounded = new BigDecimal(totalPurchaseAmount).setScale(2, RoundingMode.UP);
+        person.setTotalPurchaseAmount(compensationRounded.doubleValue());
         personRepository.save(person);
     }
 }

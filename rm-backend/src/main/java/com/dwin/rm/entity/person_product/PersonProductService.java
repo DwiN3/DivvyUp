@@ -50,6 +50,13 @@ public class PersonProductService {
         if (!person.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
+        boolean isCompensation;
+        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+        if (personProducts.isEmpty())
+            isCompensation = true;
+        else
+            isCompensation = false;
+
         PersonProduct personProduct = PersonProduct.builder()
                     .product(product)
                     .person(person)
@@ -57,18 +64,17 @@ public class PersonProductService {
                     .isSettled(false)
                     .build();
 
-
         if(product.isDivisible()){
             personProduct.setQuantity(request.getQuantity());
             personProduct.setMaxQuantity(product.getMaxQuantity());
-            //personProduct.setCompensation(request.isCompensation());
+            personProduct.setCompensation(isCompensation);
             double partOfPrice = product.getPrice() * ((double)request.getQuantity() /product.getMaxQuantity());
             personProduct.setPartOfPrice(partOfPrice);
         }
         else{
             personProduct.setQuantity(1);
             personProduct.setMaxQuantity(product.getMaxQuantity());
-            personProduct.setCompensation(true);
+            personProduct.setCompensation(isCompensation);
             personProduct.setPartOfPrice(product.getPrice());
         }
 
@@ -183,15 +189,11 @@ public class PersonProductService {
 
         for (PersonProduct personProduct : personProducts) {
             if (!personProduct.isSettled()) {
-                int quantity = personProduct.getQuantity();
-                int maxQuantity = personProduct.getMaxQuantity();
-                boolean isCompensation = personProduct.isCompensation();
-                double compensationAmount = personProduct.getProduct().getCompensationAmount();
+                double partOfPrice = personProduct.getPartOfPrice();
+                totalPurchaseAmount += partOfPrice;
 
-                if (isCompensation) {
-                    totalPurchaseAmount += (quantity + compensationAmount) / maxQuantity;
-                } else {
-                    totalPurchaseAmount += quantity / maxQuantity;
+                if(personProduct.isCompensation()){
+                    totalPurchaseAmount += personProduct.getProduct().getCompensationAmount();
                 }
             }
         }
