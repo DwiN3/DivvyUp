@@ -23,11 +23,6 @@ public class ProductController {
         return productService.addProductToReceipt(request, receiptID, currentUsername);
     }
 
-  /*  @PutMapping("/product/edit/{productId}")
-    public ResponseEntity<?> editProduct(@PathVariable int productId, @RequestBody AddProductRequest request) {
-        return null;
-    }*/
-
     @DeleteMapping("/product/remove/{productId}")
     public ResponseEntity<?> removeProduct(@PathVariable int productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

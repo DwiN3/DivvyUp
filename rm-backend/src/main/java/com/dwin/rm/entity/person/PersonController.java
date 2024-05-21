@@ -3,6 +3,7 @@ package com.dwin.rm.entity.person;
 import com.dwin.rm.entity.person.Request.AddPersonRequest;
 import com.dwin.rm.entity.person.Request.SetPersonReceiptsCountsRequest;
 import com.dwin.rm.entity.person.Request.SetTotalAmountReceiptRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,9 @@ public class PersonController {
     @PostMapping("/add")
     public ResponseEntity<?> addPerson(@RequestBody AddPersonRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
         String currentUsername = authentication.getName();
         return personService.addPerson(request, currentUsername);
     }

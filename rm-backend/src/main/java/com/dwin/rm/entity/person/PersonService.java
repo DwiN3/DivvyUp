@@ -22,22 +22,11 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final UserRepository userRepository;
 
-    private ResponseEntity<?> checkUser(String username) {
-        try {
-            Optional<User> optionalUser = userRepository.findByUsername(username);
-            if (!optionalUser.isPresent()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-        } catch (MalformedJwtException e) {
+    public ResponseEntity<?> addPerson(AddPersonRequest request, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return null;
-    }
-
-    public ResponseEntity<?> addPerson(AddPersonRequest request, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
 
         User user = userRepository.findByUsername(username).get();
         Person person = Person.builder()
@@ -52,9 +41,10 @@ public class PersonService {
     }
 
     public ResponseEntity<?> editPerson(int personId, AddPersonRequest request, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<Person> optionalPerson = personRepository.findById(personId);
         if (!optionalPerson.isPresent())
@@ -71,9 +61,10 @@ public class PersonService {
     }
 
     public ResponseEntity<?> removePerson(int personId, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<Person> optionalPerson = personRepository.findById(personId);
         if (!optionalPerson.isPresent())
@@ -88,9 +79,10 @@ public class PersonService {
     }
 
     public ResponseEntity<?> setReceiptsCounts(int personId, SetPersonReceiptsCountsRequest request, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<Person> optionalPerson = personRepository.findById(personId);
         if (!optionalPerson.isPresent())
@@ -107,9 +99,10 @@ public class PersonService {
 
 
     public ResponseEntity<?> setTotalPurchaseAmount(int personId, SetTotalAmountReceiptRequest request, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<Person> optionalPerson = personRepository.findById(personId);
         if (!optionalPerson.isPresent())
@@ -125,9 +118,10 @@ public class PersonService {
     }
 
     public ResponseEntity<?> showPerson(int personId, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<Person> optionalPerson = personRepository.findById(personId);
         if (!optionalPerson.isPresent())
@@ -148,13 +142,10 @@ public class PersonService {
     }
 
     public ResponseEntity<?> showPersons(String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
-
         Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent())
+        if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         User user = optionalUser.get();
         List<Person> persons = personRepository.findByUser(user);

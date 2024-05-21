@@ -17,22 +17,29 @@ public class PersonProductController {
 
     @PostMapping("/product/{productId}/person-product/add")
     public ResponseEntity<?> addPersonProduct(@PathVariable int productId, @RequestBody AddPersonProductRequest request){
-        return null;
-    }
-
-    @GetMapping("/product/{productId}/person-product/show-all")
-    public ResponseEntity<?> showPersonProducts(@PathVariable int productId) {
-        return null;
-    }
-
-    @GetMapping("/person-product/show/{personProductId}")
-    public ResponseEntity<?> showPersonProductsById(@PathVariable int personProductId) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personProductService.addPersonProduct(request, productId, currentUsername);
     }
 
     @DeleteMapping("/person-product/remove/{personProductId}")
     public ResponseEntity<?> removePersonProduct(@PathVariable int personProductId) {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personProductService.removePersonProduct(personProductId, currentUsername);
     }
 
+    @GetMapping("/person-product/show/{personProductId}")
+    public ResponseEntity<?> showPersonProduct(@PathVariable int personProductId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personProductService.showPersonProduct(personProductId, currentUsername);
+    }
+
+    @GetMapping("/product/{productId}/person-product/show-all")
+    public ResponseEntity<?> showPersonProducts(@PathVariable int productId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personProductService.showPersonProducts(productId, currentUsername);
+    }
 }

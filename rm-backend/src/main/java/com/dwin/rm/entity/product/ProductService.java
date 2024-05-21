@@ -25,19 +25,12 @@ public class ProductService {
     private final ReceiptRepository receiptRepository;
     private final UserRepository userRepository;
 
-    private ResponseEntity<?> checkUser(String username) {
-        try {
-            Optional<User> optionalUser = userRepository.findByUsername(username);
-            if (!optionalUser.isPresent()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-        } catch (MalformedJwtException e) {
+    public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return null;
-    }
 
-    private ResponseEntity<?> checkReceiptOwnership(int receiptId, String username) {
         Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
         if (!optionalReceipt.isPresent())
             return ResponseEntity.notFound().build();
@@ -46,23 +39,6 @@ public class ProductService {
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        return null;
-    }
-
-    public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
-
-        ResponseEntity<?> receiptOwnershipCheckResponse = checkReceiptOwnership(receiptId, username);
-        if (receiptOwnershipCheckResponse != null)
-            return receiptOwnershipCheckResponse;
-
-        Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Receipt receipt = optionalReceipt.get();
         Product product = Product.builder()
                 .receipt(receipt)
                 .productName(request.getProductName())
@@ -77,36 +53,36 @@ public class ProductService {
     }
 
     public ResponseEntity<?> removeProduct(int productId, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
 
         Product product = optionalProduct.get();
-        ResponseEntity<?> receiptOwnershipCheckResponse = checkReceiptOwnership(product.getReceipt().getReceiptId(), username);
-        if (receiptOwnershipCheckResponse != null)
-            return receiptOwnershipCheckResponse;
+        if (!product.getReceipt().getUser().getUsername().equals(username))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         productRepository.delete(product);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> setIsSettled(int productId, SetIsSettledRequest request, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
 
         Product product = optionalProduct.get();
-        ResponseEntity<?> receiptOwnershipCheckResponse = checkReceiptOwnership(product.getReceipt().getReceiptId(), username);
-        if (receiptOwnershipCheckResponse != null)
-            return receiptOwnershipCheckResponse;
+        if (!product.getReceipt().getUser().getUsername().equals(username))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         product.setSettled(request.isSettled());
         productRepository.save(product);
@@ -114,18 +90,18 @@ public class ProductService {
     }
 
     public ResponseEntity<?> showProductById(int productId, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
 
         Product product = optionalProduct.get();
-        ResponseEntity<?> receiptOwnershipCheckResponse = checkReceiptOwnership(product.getReceipt().getReceiptId(), username);
-        if (receiptOwnershipCheckResponse != null)
-            return receiptOwnershipCheckResponse;
+        if (!product.getReceipt().getUser().getUsername().equals(username))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         ShowProductResponse response = ShowProductResponse.builder()
                 .productId(product.getProductId())
@@ -141,17 +117,18 @@ public class ProductService {
     }
 
     public ResponseEntity<?> showAllProductsFromReceipt(int receiptId, String username) {
-        ResponseEntity<?> userCheckResponse = checkUser(username);
-        if (userCheckResponse != null)
-            return userCheckResponse;
-
-        ResponseEntity<?> receiptOwnershipCheckResponse = checkReceiptOwnership(receiptId, username);
-        if (receiptOwnershipCheckResponse != null)
-            return receiptOwnershipCheckResponse;
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
         if (!optionalReceipt.isPresent())
             return ResponseEntity.notFound().build();
+
+        Receipt receipt = optionalReceipt.get();
+        if (!receipt.getUser().getUsername().equals(username))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         List<Product> products = productRepository.findByReceipt(optionalReceipt.get());
         List<ShowProductResponse> responseList = new ArrayList<>();
