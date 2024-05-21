@@ -99,6 +99,13 @@ public class ProductService {
 
         product.setSettled(request.isSettled());
         productRepository.save(product);
+
+        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+        for (PersonProduct personProduct : personProducts) {
+            personProduct.setSettled(request.isSettled());
+            personProductRepository.save(personProduct);
+        }
+
         return ResponseEntity.ok().build();
     }
 
