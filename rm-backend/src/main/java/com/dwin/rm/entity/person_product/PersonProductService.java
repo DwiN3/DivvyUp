@@ -50,6 +50,11 @@ public class PersonProductService {
         if (!person.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
+        Optional<PersonProduct> existingPersonProduct = personProductRepository.findByProductAndPerson(product, person);
+        if (existingPersonProduct.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         int currentTotalQuantity = personProducts.stream()
                 .mapToInt(PersonProduct::getQuantity)
