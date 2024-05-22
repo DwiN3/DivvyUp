@@ -37,6 +37,13 @@ public class PersonProductController {
         return personProductService.setIsSettled(personProductId, request, currentUsername);
     }
 
+    @PutMapping("/person-product/set-is-compensation/{personProductId}")
+    public ResponseEntity<?> setIsCompensation(@PathVariable int personProductId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personProductService.setIsCompensation(personProductId, currentUsername);
+    }
+
     @GetMapping("/person-product/show/{personProductId}")
     public ResponseEntity<?> showPersonProduct(@PathVariable int personProductId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

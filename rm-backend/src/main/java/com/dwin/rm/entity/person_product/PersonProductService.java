@@ -50,40 +50,41 @@ public class PersonProductService {
         if (!person.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        boolean isCompensation;
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-        if (personProducts.isEmpty())
-            isCompensation = true;
-        else
-            isCompensation = false;
+        int currentTotalQuantity = personProducts.stream()
+                .mapToInt(PersonProduct::getQuantity)
+                .sum();
+
+        if (currentTotalQuantity + request.getQuantity() > product.getMaxQuantity()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        boolean isCompensation = personProducts.isEmpty();
 
         PersonProduct personProduct = PersonProduct.builder()
-                    .product(product)
-                    .person(person)
-                    .maxQuantity(product.getMaxQuantity())
-                    .isSettled(false)
-                    .build();
+                .product(product)
+                .person(person)
+                .maxQuantity(product.getMaxQuantity())
+                .isSettled(false)
+                .build();
 
-        if(product.isDivisible()){
+        if (product.isDivisible()) {
             personProduct.setQuantity(request.getQuantity());
-            personProduct.setMaxQuantity(product.getMaxQuantity());
-            personProduct.setCompensation(isCompensation);
-            double partOfPrice = product.getPrice() * ((double)request.getQuantity() /product.getMaxQuantity());
+            double partOfPrice = product.getPrice() * ((double) request.getQuantity() / product.getMaxQuantity());
             personProduct.setPartOfPrice(partOfPrice);
-        }
-        else{
+        } else {
             personProduct.setQuantity(1);
-            personProduct.setMaxQuantity(product.getMaxQuantity());
-            personProduct.setCompensation(isCompensation);
             personProduct.setPartOfPrice(product.getPrice());
         }
 
+        personProduct.setCompensation(isCompensation);
         personProductRepository.save(personProduct);
 
         updateTotalPurchaseAmountForPerson(person);
         updateCompensationAmount(product);
         return ResponseEntity.ok().build();
     }
+
 
     public ResponseEntity<?> removePersonProduct(int personProductId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -121,6 +122,35 @@ public class PersonProductService {
         personProduct.setSettled(request.isSettled());
         personProductRepository.save(personProduct);
 
+        updateTotalPurchaseAmountForPerson(personProduct.getPerson());
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> setIsCompensation(int personProductId, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
+        if (!optionalPersonProduct.isPresent())
+            return ResponseEntity.notFound().build();
+
+        PersonProduct personProduct = optionalPersonProduct.get();
+        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+
+        List<PersonProduct> personProducts = personProductRepository.findByProduct(personProduct.getProduct());
+
+        for (PersonProduct pp : personProducts) {
+            if (pp.getPersonProductId() != personProductId && pp.isCompensation()) {
+                pp.setCompensation(false);
+                personProductRepository.save(pp);
+            }
+        }
+
+        personProduct.setCompensation(true);
+        personProductRepository.save(personProduct);
         updateTotalPurchaseAmountForPerson(personProduct.getPerson());
         return ResponseEntity.ok().build();
     }

@@ -36,6 +36,6 @@ public class PersonProduct {
     @Column(name = "is_compensation")
     private boolean isCompensation;
 
-    @Column(name = "isSettled")
+    @Column(name = "is_settled")
     private  boolean isSettled;
 }
