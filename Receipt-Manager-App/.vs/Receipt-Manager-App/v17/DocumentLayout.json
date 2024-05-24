@@ -3,36 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\pages\\login.razor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:pages\\login.razor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\pages\\login.razor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:pages\\login.razor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\wwwroot\\css\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:wwwroot\\css\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\wwwroot\\css\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:wwwroot\\css\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|c:\\users\\dwini\\desktop\\receipt-manager-backend\\receipt-manager-app\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}|Receipt-Manager-App.csproj|solutionrelative:components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -50,19 +50,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "app.css",
-              "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\wwwroot\\css\\app.css",
-              "RelativeDocumentMoniker": "wwwroot\\css\\app.css",
-              "ToolTip": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\wwwroot\\css\\app.css",
-              "RelativeToolTip": "wwwroot\\css\\app.css",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-05-24T14:56:16.205Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "_Imports.razor",
               "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Components\\_Imports.razor",
               "RelativeDocumentMoniker": "Components\\_Imports.razor",
@@ -74,32 +62,31 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "index.html",
               "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\wwwroot\\index.html",
               "RelativeDocumentMoniker": "wwwroot\\index.html",
               "ToolTip": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\wwwroot\\index.html",
               "RelativeToolTip": "wwwroot\\index.html",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAABlAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
               "WhenOpened": "2024-05-24T14:41:10.694Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "MauiProgram.cs",
               "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\MauiProgram.cs",
               "RelativeDocumentMoniker": "MauiProgram.cs",
               "ToolTip": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\MauiProgram.cs",
               "RelativeToolTip": "MauiProgram.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAjAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-24T14:33:33.534Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-24T14:33:33.534Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Login.razor.cs",
               "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Pages\\Login.razor.cs",
               "RelativeDocumentMoniker": "Pages\\Login.razor.cs",
@@ -107,25 +94,36 @@
               "RelativeToolTip": "Pages\\Login.razor.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-24T14:25:00.157Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-24T14:25:00.157Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Login.razor",
               "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Pages\\Login.razor",
               "RelativeDocumentMoniker": "Pages\\Login.razor",
-              "ToolTip": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Pages\\Login.razor*",
-              "RelativeToolTip": "Pages\\Login.razor*",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAANAAAA",
+              "ToolTip": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Pages\\Login.razor",
+              "RelativeToolTip": "Pages\\Login.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAADwvwQAAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-05-24T14:16:46.159Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
+              "Title": "app.css",
+              "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\wwwroot\\css\\app.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\app.css",
+              "ToolTip": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\wwwroot\\css\\app.css",
+              "RelativeToolTip": "wwwroot\\css\\app.css",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-05-24T14:56:16.205Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "MainLayout.razor",
               "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Layout\\MainLayout.razor",
               "RelativeDocumentMoniker": "Layout\\MainLayout.razor",
@@ -133,12 +131,11 @@
               "RelativeToolTip": "Layout\\MainLayout.razor",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-05-24T14:23:43.679Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-24T14:23:43.679Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "MainPage.xaml",
               "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\MainPage.xaml",
               "RelativeDocumentMoniker": "MainPage.xaml",

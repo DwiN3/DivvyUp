@@ -17,6 +17,7 @@ namespace Receipt_Manager_App
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddFluentUIComponents();
+            builder.Services.AddBlazorBootstrap();
             builder.Services.AddHttpClient();
 
 #if DEBUG

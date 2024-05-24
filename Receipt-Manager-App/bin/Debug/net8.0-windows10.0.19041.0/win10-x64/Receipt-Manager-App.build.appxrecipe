@@ -238,6 +238,9 @@
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.31\lib\net6.0\WinRT.Runtime.dll">
       <PackagePath>WinRT.Runtime.dll</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\lib\net6.0\BlazorBootstrap.dll">
+      <PackagePath>BlazorBootstrap.dll</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.authorization\8.0.4\lib\net8.0\Microsoft.AspNetCore.Authorization.dll">
       <PackagePath>Microsoft.AspNetCore.Authorization.dll</PackagePath>
     </AppxPackagedFile>
@@ -519,6 +522,30 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.maui.core\8.0.21\lib\net8.0-windows10.0.19041\Microsoft.Maui.pri">
       <PackagePath>Microsoft.Maui.pri</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\Blazor.Bootstrap.bundle.scp.css">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\Blazor.Bootstrap.bundle.scp.css</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\blazor.bootstrap.css">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.css</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\blazor.bootstrap.js">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.js</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\blazor.bootstrap.pdf.js">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.pdf.js</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\blazor.bootstrap.sortable-list.js">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.sortable-list.js</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\icon\128X128.png">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\icon\128X128.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\pdfjs-4.0.379.min.mjs">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\pdfjs-4.0.379.min.mjs</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\pdfjs-4.0.379.worker.min.mjs">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\pdfjs-4.0.379.worker.min.mjs</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Anchor\FluentAnchor.razor.js">
       <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Anchor\FluentAnchor.razor.js</PackagePath>

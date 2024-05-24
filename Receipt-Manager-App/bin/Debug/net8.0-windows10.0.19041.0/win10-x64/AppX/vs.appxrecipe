@@ -29,25 +29,25 @@
     <AppXManifest Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2024-05-24T15:00:29.962</Modified>
+      <Modified>2024-05-24T15:26:47.756</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2024-05-24T14:59:25.448</Modified>
+      <Modified>2024-05-24T15:26:47.480</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Receipt-Manager-App.runtimeconfig.json">
       <PackagePath>Receipt-Manager-App.runtimeconfig.json</PackagePath>
-      <Modified>2024-05-24T14:59:25.246</Modified>
+      <Modified>2024-05-24T15:26:47.229</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Receipt-Manager-App.dll">
       <PackagePath>Receipt-Manager-App.dll</PackagePath>
-      <Modified>2024-05-24T15:00:29.699</Modified>
+      <Modified>2024-05-24T15:26:46.215</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>Receipt-Manager-App.exe</PackagePath>
-      <Modified>2024-05-24T15:00:29.703</Modified>
+      <Modified>2024-05-24T15:26:46.233</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
@@ -75,7 +75,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\wwwroot\index.html">
       <PackagePath>wwwroot\index.html</PackagePath>
-      <Modified>2024-05-24T14:56:04.898</Modified>
+      <Modified>2024-05-24T15:25:44.655</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-100.png">
       <PackagePath>splashSplashScreen.scale-100.png</PackagePath>
@@ -307,7 +307,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Receipt-Manager-App.deps.json">
       <PackagePath>Receipt-Manager-App.deps.json</PackagePath>
-      <Modified>2024-05-24T14:59:25.123</Modified>
+      <Modified>2024-05-24T15:26:47.103</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.31\lib\net6.0\Microsoft.Windows.SDK.NET.dll">
       <PackagePath>Microsoft.Windows.SDK.NET.dll</PackagePath>
@@ -316,6 +316,10 @@
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.31\lib\net6.0\WinRT.Runtime.dll">
       <PackagePath>WinRT.Runtime.dll</PackagePath>
       <Modified>2023-10-16T19:41:06.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\lib\net6.0\BlazorBootstrap.dll">
+      <PackagePath>BlazorBootstrap.dll</PackagePath>
+      <Modified>2024-04-14T19:14:52.000</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.authorization\8.0.4\lib\net8.0\Microsoft.AspNetCore.Authorization.dll">
       <PackagePath>Microsoft.AspNetCore.Authorization.dll</PackagePath>
@@ -693,6 +697,38 @@
       <PackagePath>Microsoft.Maui.pri</PackagePath>
       <Modified>2024-04-18T23:19:32.000</Modified>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\Blazor.Bootstrap.bundle.scp.css">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\Blazor.Bootstrap.bundle.scp.css</PackagePath>
+      <Modified>2024-04-14T19:14:52.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\blazor.bootstrap.css">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.css</PackagePath>
+      <Modified>2024-03-14T16:53:38.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\blazor.bootstrap.js">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.js</PackagePath>
+      <Modified>2024-04-11T09:23:32.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\blazor.bootstrap.pdf.js">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.pdf.js</PackagePath>
+      <Modified>2024-01-25T18:51:06.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\blazor.bootstrap.sortable-list.js">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.sortable-list.js</PackagePath>
+      <Modified>2024-04-06T16:38:46.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\icon\128X128.png">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\icon\128X128.png</PackagePath>
+      <Modified>2022-04-19T11:45:42.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\pdfjs-4.0.379.min.mjs">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\pdfjs-4.0.379.min.mjs</PackagePath>
+      <Modified>2024-01-25T18:51:06.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\blazor.bootstrap\2.2.0\staticwebassets\pdfjs-4.0.379.worker.min.mjs">
+      <PackagePath>wwwroot\_content\Blazor.Bootstrap\pdfjs-4.0.379.worker.min.mjs</PackagePath>
+      <Modified>2024-01-25T18:51:06.000</Modified>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Anchor\FluentAnchor.razor.js">
       <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Anchor\FluentAnchor.razor.js</PackagePath>
       <Modified>2024-05-03T16:01:04.000</Modified>
@@ -831,7 +867,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\scopedcss\bundle\Receipt-Manager-App.styles.css">
       <PackagePath>wwwroot\Receipt-Manager-App.styles.css</PackagePath>
-      <Modified>2024-05-24T14:55:31.650</Modified>
+      <Modified>2024-05-24T15:23:49.098</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\scopedcss\projectbundle\Receipt-Manager-App.bundle.scp.css">
       <PackagePath>wwwroot\Receipt-Manager-App.bundle.scp.css</PackagePath>

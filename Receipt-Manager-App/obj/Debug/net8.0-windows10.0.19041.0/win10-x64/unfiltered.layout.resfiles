@@ -1,3 +1,11 @@
+wwwroot\_content\Blazor.Bootstrap\Blazor.Bootstrap.bundle.scp.css
+wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.css
+wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.js
+wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.pdf.js
+wwwroot\_content\Blazor.Bootstrap\blazor.bootstrap.sortable-list.js
+wwwroot\_content\Blazor.Bootstrap\icon\128X128.png
+wwwroot\_content\Blazor.Bootstrap\pdfjs-4.0.379.min.mjs
+wwwroot\_content\Blazor.Bootstrap\pdfjs-4.0.379.worker.min.mjs
 wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Anchor\FluentAnchor.razor.js
 wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\AnchoredRegion\FluentAnchoredRegion.razor.js
 wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Button\FluentButton.razor.js
