@@ -2,7 +2,8 @@
 using Microsoft.FluentUI.AspNetCore.Components;
 using Receipt_Manager_Impl.Api.Service;
 using Receipt_Manager_Impl.Api.Interface;
-using Receipt_Manager_Impl.Api.Url;
+using Receipt_Manager_Impl.Api.ResponceCodeReader;
+using Receipt_Manager_Impl.Api.Urls;
 
 
 namespace Receipt_Manager_App
@@ -24,6 +25,8 @@ namespace Receipt_Manager_App
             builder.Services.AddBlazorBootstrap();
             builder.Services.AddHttpClient();
             builder.Services.AddTransient<IAuthService, AuthService>();
+            builder.Services.AddSingleton<Url>();
+            builder.Services.AddSingleton<ResponseCodeReader>();
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
+using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using Receipt_Manager_Impl.Api.Interface;
-using Receipt_Manager_Impl.Api.Models;
-using Receipt_Manager_Impl.Api.Url;
+using Receipt_Manager_Impl.Api.Urls;
 
 namespace Receipt_Manager_Impl.Api.Service
 {
     public class AuthService : IAuthService
-    { 
-        private HttpClient http = new HttpClient();
+    {
+        private Url _url { get; set; } = new();
+        private HttpClient _http { get; set; } = new();
 
-        private AuthUrl url = new AuthUrl();
-
-        public async Task<HttpResponseMessage> Login(String username, String password)
+        public async Task<HttpResponseMessage> Login(string username, string password)
         {
             var loginData = new
             {
@@ -26,7 +21,7 @@ namespace Receipt_Manager_Impl.Api.Service
 
             var jsonData = JsonConvert.SerializeObject(loginData);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var response = await http.PostAsync(url.Login, content);
+            var response = await _http.PostAsync(_url.Login, content);
             return response;
         }
 

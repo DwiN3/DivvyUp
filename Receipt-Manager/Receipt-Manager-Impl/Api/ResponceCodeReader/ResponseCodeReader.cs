@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Receipt_Manager_Impl.Api.ResponceCodeReader
 {
-    public class LoginRCR
+    public class ResponseCodeReader
     {
         public string ReadLogin(HttpStatusCode code)
         {
