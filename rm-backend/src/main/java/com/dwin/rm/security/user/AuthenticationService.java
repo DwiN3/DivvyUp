@@ -29,9 +29,9 @@ public class AuthenticationService {
 
     public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); 
         } else if (repository.findByUsername(request.getUsername()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         var user = User.builder()
@@ -49,10 +49,16 @@ public class AuthenticationService {
 
     public ResponseEntity<AuthenticationResponse> auth(AuthenticationRequest request) {
         try {
-
-            if(!repository.findByUsername(request.getUsername()).isPresent()){
+            Optional<User> optionalUser = repository.findByUsername(request.getUsername());
+            if(!optionalUser.isPresent()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
+
+            User userExits = optionalUser.get();
+            if (!passwordEncoder.matches(request.getPassword(), userExits.getPassword())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getUsername(),

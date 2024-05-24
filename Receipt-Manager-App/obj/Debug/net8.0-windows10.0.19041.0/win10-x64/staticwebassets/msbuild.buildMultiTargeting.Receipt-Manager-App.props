@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Receipt-Manager-App.props" />
-</Project>
