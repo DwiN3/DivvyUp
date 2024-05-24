@@ -8,5 +8,7 @@ namespace Receipt_Manager_App.Pages
 {
     partial class Login
     {
+        private String Username { get; set; }
+        private String Password { get; set; }
     }
 }

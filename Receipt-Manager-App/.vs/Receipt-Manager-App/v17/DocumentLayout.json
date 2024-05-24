@@ -42,11 +42,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Login.razor",
+              "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Pages\\Login.razor",
+              "RelativeDocumentMoniker": "Pages\\Login.razor",
+              "ToolTip": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Pages\\Login.razor",
+              "RelativeToolTip": "Pages\\Login.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-05-24T14:16:46.159Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -92,21 +105,9 @@
               "RelativeDocumentMoniker": "Pages\\Login.razor.cs",
               "ToolTip": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Pages\\Login.razor.cs",
               "RelativeToolTip": "Pages\\Login.razor.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-24T14:25:00.157Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Login.razor",
-              "DocumentMoniker": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Pages\\Login.razor",
-              "RelativeDocumentMoniker": "Pages\\Login.razor",
-              "ToolTip": "C:\\Users\\dwini\\Desktop\\Receipt-Manager-Backend\\Receipt-Manager-App\\Pages\\Login.razor",
-              "RelativeToolTip": "Pages\\Login.razor",
-              "ViewState": "AQIAAAAAAAAAAAAAAADwvwQAAAAEAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-05-24T14:16:46.159Z",
+              "WhenOpened": "2024-05-24T14:25:00.157Z",
               "EditorCaption": ""
             },
             {
@@ -119,7 +120,8 @@
               "RelativeToolTip": "wwwroot\\css\\app.css",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-05-24T14:56:16.205Z"
+              "WhenOpened": "2024-05-24T14:56:16.205Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -131,7 +133,8 @@
               "RelativeToolTip": "Layout\\MainLayout.razor",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-05-24T14:23:43.679Z"
+              "WhenOpened": "2024-05-24T14:23:43.679Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

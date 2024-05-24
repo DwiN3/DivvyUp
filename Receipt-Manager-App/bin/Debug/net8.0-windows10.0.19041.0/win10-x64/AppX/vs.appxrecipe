@@ -29,7 +29,7 @@
     <AppXManifest Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2024-05-24T15:26:47.756</Modified>
+      <Modified>2024-05-24T15:36:42.591</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -43,11 +43,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Receipt-Manager-App.dll">
       <PackagePath>Receipt-Manager-App.dll</PackagePath>
-      <Modified>2024-05-24T15:26:46.215</Modified>
+      <Modified>2024-05-24T15:36:42.278</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>Receipt-Manager-App.exe</PackagePath>
-      <Modified>2024-05-24T15:26:46.233</Modified>
+      <Modified>2024-05-24T15:36:42.283</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
