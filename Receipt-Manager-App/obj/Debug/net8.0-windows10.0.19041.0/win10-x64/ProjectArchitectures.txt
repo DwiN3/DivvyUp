@@ -1,0 +1,1 @@
+C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\Receipt-Manager-App.csproj;x64

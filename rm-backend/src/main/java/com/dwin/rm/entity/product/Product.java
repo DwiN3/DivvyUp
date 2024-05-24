@@ -28,7 +28,7 @@ public class Product {
     @Column(name = "package_price")
     private double packagePrice;
 
-    @Column(name = "parts_amount")
+    @Column(name = "divisible")
     private boolean divisible;
 
     @Column(name = "max_quantity")
