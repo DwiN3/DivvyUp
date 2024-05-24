@@ -74,6 +74,10 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
+            "Microsoft.FluentUI.AspNetCore.Components": {
+              "target": "Package",
+              "version": "[4.7.2, )"
+            },
             "Microsoft.Maui.Controls": {
               "target": "Package",
               "version": "[8.0.21, )"
@@ -120,6 +124,10 @@
             "Microsoft.Extensions.Logging.Debug": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Microsoft.FluentUI.AspNetCore.Components": {
+              "target": "Package",
+              "version": "[4.7.2, )"
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",
@@ -168,6 +176,10 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
+            "Microsoft.FluentUI.AspNetCore.Components": {
+              "target": "Package",
+              "version": "[4.7.2, )"
+            },
             "Microsoft.Maui.Controls": {
               "target": "Package",
               "version": "[8.0.21, )"
@@ -215,6 +227,10 @@
             "Microsoft.Extensions.Logging.Debug": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Microsoft.FluentUI.AspNetCore.Components": {
+              "target": "Package",
+              "version": "[4.7.2, )"
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",

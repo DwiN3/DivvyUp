@@ -29,33 +29,37 @@
     <AppXManifest Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2024-05-24T14:19:54.946</Modified>
+      <Modified>2024-05-24T15:00:29.962</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2024-05-24T14:18:43.051</Modified>
+      <Modified>2024-05-24T14:59:25.448</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Receipt-Manager-App.runtimeconfig.json">
       <PackagePath>Receipt-Manager-App.runtimeconfig.json</PackagePath>
-      <Modified>2024-05-24T14:18:42.858</Modified>
+      <Modified>2024-05-24T14:59:25.246</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Receipt-Manager-App.dll">
       <PackagePath>Receipt-Manager-App.dll</PackagePath>
-      <Modified>2024-05-24T14:19:32.212</Modified>
+      <Modified>2024-05-24T15:00:29.699</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>Receipt-Manager-App.exe</PackagePath>
-      <Modified>2024-05-24T14:19:32.216</Modified>
+      <Modified>2024-05-24T15:00:29.703</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
       <Modified>2024-05-24T14:16:32.796</Modified>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\jsmodules\jsmodules.publish.manifest.json">
+      <PackagePath>wwwroot\Receipt-Manager-App.modules.json</PackagePath>
+      <Modified>2024-05-24T14:55:31.680</Modified>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\wwwroot\css\app.css">
       <PackagePath>wwwroot\css\app.css</PackagePath>
-      <Modified>2024-05-24T14:16:32.799</Modified>
+      <Modified>2024-05-24T14:56:21.228</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\wwwroot\css\bootstrap\bootstrap.min.css">
       <PackagePath>wwwroot\css\bootstrap\bootstrap.min.css</PackagePath>
@@ -71,7 +75,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\wwwroot\index.html">
       <PackagePath>wwwroot\index.html</PackagePath>
-      <Modified>2024-05-24T14:16:32.799</Modified>
+      <Modified>2024-05-24T14:56:04.898</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-100.png">
       <PackagePath>splashSplashScreen.scale-100.png</PackagePath>
@@ -303,7 +307,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Receipt-Manager-App.deps.json">
       <PackagePath>Receipt-Manager-App.deps.json</PackagePath>
-      <Modified>2024-05-24T14:18:42.725</Modified>
+      <Modified>2024-05-24T14:59:25.123</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.31\lib\net6.0\Microsoft.Windows.SDK.NET.dll">
       <PackagePath>Microsoft.Windows.SDK.NET.dll</PackagePath>
@@ -313,21 +317,21 @@
       <PackagePath>WinRT.Runtime.dll</PackagePath>
       <Modified>2023-10-16T19:41:06.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.authorization\8.0.0\lib\net8.0\Microsoft.AspNetCore.Authorization.dll">
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.authorization\8.0.4\lib\net8.0\Microsoft.AspNetCore.Authorization.dll">
       <PackagePath>Microsoft.AspNetCore.Authorization.dll</PackagePath>
-      <Modified>2023-11-01T01:07:34.000</Modified>
+      <Modified>2024-03-20T23:34:40.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.components\8.0.0\lib\net8.0\Microsoft.AspNetCore.Components.dll">
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.components\8.0.4\lib\net8.0\Microsoft.AspNetCore.Components.dll">
       <PackagePath>Microsoft.AspNetCore.Components.dll</PackagePath>
-      <Modified>2023-11-01T01:06:30.000</Modified>
+      <Modified>2024-03-20T23:33:40.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.components.forms\8.0.0\lib\net8.0\Microsoft.AspNetCore.Components.Forms.dll">
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.components.forms\8.0.4\lib\net8.0\Microsoft.AspNetCore.Components.Forms.dll">
       <PackagePath>Microsoft.AspNetCore.Components.Forms.dll</PackagePath>
-      <Modified>2023-11-01T01:06:32.000</Modified>
+      <Modified>2024-03-20T23:34:38.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.components.web\8.0.0\lib\net8.0\Microsoft.AspNetCore.Components.Web.dll">
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.components.web\8.0.4\lib\net8.0\Microsoft.AspNetCore.Components.Web.dll">
       <PackagePath>Microsoft.AspNetCore.Components.Web.dll</PackagePath>
-      <Modified>2023-11-01T01:07:28.000</Modified>
+      <Modified>2024-03-20T23:34:42.000</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.components.webview\8.0.0\lib\net8.0\Microsoft.AspNetCore.Components.WebView.dll">
       <PackagePath>Microsoft.AspNetCore.Components.WebView.dll</PackagePath>
@@ -337,9 +341,9 @@
       <PackagePath>Microsoft.AspNetCore.Components.WebView.Maui.dll</PackagePath>
       <Modified>2024-04-18T23:38:00.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.metadata\8.0.0\lib\net8.0\Microsoft.AspNetCore.Metadata.dll">
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.aspnetcore.metadata\8.0.4\lib\net8.0\Microsoft.AspNetCore.Metadata.dll">
       <PackagePath>Microsoft.AspNetCore.Metadata.dll</PackagePath>
-      <Modified>2023-11-01T01:06:44.000</Modified>
+      <Modified>2024-03-20T23:34:34.000</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.configuration\8.0.0\lib\net8.0\Microsoft.Extensions.Configuration.dll">
       <PackagePath>Microsoft.Extensions.Configuration.dll</PackagePath>
@@ -365,9 +369,17 @@
       <PackagePath>Microsoft.Extensions.DependencyInjection.dll</PackagePath>
       <Modified>2023-10-31T14:59:00.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\8.0.0\lib\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll">
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\8.0.1\lib\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll">
       <PackagePath>Microsoft.Extensions.DependencyInjection.Abstractions.dll</PackagePath>
-      <Modified>2023-10-31T14:58:56.000</Modified>
+      <Modified>2024-02-14T23:51:40.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.diagnostics\8.0.0\lib\net8.0\Microsoft.Extensions.Diagnostics.dll">
+      <PackagePath>Microsoft.Extensions.Diagnostics.dll</PackagePath>
+      <Modified>2023-10-31T14:59:42.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.diagnostics.abstractions\8.0.0\lib\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll">
+      <PackagePath>Microsoft.Extensions.Diagnostics.Abstractions.dll</PackagePath>
+      <Modified>2023-10-31T14:59:22.000</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.fileproviders.abstractions\8.0.0\lib\net8.0\Microsoft.Extensions.FileProviders.Abstractions.dll">
       <PackagePath>Microsoft.Extensions.FileProviders.Abstractions.dll</PackagePath>
@@ -389,33 +401,49 @@
       <PackagePath>Microsoft.Extensions.FileSystemGlobbing.dll</PackagePath>
       <Modified>2023-10-31T14:58:56.000</Modified>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.hosting.abstractions\8.0.0\lib\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll">
+      <PackagePath>Microsoft.Extensions.Hosting.Abstractions.dll</PackagePath>
+      <Modified>2023-10-31T14:59:34.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.http\8.0.0\lib\net8.0\Microsoft.Extensions.Http.dll">
+      <PackagePath>Microsoft.Extensions.Http.dll</PackagePath>
+      <Modified>2023-10-31T14:59:44.000</Modified>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.logging\8.0.0\lib\net8.0\Microsoft.Extensions.Logging.dll">
       <PackagePath>Microsoft.Extensions.Logging.dll</PackagePath>
       <Modified>2023-10-31T14:59:24.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.logging.abstractions\8.0.0\lib\net8.0\Microsoft.Extensions.Logging.Abstractions.dll">
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.logging.abstractions\8.0.1\lib\net8.0\Microsoft.Extensions.Logging.Abstractions.dll">
       <PackagePath>Microsoft.Extensions.Logging.Abstractions.dll</PackagePath>
-      <Modified>2023-10-31T14:59:12.000</Modified>
+      <Modified>2024-02-14T23:51:52.000</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.logging.debug\8.0.0\lib\net8.0\Microsoft.Extensions.Logging.Debug.dll">
       <PackagePath>Microsoft.Extensions.Logging.Debug.dll</PackagePath>
       <Modified>2023-10-31T14:59:30.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.options\8.0.0\lib\net8.0\Microsoft.Extensions.Options.dll">
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.options\8.0.2\lib\net8.0\Microsoft.Extensions.Options.dll">
       <PackagePath>Microsoft.Extensions.Options.dll</PackagePath>
-      <Modified>2023-10-31T14:59:06.000</Modified>
+      <Modified>2024-01-18T03:05:26.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.options.configurationextensions\8.0.0\lib\net8.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll">
+      <PackagePath>Microsoft.Extensions.Options.ConfigurationExtensions.dll</PackagePath>
+      <Modified>2023-10-31T14:59:38.000</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.extensions.primitives\8.0.0\lib\net8.0\Microsoft.Extensions.Primitives.dll">
       <PackagePath>Microsoft.Extensions.Primitives.dll</PackagePath>
       <Modified>2023-10-31T14:58:52.000</Modified>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\lib\net8.0\Microsoft.FluentUI.AspNetCore.Components.dll">
+      <PackagePath>Microsoft.FluentUI.AspNetCore.Components.dll</PackagePath>
+      <Modified>2024-05-03T16:06:26.000</Modified>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.graphics.win2d\1.2.0\lib\net6.0-windows10.0.19041.0\Microsoft.Graphics.Canvas.Interop.dll">
       <PackagePath>Microsoft.Graphics.Canvas.Interop.dll</PackagePath>
       <Modified>2024-03-11T15:36:42.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.jsinterop\8.0.0\lib\net8.0\Microsoft.JSInterop.dll">
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.jsinterop\8.0.4\lib\net8.0\Microsoft.JSInterop.dll">
       <PackagePath>Microsoft.JSInterop.dll</PackagePath>
-      <Modified>2023-11-01T01:06:36.000</Modified>
+      <Modified>2024-03-20T23:33:54.000</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.maui.controls.compatibility\8.0.21\lib\net8.0-windows10.0.19041\Microsoft.Maui.Controls.Compatibility.dll">
       <PackagePath>Microsoft.Maui.Controls.Compatibility.dll</PackagePath>
@@ -665,21 +693,153 @@
       <PackagePath>Microsoft.Maui.pri</PackagePath>
       <Modified>2024-04-18T23:19:32.000</Modified>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Anchor\FluentAnchor.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Anchor\FluentAnchor.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\AnchoredRegion\FluentAnchoredRegion.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\AnchoredRegion\FluentAnchoredRegion.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Button\FluentButton.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Button\FluentButton.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Checkbox\FluentCheckbox.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Checkbox\FluentCheckbox.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\DataGrid\FluentDataGrid.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\DataGrid\FluentDataGrid.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\DesignSystemProvider\FluentDesignTheme.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\DesignSystemProvider\FluentDesignTheme.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Divider\FluentDivider.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Divider\FluentDivider.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Grid\FluentGrid.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Grid\FluentGrid.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\HorizontalScroll\FluentHorizontalScroll.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\HorizontalScroll\FluentHorizontalScroll.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\InputFile\FluentInputFile.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\InputFile\FluentInputFile.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\KeyCode\FluentKeyCode.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\KeyCode\FluentKeyCode.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Label\FluentInputLabel.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Label\FluentInputLabel.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\List\FluentAutocomplete.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\List\FluentAutocomplete.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\List\FluentCombobox.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\List\FluentCombobox.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\List\ListComponentBase.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\List\ListComponentBase.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Menu\FluentMenu.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Menu\FluentMenu.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\NavMenu\FluentNavMenu.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\NavMenu\FluentNavMenu.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Overflow\FluentOverflow.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Overflow\FluentOverflow.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\PullToRefresh\FluentPullToRefresh.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\PullToRefresh\FluentPullToRefresh.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Search\FluentSearch.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Search\FluentSearch.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Slider\FluentSlider.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Slider\FluentSlider.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Slider\FluentSliderLabel.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Slider\FluentSliderLabel.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\SortableList\FluentSortableList.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\SortableList\FluentSortableList.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Splitter\FluentMultiSplitter.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Splitter\FluentMultiSplitter.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Tabs\FluentTab.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Tabs\FluentTab.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\TextField\FluentTextField.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\TextField\FluentTextField.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Components\Tooltip\FluentTooltip.razor.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Components\Tooltip\FluentTooltip.razor.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\css\reboot.css">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\css\reboot.css</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\js\initializersLoader.webview.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\js\initializersLoader.webview.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\js\loading-theme.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\js\loading-theme.js</PackagePath>
+      <Modified>2024-05-03T16:01:04.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Microsoft.FluentUI.AspNetCore.Components.bundle.scp.css">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Microsoft.FluentUI.AspNetCore.Components.bundle.scp.css</PackagePath>
+      <Modified>2024-05-03T16:06:26.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Microsoft.FluentUI.AspNetCore.Components.lib.module.js">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Microsoft.FluentUI.AspNetCore.Components.lib.module.js</PackagePath>
+      <Modified>2024-05-03T16:06:18.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Microsoft.FluentUI.AspNetCore.Components.lib.module.js.LEGAL.txt">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Microsoft.FluentUI.AspNetCore.Components.lib.module.js.LEGAL.txt</PackagePath>
+      <Modified>2024-05-03T16:06:18.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\dwini\.nuget\packages\microsoft.fluentui.aspnetcore.components\4.7.2\staticwebassets\Microsoft.FluentUI.AspNetCore.Components.lib.module.js.map">
+      <PackagePath>wwwroot\_content\Microsoft.FluentUI.AspNetCore.Components\Microsoft.FluentUI.AspNetCore.Components.lib.module.js.map</PackagePath>
+      <Modified>2024-05-03T16:06:18.000</Modified>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\scopedcss\bundle\Receipt-Manager-App.styles.css">
       <PackagePath>wwwroot\Receipt-Manager-App.styles.css</PackagePath>
-      <Modified>2024-05-24T14:18:27.302</Modified>
+      <Modified>2024-05-24T14:55:31.650</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\scopedcss\projectbundle\Receipt-Manager-App.bundle.scp.css">
       <PackagePath>wwwroot\Receipt-Manager-App.bundle.scp.css</PackagePath>
-      <Modified>2024-05-24T14:18:27.305</Modified>
+      <Modified>2024-05-24T14:22:52.161</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\Layout\MainLayout.razor.css">
       <PackagePath>Layout\MainLayout.razor.css</PackagePath>
       <Modified>2024-05-24T14:16:32.806</Modified>
-    </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\Layout\NavMenu.razor.css">
-      <PackagePath>Layout\NavMenu.razor.css</PackagePath>
-      <Modified>2024-05-24T14:16:32.808</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

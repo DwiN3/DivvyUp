@@ -102,7 +102,6 @@ C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net
 C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.buildTransitive.Receipt-Manager-App.props
 C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\staticwebassets.pack.json
 C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\scopedcss\Layout\MainLayout.razor.rz.scp.css
-C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\scopedcss\Layout\NavMenu.razor.rz.scp.css
 C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\scopedcss\bundle\Receipt-Manager-App.styles.css
 C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\scopedcss\projectbundle\Receipt-Manager-App.bundle.scp.css
 C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\staticwebassets.publish.json
@@ -204,3 +203,11 @@ C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net
 C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
 C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
 C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\ProjectArchitectures.txt
+C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Http.dll
+C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\jsmodules\jsmodules.build.manifest.json
+C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\jsmodules\jsmodules.publish.manifest.json
+C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Diagnostics.dll
+C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Options.ConfigurationExtensions.dll
+C:\Users\dwini\Desktop\Receipt-Manager-Backend\Receipt-Manager-App\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.FluentUI.AspNetCore.Components.dll
