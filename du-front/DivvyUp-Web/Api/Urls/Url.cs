@@ -15,5 +15,7 @@ namespace DivvyUp_Web.Api.Urls
 
         // Receipt
         public readonly string ShowAll = "http://localhost:8080/rm/receipt/show-all";
+        public readonly string SetSettled = "http://localhost:8080/rm/receipt/set-is-settled/";
+        public readonly string ReceiptRemove = "http://localhost:8080/rm/receipt/remove/";
     }
 }

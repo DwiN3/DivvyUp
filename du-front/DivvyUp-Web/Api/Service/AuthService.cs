@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.Urls;
+using Blazored.LocalStorage;
 
 namespace DivvyUp_Web.Api.Service
 {
     public class AuthService : IAuthService
     {
         private Url _url { get; set; } = new();
-        private HttpClient _http { get; set; } = new();
+        private HttpClient _httpClient { get; set; } = new();
 
         public async Task<HttpResponseMessage> Login(string username, string password)
         {
@@ -21,7 +22,7 @@ namespace DivvyUp_Web.Api.Service
 
             var jsonData = JsonConvert.SerializeObject(loginData);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var response = await _http.PostAsync(_url.Login, content);
+            var response = await _httpClient.PostAsync(_url.Login, content);
             return response;
         }
 

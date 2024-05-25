@@ -21,16 +21,16 @@ namespace DivvyUp_App
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
+            builder.Services.AddHttpClient();
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddFluentUIComponents();
             builder.Services.AddBlazorBootstrap();
-            builder.Services.AddHttpClient();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
             builder.Services.AddSingleton<Url>();
             builder.Services.AddSingleton<ResponseCodeReader>();
             builder.Services.AddBlazoredLocalStorage();
-
+;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
