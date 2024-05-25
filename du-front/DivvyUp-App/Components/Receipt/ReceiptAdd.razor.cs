@@ -16,7 +16,7 @@ namespace DivvyUp_App.Components.Receipt
         public EventCallback RefreshGrid { get; set; }
 
         private string NameReceipt { get; set; }
-        private DateTime? DateReceipt { get; set; } = DateTime.Now;
+        private DateTime DateReceipt { get; set; } = DateTime.Now;
         private bool IsDelivery { get; set; }
         private double CostOfDelivery { get; set; }
 
@@ -30,6 +30,11 @@ namespace DivvyUp_App.Components.Receipt
             ReceiptModel receipt = new();
             receipt.receiptName = NameReceipt;
             receipt.date = (DateTime)DateReceipt;
+
+            if (IsDelivery)
+            {
+                CostOfDelivery = 0;
+            }
 
             var response = await ReceiptService.AddReceipt(Token, receipt);
             if (response.IsSuccessStatusCode)

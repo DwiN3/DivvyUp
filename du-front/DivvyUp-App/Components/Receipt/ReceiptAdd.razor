@@ -1,29 +1,67 @@
+﻿@using BlazorBootstrap
 ﻿@using Microsoft.FluentUI.AspNetCore.Components
 
 <div class="container">
-    <FluentTextField @bind-Value="@NameReceipt" Label="Nazwa" Class="inputs"></FluentTextField>
-    <FluentDatePicker @bind-Value="@DateReceipt" Label="Data" />
-    <input type="checkbox" @bind="@IsDelivery" class="delivery-checkbox" />
-    <FluentNumberField @bind-Value="@CostOfDelivery" Label="Koszt dostawy" HideStep="true" Class="inputs" />
-    <FluentButton Class="inputs" OnClick="@AddReceipt">Dodaj</FluentButton>
-</div>
+    <div class="section">
+        <span class="label">Nazwa</span>
+        <input type="text" class="form-control" @bind="@NameReceipt" aria-describedby="basic-addon1">
+    </div>
+    <div class="section">
+        <span class="label">Data</span>
+        <DateInput @bind-Value="@DateReceipt" Class="form-control" />
+    </div>
+    <div class="section">
+        <span class="label">Dostawa</span>
+        <input type="checkbox" @bind="@IsDelivery" class="delivery-checkbox" />
 
+    </div>
+    <div class="section">
+        <span class="label">Koszt dostawy</span>
+        <input type="text" class="form-control" readonly="@(!IsDelivery)" @bind="@CostOfDelivery" aria-describedby="basic-addon1">
+    </div>
+    <div class="section button-section">
+        <FluentButton Class="inputs" OnClick="@AddReceipt">Dodaj</FluentButton>
+    </div>
+</div>
 
 <style>
     .container {
         display: flex;
-        align-items: center;
-        height: 50px;
+        flex-wrap: wrap;
+        height: 70px;
+        gap: 20px;
         width: 100%;
     }
 
-    .inputs {
-        margin: 0 20px;
+    .section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    .delivery-checkbox{
-        transform: scale(2);
-        margin-left: 30px;
-        margin-right: 10px;
+    .label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 200px;
+        height: 35px;
+    }
+
+    .delivery-checkbox {
+        width: 34px;
+        height: 34px;
+        margin-left: 5px;
+    }
+
+    .button-section {
+        align-self: center;
+        margin-top: 20px;
+    }
+
+    .inputs {
+        width: 200px;
+        height: 35px;
     }
 </style>

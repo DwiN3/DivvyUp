@@ -10,23 +10,41 @@
       Responsive="true"
       @key="Receipts">
       
-    <GridColumn TItem="ShowReceiptResponse" HeaderText="Rozliczone" SortKeySelector="item => item.isSettled">
+    <GridColumn TItem="ShowReceiptResponse" 
+                HeaderText="Rozliczone" 
+                HeaderTextAlignment="Alignment.Center" 
+                TextAlignment="Alignment.Center"
+                SortKeySelector="item => item.isSettled">
         <input type="checkbox" @bind="context.isSettled" @onclick="(args) => SetSettled(context.receiptId, !context.isSettled)" />
     </GridColumn>
 
-    <GridColumn TItem="ShowReceiptResponse" HeaderText="Nazwa" SortKeySelector="item => item.receiptName">
+    <GridColumn TItem="ShowReceiptResponse" 
+                HeaderText="Nazwa" 
+                HeaderTextAlignment="Alignment.Center" 
+                TextAlignment="Alignment.Center"
+                SortKeySelector="item => item.receiptName">
         @context.receiptName
     </GridColumn>
 
-    <GridColumn TItem="ShowReceiptResponse" HeaderText="Data" SortKeySelector="item => item.date">
+    <GridColumn TItem="ShowReceiptResponse"
+                HeaderTextAlignment="Alignment.Center" 
+                TextAlignment="Alignment.Center"
+                HeaderText="Data" SortKeySelector="item => item.date">
         @context.date.ToString("dd.MM.yyyy")
     </GridColumn>
 
-    <GridColumn TItem="ShowReceiptResponse" HeaderText="Kwota" SortKeySelector="item => item.totalAmount">
+    <GridColumn TItem="ShowReceiptResponse" 
+                HeaderText="Kwota" 
+                HeaderTextAlignment="Alignment.Center"
+                TextAlignment="Alignment.Center"
+                SortKeySelector="item => item.totalAmount">
         @context.totalAmount
     </GridColumn>
     
-    <GridColumn TItem="ShowReceiptResponse" HeaderText="Usuń">
+    <GridColumn TItem="ShowReceiptResponse" 
+                HeaderTextAlignment="Alignment.Center"
+                TextAlignment="Alignment.Center"
+                HeaderText="Usuń">
         <img src="icons/remove_icon.png" alt="Usuń" @onclick="@(e => RemoveReceipt(context.receiptId))" style="cursor: pointer; width: 15px; height: 15px;" />
     </GridColumn>
 </Grid>

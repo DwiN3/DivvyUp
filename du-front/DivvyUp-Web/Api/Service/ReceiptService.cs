@@ -13,7 +13,6 @@ namespace DivvyUp_Web.Api.Service
 
         public async Task<HttpResponseMessage> AddReceipt(string token, ReceiptModel receipt)
         {
-            System.Diagnostics.Debug.Print(receipt.date.ToString());
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var receiptData = new
             {
