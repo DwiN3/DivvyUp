@@ -9,20 +9,17 @@ namespace DivvyUp_App.Layout
         private NavigationManager Navigation { get; set; }
         [Inject]
         private ILocalStorageService LocalStorage { get; set; }
+        private string Token { get; set; }
 
-
-        protected override async Task OnInitializedAsync()
+        protected override async void OnInitialized()
         {
-            //await StartUp();
+            Token = await LocalStorage.GetItemAsync<string>("authToken");
+            await StartUp();
         }
 
         private async Task StartUp()
         {
-            //var token = await LocalStorage.GetItemAsync<string>("authToken");
-            var token =
-                "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJLYW1pbCIsImlhdCI6MTcxNjY0OTc1MywiZXhwIjoxNzE2NjUyNjMzfQ.caFtTqtBd4SyN123H-a20FSNcZ4RpzzD-k6ghXVYdXY";
-            await LocalStorage.SetItemAsync("authToken", token);
-            if (!string.IsNullOrEmpty(token))
+            if (!string.IsNullOrEmpty(Token))
             {
                 Navigation.NavigateTo("/receipt");
             }

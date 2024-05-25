@@ -23,7 +23,6 @@ namespace DivvyUp_App.Pages.Auth
         private string Password { get; set; }
         private string LoginInfo { get; set; } = string.Empty;
         private string ColorInfo { get; set; } = "black";
-        
 
         private async Task SingUp()
         {

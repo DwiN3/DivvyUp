@@ -20,7 +20,7 @@ namespace DivvyUp_App.Pages.Auth
         private string RegisterInfo { get; set; } = string.Empty;
         private string ColorInfo { get; set; } = "black";
         
-
+        
         private async Task CreateAccount()
         {
             try
