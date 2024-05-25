@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DivvyUp_Web.Api.Models;
 
 namespace DivvyUp_Web.Api.Interface
 {
     public interface IAuthService
     {
-        public Task<HttpResponseMessage> Register();
-        public Task<HttpResponseMessage> Login(string username, string password);
+        public Task<HttpResponseMessage> Register(User user);
+        public Task<HttpResponseMessage> Login(User user);
         public Task<HttpResponseMessage> RemoveAccount();
     }
 }

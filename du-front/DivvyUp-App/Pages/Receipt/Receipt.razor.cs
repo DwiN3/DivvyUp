@@ -10,7 +10,7 @@ using DivvyUp_Web.Api.Response;
 using Newtonsoft.Json;
 using BlazorBootstrap;
 
-namespace DivvyUp_App.Pages
+namespace DivvyUp_App.Pages.Receipt
 {
     partial class Receipt
     {

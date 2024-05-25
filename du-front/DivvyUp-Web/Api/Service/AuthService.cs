@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.Urls;
 using Blazored.LocalStorage;
+using DivvyUp_Web.Api.Models;
 
 namespace DivvyUp_Web.Api.Service
 {
@@ -12,12 +13,12 @@ namespace DivvyUp_Web.Api.Service
         private Url _url { get; set; } = new();
         private HttpClient _httpClient { get; set; } = new();
 
-        public async Task<HttpResponseMessage> Login(string username, string password)
+        public async Task<HttpResponseMessage> Login(User user)
         {
             var loginData = new
             {
-                username = username,
-                password = password
+                username = user.username,
+                password = user.password
             };
 
             var jsonData = JsonConvert.SerializeObject(loginData);
@@ -26,12 +27,22 @@ namespace DivvyUp_Web.Api.Service
             return response;
         }
 
-        public Task<HttpResponseMessage> Register()
+        public async Task<HttpResponseMessage> Register(User user)
         {
-            throw new NotImplementedException();
+            var registerData = new
+            {
+                username = user.username,
+                email = user.email,
+                password = user.password
+            };
+
+            var jsonData = JsonConvert.SerializeObject(registerData);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(_url.Register, content);
+            return response;
         }
 
-        public Task<HttpResponseMessage> RemoveAccount()
+        public async Task<HttpResponseMessage> RemoveAccount()
         {
             throw new NotImplementedException();
         }

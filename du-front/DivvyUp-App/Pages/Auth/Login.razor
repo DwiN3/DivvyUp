@@ -7,6 +7,7 @@
         <FluentTextField Class="inputs" @bind-Value="@Username" Label="Username"></FluentTextField>
         <FluentTextField Class="inputs" @bind-Value="@Password" Label="Password" TextFieldType="TextFieldType.Password"></FluentTextField>
         <FluentButton Class="inputs" Style="margin-top: 20px;" OnClick="@SingUp">Zaloguj się</FluentButton>
+        <FluentButton Class="inputs" Style="margin-top: 20px;" OnClick="@(() => Navigation.NavigateTo("/register"))">Zarejestruj się</FluentButton>
         <span style="color: @ColorInfo">@LoginInfo</span>
     </div>
 </div>

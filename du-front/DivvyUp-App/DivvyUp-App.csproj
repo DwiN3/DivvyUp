@@ -58,6 +58,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <AndroidResource Remove="Pages\NewFolder1\**" />
+      <Compile Remove="Pages\NewFolder1\**" />
+      <Content Remove="Pages\NewFolder1\**" />
+      <EmbeddedResource Remove="Pages\NewFolder1\**" />
+      <MauiXaml Remove="Pages\NewFolder1\**" />
+      <None Remove="Pages\NewFolder1\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Blazor.Bootstrap" Version="2.2.0" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.7.2" />

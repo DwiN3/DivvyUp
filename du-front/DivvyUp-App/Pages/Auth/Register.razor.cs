@@ -1,58 +1,53 @@
 ﻿using System.Net.Sockets;
 using Microsoft.AspNetCore.Components;
-using Newtonsoft.Json;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.ResponceCodeReader;
-using DivvyUp_Web.Api.Response;
-using Blazored.LocalStorage;
+using DivvyUp_Web.Api.Models;
 
-namespace DivvyUp_App.Pages
+namespace DivvyUp_App.Pages.Auth
 {
-    partial class Login
+    partial class Register
     {
         private string Username { get; set; }
+        private string Email { get; set; }
         private string Password { get; set; }
         [Inject]
         private IAuthService AuthService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
-        [Inject]
-        private ILocalStorageService LocalStorage { get; set; }
 
         private ResponseCodeReader RCR { get; set; } = new();
-        private string LoginInfo { get; set; } = string.Empty;
+        private string RegisterInfo { get; set; } = string.Empty;
         private string ColorInfo { get; set; } = "black";
         
 
-        private async Task SingUp()
+        private async Task CreateAccount()
         {
             try
             {
-                var response = await AuthService.Login(Username, Password);
+                User user = new User();
+                user.username = Username;
+                user.email = Email;
+                user.password = Password;
+                var response = await AuthService.Register(user);
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseBody = await response.Content.ReadAsStringAsync();
-                    var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
-                    await LocalStorage.SetItemAsync("authToken", loginResponse.token);
                     ColorInfo = "green";
-                    Navigation.NavigateTo("/receipt");
                 }
                 else
                 {
                     ColorInfo = "red";
                 }
-                LoginInfo = RCR.ReadLogin(response.StatusCode);
+                RegisterInfo = RCR.ReadRegister(response.StatusCode);
             }
             catch (HttpRequestException ex) when (ex.InnerException is SocketException socketException)
             {
-                Console.WriteLine($"Błąd połączenia: {socketException.Message}");
-                LoginInfo = "Błąd połączenia z serwerem.";
+                RegisterInfo = "Błąd połączenia z serwerem.";
                 ColorInfo = "red";
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Wystąpił nieoczekiwany błąd: {ex.Message}");
-                LoginInfo = "Wystąpił nieoczekiwany błąd.";
+                RegisterInfo = "Wystąpił nieoczekiwany błąd.";
                 ColorInfo = "red";
             }
         }

@@ -26,5 +26,20 @@ namespace DivvyUp_Web.Api.ResponceCodeReader
                     return "Błędne zapytanie";
             }
         }
+
+        public string ReadRegister(HttpStatusCode code)
+        {
+            switch (code)
+            {
+                case HttpStatusCode.OK:
+                    return "Pomyślnie utworzono konto";
+                case HttpStatusCode.BadRequest:
+                    return "Błędne zapytanie";
+                case HttpStatusCode.Conflict:
+                    return "Użytkownik o podanej nazwie istnieje";
+                default:
+                    return "Błędne zapytanie";
+            }
+        }
     }
 }
