@@ -6,7 +6,7 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using DivvyUp_Web.Api.ResponceCodeReader;
 
 
-namespace Receipt_Manager_App
+namespace DivvyUp_App
 {
     public static class MauiProgram
     {

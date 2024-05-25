@@ -1,4 +1,4 @@
-﻿namespace Receipt_Manager_App
+﻿namespace DivvyUp_App
 {
     public partial class MainPage : ContentPage
     {

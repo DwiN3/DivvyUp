@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace Receipt_Manager_App
+namespace DivvyUp_App
 {
     public class Program
     {

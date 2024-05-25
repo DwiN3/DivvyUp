@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Receipt_Manager_App
+namespace DivvyUp_App
 {
     [Application]
     public class MainApplication : MauiApplication

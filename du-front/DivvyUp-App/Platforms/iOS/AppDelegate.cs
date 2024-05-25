@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Receipt_Manager_App
+namespace DivvyUp_App
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate
