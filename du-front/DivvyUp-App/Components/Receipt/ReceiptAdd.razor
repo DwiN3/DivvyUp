@@ -1,0 +1,29 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+
+<div class="container">
+    <FluentTextField @bind-Value="@NameReceipt" Label="Nazwa" Class="inputs"></FluentTextField>
+    <FluentDatePicker @bind-Value="@DateReceipt" Label="Data" />
+    <input type="checkbox" @bind="@IsDelivery" class="delivery-checkbox" />
+    <FluentNumberField @bind-Value="@CostOfDelivery" Label="Koszt dostawy" HideStep="true" Class="inputs" />
+    <FluentButton Class="inputs" OnClick="@AddReceipt">Dodaj</FluentButton>
+</div>
+
+
+<style>
+    .container {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        width: 100%;
+    }
+
+    .inputs {
+        margin: 0 20px;
+    }
+
+    .delivery-checkbox{
+        transform: scale(2);
+        margin-left: 30px;
+        margin-right: 10px;
+    }
+</style>

@@ -1,9 +1,7 @@
 ﻿using System.Text;
-using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.Urls;
-using Blazored.LocalStorage;
 using DivvyUp_Web.Api.Models;
 
 namespace DivvyUp_Web.Api.Service
@@ -13,7 +11,7 @@ namespace DivvyUp_Web.Api.Service
         private Url _url { get; set; } = new();
         private HttpClient _httpClient { get; set; } = new();
 
-        public async Task<HttpResponseMessage> Login(User user)
+        public async Task<HttpResponseMessage> Login(UserModel user)
         {
             var loginData = new
             {
@@ -27,7 +25,7 @@ namespace DivvyUp_Web.Api.Service
             return response;
         }
 
-        public async Task<HttpResponseMessage> Register(User user)
+        public async Task<HttpResponseMessage> Register(UserModel user)
         {
             var registerData = new
             {

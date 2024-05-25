@@ -11,16 +11,16 @@ namespace DivvyUp_App.Pages.Auth
 {
     partial class Login
     {
-        private string Username { get; set; }
-        private string Password { get; set; }
         [Inject]
         private IAuthService AuthService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
         private ILocalStorageService LocalStorage { get; set; }
-
         private ResponseCodeReader RCR { get; set; } = new();
+
+        private string Username { get; set; }
+        private string Password { get; set; }
         private string LoginInfo { get; set; } = string.Empty;
         private string ColorInfo { get; set; } = "black";
         
@@ -29,7 +29,7 @@ namespace DivvyUp_App.Pages.Auth
         {
             try
             {
-                User user = new User();
+                UserModel user = new UserModel();
                 user.username = Username;
                 user.password = Password;
                 var response = await AuthService.Login(user);

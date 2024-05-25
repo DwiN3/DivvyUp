@@ -1,14 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DivvyUp_Web.Api.Interface;
-using DivvyUp_Web.Api.Response;
-using Newtonsoft.Json;
-using BlazorBootstrap;
+using DivvyUp_App.Components.Receipt;
 
 namespace DivvyUp_App.Pages.Receipt
 {
@@ -22,9 +15,20 @@ namespace DivvyUp_App.Pages.Receipt
         private NavigationManager Navigation { get; set; }
         private string Token { get; set; }
 
+        private ReceiptGrid ReceiptGrid { get; set; }
+
+
         protected override async Task OnInitializedAsync()
         {
             Token = await LocalStorage.GetItemAsync<string>("authToken");
+        }
+
+        private async Task RefreshReceiptGrid()
+        {
+            if (ReceiptGrid != null)
+            {
+                await ReceiptGrid.RefreshGrid();
+            }
         }
 
         private async Task Logout()

@@ -8,15 +8,15 @@ namespace DivvyUp_App.Pages.Auth
 {
     partial class Register
     {
-        private string Username { get; set; }
-        private string Email { get; set; }
-        private string Password { get; set; }
         [Inject]
         private IAuthService AuthService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
-
         private ResponseCodeReader RCR { get; set; } = new();
+
+        private string Username { get; set; }
+        private string Email { get; set; }
+        private string Password { get; set; }
         private string RegisterInfo { get; set; } = string.Empty;
         private string ColorInfo { get; set; } = "black";
         
@@ -25,7 +25,7 @@ namespace DivvyUp_App.Pages.Auth
         {
             try
             {
-                User user = new User();
+                UserModel user = new UserModel();
                 user.username = Username;
                 user.email = Email;
                 user.password = Password;

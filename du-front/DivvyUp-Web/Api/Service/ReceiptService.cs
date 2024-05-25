@@ -1,48 +1,57 @@
 ﻿using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.Urls;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using DivvyUp_Web.Api.Response;
-using Blazored.LocalStorage;
+using DivvyUp_Web.Api.Models;
 
 namespace DivvyUp_Web.Api.Service
 {
     public class ReceiptService : IReceiptService
     {
         private Url _url { get; set; } = new();
-        private HttpClient _http { get; set; } = new();
+        private HttpClient _httpClient { get; set; } = new();
 
-        public async Task<HttpResponseMessage> ShowAll(string token)
+        public async Task<HttpResponseMessage> AddReceipt(string token, ReceiptModel receipt)
         {
-            _http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var response = await _http.GetAsync(_url.ShowAll);
+            System.Diagnostics.Debug.Print(receipt.date.ToString());
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var receiptData = new
+            {
+                receiptName = receipt.receiptName,
+                date = receipt.date
+            };
+
+            var jsonData = JsonConvert.SerializeObject(receiptData);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(_url.AddReceipt, content);
             return response;
         }
 
-        public async Task<HttpResponseMessage> Remove(string token, int id)
+        public async Task<HttpResponseMessage> SetSettled(string token, ReceiptModel receipt)
         {
-            _http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var response = await _http.DeleteAsync(_url.ReceiptRemove+id);
-            return response;
-        }
-
-        public async Task<HttpResponseMessage> SetSettled(string token, int id, bool settled)
-        {
-            _http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var settledData = new
             {
-                settled = settled,
+                settled = receipt.isSettled,
             };
 
             var jsonData = JsonConvert.SerializeObject(settledData);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var response = await _http.PutAsync(_url.SetSettled+id, content);
+            var response = await _httpClient.PutAsync(_url.SetSettled + receipt.receiptId, content);
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> Remove(string token, ReceiptModel receipt)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var response = await _httpClient.DeleteAsync(_url.ReceiptRemove+ receipt.receiptId);
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> ShowAll(string token)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var response = await _httpClient.GetAsync(_url.ShowAll);
             return response;
         }
     }

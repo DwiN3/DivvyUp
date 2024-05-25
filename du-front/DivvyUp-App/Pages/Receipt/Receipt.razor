@@ -1,7 +1,9 @@
 ﻿@page "/receipt"
-@using BlazorBootstrap;
 @using DivvyUp_App.Components.Receipt
+@using Microsoft.FluentUI.AspNetCore.Components
 
-<ReceiptGrid></ReceiptGrid>
+<h1>Paragony</h1>
 
-<Button onclick="@Logout">Wyloguj się</Button>
+<ReceiptAdd RefreshGrid="@RefreshReceiptGrid"></ReceiptAdd>
+<ReceiptGrid @ref="ReceiptGrid"></ReceiptGrid>
+<FluentButton OnClick="@Logout">Wyloguj się</FluentButton>

@@ -19,7 +19,7 @@
     </GridColumn>
 
     <GridColumn TItem="ShowReceiptResponse" HeaderText="Data" SortKeySelector="item => item.date">
-        @context.date
+        @context.date.ToString("dd.MM.yyyy")
     </GridColumn>
 
     <GridColumn TItem="ShowReceiptResponse" HeaderText="Kwota" SortKeySelector="item => item.totalAmount">
@@ -29,5 +29,4 @@
     <GridColumn TItem="ShowReceiptResponse" HeaderText="Usuń">
         <img src="icons/remove_icon.png" alt="Usuń" @onclick="@(e => RemoveReceipt(context.receiptId))" style="cursor: pointer; width: 15px; height: 15px;" />
     </GridColumn>
-
 </Grid>

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Enumeration;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
 namespace DivvyUp_Web.Api.ResponceCodeReader
 {
     public class ResponseCodeReader
     {
+        // Auth
         public string ReadLogin(HttpStatusCode code)
         {
             switch (code)
