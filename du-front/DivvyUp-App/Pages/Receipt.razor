@@ -1,0 +1,8 @@
+﻿@page "/receipt"
+@using BlazorBootstrap;
+@using DivvyUp_Web.Api.Response
+@using DivvyUp_App.Components.Receipt
+
+<ReceiptGrid Receipts="@Receipts"></ReceiptGrid>
+
+<Button onclick="@Logout">Wyloguj się</Button>

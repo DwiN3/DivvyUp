@@ -8,6 +8,6 @@ namespace DivvyUp_Web.Api.Response
 {
     public class LoginResponse
     {
-        public string token;
+        public string token { get; set; }
     }
 }

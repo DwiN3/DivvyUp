@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.ResponceCodeReader;
 using DivvyUp_Web.Api.Response;
+using Blazored.LocalStorage;
 
 namespace DivvyUp_App.Pages
 {
@@ -13,6 +14,10 @@ namespace DivvyUp_App.Pages
         private string Password { get; set; }
         [Inject]
         private IAuthService AuthService { get; set; }
+        [Inject]
+        private NavigationManager Navigation { get; set; }
+        [Inject]
+        private ILocalStorageService LocalStorage { get; set; }
 
         private ResponseCodeReader RCR { get; set; } = new();
         private string LoginInfo { get; set; } = string.Empty;
@@ -28,8 +33,10 @@ namespace DivvyUp_App.Pages
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
+                    await LocalStorage.SetItemAsync("authToken", loginResponse.token);
                     System.Diagnostics.Debug.Print(loginResponse.token);
                     ColorInfo = "green";
+                    Navigation.NavigateTo("/receipt");
                 }
                 else
                 {

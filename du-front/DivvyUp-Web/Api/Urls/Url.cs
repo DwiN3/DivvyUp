@@ -12,5 +12,8 @@ namespace DivvyUp_Web.Api.Urls
         public readonly string Register = "http://localhost:8080/rm/register";
         public readonly string Login = "http://localhost:8080/rm/auth";
         public readonly string Remove = "http://localhost:8080/rm/remove-account";
+
+        // Receipt
+        public readonly string ShowAll = "http://localhost:8080/rm/receipt/show-all";
     }
 }

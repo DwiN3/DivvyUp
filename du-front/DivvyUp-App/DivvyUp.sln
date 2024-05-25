@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp-App", "DivvyUp-App.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp-Web", "..\DivvyUp-Web\DivvyUp-Web.csproj", "{CF9602AE-B284-4307-A466-9C2237B356F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivvyUp-Impl", "..\DivvyUp-Impl\DivvyUp-Impl.csproj", "{6706BA5C-00E4-469F-8644-DC10AD1BC8C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp-Impl", "..\DivvyUp-Impl\DivvyUp-Impl.csproj", "{6706BA5C-00E4-469F-8644-DC10AD1BC8C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

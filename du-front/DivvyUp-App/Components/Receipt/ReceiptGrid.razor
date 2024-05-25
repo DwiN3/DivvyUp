@@ -1,0 +1,29 @@
+﻿@using BlazorBootstrap;
+@using DivvyUp_Web.Api.Response
+
+<Grid TItem="ShowReceiptResponse"
+      AllowRowClick="true"
+      AllowSorting="true"
+      Class="table table-hover"
+      DataProvider="ReceiptsDataProvider"
+      HeaderRowCssClass="bg-primary text-white border-bottom-0"
+      Responsive="true"
+      @key="Receipts">
+      
+    <GridColumn TItem="ShowReceiptResponse" HeaderText="Rozliczone" SortKeySelector="item => item.isSettled">
+        <input type="checkbox" @bind="context.isSettled" @onclick="(args) => SetSettled(context.receiptId, !context.isSettled)" />
+    </GridColumn>
+
+    <GridColumn TItem="ShowReceiptResponse" HeaderText="Nazwa" SortKeySelector="item => item.receiptName">
+        @context.receiptName
+    </GridColumn>
+
+    <GridColumn TItem="ShowReceiptResponse" HeaderText="Data" SortKeySelector="item => item.date">
+        @context.date
+    </GridColumn>
+
+    <GridColumn TItem="ShowReceiptResponse" HeaderText="Suma Rachunku" SortKeySelector="item => item.totalAmount">
+        @context.totalAmount
+    </GridColumn>
+
+</Grid>
