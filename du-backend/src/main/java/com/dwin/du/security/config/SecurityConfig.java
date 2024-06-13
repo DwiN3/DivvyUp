@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(new AntPathRequestMatcher("/rm/auth")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/rm/register")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/rm/validate-token")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((sessionManagement) -> sessionManagement

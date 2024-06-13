@@ -13,6 +13,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +95,22 @@ public class AuthenticationService {
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    public ResponseEntity<?> validateToken(String token) {
+        try {
+            String username = jwtService.extractUsername(token);
+            UserDetails userDetails = repository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            boolean isValid = jwtService.isTokenValid(token, userDetails);
+
+            if (isValid) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }

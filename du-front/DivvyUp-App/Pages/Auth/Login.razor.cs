@@ -41,14 +41,7 @@ namespace DivvyUp_App.Pages.Auth
                     var responseBody = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
                     var token = loginResponse.token;
-                    // Debugowanie zapisu tokenu
-                    System.Diagnostics.Debug.Print($"Token received: {token}");
-
                     await LocalStorage.SetItemAsync("authToken", token);
-
-                    // Debugowanie odczytu tokenu po zapisie
-                    var savedToken = await LocalStorage.GetItemAsync<string>("authToken");
-                    System.Diagnostics.Debug.Print($"Token saved in LocalStorage: {savedToken}");
                     HttpClient.UpdateToken(token);
                     ColorInfo = "green";
                     Navigation.NavigateTo("/receipt");

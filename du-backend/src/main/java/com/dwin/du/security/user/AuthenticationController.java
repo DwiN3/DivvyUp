@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/rm/")
+@RequestMapping("/rm")
 public class AuthenticationController {
 
     private final AuthenticationService service;
@@ -30,6 +30,13 @@ public class AuthenticationController {
     @DeleteMapping("/remove-account")
     public ResponseEntity<?> removeAccount(@RequestBody RemoveAccountRequest request){
         ResponseEntity<?> response = service.remove(request);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
+
+    @GetMapping("/validate-token")
+    public ResponseEntity<?> validateToken(@RequestParam String token) {
+        System.out.println(token);
+        ResponseEntity<?> response = service.validateToken(token);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
+using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.DivvyUpHttpClient;
 using Microsoft.AspNetCore.Components;
 
@@ -12,24 +12,24 @@ namespace DivvyUp_App.Layout
         [Inject]
         private ILocalStorageService LocalStorage { get; set; }
         [Inject]
+        private IAuthService AuthService { get; set; }
+        [Inject]
         private DuHttpClient DuHttpClient { get; set; }
-        private string Token { get; set; }
 
         protected override async void OnInitialized()
         {
-            Token = await LocalStorage.GetItemAsync<string>("authToken");
-            DuHttpClient.UpdateToken(Token);
-            await StartUp();
-        }
+            var token = await LocalStorage.GetItemAsync<string>("authToken");
+            var response = await AuthService.isValid(token);
 
-        private async Task StartUp()
-        {
-            if (!string.IsNullOrEmpty(Token))
+            if (response.IsSuccessStatusCode)
             {
+                DuHttpClient.UpdateToken(token);
                 Navigation.NavigateTo("/receipt");
+                
             }
             else
             {
+                DuHttpClient.UpdateToken(String.Empty);
                 Navigation.NavigateTo("/");
             }
         }

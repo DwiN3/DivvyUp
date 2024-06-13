@@ -7,5 +7,6 @@ namespace DivvyUp_Web.Api.Interface
         public Task<HttpResponseMessage> Login(User user);
         public Task<HttpResponseMessage> Register(User user);
         public Task<HttpResponseMessage> RemoveAccount();
+        public Task<HttpResponseMessage> isValid(string token);
     }
 }
