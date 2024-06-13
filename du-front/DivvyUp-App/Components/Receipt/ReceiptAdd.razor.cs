@@ -9,8 +9,6 @@ namespace DivvyUp_App.Components.Receipt
     {
         [Inject]
         private IReceiptService ReceiptService { get; set; }
-        [Inject]
-        private ILocalStorageService LocalStorage { get; set; }
         [Parameter]
         public EventCallback RefreshGrid { get; set; }
 

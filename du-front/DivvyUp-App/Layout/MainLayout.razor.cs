@@ -1,4 +1,5 @@
-﻿using Blazored.LocalStorage;
+﻿using BlazorBootstrap;
+using Blazored.LocalStorage;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.DivvyUpHttpClient;
 using Microsoft.AspNetCore.Components;
@@ -27,6 +28,7 @@ namespace DivvyUp_App.Layout
                 Navigation.NavigateTo("/receipt");
                 
             }
+            
             else
             {
                 DuHttpClient.UpdateToken(String.Empty);

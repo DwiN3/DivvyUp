@@ -15,7 +15,17 @@
                 HeaderTextAlignment="Alignment.Center"
                 TextAlignment="Alignment.Center"
                 SortKeySelector="item => item.settled">
-        <input type="checkbox" @bind="context.settled" @onclick="(args) => SetSettled(context.receiptId, !context.settled)"/>
+        <input style="width: 28px; height: 24px;" type="checkbox" @bind="context.settled" @onclick="(args) => SetSettled(context.receiptId, !context.settled)"/>
+    </GridColumn>
+    
+    <GridColumn TItem="ShowReceiptResponse"
+                HeaderTextAlignment="Alignment.Center"
+                TextAlignment="Alignment.Center"
+                Sortable="false"
+                SortKeySelector="item => item.receiptId">
+        <button>
+            <i class="bi bi-pencil-fill"></i>
+        </button>
     </GridColumn>
 
     <GridColumn TItem="ShowReceiptResponse" 

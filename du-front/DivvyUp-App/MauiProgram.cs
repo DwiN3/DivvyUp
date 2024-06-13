@@ -22,22 +22,23 @@ namespace DivvyUp_App
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
-            builder.Services.AddHttpClient();
-            builder.Services.AddMauiBlazorWebView();
-            builder.Services.AddFluentUIComponents();
-            builder.Services.AddBlazorBootstrap();
-            builder.Services.AddTransient<IAuthService, AuthService>();
-            builder.Services.AddTransient<IReceiptService, ReceiptService>();
-            builder.Services.AddSingleton<Route>();
-            builder.Services.AddSingleton<CodeReaderResponse>();
-            builder.Services.AddBlazoredLocalStorage();
-
             builder.Services.AddSingleton<DuHttpClient>(sp =>
             {
                 var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
                 var httpClient = httpClientFactory.CreateClient();
                 return new DuHttpClient(httpClient);
             });
+
+            builder.Services.AddHttpClient();
+            builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddFluentUIComponents();
+            builder.Services.AddBlazorBootstrap();
+            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddSingleton<Route>();
+            builder.Services.AddSingleton<CodeReaderResponse>();
+            builder.Services.AddTransient<IAuthService, AuthService>();
+            builder.Services.AddTransient<IReceiptService, ReceiptService>();
+
             ;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

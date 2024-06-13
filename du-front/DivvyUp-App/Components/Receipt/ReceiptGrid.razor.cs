@@ -12,8 +12,6 @@ namespace DivvyUp_App.Components.Receipt
     {
         [Inject]
         private IReceiptService ReceiptService { get; set; }
-        [Inject]
-        private ILocalStorageService LocalStorage { get; set; }
 
         public List<ShowReceiptResponse> Receipts { get; set; }
 

@@ -1,7 +1,15 @@
 ﻿@inherits LayoutComponentBase
+@using BlazorBootstrap;
+﻿@using Microsoft.FluentUI.AspNetCore.Components
 
-<div class="page">
+<div class="bb-page">
     <main>
-        @Body
+            @Body
     </main>
 </div>
+
+<style>
+    .navbar-toggler.px-2 {
+        display: none;
+    }
+</style>
