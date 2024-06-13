@@ -8,7 +8,7 @@ namespace DivvyUp_Web.Api.Service
 {
     public class ReceiptService : IReceiptService
     {
-        private Url _url { get; set; } = new();
+        private static Route _url { get; set; } = new();
         private HttpClient _httpClient { get; set; } = new();
 
         public async Task<HttpResponseMessage> AddReceipt(string token, ReceiptModel receipt)
@@ -26,24 +26,26 @@ namespace DivvyUp_Web.Api.Service
             return response;
         }
 
-        public async Task<HttpResponseMessage> SetSettled(string token, ReceiptModel receipt)
+        public async Task<HttpResponseMessage> SetSettled(string token, int receiptId, bool isSettled)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var settledData = new
             {
-                settled = receipt.isSettled,
+                settled = isSettled
             };
 
             var jsonData = JsonConvert.SerializeObject(settledData);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync(_url.SetSettled + receipt.receiptId, content);
+            string url = _url.SetSettled.Replace(Route.ID, receiptId.ToString());
+            var response = await _httpClient.PutAsync(url, content);
             return response;
         }
 
-        public async Task<HttpResponseMessage> Remove(string token, ReceiptModel receipt)
+        public async Task<HttpResponseMessage> Remove(string token, int receiptId)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            var response = await _httpClient.DeleteAsync(_url.ReceiptRemove+ receipt.receiptId);
+            string url = _url.ReceiptRemove.Replace(Route.ID, receiptId.ToString());
+            var response = await _httpClient.DeleteAsync(url);
             return response;
         }
 

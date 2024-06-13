@@ -8,7 +8,7 @@ namespace DivvyUp_Web.Api.Service
 {
     public class AuthService : IAuthService
     {
-        private Url _url { get; set; } = new();
+        private Route _url { get; set; } = new();
         private HttpClient _httpClient { get; set; } = new();
 
         public async Task<HttpResponseMessage> Login(UserModel user)

@@ -10,12 +10,12 @@
       Responsive="true"
       @key="Receipts">
       
-    <GridColumn TItem="ShowReceiptResponse" 
-                HeaderText="Rozliczone" 
-                HeaderTextAlignment="Alignment.Center" 
+    <GridColumn TItem="ShowReceiptResponse"
+                HeaderText="Rozliczone"
+                HeaderTextAlignment="Alignment.Center"
                 TextAlignment="Alignment.Center"
-                SortKeySelector="item => item.isSettled">
-        <input type="checkbox" @bind="context.isSettled" @onclick="(args) => SetSettled(context.receiptId, !context.isSettled)" />
+                SortKeySelector="item => item.settled">
+        <input type="checkbox" @bind="context.settled" @onclick="(args) => SetSettled(context.receiptId, !context.settled)"/>
     </GridColumn>
 
     <GridColumn TItem="ShowReceiptResponse" 

@@ -27,7 +27,7 @@ namespace DivvyUp_App
             builder.Services.AddBlazorBootstrap();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
-            builder.Services.AddSingleton<Url>();
+            builder.Services.AddSingleton<Route>();
             builder.Services.AddSingleton<ResponseCodeReader>();
             builder.Services.AddBlazoredLocalStorage();
 ;

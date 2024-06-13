@@ -59,17 +59,12 @@ namespace DivvyUp_App.Components.Receipt
 
         private void SetSettled(int receiptId, bool isChecked)
         {
-            ReceiptModel receipt = new();
-            receipt.receiptId = receiptId;
-            receipt.isSettled = isChecked;
-            ReceiptService.SetSettled(Token, receipt);
+            ReceiptService.SetSettled(Token, receiptId, isChecked);
         }
 
         private async void RemoveReceipt(int receiptId)
         {
-            ReceiptModel receipt = new();
-            receipt.receiptId = receiptId;
-            var response = await ReceiptService.Remove(Token, receipt);
+            var response = await ReceiptService.Remove(Token, receiptId);
             if (response.IsSuccessStatusCode)
             {
                 await LoadGrid();
