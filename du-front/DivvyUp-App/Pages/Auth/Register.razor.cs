@@ -12,7 +12,7 @@ namespace DivvyUp_App.Pages.Auth
         private IAuthService AuthService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
-        private ResponseCodeReader RCR { get; set; } = new();
+        private CodeReaderResponse RCR { get; set; } = new();
 
         private string Username { get; set; }
         private string Email { get; set; }
@@ -25,7 +25,7 @@ namespace DivvyUp_App.Pages.Auth
         {
             try
             {
-                UserModel user = new UserModel();
+                User user = new User();
                 user.username = Username;
                 user.email = Email;
                 user.password = Password;

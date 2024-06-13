@@ -3,15 +3,21 @@ using Newtonsoft.Json;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.Urls;
 using DivvyUp_Web.Api.Models;
+using DivvyUp_Web.DivvyUpHttpClient;
 
 namespace DivvyUp_Web.Api.Service
 {
     public class AuthService : IAuthService
     {
-        private Route _url { get; set; } = new();
         private HttpClient _httpClient { get; set; } = new();
+        private readonly Route _url;
 
-        public async Task<HttpResponseMessage> Login(UserModel user)
+        public AuthService(Route url)
+        {
+            _url = url;
+        }
+
+        public async Task<HttpResponseMessage> Login(User user)
         {
             var loginData = new
             {
@@ -25,7 +31,7 @@ namespace DivvyUp_Web.Api.Service
             return response;
         }
 
-        public async Task<HttpResponseMessage> Register(UserModel user)
+        public async Task<HttpResponseMessage> Register(User user)
         {
             var registerData = new
             {

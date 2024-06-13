@@ -1,6 +1,6 @@
 ﻿namespace DivvyUp_Web.Api.Models
 {
-    public class UserModel
+    public class User
     {
         public int userId;
         public string username;

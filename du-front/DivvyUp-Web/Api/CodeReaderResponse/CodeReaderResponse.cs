@@ -2,7 +2,7 @@
 
 namespace DivvyUp_Web.Api.ResponceCodeReader
 {
-    public class ResponseCodeReader
+    public class CodeReaderResponse
     {
         // Auth
         public string ReadLogin(HttpStatusCode code)
@@ -14,7 +14,7 @@ namespace DivvyUp_Web.Api.ResponceCodeReader
                 case HttpStatusCode.BadRequest:
                     return "Błędne zapytanie";
                 case HttpStatusCode.Unauthorized:
-                    return "Błędne dane";
+                    return "Błędne hasło";
                 case HttpStatusCode.NotFound:
                     return "Nie znaleziono użytkownika";
                 default:

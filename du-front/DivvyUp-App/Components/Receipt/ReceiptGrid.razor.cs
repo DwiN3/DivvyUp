@@ -14,23 +14,18 @@ namespace DivvyUp_App.Components.Receipt
         private IReceiptService ReceiptService { get; set; }
         [Inject]
         private ILocalStorageService LocalStorage { get; set; }
-        private string Token { get; set; }
 
         public List<ShowReceiptResponse> Receipts { get; set; }
 
 
         protected override async Task OnInitializedAsync()
         {
-            Token = await LocalStorage.GetItemAsync<string>("authToken");
-            if (Token != null)
-            {
-                await LoadGrid();
-            }
+            await LoadGrid();
         }
 
         private async Task LoadGrid()
         {
-            var response = await ReceiptService.ShowAll(Token);
+            var response = await ReceiptService.ShowAll();
             if (response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -59,12 +54,12 @@ namespace DivvyUp_App.Components.Receipt
 
         private void SetSettled(int receiptId, bool isChecked)
         {
-            ReceiptService.SetSettled(Token, receiptId, isChecked);
+            ReceiptService.SetSettled(receiptId, isChecked);
         }
 
         private async void RemoveReceipt(int receiptId)
         {
-            var response = await ReceiptService.Remove(Token, receiptId);
+            var response = await ReceiptService.Remove(receiptId);
             if (response.IsSuccessStatusCode)
             {
                 await LoadGrid();

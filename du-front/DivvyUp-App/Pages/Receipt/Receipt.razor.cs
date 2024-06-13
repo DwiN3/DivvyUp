@@ -13,14 +13,12 @@ namespace DivvyUp_App.Pages.Receipt
         private IReceiptService ReceiptService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
-        private string Token { get; set; }
-
         private ReceiptGrid ReceiptGrid { get; set; }
 
 
         protected override async Task OnInitializedAsync()
         {
-            Token = await LocalStorage.GetItemAsync<string>("authToken");
+            
         }
 
         private async Task RefreshReceiptGrid()

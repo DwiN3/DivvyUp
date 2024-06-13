@@ -6,6 +6,8 @@ using DivvyUp_Web.Api.ResponceCodeReader;
 using DivvyUp_Web.Api.Response;
 using Blazored.LocalStorage;
 using DivvyUp_Web.Api.Models;
+using DivvyUp_Web.DivvyUpHttpClient;
+using Newtonsoft.Json.Linq;
 
 namespace DivvyUp_App.Pages.Auth
 {
@@ -17,8 +19,10 @@ namespace DivvyUp_App.Pages.Auth
         private NavigationManager Navigation { get; set; }
         [Inject]
         private ILocalStorageService LocalStorage { get; set; }
-        private ResponseCodeReader RCR { get; set; } = new();
+        [Inject]
+        private DuHttpClient HttpClient { get; set; }
 
+        private CodeReaderResponse RCR { get; set; } = new();
         private string Username { get; set; }
         private string Password { get; set; }
         private string LoginInfo { get; set; } = string.Empty;
@@ -28,7 +32,7 @@ namespace DivvyUp_App.Pages.Auth
         {
             try
             {
-                UserModel user = new UserModel();
+                User user = new User();
                 user.username = Username;
                 user.password = Password;
                 var response = await AuthService.Login(user);
@@ -36,7 +40,16 @@ namespace DivvyUp_App.Pages.Auth
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
-                    await LocalStorage.SetItemAsync("authToken", loginResponse.token);
+                    var token = loginResponse.token;
+                    // Debugowanie zapisu tokenu
+                    System.Diagnostics.Debug.Print($"Token received: {token}");
+
+                    await LocalStorage.SetItemAsync("authToken", token);
+
+                    // Debugowanie odczytu tokenu po zapisie
+                    var savedToken = await LocalStorage.GetItemAsync<string>("authToken");
+                    System.Diagnostics.Debug.Print($"Token saved in LocalStorage: {savedToken}");
+                    HttpClient.UpdateToken(token);
                     ColorInfo = "green";
                     Navigation.NavigateTo("/receipt");
                 }

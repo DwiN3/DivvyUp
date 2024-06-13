@@ -11,7 +11,6 @@ namespace DivvyUp_App.Components.Receipt
         private IReceiptService ReceiptService { get; set; }
         [Inject]
         private ILocalStorageService LocalStorage { get; set; }
-        private string Token { get; set; }
         [Parameter]
         public EventCallback RefreshGrid { get; set; }
 
@@ -23,11 +22,11 @@ namespace DivvyUp_App.Components.Receipt
 
         protected override async Task OnInitializedAsync()
         {
-            Token = await LocalStorage.GetItemAsync<string>("authToken");
+            
         }
         private async Task AddReceipt()
         {
-            ReceiptModel receipt = new();
+            DivvyUp_Web.Api.Models.Receipt receipt = new();
             receipt.receiptName = NameReceipt;
             receipt.date = (DateTime)DateReceipt;
 
@@ -36,7 +35,7 @@ namespace DivvyUp_App.Components.Receipt
                 CostOfDelivery = 0;
             }
 
-            var response = await ReceiptService.AddReceipt(Token, receipt);
+            var response = await ReceiptService.AddReceipt(receipt);
             if (response.IsSuccessStatusCode)
             {
                 await RefreshGrid.InvokeAsync(null);

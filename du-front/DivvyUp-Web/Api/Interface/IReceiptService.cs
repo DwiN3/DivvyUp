@@ -4,9 +4,9 @@ namespace DivvyUp_Web.Api.Interface
 {
     public interface IReceiptService
     {
-        public Task<HttpResponseMessage> AddReceipt(string token, ReceiptModel receipt);
-        public Task<HttpResponseMessage> SetSettled(string token, int receiptId, bool isSettled);
-        public Task<HttpResponseMessage> Remove(string token, int receiptId);
-        public Task<HttpResponseMessage> ShowAll(string token);
+        public Task<HttpResponseMessage> AddReceipt(Receipt receipt);
+        public Task<HttpResponseMessage> SetSettled(int receiptId, bool isSettled);
+        public Task<HttpResponseMessage> Remove(int receiptId);
+        public Task<HttpResponseMessage> ShowAll();
     }
 }
