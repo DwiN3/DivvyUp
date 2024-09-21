@@ -1,5 +1,7 @@
 package com.dwin.du.entity.receipt;
 
+import com.dwin.du.entity.person.Person;
+import com.dwin.du.entity.person.PersonRepository;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;
@@ -14,9 +16,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +28,9 @@ public class ReceiptService {
 
     private final ReceiptRepository receiptRepository;
     private final UserRepository userRepository;
-    private final ProductRepository productRepository; // Add this repository
+    private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
-
-
+    private final PersonRepository personRepository;
 
     public ResponseEntity<?> addReceipt(AddReceiptRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -83,14 +86,24 @@ public class ReceiptService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         List<Product> products = productRepository.findByReceipt(receipt);
+
+        Set<Person> involvedPersons = new HashSet<>();
         for (Product product : products) {
             List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+            involvedPersons.addAll(
+                    personProducts.stream().map(PersonProduct::getPerson).collect(Collectors.toSet())
+            );
+
             personProductRepository.deleteAll(personProducts);
         }
+
         productRepository.deleteAll(products);
         receiptRepository.delete(receipt);
 
-        receiptRepository.delete(receipt);
+        for (Person person : involvedPersons) {
+            updateTotalPurchaseAmountForPerson(person);
+        }
+
         return ResponseEntity.ok().build();
     }
 
@@ -142,6 +155,7 @@ public class ReceiptService {
             }
         }
 
+        updateBalancesAfterReceiptChange(products);
         return ResponseEntity.ok().build();
     }
 
@@ -189,5 +203,41 @@ public class ReceiptService {
             responseList.add(response);
         }
         return ResponseEntity.ok(responseList);
+    }
+
+    private void updateBalancesAfterReceiptChange(List<Product> products) {
+        Set<Person> involvedPersons = new HashSet<>();
+
+        for (Product product : products) {
+            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+            for (PersonProduct personProduct : personProducts) {
+                involvedPersons.add(personProduct.getPerson());
+            }
+        }
+
+        for (Person person : involvedPersons) {
+            updateTotalPurchaseAmountForPerson(person);
+        }
+    }
+
+    public void updateTotalPurchaseAmountForPerson(Person person) {
+        List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
+
+        double totalPurchaseAmount = 0.0;
+
+        for (PersonProduct personProduct : personProducts) {
+            if (!personProduct.isSettled()) {
+                double partOfPrice = personProduct.getPartOfPrice();
+                totalPurchaseAmount += partOfPrice;
+
+                if(personProduct.isCompensation()){
+                    totalPurchaseAmount += personProduct.getProduct().getCompensationAmount();
+                }
+            }
+        }
+
+        BigDecimal compensationRounded = new BigDecimal(totalPurchaseAmount).setScale(2, RoundingMode.UP);
+        person.setTotalPurchaseAmount(compensationRounded.doubleValue());
+        personRepository.save(person);
     }
 }

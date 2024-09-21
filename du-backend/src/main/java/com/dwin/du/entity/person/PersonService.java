@@ -6,6 +6,9 @@ import com.dwin.du.entity.person.Request.SetTotalAmountReceiptRequest;
 import com.dwin.du.entity.person.Response.ShowPersonResponse;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
+import com.dwin.du.entity.product.ProductRepository;
+import com.dwin.du.entity.receipt.Receipt;
+import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.security.user.User;
 import com.dwin.du.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +26,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PersonService {
 
-    private final PersonRepository personRepository;
-    private final PersonProductRepository personProductRepository;
+    private final ReceiptRepository receiptRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final PersonProductRepository personProductRepository;
+    private final PersonRepository personRepository;
 
     public ResponseEntity<?> addPerson(AddPersonRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -78,6 +83,12 @@ public class PersonService {
         Person person = optionalPerson.get();
         if (!person.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        List<Receipt> receipts = receiptRepository.findByUser(person.getUser());
+        List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
+        if (!receipts.isEmpty() || !personProducts.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
 
         personRepository.delete(person);
         return ResponseEntity.ok().build();

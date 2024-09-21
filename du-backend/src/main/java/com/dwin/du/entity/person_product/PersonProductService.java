@@ -6,6 +6,7 @@ import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
 import com.dwin.du.entity.person_product.Response.ShowPersonProductResponse;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
+import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.receipt.Request.SetIsSettledRequest;
 import com.dwin.du.security.user.User;
 import com.dwin.du.security.user.UserRepository;
@@ -24,9 +25,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PersonProductService {
 
-    private final PersonProductRepository personProductRepository;
-    private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final PersonProductRepository personProductRepository;
     private final PersonRepository personRepository;
 
     public ResponseEntity<?> addPersonProduct(AddPersonProductRequest request, int productId, String username) {
@@ -70,7 +71,7 @@ public class PersonProductService {
                 .product(product)
                 .person(person)
                 .maxQuantity(product.getMaxQuantity())
-                .isSettled(false)
+                .isSettled(product.isSettled())
                 .build();
 
         if (product.isDivisible()) {
@@ -93,41 +94,45 @@ public class PersonProductService {
 
     public ResponseEntity<?> removePersonProduct(int personProductId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent())
+        if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
         if (!optionalPersonProduct.isPresent())
             return ResponseEntity.notFound().build();
 
         PersonProduct personProduct = optionalPersonProduct.get();
-        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username))
+        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         personProductRepository.delete(personProduct);
-
         updateTotalPurchaseAmountForPerson(personProduct.getPerson());
         updateCompensationAmount(personProduct.getProduct());
+
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> setIsSettled(int personProductId, SetIsSettledRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent())
+        if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
         if (!optionalPersonProduct.isPresent())
             return ResponseEntity.notFound().build();
 
         PersonProduct personProduct = optionalPersonProduct.get();
-        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username))
+        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         personProduct.setSettled(request.isSettled());
         personProductRepository.save(personProduct);
-
         updateTotalPurchaseAmountForPerson(personProduct.getPerson());
+
         return ResponseEntity.ok().build();
     }
 
@@ -217,17 +222,15 @@ public class PersonProductService {
         return ResponseEntity.ok(responseList);
     }
 
-    public void updateTotalPurchaseAmountForPerson(Person person) {
+    private void updateTotalPurchaseAmountForPerson(Person person) {
         List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
 
         double totalPurchaseAmount = 0.0;
-
         for (PersonProduct personProduct : personProducts) {
             if (!personProduct.isSettled()) {
-                double partOfPrice = personProduct.getPartOfPrice();
-                totalPurchaseAmount += partOfPrice;
+                totalPurchaseAmount += personProduct.getPartOfPrice();
 
-                if(personProduct.isCompensation()){
+                if (personProduct.isCompensation()) {
                     totalPurchaseAmount += personProduct.getProduct().getCompensationAmount();
                 }
             }
