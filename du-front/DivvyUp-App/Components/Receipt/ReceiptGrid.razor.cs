@@ -30,29 +30,11 @@ namespace DivvyUp_App.Components.Receipt
                 Receipts = JsonConvert.DeserializeObject<List<ShowReceiptResponse>>(responseBody);
                 StateHasChanged();
             }
-            else
-            {
-                System.Diagnostics.Debug.Print(response.StatusCode.ToString());
-            }
         }
 
-        private async Task<GridDataProviderResult<ShowReceiptResponse>> ReceiptsDataProvider(GridDataProviderRequest<ShowReceiptResponse> request)
+        private async Task SetSettled(int receiptId, bool isChecked)
         {
-            if (Receipts == null)
-            {
-                return new GridDataProviderResult<ShowReceiptResponse>
-                {
-                    Data = Enumerable.Empty<ShowReceiptResponse>(),
-                    TotalCount = 0
-                };
-            }
-
-            return await Task.FromResult(request.ApplyTo(Receipts));
-        }
-
-        private void SetSettled(int receiptId, bool isChecked)
-        {
-            ReceiptService.SetSettled(receiptId, isChecked);
+            await ReceiptService.SetSettled(receiptId, isChecked);
         }
 
         private async void RemoveReceipt(int receiptId)

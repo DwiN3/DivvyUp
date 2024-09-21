@@ -1,60 +1,29 @@
-﻿@using BlazorBootstrap;
-@using DivvyUp_Web.Api.Response
+﻿@using DivvyUp_Web.Api.Response
 
-<Grid TItem="ShowReceiptResponse"
-      AllowRowClick="true"
-      AllowSorting="true"
-      Class="table table-hover"
-      DataProvider="ReceiptsDataProvider"
-      HeaderRowCssClass="bg-primary text-white border-bottom-0"
-      Responsive="true"
-      @key="Receipts">
-      
-    <GridColumn TItem="ShowReceiptResponse"
-                HeaderText="Rozliczone"
-                HeaderTextAlignment="Alignment.Center"
-                TextAlignment="Alignment.Center"
-                SortKeySelector="item => item.settled">
-        <input style="width: 28px; height: 24px;" type="checkbox" @bind="context.settled" @onclick="(args) => SetSettled(context.receiptId, !context.settled)"/>
-    </GridColumn>
-    
-    <GridColumn TItem="ShowReceiptResponse"
-                HeaderTextAlignment="Alignment.Center"
-                TextAlignment="Alignment.Center"
-                Sortable="false"
-                SortKeySelector="item => item.receiptId">
-        <button>
-            <i class="bi bi-pencil-fill"></i>
-        </button>
-    </GridColumn>
-
-    <GridColumn TItem="ShowReceiptResponse" 
-                HeaderText="Nazwa" 
-                HeaderTextAlignment="Alignment.Center" 
-                TextAlignment="Alignment.Center"
-                SortKeySelector="item => item.receiptName">
-        @context.receiptName
-    </GridColumn>
-
-    <GridColumn TItem="ShowReceiptResponse"
-                HeaderTextAlignment="Alignment.Center" 
-                TextAlignment="Alignment.Center"
-                HeaderText="Data" SortKeySelector="item => item.date">
-        @context.date.ToString("dd.MM.yyyy")
-    </GridColumn>
-
-    <GridColumn TItem="ShowReceiptResponse" 
-                HeaderText="Kwota" 
-                HeaderTextAlignment="Alignment.Center"
-                TextAlignment="Alignment.Center"
-                SortKeySelector="item => item.totalAmount">
-        @context.totalAmount
-    </GridColumn>
-    
-    <GridColumn TItem="ShowReceiptResponse" 
-                HeaderTextAlignment="Alignment.Center"
-                TextAlignment="Alignment.Center"
-                HeaderText="Usuń">
-        <img src="icons/remove_icon.png" alt="Usuń" @onclick="@(e => RemoveReceipt(context.receiptId))" style="cursor: pointer; width: 15px; height: 15px;" />
-    </GridColumn>
-</Grid>
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Simple" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true"
+                Data="@Receipts" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(ShowReceiptResponse.settled)" Title="Zarządzanie" Width="15%" TextAlign="TextAlign.Center" Filterable="false">
+            <Template Context="data">
+                <RadzenCheckBox @bind-Value="data.settled" Change="@(async (bool Check) => await SetSettled(data.receiptId, data.settled))" />
+                <button>
+                    <i class="bi bi-pencil-fill"></i>
+                </button>
+                <button>
+                    <img src="icons/remove_icon.png" alt="Usuń" @onclick="@(e => RemoveReceipt(data.receiptId))" style="cursor: pointer; width: 15px; height: 15px;" />
+                </button>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(ShowReceiptResponse.receiptName)" Title="Nazwa" Frozen="true" Width="40%" />
+        <RadzenDataGridColumn Property="@nameof(ShowReceiptResponse.date)" Title="Data" Frozen="true" Width="25%" FilterMode="FilterMode.SimpleWithMenu">
+            <Template Context="data">
+                @data.date.ToString("dd.MM.yyyy")
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(ShowReceiptResponse.totalAmount)" Title="Kwota" Frozen="true" Width="25%" >
+            <Template Context="data">
+                @(data.totalAmount)zł
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

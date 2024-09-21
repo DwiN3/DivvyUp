@@ -10,15 +10,6 @@
         <span class="label">Data</span>
         <DateInput @bind-Value="@DateReceipt" Class="form-control" />
     </div>
-    <div class="section">
-        <span class="label">Dostawa</span>
-        <input type="checkbox" @bind="@IsDelivery" class="delivery-checkbox" />
-
-    </div>
-    <div class="section">
-        <span class="label">Koszt dostawy</span>
-        <input type="text" class="form-control" readonly="@(!IsDelivery)" @bind="@CostOfDelivery" aria-describedby="basic-addon1">
-    </div>
     <div class="section button-section">
         <FluentButton Class="inputs" OnClick="@AddReceipt">Dodaj</FluentButton>
     </div>

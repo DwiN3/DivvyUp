@@ -6,6 +6,7 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using DivvyUp_Web.Api.ResponceCodeReader;
 using Blazored.LocalStorage;
 using DivvyUp_Web.DivvyUpHttpClient;
+using Radzen;
 
 
 namespace DivvyUp_App
@@ -33,6 +34,7 @@ namespace DivvyUp_App
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddFluentUIComponents();
             builder.Services.AddBlazorBootstrap();
+            builder.Services.AddRadzenComponents();
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddSingleton<Route>();
             builder.Services.AddSingleton<CodeReaderResponse>();
