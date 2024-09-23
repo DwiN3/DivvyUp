@@ -1,17 +1,21 @@
 ﻿@using BlazorBootstrap
-﻿@using Microsoft.FluentUI.AspNetCore.Components
+@using Radzen.Blazor
+@using JustifyContent = Radzen.JustifyContent
+@using Orientation = Radzen.Orientation
 
 <div class="container">
     <div class="section">
         <span class="label">Nazwa</span>
-        <input type="text" class="form-control" @bind="@NameReceipt" aria-describedby="basic-addon1">
+        <RadzenFormField Text="Nazwa">
+            <RadzenTextBox @bind-Value="@NameReceipt" />
+        </RadzenFormField>
     </div>
     <div class="section">
         <span class="label">Data</span>
-        <DateInput @bind-Value="@DateReceipt" Class="form-control" />
+        <RadzenDatePicker @bind-Value="@DateReceipt" Name="Data" ShowCalendarWeek DateFormat="dd.MM.yyyy" />
     </div>
     <div class="section button-section">
-        <FluentButton Class="inputs" OnClick="@AddReceipt">Dodaj</FluentButton>
+        <RadzenButton class="inputs" Click="@AddReceipt" Text="Dodaj"/>
     </div>
 </div>
 

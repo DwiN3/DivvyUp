@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Components;
 using Blazored.LocalStorage;
 using DivvyUp_Web.Api.Models;
 using Newtonsoft.Json;
+using Radzen;
+using Radzen.Blazor;
 
 namespace DivvyUp_App.Components.Receipt
 {
@@ -14,7 +16,7 @@ namespace DivvyUp_App.Components.Receipt
         private IReceiptService ReceiptService { get; set; }
 
         public List<ShowReceiptResponse> Receipts { get; set; }
-
+        private RadzenDataGrid<ShowReceiptResponse> receiptGrid { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
