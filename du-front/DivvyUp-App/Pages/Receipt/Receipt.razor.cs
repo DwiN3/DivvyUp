@@ -21,14 +21,6 @@ namespace DivvyUp_App.Pages.Receipt
             
         }
 
-        private async Task RefreshReceiptGrid()
-        {
-            if (ReceiptGrid != null)
-            {
-                await ReceiptGrid.RefreshGrid();
-            }
-        }
-
         private async Task Logout()
         {
             await LocalStorage.SetItemAsync("authToken", "");

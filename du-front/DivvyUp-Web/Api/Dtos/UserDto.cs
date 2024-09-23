@@ -1,6 +1,6 @@
-﻿namespace DivvyUp_Web.Api.Models
+﻿namespace DivvyUp_Web.Api.Dtos
 {
-    public class User
+    public class UserDto
     {
         public int userId;
         public string username;

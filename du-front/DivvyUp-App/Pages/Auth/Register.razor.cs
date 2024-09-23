@@ -1,8 +1,8 @@
 ﻿using System.Net.Sockets;
+using DivvyUp_Web.Api.Dtos;
 using Microsoft.AspNetCore.Components;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.ResponceCodeReader;
-using DivvyUp_Web.Api.Models;
 
 namespace DivvyUp_App.Pages.Auth
 {
@@ -25,19 +25,16 @@ namespace DivvyUp_App.Pages.Auth
         {
             try
             {
-                User user = new User();
+                UserDto user = new UserDto();
                 user.username = Username;
                 user.email = Email;
                 user.password = Password;
                 var response = await AuthService.Register(user);
-                if (response.IsSuccessStatusCode)
-                {
+                if(response.IsSuccessStatusCode)
                     ColorInfo = "green";
-                }
                 else
-                {
                     ColorInfo = "red";
-                }
+                
                 RegisterInfo = RCR.ReadRegister(response.StatusCode);
             }
             catch (HttpRequestException ex) when (ex.InnerException is SocketException socketException)

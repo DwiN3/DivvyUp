@@ -1,4 +1,5 @@
-﻿using DivvyUp_Web.Api.Interface;
+﻿using DivvyUp_Web.Api.Dtos;
+using DivvyUp_Web.Api.Interface;
 using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Components.ReceiptComponents
@@ -23,7 +24,7 @@ namespace DivvyUp_App.Components.ReceiptComponents
 
         private async Task AddReceipt()
         {
-            DivvyUp_Web.Api.Models.ReceiptModel receipt = new();
+            ReceiptDto receipt = new();
             receipt.receiptName = NameReceipt;
             receipt.date = (DateTime)DateReceipt;
 
@@ -32,11 +33,8 @@ namespace DivvyUp_App.Components.ReceiptComponents
                 CostOfDelivery = 0;
             }
 
-            var response = await ReceiptService.AddReceipt(receipt);
-            if (response.IsSuccessStatusCode)
-            {
-                await RefreshGrid.InvokeAsync(null);
-            }
+            await ReceiptService.AddReceipt(receipt);
+            await RefreshGrid.InvokeAsync(null);
         }
     }
 }

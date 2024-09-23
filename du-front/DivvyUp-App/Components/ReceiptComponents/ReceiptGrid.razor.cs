@@ -1,10 +1,6 @@
-﻿using BlazorBootstrap;
-using DivvyUp_Web.Api.Response;
+﻿using DivvyUp_Web.Api.Dtos;
 using DivvyUp_Web.Api.Interface;
 using Microsoft.AspNetCore.Components;
-using Blazored.LocalStorage;
-using DivvyUp_Web.Api.Models;
-using Newtonsoft.Json;
 using Radzen.Blazor;
 
 namespace DivvyUp_App.Components.ReceiptComponents
@@ -14,8 +10,8 @@ namespace DivvyUp_App.Components.ReceiptComponents
         [Inject]
         private IReceiptService ReceiptService { get; set; }
 
-        public List<ReceiptModel> Receipts { get; set; }
-        private RadzenDataGrid<ReceiptModel> receiptGrid { get; set; }
+        public List<ReceiptDto> Receipts { get; set; }
+        private RadzenDataGrid<ReceiptDto> receiptGrid { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -24,13 +20,8 @@ namespace DivvyUp_App.Components.ReceiptComponents
 
         private async Task LoadGrid()
         {
-            var response = await ReceiptService.ShowAll();
-            if (response.IsSuccessStatusCode)
-            {
-                var responseBody = await response.Content.ReadAsStringAsync();
-                Receipts = JsonConvert.DeserializeObject<List<ReceiptModel>>(responseBody);
-                StateHasChanged();
-            }
+            Receipts = await ReceiptService.ShowAll();
+            StateHasChanged();
         }
 
         private async Task SetSettled(int receiptId, bool isChecked)
@@ -45,13 +36,13 @@ namespace DivvyUp_App.Components.ReceiptComponents
 
         private async Task InsertRow()
         {
-            var receipt = new ReceiptModel();
+            var receipt = new ReceiptDto();
             Receipts.Add(receipt);
             await receiptGrid.InsertRow(receipt);
         }
 
 
-        private async Task SaveRow(ReceiptModel r)
+        private async Task SaveRow(ReceiptDto r)
         {
             if (r.receiptId == 0)
                 await ReceiptService.AddReceipt(r);
@@ -61,21 +52,20 @@ namespace DivvyUp_App.Components.ReceiptComponents
             await RefreshGrid();
         }
 
-        private async Task EditRow(ReceiptModel order)
+        private async Task EditRow(ReceiptDto order)
         {
             await receiptGrid.EditRow(order);
         }
 
-        private void CancelEdit(ReceiptModel receipt)
+        private void CancelEdit(ReceiptDto receipt)
         {
             receiptGrid.CancelEditRow(receipt);
         }
 
         private async void RemoveReceipt(int receiptId)
         {
-            var response = await ReceiptService.Remove(receiptId);
-            if (response.IsSuccessStatusCode)
-                await RefreshGrid();
+            await ReceiptService.Remove(receiptId);
+            await RefreshGrid();
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace DivvyUp_Web.DivvyUpHttpClient
+namespace DivvyUp_Web.DuHttp
 {
     public class DuHttpClient
     {

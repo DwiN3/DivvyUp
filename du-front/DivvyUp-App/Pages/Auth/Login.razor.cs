@@ -5,9 +5,8 @@ using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.ResponceCodeReader;
 using DivvyUp_Web.Api.Response;
 using Blazored.LocalStorage;
-using DivvyUp_Web.Api.Models;
-using DivvyUp_Web.DivvyUpHttpClient;
-using Newtonsoft.Json.Linq;
+using DivvyUp_Web.Api.Dtos;
+using DivvyUp_Web.DuHttp;
 
 namespace DivvyUp_App.Pages.Auth
 {
@@ -32,7 +31,7 @@ namespace DivvyUp_App.Pages.Auth
         {
             try
             {
-                User user = new User();
+                UserDto user = new UserDto();
                 user.username = Username;
                 user.password = Password;
                 var response = await AuthService.Login(user);

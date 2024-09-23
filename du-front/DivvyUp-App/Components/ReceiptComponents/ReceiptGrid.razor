@@ -1,14 +1,14 @@
-﻿@using DivvyUp_Web.Api.Response
+﻿@using DivvyUp_Web.Api.Dtos
 
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Simple" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true"
-                Data="@Receipts" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" @ref="receiptGrid">
+                Data="@Receipts" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" @ref="receiptGrid" TItem="ReceiptDto">
     <HeaderTemplate>
         <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"  />
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@RefreshGrid"  />
     </HeaderTemplate>
     <Columns>
         
-        <RadzenDataGridColumn Property="@nameof(ReceiptModel.settled)" Title="Zarządzanie" Width="10%" TextAlign="TextAlign.Center" Filterable="false" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.settled)" Title="Zarządzanie" Width="10%" TextAlign="TextAlign.Center" Filterable="false" Frozen="true">
             <FilterTemplate>
                 <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"/>
             </FilterTemplate>
@@ -30,7 +30,7 @@
                 <RadzenCheckBox class="button" Value="false" Disabled="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ReceiptModel.receiptName)" Title="Nazwa" Frozen="true" Width="30%">
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.receiptName)" Title="Nazwa" Frozen="true" Width="30%">
             <EditTemplate Context="receipt">
                 <RadzenTextBox @bind-value="receipt.receiptName" Style="width: 100%;"/>
             </EditTemplate>
@@ -38,9 +38,9 @@
                 @receipt.receiptName
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ReceiptModel.date)" Title="Data" Frozen="true" Width="25%" FilterMode="FilterMode.SimpleWithMenu">
-            <Template Context="data">
-                @data.date.ToString("dd.MM.yyyy")
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.date)" Title="Data" Frozen="true" Width="25%" FilterMode="FilterMode.SimpleWithMenu">
+            <Template Context="receipt">
+                @receipt.date.ToString("dd.MM.yyyy")
             </Template>
             <EditTemplate Context="receipt">
                 @{
@@ -52,7 +52,7 @@
                 <RadzenDatePicker @bind-Value="receipt.date" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ReceiptModel.totalAmount)" Title="Kwota" Frozen="true" Width="25%">
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.totalAmount)" Title="Kwota" Frozen="true" Width="25%">
             <Template Context="receipt">                
                 <div style="color: @(receipt.settled ? "green" : "red")">
                     <b>@(receipt.totalAmount)zł</b>
