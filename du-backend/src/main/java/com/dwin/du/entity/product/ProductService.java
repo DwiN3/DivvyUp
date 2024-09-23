@@ -64,6 +64,7 @@ public class ProductService {
             product.setMaxQuantity(1);
 
         productRepository.save(product);
+        updateReceiptTotalAmount(receipt);
         return ResponseEntity.ok().build();
     }
 
@@ -81,10 +82,14 @@ public class ProductService {
         if (!product.getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
+        Receipt receipt = product.getReceipt();
+
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         personProductRepository.deleteAll(personProducts);
         productRepository.delete(product);
         updateBalancesAfterProductChange(personProducts);
+
+        updateReceiptTotalAmount(receipt);
 
         return ResponseEntity.ok().build();
     }
@@ -207,5 +212,13 @@ public class ProductService {
         BigDecimal compensationRounded = new BigDecimal(totalPurchaseAmount).setScale(2, RoundingMode.UP);
         person.setTotalPurchaseAmount(compensationRounded.doubleValue());
         personRepository.save(person);
+    }
+
+    private void updateReceiptTotalAmount(Receipt receipt) {
+        List<Product> products = productRepository.findByReceipt(receipt);
+        double totalAmount = products.stream().mapToDouble(Product::getPrice).sum();
+
+        receipt.setTotalAmount(totalAmount);
+        receiptRepository.save(receipt);
     }
 }
