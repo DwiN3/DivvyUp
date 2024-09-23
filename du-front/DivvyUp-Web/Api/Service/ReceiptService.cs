@@ -3,6 +3,7 @@ using DivvyUp_Web.Api.Urls;
 using DivvyUp_Web.Api.Models;
 using Microsoft.AspNetCore.Components;
 using DivvyUp_Web.DivvyUpHttpClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DivvyUp_Web.Api.Service
 {
@@ -18,7 +19,7 @@ namespace DivvyUp_Web.Api.Service
             _url = url;
         }
 
-        public async Task<HttpResponseMessage> AddReceipt(Receipt receipt)
+        public async Task<HttpResponseMessage> AddReceipt(ReceiptModel receipt)
         {
             var data = new
             {
@@ -30,15 +31,10 @@ namespace DivvyUp_Web.Api.Service
             return response;
         }
 
-        public async Task<HttpResponseMessage> EditReceipt(Receipt receipt)
+        public async Task<HttpResponseMessage> EditReceipt(ReceiptModel receipt)
         {
-            var data = new
-            {
-                receiptName = receipt.receiptName,
-                date = receipt.date
-            };
-
-            var response = await _duHttpClient.PutAsync(_url.EditReceipt, data);
+            string url = _url.EditReceipt.Replace(Route.ID, receipt.receiptId.ToString());
+            var response = await _duHttpClient.PutAsync(url, receipt);
             return response;
         }
 

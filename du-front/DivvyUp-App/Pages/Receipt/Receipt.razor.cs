@@ -1,7 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using DivvyUp_Web.Api.Interface;
-using DivvyUp_App.Components.Receipt;
+using DivvyUp_App.Components.ReceiptComponents;
 
 namespace DivvyUp_App.Pages.Receipt
 {

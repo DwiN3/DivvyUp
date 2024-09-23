@@ -173,12 +173,13 @@ public class ReceiptService {
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        ShowReceiptResponse response = ShowReceiptResponse.builder()
+        Receipt response = Receipt.builder()
                 .receiptId(receipt.getReceiptId())
                 .receiptName(receipt.getReceiptName())
                 .date(receipt.getDate())
                 .totalAmount(receipt.getTotalAmount())
                 .isSettled(receipt.isSettled())
+                .user(receipt.getUser())
                 .build();
         return ResponseEntity.ok(response);
     }

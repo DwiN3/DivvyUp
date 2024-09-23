@@ -1,12 +1,12 @@
 ﻿namespace DivvyUp_Web.Api.Models
 {
-    public class Receipt
+    public class ReceiptModel
     {
         public int receiptId;
-        public User user;
+        public int userId;
         public string receiptName;
         public DateTime date;
         public double totalAmount;
-        public bool isSettled;
+        public bool settled;
     }
 }

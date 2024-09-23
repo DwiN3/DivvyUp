@@ -5,18 +5,17 @@ using Microsoft.AspNetCore.Components;
 using Blazored.LocalStorage;
 using DivvyUp_Web.Api.Models;
 using Newtonsoft.Json;
-using Radzen;
 using Radzen.Blazor;
 
-namespace DivvyUp_App.Components.Receipt
+namespace DivvyUp_App.Components.ReceiptComponents
 {
     partial class ReceiptGrid : ComponentBase
     {
         [Inject]
         private IReceiptService ReceiptService { get; set; }
 
-        public List<ShowReceiptResponse> Receipts { get; set; }
-        private RadzenDataGrid<ShowReceiptResponse> receiptGrid { get; set; }
+        public List<ReceiptModel> Receipts { get; set; }
+        private RadzenDataGrid<ReceiptModel> receiptGrid { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -29,7 +28,7 @@ namespace DivvyUp_App.Components.Receipt
             if (response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                Receipts = JsonConvert.DeserializeObject<List<ShowReceiptResponse>>(responseBody);
+                Receipts = JsonConvert.DeserializeObject<List<ReceiptModel>>(responseBody);
                 StateHasChanged();
             }
         }
@@ -44,46 +43,30 @@ namespace DivvyUp_App.Components.Receipt
             await LoadGrid();
         }
 
-        async Task InsertRow()
+        private async Task InsertRow()
         {
-            var receipt = new ShowReceiptResponse();
+            var receipt = new ReceiptModel();
             Receipts.Add(receipt);
             await receiptGrid.InsertRow(receipt);
         }
 
 
-        async Task SaveRow(ShowReceiptResponse receipt)
-        {
-            await receiptGrid.UpdateRow(receipt);
-        }
-
-        private async Task AddReceipt(ShowReceiptResponse r)
+        private async Task SaveRow(ReceiptModel r)
         {
             if (r.receiptId == 0)
-            {
-                DivvyUp_Web.Api.Models.Receipt receipt = new();
-                receipt.receiptName = r.receiptName;
-                receipt.date = r.date;
-                await ReceiptService.AddReceipt(receipt);
-            }
+                await ReceiptService.AddReceipt(r);
             else
-            {
-                DivvyUp_Web.Api.Models.Receipt receipt = new();
-                receipt.receiptName = r.receiptName;
-                receipt.date = r.date;
-                receipt.receiptId = r.receiptId;
-                await ReceiptService.EditReceipt(receipt);
-            }
+                await ReceiptService.EditReceipt(r);
 
             await RefreshGrid();
         }
 
-        async Task EditRow(ShowReceiptResponse order)
+        private async Task EditRow(ReceiptModel order)
         {
             await receiptGrid.EditRow(order);
         }
 
-        void CancelEdit(ShowReceiptResponse receipt)
+        private void CancelEdit(ReceiptModel receipt)
         {
             receiptGrid.CancelEditRow(receipt);
         }
@@ -92,9 +75,7 @@ namespace DivvyUp_App.Components.Receipt
         {
             var response = await ReceiptService.Remove(receiptId);
             if (response.IsSuccessStatusCode)
-            {
-                await LoadGrid();
-            }
+                await RefreshGrid();
         }
     }
 }

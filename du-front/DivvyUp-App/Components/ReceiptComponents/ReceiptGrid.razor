@@ -4,28 +4,41 @@
                 Data="@Receipts" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" @ref="receiptGrid">
     <HeaderTemplate>
         <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"  />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@RefreshGrid"  />
     </HeaderTemplate>
     <Columns>
-        <RadzenDataGridColumn Property="@nameof(ShowReceiptResponse.settled)" Title="Zarządzanie" Width="15%" TextAlign="TextAlign.Center" Filterable="false">
+        
+        <RadzenDataGridColumn Property="@nameof(ReceiptModel.settled)" Title="Zarządzanie" Width="10%" TextAlign="TextAlign.Center" Filterable="false" Frozen="true">
             <FilterTemplate>
-                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow" />
+                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"/>
             </FilterTemplate>
             <Template Context="receipt">
-                <RadzenCheckBox class="button" @bind-Value="receipt.settled" Change="@(async (bool Check) => await SetSettled(receipt.receiptId, receipt.settled))"/>
-                <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@(args => EditRow(receipt))" />
+                <RadzenButton class="button" Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" />
+                <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@(args => EditRow(receipt))"/>
                 <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveReceipt(receipt.receiptId))"/>
             </Template>
             <EditTemplate Context="receipt">
-                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => AddReceipt(receipt))"/>
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(receipt))"/>
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(receipt))"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ShowReceiptResponse.receiptName)" Title="Nazwa" Frozen="true" Width="40%">
+        <RadzenDataGridColumn Title="Rozliczono" Width="10%" TextAlign="TextAlign.Center" Filterable="false" Frozen="true">
+            <Template Context="receipt">
+                <RadzenCheckBox class="button" @bind-Value="@receipt.settled" Change="@(async (bool Check) => await SetSettled(receipt.receiptId, receipt.settled))" />
+            </Template>
+            <EditTemplate Context="receipt">
+                <RadzenCheckBox class="button" Value="false" Disabled="true" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(ReceiptModel.receiptName)" Title="Nazwa" Frozen="true" Width="30%">
             <EditTemplate Context="receipt">
                 <RadzenTextBox @bind-value="receipt.receiptName" Style="width: 100%;"/>
             </EditTemplate>
+            <Template Context="receipt">
+                @receipt.receiptName
+            </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ShowReceiptResponse.date)" Title="Data" Frozen="true" Width="25%" FilterMode="FilterMode.SimpleWithMenu">
+        <RadzenDataGridColumn Property="@nameof(ReceiptModel.date)" Title="Data" Frozen="true" Width="25%" FilterMode="FilterMode.SimpleWithMenu">
             <Template Context="data">
                 @data.date.ToString("dd.MM.yyyy")
             </Template>
@@ -39,9 +52,11 @@
                 <RadzenDatePicker @bind-Value="receipt.date" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ShowReceiptResponse.totalAmount)" Title="Kwota" Frozen="true" Width="25%">
-            <Template Context="data">
-                @(data.totalAmount)zł
+        <RadzenDataGridColumn Property="@nameof(ReceiptModel.totalAmount)" Title="Kwota" Frozen="true" Width="25%">
+            <Template Context="receipt">                
+                <div style="color: @(receipt.settled ? "green" : "red")">
+                    <b>@(receipt.totalAmount)zł</b>
+                </div>
             </Template>
             <EditTemplate Context="receipt">
                 -

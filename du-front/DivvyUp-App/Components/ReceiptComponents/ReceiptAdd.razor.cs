@@ -1,9 +1,7 @@
-﻿using Blazored.LocalStorage;
-using DivvyUp_Web.Api.Interface;
+﻿using DivvyUp_Web.Api.Interface;
 using Microsoft.AspNetCore.Components;
-using DivvyUp_Web.Api.Models;
 
-namespace DivvyUp_App.Components.Receipt
+namespace DivvyUp_App.Components.ReceiptComponents
 {
     partial class ReceiptAdd
     {
@@ -22,9 +20,10 @@ namespace DivvyUp_App.Components.Receipt
         {
             
         }
+
         private async Task AddReceipt()
         {
-            DivvyUp_Web.Api.Models.Receipt receipt = new();
+            DivvyUp_Web.Api.Models.ReceiptModel receipt = new();
             receipt.receiptName = NameReceipt;
             receipt.date = (DateTime)DateReceipt;
 
