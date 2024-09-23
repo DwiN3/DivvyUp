@@ -30,6 +30,18 @@ namespace DivvyUp_Web.Api.Service
             return response;
         }
 
+        public async Task<HttpResponseMessage> EditReceipt(Receipt receipt)
+        {
+            var data = new
+            {
+                receiptName = receipt.receiptName,
+                date = receipt.date
+            };
+
+            var response = await _duHttpClient.PutAsync(_url.EditReceipt, data);
+            return response;
+        }
+
         public async Task<HttpResponseMessage> SetSettled(int receiptId, bool isSettled)
         {
             var data = new

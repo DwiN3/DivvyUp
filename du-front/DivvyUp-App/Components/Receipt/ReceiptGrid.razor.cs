@@ -39,6 +39,55 @@ namespace DivvyUp_App.Components.Receipt
             await ReceiptService.SetSettled(receiptId, isChecked);
         }
 
+        public async Task RefreshGrid()
+        {
+            await LoadGrid();
+        }
+
+        async Task InsertRow()
+        {
+            var receipt = new ShowReceiptResponse();
+            Receipts.Add(receipt);
+            await receiptGrid.InsertRow(receipt);
+        }
+
+
+        async Task SaveRow(ShowReceiptResponse receipt)
+        {
+            await receiptGrid.UpdateRow(receipt);
+        }
+
+        private async Task AddReceipt(ShowReceiptResponse r)
+        {
+            if (r.receiptId == 0)
+            {
+                DivvyUp_Web.Api.Models.Receipt receipt = new();
+                receipt.receiptName = r.receiptName;
+                receipt.date = r.date;
+                await ReceiptService.AddReceipt(receipt);
+            }
+            else
+            {
+                DivvyUp_Web.Api.Models.Receipt receipt = new();
+                receipt.receiptName = r.receiptName;
+                receipt.date = r.date;
+                receipt.receiptId = r.receiptId;
+                await ReceiptService.EditReceipt(receipt);
+            }
+
+            await RefreshGrid();
+        }
+
+        async Task EditRow(ShowReceiptResponse order)
+        {
+            await receiptGrid.EditRow(order);
+        }
+
+        void CancelEdit(ShowReceiptResponse receipt)
+        {
+            receiptGrid.CancelEditRow(receipt);
+        }
+
         private async void RemoveReceipt(int receiptId)
         {
             var response = await ReceiptService.Remove(receiptId);
@@ -46,11 +95,6 @@ namespace DivvyUp_App.Components.Receipt
             {
                 await LoadGrid();
             }
-        }
-
-        public async Task RefreshGrid()
-        {
-            await LoadGrid();
         }
     }
 }
