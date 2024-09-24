@@ -1,6 +1,6 @@
 ﻿@using DivvyUp_Web.Api.Dtos
 
-<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Simple" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true"
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Simple" EditMode="DataGridEditMode.Single" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true"
                 Data="@Receipts" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" @ref="receiptGrid" TItem="ReceiptDto">
     <HeaderTemplate>
         <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"  />
@@ -27,7 +27,7 @@
                 <RadzenCheckBox class="button" @bind-Value="@receipt.settled" Change="@(async (bool Check) => await SetSettled(receipt.receiptId, receipt.settled))" />
             </Template>
             <EditTemplate Context="receipt">
-                <RadzenCheckBox class="button" Value="false" Disabled="true" />
+                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@receipt.settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.receiptName)" Title="Nazwa" Frozen="true" Width="30%">
