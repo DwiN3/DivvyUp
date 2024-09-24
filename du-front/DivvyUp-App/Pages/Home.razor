@@ -1,4 +1,3 @@
 ﻿@page "/"
-@using DivvyUp_App.Components.ReceiptComponents
-@using Radzen
-@using Radzen.Blazor
+
+<h1>@(User.IsLoggedIn() ? $"Witaj {User.GetUser().username}" : "Zaloguj się lub załóż konto :)")</h1>

@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using DivvyUp_Impl.Interface;
 using DivvyUp_Impl.Model;
 using DivvyUp_Impl.Service;
 using DivvyUp_Web.Api.Interface;
@@ -12,18 +13,16 @@ namespace DivvyUp_App.Layout
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
-        private ILocalStorageService LocalStorage { get; set; }
-        [Inject]
         private IAuthService AuthService { get; set; }
         [Inject]
         private DuHttpClient DuHttpClient { get; set; }
 
         [Inject]
-        private UserService UserService { get; set; }
+        private UserAppService User { get; set; }
 
         protected override async void OnInitialized()
         {
-            var user = UserService.GetUser();
+            var user = User.GetUser();
 
             if (!string.IsNullOrEmpty(user.token))
             {
@@ -31,13 +30,13 @@ namespace DivvyUp_App.Layout
 
                 if (response.IsSuccessStatusCode)
                 {
-                    UserService.SetUser(user.username, user.token, true);
+                    User.SetUser(user.username, user.token, true);
                     DuHttpClient.UpdateToken(user.token);
                     Navigation.NavigateTo("/receipt");
                 }
                 else
                 {
-                    UserService.ClearUser();
+                    User.ClearUser();
                     DuHttpClient.UpdateToken(string.Empty);
                     Navigation.NavigateTo("/");
                 }
@@ -46,11 +45,13 @@ namespace DivvyUp_App.Layout
             {
                 Navigation.NavigateTo("/");
             }
+            StateHasChanged();
         }
 
         private async Task Logout()
         {
-            UserService.ClearUser();
+            User.ClearUser();
+            StateHasChanged();
             Navigation.NavigateTo("/");
         }
     }

@@ -5,9 +5,10 @@ using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.Api.ResponceCodeReader;
 using DivvyUp_Web.Api.Response;
 using Blazored.LocalStorage;
+using DivvyUp_Impl.Interface;
+using DivvyUp_Impl.Service;
 using DivvyUp_Web.Api.Dtos;
 using DivvyUp_Web.DuHttp;
-using DivvyUp_Impl.Service;
 
 namespace DivvyUp_App.Pages.Auth
 {
@@ -18,12 +19,9 @@ namespace DivvyUp_App.Pages.Auth
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
-        private ILocalStorageService LocalStorage { get; set; }
-        [Inject]
         private DuHttpClient HttpClient { get; set; }
         [Inject]
-        private UserService UserService { get; set; }
-
+        private UserAppService User { get; set; }
         private CodeReaderResponse RCR { get; set; } = new();
         private string Username { get; set; }
         private string Password { get; set; }
@@ -46,9 +44,7 @@ namespace DivvyUp_App.Pages.Auth
                     var responseBody = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
                     var token = loginResponse.token;
-
-                    // Ustaw dane użytkownika w serwisie
-                    UserService.SetUser(user.username, token, true);
+                    User.SetUser(user.username, token, true);
                     HttpClient.UpdateToken(token);
 
                     ColorInfo = "green";

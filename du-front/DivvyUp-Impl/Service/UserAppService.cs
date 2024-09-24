@@ -1,20 +1,22 @@
-﻿using DivvyUp_Impl.Model;
+﻿using DivvyUp_Impl.Interface;
+using DivvyUp_Impl.Model;
 using System.IO;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DivvyUp_Impl.Service
 {
-    public class UserService
+    public class UserAppService 
     {
         private readonly string _userFileName;
         private User _currentUser;
-        private const string UserFileName = @"C:\Users\dwini\Desktop\DivvyUp\du-front\DivvyUp-App\wwwroot\user_data.json";
 
-
-        public UserService(string basePath)
+        public UserAppService()
         {
-            _userFileName = Path.Combine(UserFileName);
+            string projectDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\..\..\.."));
+            string userFilePath = Path.Combine(projectDirectory, "wwwroot", "user", "user_data.json");
+            _userFileName = userFilePath;
             LoadUserData();
         }
 
@@ -22,10 +24,7 @@ namespace DivvyUp_Impl.Service
 
         public void SetUser(string username, string token, bool isLogin)
         {
-            _currentUser.username = username;
-            _currentUser.token = token;
-            _currentUser.isLogin = isLogin;
-
+            _currentUser = new User { username = username, token = token, isLogin = isLogin };
             SaveUserData();
         }
 
@@ -41,7 +40,18 @@ namespace DivvyUp_Impl.Service
         {
             try
             {
-                var userData = JsonSerializer.Serialize(_currentUser);
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                };
+
+                string userData = JsonSerializer.Serialize(new User
+                {
+                    username = _currentUser.username,
+                    token = _currentUser.token,
+                    isLogin = _currentUser.isLogin
+                }, options);
+
                 File.WriteAllText(_userFileName, userData);
             }
             catch (Exception ex)
@@ -73,13 +83,19 @@ namespace DivvyUp_Impl.Service
             {
                 if (File.Exists(_userFileName))
                 {
-                    string jsonContent = "{\n" +
-                                         "  \"username\": \"\",\n" +
-                                         "  \"token\": \"\",\n" +
-                                         "  \"isLogin\": false\n" +
-                                         "}";
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    };
 
-                    File.WriteAllText(_userFileName, jsonContent);
+                    string userData = JsonSerializer.Serialize(new User
+                    {
+                        username = string.Empty,
+                        token = string.Empty,
+                        isLogin = false
+                    }, options);
+
+                    File.WriteAllText(_userFileName, userData);
                 }
             }
             catch (Exception ex)

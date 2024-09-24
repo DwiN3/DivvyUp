@@ -31,8 +31,7 @@ namespace DivvyUp_App
                 return new DuHttpClient(httpClient);
             });
 
-            string rootpath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot");
-
+            
             builder.Services.AddHttpClient();
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddFluentUIComponents();
@@ -44,7 +43,7 @@ namespace DivvyUp_App
             builder.Services.AddSingleton<CodeReaderResponse>();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
-            builder.Services.AddSingleton(new UserService(rootpath));
+            builder.Services.AddSingleton<UserAppService>();
             ;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
