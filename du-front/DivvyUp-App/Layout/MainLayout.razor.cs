@@ -1,5 +1,4 @@
-﻿using BlazorBootstrap;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.DuHttp;
 using Microsoft.AspNetCore.Components;
@@ -24,16 +23,25 @@ namespace DivvyUp_App.Layout
 
             if (response.IsSuccessStatusCode)
             {
+                await LocalStorage.SetItemAsync("isLogin", true);
                 DuHttpClient.UpdateToken(token);
                 Navigation.NavigateTo("/receipt");
-                
             }
             
             else
             {
-                DuHttpClient.UpdateToken(String.Empty);
+                DuHttpClient.UpdateToken(string.Empty);
+                await LocalStorage.SetItemAsync("authToken", string.Empty);
+                await LocalStorage.SetItemAsync("isLogin", false);
                 Navigation.NavigateTo("/");
             }
+        }
+
+        private async Task Logout()
+        {
+            await LocalStorage.SetItemAsync("authToken", string.Empty);
+            await LocalStorage.SetItemAsync("isLogin", false);
+            Navigation.NavigateTo("/");
         }
     }
 }

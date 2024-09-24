@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_App.Components.ReceiptComponents;
 
-namespace DivvyUp_App.Pages.Receipt
+namespace DivvyUp_App.Pages
 {
     partial class Receipt
     {
@@ -18,13 +18,7 @@ namespace DivvyUp_App.Pages.Receipt
 
         protected override async Task OnInitializedAsync()
         {
-            
-        }
 
-        private async Task Logout()
-        {
-            await LocalStorage.SetItemAsync("authToken", "");
-            Navigation.NavigateTo("/");
         }
     }
 }

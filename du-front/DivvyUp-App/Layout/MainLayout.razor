@@ -1,11 +1,18 @@
 ﻿@inherits LayoutComponentBase
-@using BlazorBootstrap;
-﻿@using Microsoft.FluentUI.AspNetCore.Components
+@using Radzen.Blazor
 
-<div class="bb-page">
-    <main>
-            @Body
-    </main>
+
+<div style="margin-bottom: 200px;">
+    <RadzenMenu Style="flex-grow: 1;">
+        <RadzenMenuItem Text="Strona Główna" Path="/" Icon="home"></RadzenMenuItem>
+        <RadzenMenuItem Text="Logowanie" Path="/login" Icon="login"></RadzenMenuItem>
+        <RadzenMenuItem Text="Rejestracja" Path="/register" Icon="input"></RadzenMenuItem>
+        <RadzenMenuItem Text="Rachunki" Path="/receipt" Icon="receipt_long"></RadzenMenuItem>
+        <div style="margin-left: auto;">
+            <RadzenMenuItem Text="Wyloguj się" Icon="logout" Click="@Logout"></RadzenMenuItem>
+        </div>
+    </RadzenMenu>
+    @Body
 </div>
 
 <style>
