@@ -1,6 +1,8 @@
 ﻿using DivvyUp_Web.Api.Dtos;
 using DivvyUp_Web.Api.Interface;
+using DivvyUp_Web.Api.Service;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using Radzen.Blazor;
 
 namespace DivvyUp_App.Components.ReceiptComponents
@@ -24,16 +26,6 @@ namespace DivvyUp_App.Components.ReceiptComponents
             StateHasChanged();
         }
 
-        private async Task SetSettled(int receiptId, bool isChecked)
-        {
-            await ReceiptService.SetSettled(receiptId, isChecked);
-        }
-
-        public async Task RefreshGrid()
-        {
-            await LoadGrid();
-        }
-
         private async Task InsertRow()
         {
             var receipt = new ReceiptDto();
@@ -41,20 +33,9 @@ namespace DivvyUp_App.Components.ReceiptComponents
             await receiptGrid.InsertRow(receipt);
         }
 
-
-        private async Task SaveRow(ReceiptDto r)
+        private async Task EditRow(ReceiptDto receipt)
         {
-            if (r.receiptId == 0)
-                await ReceiptService.AddReceipt(r);
-            else
-                await ReceiptService.EditReceipt(r);
-
-            await RefreshGrid();
-        }
-
-        private async Task EditRow(ReceiptDto order)
-        {
-            await receiptGrid.EditRow(order);
+            await receiptGrid.EditRow(receipt);
         }
 
         private void CancelEdit(ReceiptDto receipt)
@@ -62,10 +43,57 @@ namespace DivvyUp_App.Components.ReceiptComponents
             receiptGrid.CancelEditRow(receipt);
         }
 
+        private async Task SaveRow(ReceiptDto r)
+        {
+            try
+            {
+                if (r.receiptId == 0)
+                    await ReceiptService.AddReceipt(r);
+                else
+                    await ReceiptService.EditReceipt(r);
+            } 
+            catch (InvalidOperationException ex)
+            {
+            } 
+            catch (Exception ex)
+            {
+            } 
+            finally
+            {
+                await LoadGrid();
+            }
+        }
+
         private async void RemoveReceipt(int receiptId)
         {
-            await ReceiptService.Remove(receiptId);
-            await RefreshGrid();
+            try
+            {
+                await ReceiptService.Remove(receiptId);
+            }
+            catch (InvalidOperationException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                await LoadGrid();
+            }
+        }
+
+        private async Task SetSettled(int receiptId, bool isChecked)
+        {
+            try
+            {
+                await ReceiptService.SetSettled(receiptId, isChecked);
+            }
+            catch (InvalidOperationException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
         }
     }
 }

@@ -4,7 +4,7 @@
                 Data="@Receipts" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" @ref="receiptGrid" TItem="ReceiptDto">
     <HeaderTemplate>
         <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"  />
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@RefreshGrid"  />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@LoadGrid"  />
     </HeaderTemplate>
     <Columns>
         
