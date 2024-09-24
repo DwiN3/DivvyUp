@@ -40,8 +40,10 @@ namespace DivvyUp_App.Pages.Auth
                     var responseBody = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
                     var token = loginResponse.token;
+
                     await LocalStorage.SetItemAsync("authToken", token);
                     HttpClient.UpdateToken(token);
+                    await LocalStorage.SetItemAsync("username", user.username);
                     ColorInfo = "green";
                     Navigation.NavigateTo("/receipt");
                 }

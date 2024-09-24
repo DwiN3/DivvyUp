@@ -107,12 +107,13 @@ namespace DivvyUp_Web.Api.Service
             }
         }
 
-        public async Task Remove(int receiptId)
+        public async Task RemoveReceipt(int receiptId)
         {
             try
             {
                 if (receiptId == null)
                     throw new InvalidOperationException("Nie mozna usunąć rachunku które nie posiada id");
+
                 var url = _url.ReceiptRemove.Replace(Route.ID, receiptId.ToString());
                 var response = await _duHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
@@ -129,14 +130,13 @@ namespace DivvyUp_Web.Api.Service
             }
         }
 
-        public async Task<List<ReceiptDto>> ShowAll()
+        public async Task<List<ReceiptDto>> ShowAllReceipts()
         {
             try
             {
                 var response = await _duHttpClient.GetAsync(_url.ShowAll);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var receiptModels = JsonConvert.DeserializeObject<List<ReceiptModel>>(jsonResponse);
-
                 var result = _mapper.Map<List<ReceiptDto>>(receiptModels);
                 return result;
             }

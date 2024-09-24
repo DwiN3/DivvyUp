@@ -7,7 +7,7 @@ namespace DivvyUp_Web.Api.Interface
         public Task AddReceipt(ReceiptDto receipt);
         public Task EditReceipt(ReceiptDto receipt);
         public Task SetSettled(int receiptId, bool isSettled);
-        public Task Remove(int receiptId);
-        public Task<List<ReceiptDto>> ShowAll();
+        public Task RemoveReceipt(int receiptId);
+        public Task<List<ReceiptDto>> ShowAllReceipts();
     }
 }

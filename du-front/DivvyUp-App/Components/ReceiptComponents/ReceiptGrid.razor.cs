@@ -22,7 +22,7 @@ namespace DivvyUp_App.Components.ReceiptComponents
 
         private async Task LoadGrid()
         {
-            Receipts = await ReceiptService.ShowAll();
+            Receipts = await ReceiptService.ShowAllReceipts();
             StateHasChanged();
         }
 
@@ -68,7 +68,7 @@ namespace DivvyUp_App.Components.ReceiptComponents
         {
             try
             {
-                await ReceiptService.Remove(receiptId);
+                await ReceiptService.RemoveReceipt(receiptId);
             }
             catch (InvalidOperationException ex)
             {
