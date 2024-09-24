@@ -21,7 +21,16 @@
 
     <div class="status-bar-safe-area"></div>
 
-    <div id="app">Loading...</div>
+    <div id="splash_screen" style="width: 100vw; height: 100vh; background-color: white;">
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+
+            <div class="h2 spinner-border" style="color: #D1050C"></div>
+            <div style="color: #D1050C; font-weight: 600;">Trwa Ładowanie</div>
+        </div>
+    </div>
+    <div id="app" style="display: none;">
+
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -42,6 +51,12 @@
     <script src="_content/Blazor.Bootstrap/blazor.bootstrap.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
 
+    <script>
+        setTimeout(function () {
+            document.getElementById('app').style.display = 'block';
+            document.getElementById('splash_screen').style.display = 'none';
+        }, 1500);
+    </script>
 </body>
 
 </html>
