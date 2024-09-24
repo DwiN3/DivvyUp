@@ -1,4 +1,6 @@
 ﻿using Blazored.LocalStorage;
+using DivvyUp_Impl.Model;
+using DivvyUp_Impl.Service;
 using DivvyUp_Web.Api.Interface;
 using DivvyUp_Web.DuHttp;
 using Microsoft.AspNetCore.Components;
@@ -16,31 +18,39 @@ namespace DivvyUp_App.Layout
         [Inject]
         private DuHttpClient DuHttpClient { get; set; }
 
+        [Inject]
+        private UserService UserService { get; set; }
+
         protected override async void OnInitialized()
         {
-            var token = await LocalStorage.GetItemAsync<string>("authToken");
-            var response = await AuthService.isValid(token);
+            var user = UserService.GetUser();
 
-            if (response.IsSuccessStatusCode)
+            if (!string.IsNullOrEmpty(user.token))
             {
-                await LocalStorage.SetItemAsync("isLogin", true);
-                DuHttpClient.UpdateToken(token);
-                Navigation.NavigateTo("/receipt");
+                var response = await AuthService.isValid(user.token);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    UserService.SetUser(user.username, user.token, true);
+                    DuHttpClient.UpdateToken(user.token);
+                    Navigation.NavigateTo("/receipt");
+                }
+                else
+                {
+                    UserService.ClearUser();
+                    DuHttpClient.UpdateToken(string.Empty);
+                    Navigation.NavigateTo("/");
+                }
             }
-            
             else
             {
-                DuHttpClient.UpdateToken(string.Empty);
-                await LocalStorage.SetItemAsync("authToken", string.Empty);
-                await LocalStorage.SetItemAsync("isLogin", false);
                 Navigation.NavigateTo("/");
             }
         }
 
         private async Task Logout()
         {
-            await LocalStorage.SetItemAsync("authToken", string.Empty);
-            await LocalStorage.SetItemAsync("isLogin", false);
+            UserService.ClearUser();
             Navigation.NavigateTo("/");
         }
     }

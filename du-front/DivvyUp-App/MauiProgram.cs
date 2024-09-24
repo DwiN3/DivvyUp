@@ -8,7 +8,7 @@ using Blazored.LocalStorage;
 using DivvyUp_Web.DuHttp;
 using Radzen;
 using DivvyUp_Web.Mapper;
-
+using DivvyUp_Impl.Service;
 
 namespace DivvyUp_App
 {
@@ -31,6 +31,8 @@ namespace DivvyUp_App
                 return new DuHttpClient(httpClient);
             });
 
+            string rootpath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "wwwroot");
+
             builder.Services.AddHttpClient();
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddFluentUIComponents();
@@ -42,6 +44,7 @@ namespace DivvyUp_App
             builder.Services.AddSingleton<CodeReaderResponse>();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
+            builder.Services.AddSingleton(new UserService(rootpath));
             ;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

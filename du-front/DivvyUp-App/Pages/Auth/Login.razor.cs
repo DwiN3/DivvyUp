@@ -7,6 +7,7 @@ using DivvyUp_Web.Api.Response;
 using Blazored.LocalStorage;
 using DivvyUp_Web.Api.Dtos;
 using DivvyUp_Web.DuHttp;
+using DivvyUp_Impl.Service;
 
 namespace DivvyUp_App.Pages.Auth
 {
@@ -20,6 +21,8 @@ namespace DivvyUp_App.Pages.Auth
         private ILocalStorageService LocalStorage { get; set; }
         [Inject]
         private DuHttpClient HttpClient { get; set; }
+        [Inject]
+        private UserService UserService { get; set; }
 
         private CodeReaderResponse RCR { get; set; } = new();
         private string Username { get; set; }
@@ -27,25 +30,27 @@ namespace DivvyUp_App.Pages.Auth
         private string LoginInfo { get; set; } = string.Empty;
         private string ColorInfo { get; set; } = "black";
 
-        private async Task SingUp()
+        private async Task SignUp()
         {
             try
             {
-                UserDto user = new UserDto();
-                user.username = Username;
-                user.password = Password;
+                UserDto user = new UserDto
+                {
+                    username = Username,
+                    password = Password
+                };
                 var response = await AuthService.Login(user);
+
                 if (response.IsSuccessStatusCode)
                 {
                     var responseBody = await response.Content.ReadAsStringAsync();
                     var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
                     var token = loginResponse.token;
 
-                    await LocalStorage.SetItemAsync("authToken", token);
-                    await LocalStorage.SetItemAsync("username", user.username);
-                    await LocalStorage.SetItemAsync("isLogin", true);
+                    // Ustaw dane użytkownika w serwisie
+                    UserService.SetUser(user.username, token, true);
                     HttpClient.UpdateToken(token);
-                    
+
                     ColorInfo = "green";
                     Navigation.NavigateTo("/receipt");
                 }
@@ -68,5 +73,6 @@ namespace DivvyUp_App.Pages.Auth
                 ColorInfo = "red";
             }
         }
+
     }
 }

@@ -9,7 +9,7 @@
         <RadzenFormField class="input" Text="Hasło">
             <RadzenPassword @bind-Value="@Password"/>
         </RadzenFormField>
-        <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Zaloguj się" Click="@SingUp" />
+        <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Zaloguj się" Click="@SignUp" />
         <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Zarejestruj się" Click="@(() => Navigation.NavigateTo("/register"))" />
         <span style="color: @ColorInfo">@LoginInfo</span>
     </div>
