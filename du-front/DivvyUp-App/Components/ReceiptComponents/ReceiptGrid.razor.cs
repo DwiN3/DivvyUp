@@ -14,7 +14,7 @@ namespace DivvyUp_App.Components.ReceiptComponents
 
         public List<ReceiptDto> Receipts { get; set; }
         private RadzenDataGrid<ReceiptDto> receiptGrid { get; set; }
-
+        IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         protected override async Task OnInitializedAsync()
         {
             await LoadGrid();

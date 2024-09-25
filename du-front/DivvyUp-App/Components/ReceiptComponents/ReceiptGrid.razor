@@ -1,16 +1,16 @@
 ﻿@using DivvyUp_Web.Api.Dtos
 
-<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Simple" EditMode="DataGridEditMode.Single" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true"
-                Data="@Receipts" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" @ref="receiptGrid" TItem="ReceiptDto">
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Simple" EditMode="DataGridEditMode.Single" AllowSorting="true" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true"
+                Data="@Receipts" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" @ref="receiptGrid" TItem="ReceiptDto" PagerAlwaysVisible="true" PageSize="5" PageSizeOptions="@PageSizeOptions">
     <HeaderTemplate>
         <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"  />
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@LoadGrid"  />
     </HeaderTemplate>
     <Columns>
         
-        <RadzenDataGridColumn Property="@nameof(ReceiptDto.settled)" Title="Zarządzanie" Width="10%" TextAlign="TextAlign.Center" Filterable="false" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.settled)" Title="Zarządzanie" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <FilterTemplate>
-                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"/>
+                <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { receiptGrid.Reset(); })" />
             </FilterTemplate>
             <Template Context="receipt">
                 <RadzenButton class="button" Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" />
@@ -69,5 +69,10 @@
     .button {
         width: 36px;
         height: 36px;
+    }
+
+    .rz-cell-filter-content {
+        display: flex;
+        justify-content: center
     }
 </style>
