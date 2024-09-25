@@ -1,18 +1,24 @@
 ﻿@inherits LayoutComponentBase
+@using Radzen
 @using Radzen.Blazor
 
-
-<div class="bb-page">
-    <main>
-        <RadzenMenu Style="flex-grow: 1;">
-            <RadzenMenuItem Text="Strona Główna" Path="/" Icon="home"></RadzenMenuItem>
-            <RadzenMenuItem Text="Rachunki" Path="/receipt" Icon="receipt_long" Visible="@User.IsLoggedIn()"></RadzenMenuItem>
-            <div style="display: flex; flex-direction: row; margin-left: auto;">
-                <RadzenMenuItem Text="Logowanie" Path="/login" Icon="login" Visible="@(!User.IsLoggedIn())"></RadzenMenuItem>
-                <RadzenMenuItem Text="Rejestracja" Path="/register" Icon="input" Visible="@(!User.IsLoggedIn())"></RadzenMenuItem>
-                <RadzenMenuItem Text="Wyloguj się" Icon="logout" Click="@Logout" Visible="@(User.IsLoggedIn())"></RadzenMenuItem>
-            </div>
-        </RadzenMenu>
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+            <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)" />
+            <RadzenLabel Text="@Header" />
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar Responsive="false" Style="width: max-content">
+        <RadzenPanelMenu DisplayStyle="@(SidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
+            <RadzenPanelMenuItem Text="Strona Główna" Path="/" Icon="home" />
+            <RadzenPanelMenuItem Text="Rachunki" Path="/receipt" Icon="receipt_long" Visible="@User.IsLoggedIn()" />
+            <RadzenPanelMenuItem Text="Logowanie" Path="/login" Icon="login" Visible="@(!User.IsLoggedIn())" />
+            <RadzenPanelMenuItem Text="Rejestracja" Path="/register" Icon="input" Visible="@(!User.IsLoggedIn())" />
+            <RadzenPanelMenuItem Text="Wyloguj się" Icon="logout" Click="@Logout" Visible="@(User.IsLoggedIn())" />
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody>
         @Body
-    </main>
-</div>
+    </RadzenBody>
+</RadzenLayout>

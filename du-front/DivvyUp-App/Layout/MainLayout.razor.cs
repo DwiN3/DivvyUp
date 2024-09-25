@@ -20,8 +20,24 @@ namespace DivvyUp_App.Layout
         [Inject]
         private UserAppService User { get; set; }
 
+        private bool SidebarExpanded { get; set; } = false;
+
+        Dictionary<string, string> MenuItems = new Dictionary<string, string>
+        {
+            { "/", "Strona Główna" },
+            { "/receipt", "Rachunki" },
+            { "/login", "Logowanie" },
+            { "/register", "Rejestracja" },
+            { "/logout", "Wyloguj się" }
+        };
+        
+        private string Header { get; set; } = string.Empty;
+
         protected override async void OnInitialized()
         {
+            Navigation.LocationChanged += OnLocationChanged;
+            SetHeader(Navigation.Uri);
+
             var user = User.GetUser();
 
             if (!string.IsNullOrEmpty(user.token))
@@ -53,6 +69,27 @@ namespace DivvyUp_App.Layout
             User.ClearUser();
             StateHasChanged();
             Navigation.NavigateTo("/");
+        }
+
+        private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+        {
+            SetHeader(e.Location);
+            StateHasChanged();
+        }
+
+        private void SetHeader(string url)
+        {
+            var relativePath = new Uri(url).AbsolutePath;
+
+            if (MenuItems.ContainsKey(relativePath))
+                Header = MenuItems[relativePath];
+            else
+                Header = string.Empty;
+        }
+
+        public void Dispose()
+        {
+            Navigation.LocationChanged -= OnLocationChanged;
         }
     }
 }
