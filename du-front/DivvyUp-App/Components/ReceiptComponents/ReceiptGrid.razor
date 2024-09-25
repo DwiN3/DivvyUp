@@ -1,11 +1,10 @@
 ﻿@using DivvyUp_Web.Api.Dtos
 
-<RadzenDataGrid @ref="receiptGrid" 
+<RadzenDataGrid @ref="@Grid" 
                 Data="@Receipts"
                 TItem="ReceiptDto"
-                AllowAlternatingRows="true" 
                 AllowSorting="true"
-                EditMode="DataGridEditMode.Single" 
+                AllowAlternatingRows="true" 
                 FilterMode="FilterMode.Simple"
                 AllowFiltering="true"
                 LogicalFilterOperator="LogicalFilterOperator.Or" 
@@ -15,6 +14,7 @@
                 PageSizeOptions="@PageSizeOptions"
                 PagerHorizontalAlign="HorizontalAlign.Center"
                 ShowPagingSummary="true"
+                EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
         <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"  />
@@ -25,19 +25,19 @@
             <Template Context="receipt">
                 <RadzenButton class="button" Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" />
                 <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@(args => EditRow(receipt))" />
-                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveReceipt(receipt.receiptId))" />
+                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(receipt.receiptId))" />
             </Template>
             <EditTemplate Context="receipt">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(receipt))"/>
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(receipt))"/>
             </EditTemplate>
             <FilterTemplate>
-                <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { receiptGrid.Reset(); })" />
+                <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
             </FilterTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.settled)" Title="Rozliczono" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="receipt">
-                <RadzenCheckBox class="button" @bind-Value="@receipt.settled" Change="@(async (bool Check) => await SetSettled(receipt.receiptId, receipt.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@receipt.settled" Change="@(async (bool Check) => await ChangeSettled(receipt.receiptId, receipt.settled))" />
             </Template>
             <EditTemplate Context="receipt">
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@receipt.settled" ReadOnly="true" />

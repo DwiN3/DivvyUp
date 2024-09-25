@@ -12,9 +12,10 @@ namespace DivvyUp_App.Components.ReceiptComponents
         [Inject]
         private IReceiptService ReceiptService { get; set; }
 
-        public List<ReceiptDto> Receipts { get; set; }
-        private RadzenDataGrid<ReceiptDto> receiptGrid { get; set; }
-        IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
+        private List<ReceiptDto> Receipts { get; set; }
+        private RadzenDataGrid<ReceiptDto> Grid { get; set; }
+        private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
+
         protected override async Task OnInitializedAsync()
         {
             await LoadGrid();
@@ -30,17 +31,17 @@ namespace DivvyUp_App.Components.ReceiptComponents
         {
             var receipt = new ReceiptDto();
             Receipts.Add(receipt);
-            await receiptGrid.InsertRow(receipt);
+            await Grid.InsertRow(receipt);
         }
 
         private async Task EditRow(ReceiptDto receipt)
         {
-            await receiptGrid.EditRow(receipt);
+            await Grid.EditRow(receipt);
         }
 
         private void CancelEdit(ReceiptDto receipt)
         {
-            receiptGrid.CancelEditRow(receipt);
+            Grid.CancelEditRow(receipt);
         }
 
         private async Task SaveRow(ReceiptDto r)
@@ -64,7 +65,7 @@ namespace DivvyUp_App.Components.ReceiptComponents
             }
         }
 
-        private async void RemoveReceipt(int receiptId)
+        private async void RemoveRow(int receiptId)
         {
             try
             {
@@ -82,7 +83,7 @@ namespace DivvyUp_App.Components.ReceiptComponents
             }
         }
 
-        private async Task SetSettled(int receiptId, bool isChecked)
+        private async Task ChangeSettled(int receiptId, bool isChecked)
         {
             try
             {
