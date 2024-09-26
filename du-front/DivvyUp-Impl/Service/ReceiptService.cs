@@ -1,11 +1,11 @@
-﻿using DivvyUp_Web.Api.Interface;
-using DivvyUp.Shared.Model;
+﻿using DivvyUp.Shared.Model;
 using Microsoft.AspNetCore.Components;
 using DivvyUp.Shared.Dto;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text;
+using DivvyUp.Shared.Interface;
 using DivvyUp_Impl.Api.DuHttpClient;
 using DivvyUp_Impl.Api.Route;
 using Newtonsoft.Json;
@@ -17,15 +17,13 @@ namespace DivvyUp_Impl.Service
         [Inject]
         private DuHttpClient _duHttpClient { get; set; }
         private readonly Route _url;
-        private readonly IMapper _mapper;
         private readonly ILogger<ReceiptService> _logger;
 
 
-        public ReceiptService(DuHttpClient duHttpClient, Route url, ILogger<ReceiptService> logger, IMapper mapper)
+        public ReceiptService(DuHttpClient duHttpClient, Route url, ILogger<ReceiptService> logger)
         {
             _duHttpClient = duHttpClient;
             _url = url;
-            _mapper = mapper;
             _logger = logger;
         }
 
@@ -134,10 +132,11 @@ namespace DivvyUp_Impl.Service
         {
             try
             {
-                var response = await _duHttpClient.GetAsync(_url.ShowAll);
+                var url = _url.ShowAll;
+                var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
-                var receiptModels = JsonConvert.DeserializeObject<List<ReceiptModel>>(jsonResponse);
-                var result = _mapper.Map<List<ReceiptDto>>(receiptModels);
+                var result = JsonConvert.DeserializeObject<List<ReceiptDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunków");
                 return result;
             }
             catch (Exception ex)

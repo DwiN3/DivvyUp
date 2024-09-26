@@ -1,9 +1,7 @@
 ﻿using Blazored.LocalStorage;
+using DivvyUp.Shared.Interface;
 using DivvyUp_Impl.Api.DuHttpClient;
-using DivvyUp_Impl.Interface;
-using DivvyUp_Impl.Model;
 using DivvyUp_Impl.Service;
-using DivvyUp_Web.Api.Interface;
 using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Layout

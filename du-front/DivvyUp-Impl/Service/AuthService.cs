@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using DivvyUp.Shared.Dto;
 using Newtonsoft.Json;
-using DivvyUp_Web.Api.Interface;
 using AutoMapper;
+using DivvyUp.Shared.Interface;
 using DivvyUp_Impl.Api.Route;
 
 namespace DivvyUp_Impl.Service
@@ -23,8 +23,7 @@ namespace DivvyUp_Impl.Service
         {
             var loginData = new
             {
-                user.username,
-                user.password
+                username = user.username, password = user.password
             };
 
             var jsonData = JsonConvert.SerializeObject(loginData);
@@ -38,9 +37,9 @@ namespace DivvyUp_Impl.Service
         {
             var registerData = new
             {
-                user.username,
-                user.email,
-                user.password
+                username = user.username,
+                email = user.email,
+                password = user.password
             };
 
             var jsonData = JsonConvert.SerializeObject(registerData);

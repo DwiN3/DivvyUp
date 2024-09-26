@@ -1,5 +1,5 @@
 ﻿using DivvyUp.Shared.Dto;
-using DivvyUp_Web.Api.Interface;
+using DivvyUp.Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Radzen.Blazor;

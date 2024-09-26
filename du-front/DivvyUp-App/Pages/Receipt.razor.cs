@@ -1,6 +1,6 @@
 ﻿using Blazored.LocalStorage;
+using DivvyUp.Shared.Interface;
 using Microsoft.AspNetCore.Components;
-using DivvyUp_Web.Api.Interface;
 using DivvyUp_App.Components.ReceiptComponents;
 
 namespace DivvyUp_App.Pages

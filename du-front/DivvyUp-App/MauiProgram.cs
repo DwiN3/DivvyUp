@@ -1,7 +1,7 @@
-﻿using DivvyUp_Web.Api.Interface;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Blazored.LocalStorage;
+using DivvyUp.Shared.Interface;
 using DivvyUp_Impl.Api.DuHttpClient;
 using DivvyUp_Impl.Api.Mapper;
 using DivvyUp_Impl.Api.Route;

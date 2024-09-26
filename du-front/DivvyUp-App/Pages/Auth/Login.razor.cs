@@ -1,10 +1,8 @@
 ﻿using System.Net.Sockets;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
-using DivvyUp_Web.Api.Interface;
-using Blazored.LocalStorage;
-using DivvyUp_Impl.Interface;
 using DivvyUp.Shared.Dto;
+using DivvyUp.Shared.Interface;
 using DivvyUp_Impl.Api.DuHttpClient;
 using DivvyUp_Impl.Api.Response;
 using DivvyUp_Impl.CodeReader;

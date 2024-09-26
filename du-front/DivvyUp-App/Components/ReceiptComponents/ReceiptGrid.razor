@@ -44,9 +44,6 @@
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.receiptName)" Title="Nazwa" Width="30%" TextAlign="TextAlign.Start" Frozen="true">
-            <Template Context="receipt">
-                @receipt.receiptName
-            </Template>
             <EditTemplate Context="receipt">
                 <RadzenTextBox @bind-value="receipt.receiptName" Style="width: 100%;"/>
             </EditTemplate>

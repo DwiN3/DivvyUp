@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DivvyUp_Impl.Model
+namespace DivvyUp.Shared.Model
 {
     public class User
     {

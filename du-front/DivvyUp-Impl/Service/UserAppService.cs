@@ -1,9 +1,8 @@
-﻿using DivvyUp_Impl.Interface;
-using DivvyUp_Impl.Model;
-using System.IO;
+﻿using System.IO;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DivvyUp.Shared.Model;
 
 namespace DivvyUp_Impl.Service
 {

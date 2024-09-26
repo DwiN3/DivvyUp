@@ -2,9 +2,9 @@
 {
     public class UserDto
     {
-        public int userId;
-        public string username;
-        public string email;
-        public string password;
+        public int userId { get; set; }
+        public string username { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
     }
 }
