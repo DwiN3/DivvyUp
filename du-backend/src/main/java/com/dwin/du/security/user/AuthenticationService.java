@@ -3,7 +3,6 @@ package com.dwin.du.security.user;
 import com.dwin.du.security.user.Request.AuthenticationRequest;
 import com.dwin.du.security.user.Request.RegisterRequest;
 import com.dwin.du.security.user.Request.RemoveAccountRequest;
-import com.dwin.du.security.user.Response.AuthenticationResponse;
 import com.dwin.du.security.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {
+    public ResponseEntity<?> register(RegisterRequest request) {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); 
         } else if (repository.findByUsername(request.getUsername()).isPresent()) {
@@ -45,11 +44,10 @@ public class AuthenticationService {
 
         repository.save(user);
 
-        var jwtToken = jwtService.generateTokem(user);
-        return ResponseEntity.ok(AuthenticationResponse.builder().token(jwtToken).build());
+        return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<AuthenticationResponse> auth(AuthenticationRequest request) {
+    public ResponseEntity<String> auth(AuthenticationRequest request) {
         try {
             Optional<User> optionalUser = repository.findByUsername(request.getUsername());
             if(!optionalUser.isPresent()){
@@ -73,7 +71,7 @@ public class AuthenticationService {
             var user = repository.findByUsername(request.getUsername()).orElseThrow();
 
             var jwtToken = jwtService.generateTokem(user);
-            return ResponseEntity.ok(AuthenticationResponse.builder().token(jwtToken).build());
+            return ResponseEntity.ok(jwtToken);
 
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -105,9 +103,9 @@ public class AuthenticationService {
             boolean isValid = jwtService.isTokenValid(token, userDetails);
 
             if (isValid) {
-                return ResponseEntity.ok().build();
+                return ResponseEntity.ok(true);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return ResponseEntity.ok(false);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

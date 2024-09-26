@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using DivvyUp.Shared.Dto;
 using DivvyUp.Shared.Interface;
-using DivvyUp.Shared.Response;
 using DivvyUp_Impl.Api.DuHttpClient;
 using DivvyUp_Impl.CodeReader;
 using DivvyUp_Impl.Service;
@@ -29,7 +28,6 @@ namespace DivvyUp_App.Pages.Auth
 
         private async Task SignUp()
         {
-            LoginResponse response = new LoginResponse();
             UserDto user = new UserDto
             {
                 username = Username,
@@ -38,10 +36,10 @@ namespace DivvyUp_App.Pages.Auth
 
             try
             {
-                response = await AuthService.Login(user);
+                var token = await AuthService.Login(user);
                 //LoginInfo = RCR.ReadLogin(response);
-                User.SetUser(user.username, response.token, true);
-                HttpClient.UpdateToken(response.token);
+                User.SetUser(user.username, token, true);
+                HttpClient.UpdateToken(token);
                 ColorInfo = "green";
                 Navigation.NavigateTo("/receipt");
             }

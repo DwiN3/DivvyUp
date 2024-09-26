@@ -3,7 +3,6 @@ using DivvyUp.Shared.Dto;
 using Newtonsoft.Json;
 using AutoMapper;
 using DivvyUp.Shared.Interface;
-using DivvyUp.Shared.Response;
 using DivvyUp_Impl.Api.Route;
 using Microsoft.Extensions.Logging;
 using DivvyUp_Impl.Api.DuHttpClient;
@@ -26,7 +25,7 @@ namespace DivvyUp_Impl.Service
             _logger = logger;
         }
 
-        public async Task<LoginResponse> Login(UserDto user)
+        public async Task<string> Login(UserDto user)
         {
             try
             {
@@ -39,8 +38,7 @@ namespace DivvyUp_Impl.Service
 
                 var url = _url.Login;
                 var response = await _duHttpClient.PostAsync(url, user);
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
+                var result = await response.Content.ReadAsStringAsync();
                 await EnsureCorrectResponse(response, "Błąd w czasie logowania");
                 return result;
             }
@@ -99,7 +97,7 @@ namespace DivvyUp_Impl.Service
             throw new NotImplementedException();
         }
 
-        public async Task isValid(string token)
+        public async Task<bool> IsValid(string token)
         {
             try
             {
@@ -108,7 +106,10 @@ namespace DivvyUp_Impl.Service
 
                 var url = $"{_url.IsValid}?token={token}";
                 var response = await _duHttpClient.GetAsync(url);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                bool result = bool.Parse(responseContent);
                 await EnsureCorrectResponse(response, "Błąd w czasie walidacji");
+                return result;
             }
             catch (InvalidOperationException ex)
             {

@@ -33,6 +33,8 @@ namespace DivvyUp_Impl.Service
             ClearUserData();
         }
 
+        public void SetLoggedIn(bool isLogin) { _currentUser.isLogin = isLogin; }
+
         public bool IsLoggedIn() => _currentUser.isLogin;
 
         private void SaveUserData()

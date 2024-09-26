@@ -37,15 +37,19 @@ namespace DivvyUp_App.Layout
             SetHeader(Navigation.Uri);
 
             var user = User.GetUser();
+            User.SetLoggedIn(false);
 
             if (!string.IsNullOrEmpty(user.token))
             {
                 try
                 {
-                    await AuthService.isValid(user.token);
-                    User.SetUser(user.username, user.token, true);
-                    DuHttpClient.UpdateToken(user.token);
-                    Navigation.NavigateTo("/receipt");
+                    bool isValid = await AuthService.IsValid(user.token);
+                    if (isValid)
+                    {
+                        User.SetUser(user.username, user.token, true);
+                        DuHttpClient.UpdateToken(user.token);
+                        Navigation.NavigateTo("/receipt");
+                    }
                 }
                 catch (HttpRequestException ex)
                 {
@@ -58,7 +62,6 @@ namespace DivvyUp_App.Layout
                     User.ClearUser();
                     DuHttpClient.UpdateToken(string.Empty);
                     Navigation.NavigateTo("/");
-                    SetHeader("/");
                 }
             }
             StateHasChanged();

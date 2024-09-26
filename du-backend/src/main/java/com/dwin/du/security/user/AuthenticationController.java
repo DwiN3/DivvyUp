@@ -3,7 +3,6 @@ package com.dwin.du.security.user;
 import com.dwin.du.security.user.Request.RegisterRequest;
 import com.dwin.du.security.user.Request.AuthenticationRequest;
 import com.dwin.du.security.user.Request.RemoveAccountRequest;
-import com.dwin.du.security.user.Response.AuthenticationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +16,13 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request){
-        ResponseEntity<AuthenticationResponse> response = service.register(request);
+        ResponseEntity<?> response = service.register(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
     @PostMapping("/auth")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request){
-        ResponseEntity<AuthenticationResponse> response = service.auth(request);
+        ResponseEntity<String> response = service.auth(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 

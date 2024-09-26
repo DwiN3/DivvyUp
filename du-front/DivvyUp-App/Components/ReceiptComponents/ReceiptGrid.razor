@@ -48,12 +48,12 @@
                 <RadzenTextBox @bind-value="@receipt.receiptName" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ReceiptDto.date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu">
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
             <Template Context="receipt">
                 @receipt.date.ToString("dd.MM.yyyy")
             </Template>
             <EditTemplate Context="receipt">
-                <RadzenDatePicker @bind-Value="@receipt.date" ShowCalendarWeek Style="width: 100%;"/>
+                <RadzenDatePicker @bind-Value="@receipt.date" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.totalAmount)" Title="Kwota" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
