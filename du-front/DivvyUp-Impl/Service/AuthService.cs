@@ -15,13 +15,12 @@ namespace DivvyUp_Impl.Service
     {
         [Inject]
         private DuHttpClient _duHttpClient { get; set; }
-        private readonly Route _url;
+        private Route _url { get; } = new();
         private readonly ILogger<ReceiptService> _logger;
 
-        public AuthService(DuHttpClient duHttpClient, Route url, ILogger<ReceiptService> logger)
+        public AuthService(DuHttpClient duHttpClient, ILogger<ReceiptService> logger)
         {
             _duHttpClient = duHttpClient;
-            _url = url;
             _logger = logger;
         }
 

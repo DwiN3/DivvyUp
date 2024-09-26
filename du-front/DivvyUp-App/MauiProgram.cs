@@ -3,7 +3,6 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using Blazored.LocalStorage;
 using DivvyUp.Shared.Interface;
 using DivvyUp_Impl.Api.DuHttpClient;
-using DivvyUp_Impl.Api.Mapper;
 using DivvyUp_Impl.Api.Route;
 using DivvyUp_Impl.CodeReader;
 using DivvyUp_Impl.Service;
@@ -37,8 +36,6 @@ namespace DivvyUp_App
             builder.Services.AddBlazorBootstrap();
             builder.Services.AddRadzenComponents();
             builder.Services.AddBlazoredLocalStorage();
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
-            builder.Services.AddSingleton<Route>();
             builder.Services.AddSingleton<CodeReaderResponse>();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
