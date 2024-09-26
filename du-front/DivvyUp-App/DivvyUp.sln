@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp-App", "DivvyUp-App.csproj", "{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.App", "DivvyUp.App.csproj", "{F5A4F70D-B0C7-478A-B07F-B4EE1287BC37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp-Web", "..\DivvyUp-Web\DivvyUp-Web.csproj", "{CF9602AE-B284-4307-A466-9C2237B356F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.Impl.Web", "..\DivvyUp-Web\DivvyUp.Impl.Web.csproj", "{CF9602AE-B284-4307-A466-9C2237B356F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp-Impl", "..\DivvyUp-Impl\DivvyUp-Impl.csproj", "{6706BA5C-00E4-469F-8644-DC10AD1BC8C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.Impl.Maui", "..\DivvyUp-Impl\DivvyUp.Impl.Maui.csproj", "{6706BA5C-00E4-469F-8644-DC10AD1BC8C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivvyUp.Shared", "..\DivvyUp.Shared\DivvyUp.Shared.csproj", "{24894E8D-172C-4D69-896E-956504A52175}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{6706BA5C-00E4-469F-8644-DC10AD1BC8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6706BA5C-00E4-469F-8644-DC10AD1BC8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6706BA5C-00E4-469F-8644-DC10AD1BC8C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24894E8D-172C-4D69-896E-956504A52175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24894E8D-172C-4D69-896E-956504A52175}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24894E8D-172C-4D69-896E-956504A52175}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24894E8D-172C-4D69-896E-956504A52175}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

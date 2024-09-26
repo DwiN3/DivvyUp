@@ -1,14 +1,13 @@
 ﻿using DivvyUp_Web.Api.Interface;
-using DivvyUp_Web.Api.Service;
-using DivvyUp_Web.Api.Urls;
 using Microsoft.Extensions.Logging;
 using Microsoft.FluentUI.AspNetCore.Components;
-using DivvyUp_Web.Api.ResponceCodeReader;
 using Blazored.LocalStorage;
-using DivvyUp_Web.DuHttp;
-using Radzen;
-using DivvyUp_Web.Mapper;
+using DivvyUp_Impl.Api.DuHttpClient;
+using DivvyUp_Impl.Api.Mapper;
+using DivvyUp_Impl.Api.Route;
+using DivvyUp_Impl.CodeReader;
 using DivvyUp_Impl.Service;
+using Radzen;
 
 namespace DivvyUp_App
 {

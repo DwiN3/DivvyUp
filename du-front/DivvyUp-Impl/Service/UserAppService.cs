@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DivvyUp_Impl.Service
 {
-    public class UserAppService 
+    public class UserAppService
     {
         private readonly string _userFileName;
         private User _currentUser;

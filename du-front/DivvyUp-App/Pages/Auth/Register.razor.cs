@@ -1,8 +1,8 @@
 ﻿using System.Net.Sockets;
-using DivvyUp_Web.Api.Dtos;
+using DivvyUp.Shared.Dto;
+using DivvyUp_Impl.CodeReader;
 using Microsoft.AspNetCore.Components;
 using DivvyUp_Web.Api.Interface;
-using DivvyUp_Web.Api.ResponceCodeReader;
 
 namespace DivvyUp_App.Pages.Auth
 {

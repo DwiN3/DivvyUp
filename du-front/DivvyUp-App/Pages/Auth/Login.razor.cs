@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using DivvyUp_Web.Api.Interface;
-using DivvyUp_Web.Api.ResponceCodeReader;
-using DivvyUp_Web.Api.Response;
 using Blazored.LocalStorage;
 using DivvyUp_Impl.Interface;
+using DivvyUp.Shared.Dto;
+using DivvyUp_Impl.Api.DuHttpClient;
+using DivvyUp_Impl.Api.Response;
+using DivvyUp_Impl.CodeReader;
 using DivvyUp_Impl.Service;
-using DivvyUp_Web.Api.Dtos;
-using DivvyUp_Web.DuHttp;
 
 namespace DivvyUp_App.Pages.Auth
 {
