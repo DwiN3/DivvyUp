@@ -40,24 +40,26 @@ namespace DivvyUp_App.Layout
 
             if (!string.IsNullOrEmpty(user.token))
             {
-                var response = await AuthService.isValid(user.token);
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
+                    await AuthService.isValid(user.token);
                     User.SetUser(user.username, user.token, true);
                     DuHttpClient.UpdateToken(user.token);
                     Navigation.NavigateTo("/receipt");
                 }
-                else
+                catch (HttpRequestException ex)
                 {
                     User.ClearUser();
                     DuHttpClient.UpdateToken(string.Empty);
                     Navigation.NavigateTo("/");
                 }
-            }
-            else
-            {
-                Navigation.NavigateTo("/");
+                catch (Exception ex)
+                {
+                    User.ClearUser();
+                    DuHttpClient.UpdateToken(string.Empty);
+                    Navigation.NavigateTo("/");
+                    SetHeader("/");
+                }
             }
             StateHasChanged();
         }

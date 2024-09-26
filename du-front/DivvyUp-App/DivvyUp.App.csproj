@@ -81,7 +81,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DivvyUp-Impl\DivvyUp.Impl.Maui.csproj" />
-      <ProjectReference Include="..\DivvyUp-Web\DivvyUp.Impl.Web.csproj" />
       <ProjectReference Include="..\DivvyUp.Shared\DivvyUp.Shared.csproj" />
     </ItemGroup>
 

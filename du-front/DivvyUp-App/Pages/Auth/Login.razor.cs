@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using DivvyUp.Shared.Dto;
 using DivvyUp.Shared.Interface;
+using DivvyUp.Shared.Response;
 using DivvyUp_Impl.Api.DuHttpClient;
-using DivvyUp_Impl.Api.Response;
 using DivvyUp_Impl.CodeReader;
 using DivvyUp_Impl.Service;
+using DivvyUp.Shared.Model;
 
 namespace DivvyUp_App.Pages.Auth
 {
@@ -28,35 +29,30 @@ namespace DivvyUp_App.Pages.Auth
 
         private async Task SignUp()
         {
+            LoginResponse response = new LoginResponse();
+            UserDto user = new UserDto
+            {
+                username = Username,
+                password = Password
+            };
+
             try
             {
-                UserDto user = new UserDto
-                {
-                    username = Username,
-                    password = Password
-                };
-                var response = await AuthService.Login(user);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseBody = await response.Content.ReadAsStringAsync();
-                    var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
-                    var token = loginResponse.token;
-                    User.SetUser(user.username, token, true);
-                    HttpClient.UpdateToken(token);
-
-                    ColorInfo = "green";
-                    Navigation.NavigateTo("/receipt");
-                }
-                else
-                {
-                    ColorInfo = "red";
-                }
-                LoginInfo = RCR.ReadLogin(response.StatusCode);
+                response = await AuthService.Login(user);
+                //LoginInfo = RCR.ReadLogin(response);
+                User.SetUser(user.username, response.token, true);
+                HttpClient.UpdateToken(response.token);
+                ColorInfo = "green";
+                Navigation.NavigateTo("/receipt");
             }
-            catch (HttpRequestException ex) when (ex.InnerException is SocketException socketException)
+            catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"Błąd połączenia: {socketException.Message}");
+                ColorInfo = "red";
+            }
+            
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Błąd połączenia z serwerem");
                 LoginInfo = "Błąd połączenia z serwerem.";
                 ColorInfo = "red";
             }
@@ -67,6 +63,5 @@ namespace DivvyUp_App.Pages.Auth
                 ColorInfo = "red";
             }
         }
-
     }
 }

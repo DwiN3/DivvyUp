@@ -1,4 +1,4 @@
-﻿namespace DivvyUp_Impl.Api.Response
+﻿namespace DivvyUp.Shared.Response
 {
     public class LoginResponse
     {

@@ -1,10 +1,6 @@
-﻿using DivvyUp.Shared.Model;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using DivvyUp.Shared.Dto;
-using AutoMapper;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
-using System.Text;
 using DivvyUp.Shared.Interface;
 using DivvyUp_Impl.Api.DuHttpClient;
 using DivvyUp_Impl.Api.Route;

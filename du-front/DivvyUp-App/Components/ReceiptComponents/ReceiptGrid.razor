@@ -45,7 +45,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.receiptName)" Title="Nazwa" Width="30%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="receipt">
-                <RadzenTextBox @bind-value="receipt.receiptName" Style="width: 100%;"/>
+                <RadzenTextBox @bind-value="@receipt.receiptName" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu">
@@ -53,11 +53,7 @@
                 @receipt.date.ToString("dd.MM.yyyy")
             </Template>
             <EditTemplate Context="receipt">
-                @{
-                    if (receipt.date == default(DateTime))
-                        receipt.date = DateTime.Now;
-                }
-                <RadzenDatePicker @bind-Value="receipt.date" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="width: 100%;"/>
+                <RadzenDatePicker @bind-Value="@receipt.date" ShowCalendarWeek Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.totalAmount)" Title="Kwota" Width="20%" TextAlign="TextAlign.Start" Frozen="true">

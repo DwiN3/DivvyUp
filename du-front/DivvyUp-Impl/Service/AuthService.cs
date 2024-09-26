@@ -3,62 +3,144 @@ using DivvyUp.Shared.Dto;
 using Newtonsoft.Json;
 using AutoMapper;
 using DivvyUp.Shared.Interface;
+using DivvyUp.Shared.Response;
 using DivvyUp_Impl.Api.Route;
+using Microsoft.Extensions.Logging;
+using DivvyUp_Impl.Api.DuHttpClient;
+using Microsoft.AspNetCore.Components;
+using DivvyUp.Shared.Model;
 
 namespace DivvyUp_Impl.Service
 {
     public class AuthService : IAuthService
     {
-        private HttpClient _httpClient { get; set; } = new();
+        [Inject]
+        private DuHttpClient _duHttpClient { get; set; }
         private readonly Route _url;
-        private readonly IMapper _mapper;
+        private readonly ILogger<ReceiptService> _logger;
 
-        public AuthService(Route url, IMapper mapper)
+        public AuthService(DuHttpClient duHttpClient, Route url, ILogger<ReceiptService> logger)
         {
+            _duHttpClient = duHttpClient;
             _url = url;
-            _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task<HttpResponseMessage> Login(UserDto user)
+        public async Task<LoginResponse> Login(UserDto user)
         {
-            var loginData = new
+            try
             {
-                username = user.username, password = user.password
-            };
+                if (user == null)
+                    throw new InvalidOperationException("Dane są puste");
+                if (user.username == null || user.username.Equals(string.Empty))
+                    throw new InvalidOperationException("Nazwa jest pusta");
+                if (user.password == null || user.password.Equals(string.Empty))
+                    throw new InvalidOperationException("Hasło jest puste");
 
-            var jsonData = JsonConvert.SerializeObject(loginData);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var url = _url.Login;
-            var response = await _httpClient.PostAsync(url, content);
-            return response;
+                var url = _url.Login;
+                var response = await _duHttpClient.PostAsync(url, user);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie logowania");
+                return result;
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie logowania: {Message}", ex.Message);
+                throw;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie logowania: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie logowania: {Message}", ex.Message);
+                throw;
+            }
         }
-
-        public async Task<HttpResponseMessage> Register(UserDto user)
+        public async Task Register(UserDto user)
         {
-            var registerData = new
+            try
             {
-                username = user.username,
-                email = user.email,
-                password = user.password
-            };
+                if (user == null)
+                    throw new InvalidOperationException("Dane są puste");
+                if (user.username == null || user.username.Equals(string.Empty))
+                    throw new InvalidOperationException("Nazwa jest pusta");
+                if (user.password == null || user.password.Equals(string.Empty))
+                    throw new InvalidOperationException("Hasło jest puste");
+                if (user.email == null || user.email.Equals(string.Empty))
+                    throw new InvalidOperationException("Email");
 
-            var jsonData = JsonConvert.SerializeObject(registerData);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var url = _url.Register;
-            var response = await _httpClient.PostAsync(url, content);
-            return response;
+                var url = _url.Register;
+                var response = await _duHttpClient.PostAsync(url, user);
+                await EnsureCorrectResponse(response, "Błąd w czasie rejestracji");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie rejestracji: {Message}", ex.Message);
+                throw;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie rejestracji: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie rejestracji: {Message}", ex.Message);
+                throw;
+            }
         }
 
-        public async Task<HttpResponseMessage> RemoveAccount()
+        public async Task RemoveAccount()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<HttpResponseMessage> isValid(string token)
+        public async Task isValid(string token)
         {
-            var url = $"{_url.IsValid}?token={token}";
-            var response = await _httpClient.GetAsync(url);
-            return response;
+            try
+            {
+                if (token == null)
+                    throw new InvalidOperationException("Brak tokenu");
+
+                var url = $"{_url.IsValid}?token={token}";
+                var response = await _duHttpClient.GetAsync(url);
+                await EnsureCorrectResponse(response, "Błąd w czasie walidacji");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie rejestracji: {Message}", ex.Message);
+                throw;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie walidacji: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie walidacji: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        private async Task EnsureCorrectResponse(HttpResponseMessage response, string errorMessage)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    throw new InvalidOperationException(content);
+                }
+
+                response.EnsureSuccessStatusCode();
+            }
         }
     }
 }

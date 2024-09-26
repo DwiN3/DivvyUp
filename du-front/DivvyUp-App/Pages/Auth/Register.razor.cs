@@ -1,6 +1,8 @@
 ﻿using System.Net.Sockets;
 using DivvyUp.Shared.Dto;
 using DivvyUp.Shared.Interface;
+using DivvyUp.Shared.Model;
+using DivvyUp_Impl.Api.DuHttpClient;
 using DivvyUp_Impl.CodeReader;
 using Microsoft.AspNetCore.Components;
 
@@ -25,26 +27,23 @@ namespace DivvyUp_App.Pages.Auth
         {
             try
             {
-                UserDto user = new UserDto();
-                user.username = Username;
-                user.email = Email;
-                user.password = Password;
-                var response = await AuthService.Register(user);
-                if(response.IsSuccessStatusCode)
-                    ColorInfo = "green";
-                else
-                    ColorInfo = "red";
-                
-                RegisterInfo = RCR.ReadRegister(response.StatusCode);
+                UserDto user = new UserDto
+                {
+                    username = Username,
+                    email = Email,
+                    password = Password
+                };
+                await AuthService.Register(user);
+                //RegisterInfo = RCR.ReadRegister(response.StatusCode);
+                ColorInfo = "green";
             }
-            catch (HttpRequestException ex) when (ex.InnerException is SocketException socketException)
+            catch (HttpRequestException ex)
             {
-                RegisterInfo = "Błąd połączenia z serwerem.";
                 ColorInfo = "red";
+                RegisterInfo = "Błąd połączenia z serwerem.";
             }
             catch (Exception ex)
             {
-                RegisterInfo = "Wystąpił nieoczekiwany błąd.";
                 ColorInfo = "red";
             }
         }

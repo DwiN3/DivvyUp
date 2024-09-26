@@ -8,5 +8,25 @@
         public DateTime date { get; set; }
         public double totalAmount { get; set; }
         public bool settled { get; set; }
+
+        public ReceiptDto()
+        {
+            receiptId = 0;
+            userId = 0;
+            receiptName = string.Empty;
+            date = DateTime.Now;
+            totalAmount = 0;
+            settled = false;
+        }
+
+        public ReceiptDto(int receiptId, int userId, string receiptName, DateTime date, double totalAmount, bool settled)
+        {
+            this.receiptId = receiptId;
+            this.userId = userId;
+            this.receiptName = receiptName;
+            this.date = date;
+            this.totalAmount = totalAmount;
+            this.settled = settled;
+        }
     }
 }
