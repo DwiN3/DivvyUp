@@ -1,5 +1,6 @@
-﻿using DivvyUp_Shared.Interface;
-using Radzen;
+﻿using Radzen;
+using DivvyUp_Shared.Interface;
+using DivvyUp_Impl_Maui.Components.DDialog;
 
 namespace DivvyUp_Impl_Maui.Service
 {
@@ -12,15 +13,24 @@ namespace DivvyUp_Impl_Maui.Service
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         }
 
-
-        public Task OpenDialog(string title, string content)
+        public async Task OpenDialog(string title, string content)
         {
-            throw new NotImplementedException();
+            await _dialogService.OpenAsync<DialogCard>(
+                title,
+                new Dictionary<string, object> { { "Content", content } },
+                new DialogOptions()
+            );
         }
 
-        public Task<bool> OpenYesNoDialog(string title, string content)
+        public async Task<bool> OpenYesNoDialog(string title, string content)
         {
-            throw new NotImplementedException();
+            var result = await _dialogService.OpenAsync<DialogYesNoCard>(
+                title,
+                new Dictionary<string, object> { { "Content", content } },
+                new DialogOptions()
+            );
+
+            return result != null && (bool)result;
         }
     }
 }

@@ -18,6 +18,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\DivvyUp.Shared\DivvyUp.Shared.csproj" />
+		<Content Include="..\DivvyUp-App\Components\DDialog\DialogCard.razor" Link="Components\DDialog\DialogCard.razor" />
+		<Content Include="..\DivvyUp-App\Components\DDialog\DialogYesNoCard.razor" Link="Components\DDialog\DialogYesNoCard.razor" />
 	</ItemGroup>
 
 </Project>
