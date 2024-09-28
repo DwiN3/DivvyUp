@@ -3,9 +3,9 @@ using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 
-namespace DivvyUp_App.Pages.Auth
+namespace DivvyUp_App.Pages
 {
-    partial class Register
+    partial class RegisterPage
     {
         [Inject]
         private IAuthService AuthService { get; set; }
@@ -18,8 +18,8 @@ namespace DivvyUp_App.Pages.Auth
         private string Password { get; set; }
         private string RegisterInfo { get; set; } = string.Empty;
         private string ColorInfo { get; set; } = "black";
-        
-        
+
+
         private async Task CreateAccount()
         {
             try

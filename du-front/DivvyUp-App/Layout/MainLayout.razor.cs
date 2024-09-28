@@ -1,5 +1,4 @@
-﻿using BlazorBootstrap;
-using DivvyUp_App.Components.DAlert;
+﻿using DivvyUp_App.BaseComponents.DAlert;
 using DivvyUp_Impl_Maui.Api.DuHttpClient;
 using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Interface;
@@ -17,7 +16,7 @@ namespace DivvyUp_App.Layout
         [Inject]
         private DuHttpClient DuHttpClient { get; set; }
         [Inject]
-        private IAlertService AlertService { get; set; }
+        private DAlertService AlertService { get; set; }
         [Inject]
         private UserAppService UserAppService { get; set; }
 

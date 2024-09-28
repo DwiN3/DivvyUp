@@ -1,11 +1,11 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
-using DivvyUp_App.Components.ReceiptComponents;
+using DivvyUp_App.Components.Receipt;
 using DivvyUp_Shared.Interface;
 
 namespace DivvyUp_App.Pages
 {
-    partial class Receipt
+    partial class ReceiptPage
     {
         [Inject]
         private ILocalStorageService LocalStorage { get; set; }

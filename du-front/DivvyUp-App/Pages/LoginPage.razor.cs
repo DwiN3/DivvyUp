@@ -6,9 +6,9 @@ using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Radzen;
 
-namespace DivvyUp_App.Pages.Auth
+namespace DivvyUp_App.Pages
 {
-    partial class Login
+    partial class LoginPage
     {
         [Inject]
         private IAuthService AuthService { get; set; }
@@ -19,7 +19,7 @@ namespace DivvyUp_App.Pages.Auth
         [Inject]
         private UserAppService UserAppService { get; set; }
         [Inject]
-        private IAlertService AlertService { get; set; }
+        private DAlertService AlertService { get; set; }
         private CodeReaderResponse RCR { get; set; } = new();
         private string Username { get; set; }
         private string Password { get; set; }
@@ -48,7 +48,7 @@ namespace DivvyUp_App.Pages.Auth
                 ColorInfo = "red";
                 AlertService.ShowAlert("Błędne dane", AlertStyle.Danger);
             }
-            
+
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Błąd połączenia z serwerem");

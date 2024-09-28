@@ -1,14 +1,18 @@
-﻿using DivvyUp_Shared.Dto;
+﻿using DivvyUp_Impl_Maui.Service;
+using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
+using Radzen;
 using Radzen.Blazor;
 
-namespace DivvyUp_App.Components.ReceiptComponents
+namespace DivvyUp_App.Components.Receipt
 {
     partial class ReceiptGrid : ComponentBase
     {
         [Inject]
         private IReceiptService ReceiptService { get; set; }
+        [Inject]
+        private DAlertService AlertService { get; set; }
 
         private List<ReceiptDto> Receipts { get; set; }
         private RadzenDataGrid<ReceiptDto> Grid { get; set; }
@@ -68,6 +72,7 @@ namespace DivvyUp_App.Components.ReceiptComponents
             try
             {
                 await ReceiptService.RemoveReceipt(receiptId);
+                AlertService.ShowAlert("Usunięto rachunek", AlertStyle.Success);
             }
             catch (InvalidOperationException ex)
             {

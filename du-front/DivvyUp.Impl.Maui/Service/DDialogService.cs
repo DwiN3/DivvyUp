@@ -1,14 +1,13 @@
 ﻿using Radzen;
-using DivvyUp_Shared.Interface;
 //using DivvyUp_App.Components.DDialog;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class MyDialogService : IMyDialogService
+    public class DDialogService
     {
         private readonly DialogService _dialogService;
 
-        public MyDialogService(DialogService dialogService)
+        public DDialogService(DialogService dialogService)
         {
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         }

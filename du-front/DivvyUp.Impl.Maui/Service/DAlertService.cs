@@ -3,7 +3,7 @@ using Radzen;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class AlertService : IAlertService
+    public class DAlertService
     {
         public event Action<string, AlertStyle> OnAlert;
         public event Action OnCloseAlert;

@@ -1,6 +1,4 @@
 ﻿@namespace DivvyUp_App.Components.DDialog
-@using Radzen
-@using Radzen.Blazor
 @inject DialogService DialogService
 
 <div class="card-dialog">
@@ -15,7 +13,8 @@
 </div>
 
 @code {
-    [Parameter] public string Content { get; set; }
+    [Parameter] 
+    public string Content { get; set; }
 }
 
 <style>

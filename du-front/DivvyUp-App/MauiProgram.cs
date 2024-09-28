@@ -35,13 +35,12 @@ namespace DivvyUp_App
             builder.Services.AddRadzenComponents();
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddSingleton<CodeReaderResponse>();
-            builder.Services.AddTransient<IAuthService, AuthService>();
-            builder.Services.AddTransient<IReceiptService, ReceiptService>();
             builder.Services.AddSingleton<UserAppService>();
             builder.Services.AddScoped<DialogService>();
-            builder.Services.AddScoped<IMyDialogService, MyDialogService>();
-            builder.Services.AddScoped<IAlertService, AlertService>();
-            //builder.Services.AddScoped<AlertService>();
+            builder.Services.AddSingleton<DDialogService>();
+            builder.Services.AddSingleton<DAlertService>();
+            builder.Services.AddTransient<IAuthService, AuthService>();
+            builder.Services.AddTransient<IReceiptService, ReceiptService>();
             ;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

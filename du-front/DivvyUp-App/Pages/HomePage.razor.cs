@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Pages
 {
-    public partial class Home
+    public partial class HomePage
     {
         [Inject]
         private UserAppService UserAppService { get; set; }
