@@ -1,4 +1,4 @@
-﻿namespace DivvyUp.Shared.Dto
+﻿namespace DivvyUp_Shared.Dto
 {
     public class UserDto
     {

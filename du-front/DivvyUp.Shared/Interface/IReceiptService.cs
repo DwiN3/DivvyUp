@@ -1,6 +1,6 @@
-﻿using DivvyUp.Shared.Dto;
+﻿using DivvyUp_Shared.Dto;
 
-namespace DivvyUp.Shared.Interface
+namespace DivvyUp_Shared.Interface
 {
     public interface IReceiptService
     {

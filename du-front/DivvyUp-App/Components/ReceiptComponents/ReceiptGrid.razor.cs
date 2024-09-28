@@ -1,7 +1,6 @@
-﻿using DivvyUp.Shared.Dto;
-using DivvyUp.Shared.Interface;
+﻿using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using Radzen.Blazor;
 
 namespace DivvyUp_App.Components.ReceiptComponents

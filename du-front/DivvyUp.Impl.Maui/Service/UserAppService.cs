@@ -1,10 +1,7 @@
-﻿using System.IO;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Threading.Tasks;
-using DivvyUp.Shared.Model;
+﻿using System.Text.Json;
+using DivvyUp_Shared.Model;
 
-namespace DivvyUp_Impl.Service
+namespace DivvyUp_Impl_Maui.Service
 {
     public class UserAppService
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DivvyUp.Shared.Interface
+namespace DivvyUp_Shared.Interface
 {
     public interface IMyDialogService
     {

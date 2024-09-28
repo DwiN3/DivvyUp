@@ -1,15 +1,11 @@
-﻿using System.Text;
-using DivvyUp.Shared.Dto;
-using Newtonsoft.Json;
-using AutoMapper;
-using DivvyUp.Shared.Interface;
-using DivvyUp_Impl.Api.Route;
+﻿using DivvyUp_Impl_Maui.Api.DuHttpClient;
+using DivvyUp_Impl_Maui.Api.Route;
+using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Interface;
 using Microsoft.Extensions.Logging;
-using DivvyUp_Impl.Api.DuHttpClient;
 using Microsoft.AspNetCore.Components;
-using DivvyUp.Shared.Model;
 
-namespace DivvyUp_Impl.Service
+namespace DivvyUp_Impl_Maui.Service
 {
     public class AuthService : IAuthService
     {

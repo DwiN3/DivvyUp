@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DivvyUp_Impl.Service;
+﻿using DivvyUp_Impl_Maui.Service;
 using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Pages

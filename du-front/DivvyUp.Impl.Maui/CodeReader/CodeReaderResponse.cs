@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace DivvyUp_Impl.CodeReader
+namespace DivvyUp_Impl_Maui.CodeReader
 {
     public class CodeReaderResponse
     {

@@ -1,12 +1,6 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DivvyUp.Shared.Model;
+﻿using DivvyUp_Shared.Model;
 
-namespace DivvyUp.Shared.Interface
+namespace DivvyUp_Shared.Interface
 {
     public interface IUserAppService
     {

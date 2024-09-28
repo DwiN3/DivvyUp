@@ -1,4 +1,4 @@
-﻿namespace DivvyUp_Impl.Api.Route
+﻿namespace DivvyUp_Impl_Maui.Api.Route
 {
     public class Route
     {

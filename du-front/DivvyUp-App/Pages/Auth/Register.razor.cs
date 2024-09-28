@@ -1,9 +1,6 @@
-﻿using System.Net.Sockets;
-using DivvyUp.Shared.Dto;
-using DivvyUp.Shared.Interface;
-using DivvyUp.Shared.Model;
-using DivvyUp_Impl.Api.DuHttpClient;
-using DivvyUp_Impl.CodeReader;
+﻿using DivvyUp_Impl_Maui.CodeReader;
+using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Pages.Auth
