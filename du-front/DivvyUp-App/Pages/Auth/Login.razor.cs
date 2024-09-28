@@ -17,7 +17,7 @@ namespace DivvyUp_App.Pages.Auth
         [Inject]
         private DuHttpClient HttpClient { get; set; }
         [Inject]
-        private IUserAppService UserAppService { get; set; }
+        private UserAppService UserAppService { get; set; }
         [Inject]
         private IAlertService AlertService { get; set; }
         private CodeReaderResponse RCR { get; set; } = new();

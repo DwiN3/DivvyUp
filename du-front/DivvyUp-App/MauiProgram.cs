@@ -37,7 +37,7 @@ namespace DivvyUp_App
             builder.Services.AddSingleton<CodeReaderResponse>();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
-            builder.Services.AddTransient<IUserAppService, UserAppService>();
+            builder.Services.AddSingleton<UserAppService>();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<IMyDialogService, MyDialogService>();
             builder.Services.AddScoped<IAlertService, AlertService>();

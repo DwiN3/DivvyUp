@@ -1,4 +1,4 @@
-﻿using DivvyUp_Shared.Interface;
+﻿using DivvyUp_Impl_Maui.Service;
 using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Pages
@@ -6,7 +6,7 @@ namespace DivvyUp_App.Pages
     public partial class Home
     {
         [Inject]
-        private IUserAppService UserAppService { get; set; }
+        private UserAppService UserAppService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

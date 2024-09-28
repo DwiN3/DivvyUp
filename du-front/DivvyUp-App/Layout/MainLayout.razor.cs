@@ -19,7 +19,7 @@ namespace DivvyUp_App.Layout
         [Inject]
         private IAlertService AlertService { get; set; }
         [Inject]
-        private IUserAppService UserAppService { get; set; }
+        private UserAppService UserAppService { get; set; }
 
         private DAlert Alert { get; set; }
         private bool SidebarExpanded { get; set; } = false;
