@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DivvyUp_Shared.Model
+﻿namespace DivvyUp_Shared.Model
 {
     public class User
     {
