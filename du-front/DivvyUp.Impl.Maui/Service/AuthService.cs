@@ -1,4 +1,5 @@
 ﻿using DivvyUp_Impl_Maui.Api.DuHttpClient;
+using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Impl_Maui.Api.Route;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
@@ -129,13 +130,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                {
-                    throw new InvalidOperationException(content);
-                }
-
-                response.EnsureSuccessStatusCode();
+                throw new HttpResponseException(response.StatusCode, errorMessage);
             }
         }
     }

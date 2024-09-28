@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using DivvyUp_Impl_Maui.Api.DuHttpClient;
+using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Impl_Maui.CodeReader;
 using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
@@ -23,8 +24,6 @@ namespace DivvyUp_App.Pages
         private CodeReaderResponse RCR { get; set; } = new();
         private string Username { get; set; }
         private string Password { get; set; }
-        private string LoginInfo { get; set; } = string.Empty;
-        private string ColorInfo { get; set; } = "black";
 
         private async Task SignUp()
         {
@@ -37,29 +36,21 @@ namespace DivvyUp_App.Pages
             try
             {
                 var token = await AuthService.Login(user);
-                //LoginInfo = RCR.ReadLogin(response);
                 UserAppService.SetUser(user.username, token, true);
                 HttpClient.UpdateToken(token);
-                ColorInfo = "green";
                 Navigation.NavigateTo("/receipt");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException ex)
             {
-                ColorInfo = "red";
-                AlertService.ShowAlert("Błędne dane", AlertStyle.Danger);
+                var message = RCR.ReadLogin(ex.StatusCode);
+                AlertService.ShowAlert(message, AlertStyle.Danger);
             }
-
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"Błąd połączenia z serwerem");
-                ColorInfo = "red";
                 AlertService.ShowAlert("Błąd połączenia z serwerem", AlertStyle.Warning);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Wystąpił nieoczekiwany błąd: {ex.Message}");
-                LoginInfo = "Wystąpił nieoczekiwany błąd.";
-                ColorInfo = "red";
             }
         }
     }

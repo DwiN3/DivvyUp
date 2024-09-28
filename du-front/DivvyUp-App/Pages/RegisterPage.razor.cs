@@ -1,7 +1,10 @@
-﻿using DivvyUp_Impl_Maui.CodeReader;
+﻿using DivvyUp_Impl_Maui.Api.HttpResponseException;
+using DivvyUp_Impl_Maui.CodeReader;
+using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
+using Radzen;
 
 namespace DivvyUp_App.Pages
 {
@@ -10,14 +13,15 @@ namespace DivvyUp_App.Pages
         [Inject]
         private IAuthService AuthService { get; set; }
         [Inject]
+        private DAlertService AlertService { get; set; }
+
+        [Inject]
         private NavigationManager Navigation { get; set; }
         private CodeReaderResponse RCR { get; set; } = new();
 
         private string Username { get; set; }
         private string Email { get; set; }
         private string Password { get; set; }
-        private string RegisterInfo { get; set; } = string.Empty;
-        private string ColorInfo { get; set; } = "black";
 
 
         private async Task CreateAccount()
@@ -31,17 +35,18 @@ namespace DivvyUp_App.Pages
                     password = Password
                 };
                 await AuthService.Register(user);
-                //RegisterInfo = RCR.ReadRegister(response.StatusCode);
-                ColorInfo = "green";
+            }
+            catch (HttpResponseException ex)
+            {
+                var message = RCR.ReadRegister(ex.StatusCode);
+                AlertService.ShowAlert(message, AlertStyle.Danger);
             }
             catch (HttpRequestException ex)
             {
-                ColorInfo = "red";
-                RegisterInfo = "Błąd połączenia z serwerem.";
+                AlertService.ShowAlert("Błąd połączenia z serwerem", AlertStyle.Warning);
             }
             catch (Exception ex)
             {
-                ColorInfo = "red";
             }
         }
     }
