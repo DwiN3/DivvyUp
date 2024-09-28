@@ -18,8 +18,9 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\DivvyUp.Shared\DivvyUp.Shared.csproj" />
-		<Content Include="..\DivvyUp-App\BaseComponents\DDialog\DialogCard.razor" Link="Components\DDialog\DialogCard.razor" />
-		<Content Include="..\DivvyUp-App\BaseComponents\DDialog\DialogYesNoCard.razor" Link="Components\DDialog\DialogYesNoCard.razor" />
+		<Content Include="..\DivvyUp-App\BaseComponents\DDialog\DialogCard.razor" Link="BaseComponents\DDialog\DialogCard.razor" />
+		<Content Include="..\DivvyUp-App\BaseComponents\DDialog\DialogYesNoCard.razor" Link="BaseComponents\DDialog\DialogYesNoCard.razor" />
+		<Content Include="..\DivvyUp-App\BaseComponents\_Imports.razor" Link="BaseComponents\_Imports.razor" />
 	</ItemGroup>
 
 </Project>

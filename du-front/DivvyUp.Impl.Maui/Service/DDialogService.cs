@@ -1,5 +1,5 @@
-﻿using Radzen;
-//using DivvyUp_App.Components.DDialog;
+﻿//using DivvyUp_Impl_Maui.BaseComponents.DDialog;
+using Radzen;
 
 namespace DivvyUp_Impl_Maui.Service
 {
@@ -10,17 +10,6 @@ namespace DivvyUp_Impl_Maui.Service
         public DDialogService(DialogService dialogService)
         {
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        }
-
-
-        public Task OpenDialog(string title, string content)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> OpenYesNoDialog(string title, string content)
-        {
-            throw new NotImplementedException();
         }
 
         /*
@@ -44,7 +33,6 @@ namespace DivvyUp_Impl_Maui.Service
 
             return result != null && (bool)result;
         }
-        
         */
     }
 }
