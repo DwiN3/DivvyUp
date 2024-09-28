@@ -40,6 +40,8 @@ namespace DivvyUp_App
             builder.Services.AddTransient<IUserAppService, UserAppService>();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<IMyDialogService, MyDialogService>();
+            builder.Services.AddScoped<IAlertService, AlertService>();
+            //builder.Services.AddScoped<AlertService>();
             ;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

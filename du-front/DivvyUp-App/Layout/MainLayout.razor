@@ -1,21 +1,23 @@
 ﻿@inherits LayoutComponentBase
 @using Radzen
 @using Radzen.Blazor
+@using DivvyUp_App.Components.DAlert
 
 <RadzenLayout>
+    <DAlert @ref="@Alert" />
     <RadzenHeader>
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-            <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)" />
-            <RadzenLabel Text="@Header" />
+            <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)"/>
+            <RadzenLabel Text="@Header"/>
         </RadzenStack>
     </RadzenHeader>
     <RadzenSidebar Responsive="false" Style="width: max-content">
         <RadzenPanelMenu DisplayStyle="@(SidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
-            <RadzenPanelMenuItem Text="Strona Główna" Path="/" Icon="home" />
-            <RadzenPanelMenuItem Text="Rachunki" Path="/receipt" Icon="receipt_long" Visible="@(UserAppService.IsLoggedIn())" />
-            <RadzenPanelMenuItem Text="Logowanie" Path="/login" Icon="login" Visible="@(!UserAppService.IsLoggedIn())" />
-            <RadzenPanelMenuItem Text="Rejestracja" Path="/register" Icon="input" Visible="@(!UserAppService.IsLoggedIn())" />
-            <RadzenPanelMenuItem Text="Wyloguj się" Icon="logout" Click="@Logout" Visible="@(UserAppService.IsLoggedIn())" />
+            <RadzenPanelMenuItem Text="Strona Główna" Path="/" Icon="home"/>
+            <RadzenPanelMenuItem Text="Rachunki" Path="/receipt" Icon="receipt_long" Visible="@(UserAppService.IsLoggedIn())"/>
+            <RadzenPanelMenuItem Text="Logowanie" Path="/login" Icon="login" Visible="@(!UserAppService.IsLoggedIn())"/>
+            <RadzenPanelMenuItem Text="Rejestracja" Path="/register" Icon="input" Visible="@(!UserAppService.IsLoggedIn())"/>
+            <RadzenPanelMenuItem Text="Wyloguj się" Icon="logout" Click="@Logout" Visible="@(UserAppService.IsLoggedIn())"/>
         </RadzenPanelMenu>
     </RadzenSidebar>
     <RadzenBody>

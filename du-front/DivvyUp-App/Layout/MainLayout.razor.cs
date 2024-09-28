@@ -1,7 +1,10 @@
-﻿using DivvyUp_Impl_Maui.Api.DuHttpClient;
+﻿using BlazorBootstrap;
+using DivvyUp_App.Components.DAlert;
+using DivvyUp_Impl_Maui.Api.DuHttpClient;
 using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
+using Radzen;
 
 namespace DivvyUp_App.Layout
 {
@@ -13,10 +16,12 @@ namespace DivvyUp_App.Layout
         private IAuthService AuthService { get; set; }
         [Inject]
         private DuHttpClient DuHttpClient { get; set; }
-
+        [Inject]
+        private IAlertService AlertService { get; set; }
         [Inject]
         private IUserAppService UserAppService { get; set; }
 
+        private DAlert Alert { get; set; }
         private bool SidebarExpanded { get; set; } = false;
 
         Dictionary<string, string> MenuItems = new Dictionary<string, string>
@@ -33,6 +38,8 @@ namespace DivvyUp_App.Layout
         protected override async void OnInitialized()
         {
             Navigation.LocationChanged += OnLocationChanged;
+            AlertService.OnAlert += ShowAlert;
+            AlertService.OnCloseAlert += HideAlert;
             SetHeader(Navigation.Uri);
 
             var user = UserAppService.GetUser();
@@ -89,9 +96,21 @@ namespace DivvyUp_App.Layout
                 Header = string.Empty;
         }
 
+        private async void ShowAlert(string message, AlertStyle style)
+        {
+            await Alert.OpenAlert(style, message);
+        }
+
+        private async void HideAlert()
+        {
+            await Alert.CloseAlert();
+        }
+
         public void Dispose()
         {
             Navigation.LocationChanged -= OnLocationChanged;
+            AlertService.OnAlert -= ShowAlert;
+            AlertService.OnCloseAlert -= HideAlert;
         }
     }
 }

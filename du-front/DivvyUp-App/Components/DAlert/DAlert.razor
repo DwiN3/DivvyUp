@@ -1,0 +1,43 @@
+﻿@inject NotificationService NotificationService
+
+@if (Visible)
+{
+    <RadzenStack Gap="0" class="rz-py-2 rz-px-4">
+        <RadzenAlert @bind-Visible="@Visible" AlertStyle="@Style" Size="AlertSize.Medium" Variant="Variant.Filled" Shade="Shade.Lighter" AllowClose="true">
+            @Message
+        </RadzenAlert>
+    </RadzenStack>
+}
+
+@code{
+    private bool Visible { get; set; } = false;
+    private string Message { get; set; } = string.Empty;
+    private AlertStyle Style { get; set; }
+   
+
+    public async Task OpenAlert(AlertStyle style, string message)
+    {
+        Visible = true;
+        Message = message;
+        Style = style;
+        StateHasChanged();
+        await Task.Delay(30000);
+        await CloseAlert();
+    }
+
+    public async Task CloseAlert()
+    {
+        Visible = false;
+        Message = string.Empty;
+        StateHasChanged();
+    }
+}
+
+<style>
+    .rz-stack{
+        position: fixed;
+        z-index: 999;
+        width: 100%;
+        opacity: 1;
+    }
+</style>

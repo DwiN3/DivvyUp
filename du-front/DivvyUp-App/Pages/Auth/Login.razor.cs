@@ -4,6 +4,7 @@ using DivvyUp_Impl_Maui.CodeReader;
 using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using Radzen;
 
 namespace DivvyUp_App.Pages.Auth
 {
@@ -17,6 +18,8 @@ namespace DivvyUp_App.Pages.Auth
         private DuHttpClient HttpClient { get; set; }
         [Inject]
         private IUserAppService UserAppService { get; set; }
+        [Inject]
+        private IAlertService AlertService { get; set; }
         private CodeReaderResponse RCR { get; set; } = new();
         private string Username { get; set; }
         private string Password { get; set; }
@@ -43,13 +46,14 @@ namespace DivvyUp_App.Pages.Auth
             catch (InvalidOperationException ex)
             {
                 ColorInfo = "red";
+                AlertService.ShowAlert("Błędne dane", AlertStyle.Danger);
             }
             
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Błąd połączenia z serwerem");
-                LoginInfo = "Błąd połączenia z serwerem.";
                 ColorInfo = "red";
+                AlertService.ShowAlert("Błąd połączenia z serwerem", AlertStyle.Warning);
             }
             catch (Exception ex)
             {
