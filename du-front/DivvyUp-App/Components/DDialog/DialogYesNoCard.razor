@@ -1,0 +1,46 @@
+﻿@inject DialogService DialogService
+@namespace DivvyUp_Impl.Components.DDialog
+
+<div class="card-dialog">
+    <div class="content-dialog">
+        @Content
+    </div>
+
+    <footer class="footer">
+        <RadzenButton Text="Tak" Style="margin-right: 8px;" ButtonStyle="ButtonStyle.Success" Click="@(async () => { DialogService.Close(true); })" />
+        <RadzenButton Text="Nie" ButtonStyle="ButtonStyle.Danger" Click="@(async () => { DialogService.Close(false); })" />
+    </footer>
+</div>
+
+@code {
+    [Parameter] public string Content { get; set; }
+}
+
+<style>
+    .card-dialog {
+        display: flex;
+        flex-direction: column;
+        min-height: 120px;
+        width: 596px;
+        position: relative;
+    }
+
+    .content-dialog {
+        flex-grow: 1;
+        padding: 16px;
+        width: 100%;
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 10px;
+        background-color: #f0f0f0;
+        width: 100%;
+    }
+
+    .rz-dialog-content {
+        padding: 2px;
+    }
+</style>
