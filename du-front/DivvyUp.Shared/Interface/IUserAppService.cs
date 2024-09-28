@@ -8,5 +8,6 @@ namespace DivvyUp_Shared.Interface
         void SetUser(string username, string token, bool isLogin);
         void ClearUser();
         bool IsLoggedIn();
+        void SetLoggedIn(bool isLoggedIn);
     }
 }

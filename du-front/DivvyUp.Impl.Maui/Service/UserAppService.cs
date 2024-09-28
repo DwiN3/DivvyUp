@@ -1,9 +1,10 @@
 ﻿using System.Text.Json;
+using DivvyUp_Shared.Interface;
 using DivvyUp_Shared.Model;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class UserAppService
+    public class UserAppService : IUserAppService
     {
         private readonly string _userFileName;
         private User _currentUser;

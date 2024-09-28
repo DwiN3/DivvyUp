@@ -1,3 +1,3 @@
 ﻿@page "/"
 
-<h1>@(User.IsLoggedIn() ? $"Witaj {User.GetUser().username}" : "Zaloguj się lub załóż konto :)")</h1>
+<h1>@(UserAppService.IsLoggedIn() ? $"Witaj {UserAppService.GetUser().username}" : "Zaloguj się lub załóż konto :)")</h1>

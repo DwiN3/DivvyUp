@@ -15,7 +15,7 @@ namespace DivvyUp_App.Layout
         private DuHttpClient DuHttpClient { get; set; }
 
         [Inject]
-        private UserAppService User { get; set; }
+        private IUserAppService UserAppService { get; set; }
 
         private bool SidebarExpanded { get; set; } = false;
 
@@ -35,8 +35,8 @@ namespace DivvyUp_App.Layout
             Navigation.LocationChanged += OnLocationChanged;
             SetHeader(Navigation.Uri);
 
-            var user = User.GetUser();
-            User.SetLoggedIn(false);
+            var user = UserAppService.GetUser();
+            UserAppService.SetLoggedIn(false);
 
             if (!string.IsNullOrEmpty(user.token))
             {
@@ -45,20 +45,20 @@ namespace DivvyUp_App.Layout
                     bool isValid = await AuthService.IsValid(user.token);
                     if (isValid)
                     {
-                        User.SetUser(user.username, user.token, true);
+                        UserAppService.SetUser(user.username, user.token, true);
                         DuHttpClient.UpdateToken(user.token);
                         Navigation.NavigateTo("/receipt");
                     }
                 }
                 catch (HttpRequestException ex)
                 {
-                    User.ClearUser();
+                    UserAppService.ClearUser();
                     DuHttpClient.UpdateToken(string.Empty);
                     Navigation.NavigateTo("/");
                 }
                 catch (Exception ex)
                 {
-                    User.ClearUser();
+                    UserAppService.ClearUser();
                     DuHttpClient.UpdateToken(string.Empty);
                     Navigation.NavigateTo("/");
                 }
@@ -68,7 +68,7 @@ namespace DivvyUp_App.Layout
 
         private async Task Logout()
         {
-            User.ClearUser();
+            UserAppService.ClearUser();
             StateHasChanged();
             Navigation.NavigateTo("/");
         }

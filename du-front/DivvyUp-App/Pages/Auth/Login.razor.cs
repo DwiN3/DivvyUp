@@ -16,7 +16,7 @@ namespace DivvyUp_App.Pages.Auth
         [Inject]
         private DuHttpClient HttpClient { get; set; }
         [Inject]
-        private UserAppService User { get; set; }
+        private IUserAppService UserAppService { get; set; }
         private CodeReaderResponse RCR { get; set; } = new();
         private string Username { get; set; }
         private string Password { get; set; }
@@ -35,7 +35,7 @@ namespace DivvyUp_App.Pages.Auth
             {
                 var token = await AuthService.Login(user);
                 //LoginInfo = RCR.ReadLogin(response);
-                User.SetUser(user.username, token, true);
+                UserAppService.SetUser(user.username, token, true);
                 HttpClient.UpdateToken(token);
                 ColorInfo = "green";
                 Navigation.NavigateTo("/receipt");
