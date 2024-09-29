@@ -27,6 +27,7 @@ namespace DivvyUp_App.Layout
         {
             { "/", "Strona Główna" },
             { "/receipt", "Rachunki" },
+            { "/receipt/{id:int}/products", "Rachunek {id:int}" },
             { "/person", "Osoby" },
             { "/accountManager", "Zarządzaj kontem" },
             { "/login", "Logowanie" },
@@ -91,10 +92,18 @@ namespace DivvyUp_App.Layout
         {
             var relativePath = new Uri(url).AbsolutePath;
 
-            if (MenuItems.ContainsKey(relativePath))
+            if (relativePath.Contains("/receipt/") && relativePath.Contains("/products"))
+            {
+                Header = "Rachunek " + relativePath.Split('/')[2];
+            }
+            else if (MenuItems.ContainsKey(relativePath))
+            {
                 Header = MenuItems[relativePath];
+            }
             else
+            {
                 Header = string.Empty;
+            }
         }
 
         private async void ShowAlert(string message, AlertStyle style)
