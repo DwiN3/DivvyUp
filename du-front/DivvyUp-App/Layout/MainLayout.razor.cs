@@ -7,34 +7,23 @@ using Radzen;
 
 namespace DivvyUp_App.Layout
 {
-    partial class MainLayout
+    partial class MainLayout : IDisposable
     {
         [Inject]
-        private NavigationManager Navigation { get; set; }
-        [Inject]
         private IAuthService AuthService { get; set; }
+        [Inject]
+        private NavigationManager Navigation { get; set; }
         [Inject]
         private DuHttpClient DuHttpClient { get; set; }
         [Inject]
         private DAlertService AlertService { get; set; }
         [Inject]
         private UserAppService UserAppService { get; set; }
-
+        [Inject]
+        private HeaderService HeaderService { get; set; } 
         private DAlert Alert { get; set; }
-        private bool SidebarExpanded { get; set; } = false;
 
-        Dictionary<string, string> MenuItems = new Dictionary<string, string>
-        {
-            { "/", "Strona Główna" },
-            { "/receipt", "Rachunki" },
-            { "/receipt/{id:int}/products", "Rachunek {id:int}" },
-            { "/person", "Osoby" },
-            { "/accountManager", "Zarządzaj kontem" },
-            { "/login", "Logowanie" },
-            { "/register", "Rejestracja" },
-            { "/logout", "Wyloguj się" }
-        };
-        
+        private bool SidebarExpanded { get; set; } = false;
         private string Header { get; set; } = string.Empty;
 
         protected override async void OnInitialized()
@@ -42,7 +31,6 @@ namespace DivvyUp_App.Layout
             Navigation.LocationChanged += OnLocationChanged;
             AlertService.OnAlert += ShowAlert;
             AlertService.OnCloseAlert += HideAlert;
-            SetHeader(Navigation.Uri);
 
             var user = UserAppService.GetUser();
             UserAppService.SetLoggedIn(false);
@@ -59,27 +47,21 @@ namespace DivvyUp_App.Layout
                         Navigation.NavigateTo("/receipt");
                     }
                 }
-                catch (HttpRequestException ex)
+                catch (HttpRequestException)
                 {
                     UserAppService.ClearUser();
                     DuHttpClient.UpdateToken(string.Empty);
                     Navigation.NavigateTo("/");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     UserAppService.ClearUser();
                     DuHttpClient.UpdateToken(string.Empty);
                     Navigation.NavigateTo("/");
                 }
             }
+            SetHeader(Navigation.Uri);
             StateHasChanged();
-        }
-
-        private async Task Logout()
-        {
-            UserAppService.ClearUser();
-            StateHasChanged();
-            Navigation.NavigateTo("/");
         }
 
         private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
@@ -90,20 +72,7 @@ namespace DivvyUp_App.Layout
 
         private void SetHeader(string url)
         {
-            var relativePath = new Uri(url).AbsolutePath;
-
-            if (relativePath.Contains("/receipt/") && relativePath.Contains("/products"))
-            {
-                Header = "Rachunek " + relativePath.Split('/')[2];
-            }
-            else if (MenuItems.ContainsKey(relativePath))
-            {
-                Header = MenuItems[relativePath];
-            }
-            else
-            {
-                Header = string.Empty;
-            }
+            Header = HeaderService.GetHeader(url);
         }
 
         private async void ShowAlert(string message, AlertStyle style)
@@ -114,6 +83,13 @@ namespace DivvyUp_App.Layout
         private async void HideAlert()
         {
             await Alert.CloseAlert();
+        }
+
+        private async Task Logout()
+        {
+            UserAppService.ClearUser();
+            StateHasChanged();
+            Navigation.NavigateTo("/");
         }
 
         public void Dispose()

@@ -45,11 +45,11 @@ namespace DivvyUp_App.Components.Login
                 var message = RCR.ReadLogin(ex.StatusCode);
                 AlertService.ShowAlert(message, AlertStyle.Danger);
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException)
             {
                 AlertService.ShowAlert("Błąd połączenia z serwerem", AlertStyle.Warning);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

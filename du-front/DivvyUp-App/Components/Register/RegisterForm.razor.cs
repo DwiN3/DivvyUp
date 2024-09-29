@@ -41,11 +41,11 @@ namespace DivvyUp_App.Components.Register
                 var message = RCR.ReadRegister(ex.StatusCode);
                 AlertService.ShowAlert(message, AlertStyle.Danger);
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException)
             {
                 AlertService.ShowAlert("Błąd połączenia z serwerem", AlertStyle.Warning);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

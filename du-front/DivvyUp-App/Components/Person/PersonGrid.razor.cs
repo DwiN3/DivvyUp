@@ -55,10 +55,10 @@ namespace DivvyUp_App.Components.Person
                 else
                     await PersonService.EditPerson(person);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             finally
@@ -74,10 +74,10 @@ namespace DivvyUp_App.Components.Person
                 await PersonService.RemovePerson(personId);
                 AlertService.ShowAlert("Usunięto osobę", AlertStyle.Success);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             finally
