@@ -1,0 +1,75 @@
+﻿@using DivvyUp_Shared.Dto
+<RadzenDataGrid @ref="@Grid"
+                Data="@Persons"
+                TItem="PersonDto"
+                AllowSorting="true"
+                AllowAlternatingRows="true"
+                FilterMode="FilterMode.Simple"
+                AllowFiltering="true"
+                LogicalFilterOperator="LogicalFilterOperator.Or"
+                AllowPaging="true"
+                PagerAlwaysVisible="true"
+                PageSize="5"
+                PageSizeOptions="@PageSizeOptions"
+                PagerHorizontalAlign="HorizontalAlign.Center"
+                ShowPagingSummary="true"
+                EditMode="DataGridEditMode.Single"
+                GridLines="DataGridGridLines.Both">
+    <HeaderTemplate>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj osobę" Click="@InsertRow" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@LoadGrid" />
+    </HeaderTemplate>
+    <Columns>
+        <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="person">
+                <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@(args => EditRow(person))" />
+                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(person.personId))" />
+            </Template>
+            <EditTemplate Context="person">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(person))" />
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(person))" />
+            </EditTemplate>
+            <FilterTemplate>
+                <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+            </FilterTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonDto.name)" Title="Imie" Width="25%" TextAlign="TextAlign.Start" Frozen="true">
+            <EditTemplate Context="person">
+                <RadzenTextBox @bind-value="@person.name" Style="width: 100%;" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonDto.surname)" Title="Nazwisko" Width="25%" TextAlign="TextAlign.Start" Frozen="true">
+            <EditTemplate Context="person">
+                <RadzenTextBox @bind-value="@person.surname" Style="width: 100%;" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonDto.receiptsCount)" Title="Ilość rachunków" Width="19%" TextAlign="TextAlign.Start" Frozen="true">
+            <Template Context="person">
+                <b>@(person.totalPurchaseAmount)zł</b>
+            </Template>
+            <EditTemplate>
+                -
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonDto.totalPurchaseAmount)" Title="Bilans" Width="19%" TextAlign="TextAlign.Start" Frozen="true">
+            <Template Context="person">
+                <b>@(person.totalPurchaseAmount)zł</b>
+            </Template>
+            <EditTemplate>
+                -
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+<style>
+    .button {
+        width: 36px;
+        height: 36px;
+    }
+
+    .rz-cell-filter-content {
+        display: flex;
+        justify-content: center
+    }
+</style>

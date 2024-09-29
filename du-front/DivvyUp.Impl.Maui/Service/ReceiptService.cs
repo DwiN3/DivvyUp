@@ -52,9 +52,9 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 if (receipt == null)
-                    throw new InvalidOperationException("Nie mozna dodać pustego rachunku");
+                    throw new InvalidOperationException("Nie mozna edytować pustego rachunku");
                 if (receipt.receiptName.Equals(string.Empty))
-                    throw new InvalidOperationException("Nie mozna dodać rachunku bez nazwy");
+                    throw new InvalidOperationException("Nie mozna edytować rachunku bez nazwy");
 
                 var url = _url.EditReceipt.Replace(Route.ID, receipt.receiptId.ToString());
                 var response = await _duHttpClient.PutAsync(url, receipt);
@@ -84,7 +84,7 @@ namespace DivvyUp_Impl_Maui.Service
                     settled = isSettled
                 };
 
-                var url = _url.SetSettled.Replace(Route.ID, receiptId.ToString());
+                var url = _url.SetSettledReceipt.Replace(Route.ID, receiptId.ToString());
                 var response = await _duHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
@@ -127,7 +127,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.ShowAll;
+                var url = _url.ShowReceipts;
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ReceiptDto>>(jsonResponse);

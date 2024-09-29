@@ -84,11 +84,14 @@ public class PersonService {
         if (!person.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
+        // TO DO DO poprawki
+        /*
         List<Receipt> receipts = receiptRepository.findByUser(person.getUser());
         List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
         if (!receipts.isEmpty() || !personProducts.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+        */
 
         personRepository.delete(person);
         return ResponseEntity.ok().build();

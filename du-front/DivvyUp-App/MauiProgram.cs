@@ -41,6 +41,7 @@ namespace DivvyUp_App
             builder.Services.AddSingleton<DAlertService>();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
+            builder.Services.AddTransient<IPersonService, PersonService>();
             ;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
