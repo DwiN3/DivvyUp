@@ -1,24 +1,4 @@
 ﻿@page "/register"
-@using Radzen.Blazor
+@using DivvyUp_App.Components.Register
 
-<div style="height: 100%; display:flex; justify-content: center; align-items: center;">
-    <div style="width: 300px;">
-        <RadzenFormField class="input" Text="Nazwa">
-            <RadzenTextBox @bind-Value="@Username"/>
-        </RadzenFormField>
-        <RadzenFormField class="input" Text="email">
-            <RadzenTextBox @bind-Value="@Email"/>
-        </RadzenFormField>
-        <RadzenFormField class="input" Text="Hasło">
-            <RadzenPassword @bind-Value="@Password"/>
-        </RadzenFormField>
-        <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Stwórz konto" Click="@CreateAccount"/>
-        <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Wróć do logowania" Click="@(() => Navigation.NavigateTo("/login"))"/>
-    </div>
-</div>
-
-<style>
-    .input{
-        width: 100%
-    }
-</style>
+<RegisterForm/>

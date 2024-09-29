@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Components;
-using DivvyUp_Impl_Maui.Api.DuHttpClient;
+﻿using DivvyUp_Impl_Maui.Api.DuHttpClient;
 using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Impl_Maui.CodeReader;
 using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using Microsoft.AspNetCore.Components;
 using Radzen;
 
-namespace DivvyUp_App.Pages
+namespace DivvyUp_App.Components.Login
 {
-    partial class LoginPage
+    partial class LoginForm
     {
         [Inject]
         private IAuthService AuthService { get; set; }

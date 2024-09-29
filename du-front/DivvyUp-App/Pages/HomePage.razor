@@ -1,3 +1,4 @@
 ﻿@page "/"
+@using DivvyUp_App.Components.Home
 
-<h1>@(UserAppService.IsLoggedIn() ? $"Witaj {UserAppService.GetUser().username}" : "Zaloguj się lub załóż konto :)")</h1>
+<HomeLayout/>

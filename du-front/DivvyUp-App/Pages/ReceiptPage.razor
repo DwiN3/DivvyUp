@@ -1,4 +1,8 @@
 ﻿@page "/receipt"
 @using DivvyUp_App.Components.Receipt
 
-<ReceiptGrid @ref="ReceiptGrid"></ReceiptGrid>
+<ReceiptGrid @ref="@ReceiptGrid"/>
+
+@code{
+    private ReceiptGrid ReceiptGrid { get; set; }
+}

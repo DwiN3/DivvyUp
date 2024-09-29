@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.Shared", "..\DivvyU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.Impl.Maui", "..\DivvyUp.Impl.Maui\DivvyUp.Impl.Maui.csproj", "{456C416A-744C-4C07-9791-152524AEB4F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivvyUp.Impl.Web", "..\DivvyUp.Impl.Web\DivvyUp.Impl.Web.csproj", "{DAE7623C-80FB-4BA8-9084-44730F87FEC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.Impl.Web", "..\DivvyUp.Impl.Web\DivvyUp.Impl.Web.csproj", "{DAE7623C-80FB-4BA8-9084-44730F87FEC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,20 @@
+﻿@using Radzen.Blazor
+
+<div style="height: 100%; display:flex; justify-content: center; align-items: center;">
+    <div style="width: 300px;">
+        <RadzenFormField class="input" Text="Nazwa">
+            <RadzenTextBox @bind-Value="@Username"/>
+        </RadzenFormField>
+        <RadzenFormField class="input" Text="Hasło">
+            <RadzenPassword @bind-Value="@Password"/>
+        </RadzenFormField>
+        <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Zaloguj się" Click="@SignUp" />
+        <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Zarejestruj się" Click="@(() => Navigation.NavigateTo("/register"))" />
+    </div>
+</div>
+
+<style>
+    .input{
+        width: 300px
+    }
+</style>
