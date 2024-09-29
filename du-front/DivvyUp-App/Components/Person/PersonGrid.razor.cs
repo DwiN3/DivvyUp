@@ -67,7 +67,7 @@ namespace DivvyUp_App.Components.Person
             }
         }
 
-        private async void RemoveRow(int personId)
+        private async Task RemoveRow(int personId)
         {
             try
             {

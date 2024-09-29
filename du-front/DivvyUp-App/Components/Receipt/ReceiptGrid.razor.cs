@@ -13,6 +13,8 @@ namespace DivvyUp_App.Components.Receipt
         private IReceiptService ReceiptService { get; set; }
         [Inject]
         private DAlertService AlertService { get; set; }
+        [Inject]
+        private NavigationManager Navigation { get; set; }
 
         private List<ReceiptDto> Receipts { get; set; }
         private RadzenDataGrid<ReceiptDto> Grid { get; set; }
@@ -67,7 +69,7 @@ namespace DivvyUp_App.Components.Receipt
             }
         }
 
-        private async void RemoveRow(int receiptId)
+        private async Task RemoveRow(int receiptId)
         {
             try
             {
@@ -83,6 +85,14 @@ namespace DivvyUp_App.Components.Receipt
             finally
             {
                 await LoadGrid();
+            }
+        }
+
+        private async Task OpenProductsList(int receiptId)
+        {
+            if (receiptId > 0)
+            {
+                Navigation.NavigateTo($"/receipt/{receiptId}/products");
             }
         }
 
