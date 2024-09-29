@@ -28,6 +28,7 @@ namespace DivvyUp_App.Layout
             { "/", "Strona Główna" },
             { "/receipt", "Rachunki" },
             { "/person", "Osoby" },
+            { "/accountManager", "Zarządzaj kontem" },
             { "/login", "Logowanie" },
             { "/register", "Rejestracja" },
             { "/logout", "Wyloguj się" }

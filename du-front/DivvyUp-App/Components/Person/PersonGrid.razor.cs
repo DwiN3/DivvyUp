@@ -50,7 +50,7 @@ namespace DivvyUp_App.Components.Person
         {
             try
             {
-                if (person.userId == 0)
+                if (person.personId == 0)
                     await PersonService.AddPerson(person);
                 else
                     await PersonService.EditPerson(person);
