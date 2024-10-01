@@ -1,144 +1,28 @@
-﻿@using DivvyUp_Shared.Dto
-@using DivvyUp_Shared.Interface
+﻿@using DivvyUp_App.Components.PersonProduct
 @inject DialogService DialogService
 
 <div class="card-dialog">
     <div class="content-dialog">
-        @ProductId.ToString()
+        <PersonProductGrid ProductId="@ProductId" />
     </div>
-    
-    <RadzenDataGrid @ref="@Grid"
-                    Data="@PersonProducts"
-                    TItem="PersonProductDto"
-                    AllowSorting="true"
-                    AllowAlternatingRows="true"
-                    FilterMode="FilterMode.Simple"
-                    AllowFiltering="true"
-                    LogicalFilterOperator="LogicalFilterOperator.Or"
-                    AllowPaging="true"
-                    PagerAlwaysVisible="true"
-                    PageSize="5"
-                    PageSizeOptions="@PageSizeOptions"
-                    PagerHorizontalAlign="HorizontalAlign.Center"
-                    ShowPagingSummary="true"
-                    EditMode="DataGridEditMode.Single"
-                    GridLines="DataGridGridLines.Both">
-        <HeaderTemplate>
-            <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj produkt" Click="@InsertRow" />
-            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@LoadGrid" />
-            <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="receipt_long" Text="Powrót do produktu" Click="@(() => { } )" />
-        </HeaderTemplate>
-        <Columns>
-            <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
-                <Template Context="product">
-                    @*<RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />*@
-                    <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(product.productId))" />
-                </Template>
-                <EditTemplate Context="product">
-                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(product))" />
-                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(product))" />
-                </EditTemplate>
-                <FilterTemplate>
-                    <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
-                </FilterTemplate>
-            </RadzenDataGridColumn>
-        </Columns>
-    </RadzenDataGrid>
-
     <footer class="footer">
-        <RadzenButton Text="Okej" ButtonStyle="ButtonStyle.Info" Click="@(async () => { DialogService.Close(false); })"></RadzenButton>
+        <RadzenButton Text="Zatwierdź" ButtonStyle="ButtonStyle.Info" Click="@(async () => { DialogService.Close(false); })"></RadzenButton>
     </footer>
 </div>
 
 @code {
     [Parameter] 
     public int ProductId { get; set; }
-
-    [Inject]
-    private IPersonService PersonService { get; set; }
-    [Inject]
-    private IPersonProductService PersonProductService { get; set; }
-
-    private List<PersonDto> Persons { get; set; }
-    private List<PersonProductDto> PersonProducts { get; set; }
-
-    private RadzenDataGrid<PersonProductDto> Grid { get; set; }
-    private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        Persons = await PersonService.ShowPersons();
-        await LoadGrid();
-    }
-
-    private async Task LoadGrid()
-    {
-        PersonProducts = await PersonProductService.ShowPersonProducts(ProductId);
-        StateHasChanged();
-    }
-
-    private async Task InsertRow()
-    {
-        var personProduct = new PersonProductDto();
-        PersonProducts.Add(personProduct);
-        await Grid.InsertRow(personProduct);
-    }
-
-    private async Task EditRow(PersonProductDto personProduct)
-    {
-        await Grid.EditRow(personProduct);
-    }
-
-    private void CancelEdit(PersonProductDto personProduct)
-    {
-        Grid.CancelEditRow(personProduct);
-    }
-
-    private async Task SaveRow(PersonProductDto personProduct)
-    {
-        try
-        {
-            if (personProduct.personProductId == 0)
-                await PersonProductService.AddProductPerson(personProduct, ProductId);
-        }
-        catch (InvalidOperationException)
-        {
-        }
-        catch (Exception)
-        {
-        }
-        finally
-        {
-            await LoadGrid();
-        }
-    }
-
-    private async Task RemoveRow(int personProductId)
-    {
-        try
-        {
-            await PersonProductService.RemoveProductPerson(personProductId);
-        }
-        catch (InvalidOperationException)
-        {
-        }
-        catch (Exception)
-        {
-        }
-        finally
-        {
-            await LoadGrid();
-        }
-    }
+    [Parameter]
+    public int ReceiptId { get; set; }
 }
 
 <style>
     .card-dialog {
         display: flex;
         flex-direction: column;
-        min-height: 120px;
-        width: 596px;
+        min-height: 400px;
+        width: 800px;
         position: relative;
     }
 
@@ -157,17 +41,7 @@
         width: 100%;
     }
 
-    .rz-dialog-content{
+    .rz-dialog-content {
         padding: 2px;
-    }
-
-    .button {
-        width: 36px;
-        height: 36px;
-    }
-
-    .rz-cell-filter-content {
-        display: flex;
-        justify-content: center
     }
 </style>

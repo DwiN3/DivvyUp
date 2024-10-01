@@ -36,7 +36,7 @@ namespace DivvyUp_App.GuiService
         public async Task OpenProductPersonDialog(int productId)
         {
             await _dialogService.OpenAsync<DialogProductPersonCard>(
-                string.Empty,
+                "Osoby przypisane do produktu",
                 new Dictionary<string, object> { { "ProductId", productId } },
                 new DialogOptions()
             );

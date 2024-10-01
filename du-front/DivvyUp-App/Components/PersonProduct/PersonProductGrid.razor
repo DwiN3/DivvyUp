@@ -1,0 +1,113 @@
+﻿@using DivvyUp_Shared.Dto
+
+<RadzenDataGrid @ref="@Grid"
+                Data="@PersonProducts"
+                TItem="PersonProductDto"
+                AllowSorting="true"
+                AllowAlternatingRows="true"
+                FilterMode="FilterMode.Simple"
+                AllowFiltering="true"
+                LogicalFilterOperator="LogicalFilterOperator.Or"
+                AllowPaging="true"
+                PagerAlwaysVisible="true"
+                PageSize="5"
+                PageSizeOptions="@PageSizeOptions"
+                PagerHorizontalAlign="HorizontalAlign.Center"
+                ShowPagingSummary="true"
+                EditMode="DataGridEditMode.Single"
+                GridLines="DataGridGridLines.Both">
+    <HeaderTemplate>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj produkt" Click="@InsertRow" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@LoadGrid" />
+    </HeaderTemplate>
+    <Columns>
+        <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="personProduct">
+                @*<RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />*@
+                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct.productId))" />
+            </Template>
+            <EditTemplate Context="personProduct">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(personProduct))" />
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(personProduct))" />
+            </EditTemplate>
+            <FilterTemplate>
+                <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+            </FilterTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonProductDto.settled)" Title="Rozliczono" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="personProduct">
+                <RadzenCheckBox class="button" @bind-Value="@personProduct.settled" Change="@(async (bool Check) => await ChangeSettled(personProduct.productId, personProduct.settled))" />
+            </Template>
+            <EditTemplate Context="personProduct">
+                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.settled" ReadOnly="true" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonProductDto.isCompensation)" Title="Wyrównanie" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="personProduct">
+                <RadzenCheckBox class="button" @bind-Value="@personProduct.isCompensation" Change="@(async (bool Check) => await ChangeSettled(personProduct.productId, personProduct.settled))" />
+            </Template>
+            <EditTemplate Context="personProduct">
+                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.isCompensation" ReadOnly="true" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonProductDto.quantity)" Title="Ilośc" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="personProduct">
+                @personProduct.quantity
+            </Template>
+            <EditTemplate Context="personProduct">
+                <RadzenNumeric @bind-Value="@personProduct.quantity" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonProductDto.maxQuantity)" Title="Max" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="personProduct">
+                @personProduct.maxQuantity
+            </Template>
+            <EditTemplate Context="personProduct">
+                -
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonProductDto.partOfPrice)" Title="Cena" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="personProduct">
+                @personProduct.partOfPrice.ToString("0.00")
+            </Template>
+            <EditTemplate Context="personProduct">
+                -
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonProductDto.personId)" Title="Osoba" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="personProduct">
+                @if (Persons != null && Persons.Count > 0)
+                {
+                    PersonDto person = Persons.FirstOrDefault(e => e.personId == personProduct.personId);
+                    <div>@(person != null ? person.name : "-")</div>
+                }
+                else
+                {
+                    <div>-</div>
+                }
+            </Template>
+    
+            <EditTemplate Context="personProduct">
+                <RadzenDropDownDataGrid
+                    TValue="int"
+                    @bind-Value="personProduct.personId"
+                    Data="@Persons"
+                    TextProperty="@nameof(PersonDto.name)"
+                    ValueProperty="@nameof(PersonDto.personId)" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
+    </Columns>
+</RadzenDataGrid>
+                
+<style>
+    .button {
+        width: 36px;
+        height: 36px;
+    }
+
+    .rz-cell-filter-content {
+        display: flex;
+        justify-content: center
+    }
+</style>

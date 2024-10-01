@@ -68,7 +68,7 @@
                 <RadzenNumeric @bind-Value="@product.price" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.maxQuantity)" Title="Ilość" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.maxQuantity)" Title="Ilość osób" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
                 @if (product.divisible)
                 {

@@ -33,17 +33,17 @@
                 <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
             </FilterTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.name)" Title="Imie" Width="25%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.name)" Title="Imie" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="person">
                 <RadzenTextBox @bind-value="@person.name" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.surname)" Title="Nazwisko" Width="25%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.surname)" Title="Nazwisko" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="person">
                 <RadzenTextBox @bind-value="@person.surname" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.receiptsCount)" Title="Ilość rachunków" Width="19%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.receiptsCount)" Title="Ilość rachunków" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
                 <b>@(person.receiptsCount)</b>
             </Template>
@@ -51,9 +51,17 @@
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.totalPurchaseAmount)" Title="Bilans" Width="19%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.totalPurchaseAmount)" Title="Kwota" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
                 <b>@(person.totalPurchaseAmount)zł</b>
+            </Template>
+            <EditTemplate>
+                -
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Title="Kwota całościowa" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+            <Template Context="person">
+                <b>@(0)zł</b>
             </Template>
             <EditTemplate>
                 -
