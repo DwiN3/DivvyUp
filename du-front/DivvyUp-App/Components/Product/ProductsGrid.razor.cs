@@ -1,4 +1,5 @@
-﻿using DivvyUp_Impl_Maui.Service;
+﻿using DivvyUp_App.GuiService;
+using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
@@ -14,13 +15,19 @@ namespace DivvyUp_App.Components.Product
         [Inject]
         private IProductService ProductService { get; set; }
         [Inject]
+        private IPersonService PersonService { get; set; }
+        [Inject]
         private DAlertService AlertService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
+        [Inject]
+        private DDialogService DDialogService { get; set; }
 
         private List<ProductDto> Products { get; set; }
+        private IEnumerable<PersonDto> Persons { get; set; }
         private RadzenDataGrid<ProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
+        private PersonDto selectedPerson { get; set; } = new();
 
         protected override async Task OnInitializedAsync()
         {
@@ -30,6 +37,7 @@ namespace DivvyUp_App.Components.Product
         private async Task LoadGrid()
         {
             Products = await ProductService.ShowProducts(ReceiptId);
+            Persons = await PersonService.ShowPersons();
             StateHasChanged();
         }
 
@@ -105,6 +113,16 @@ namespace DivvyUp_App.Components.Product
             {
             }
         
+        }
+
+        private async Task ManagePerson(int productId)
+        {
+            await DDialogService.OpenProductPersonDialog(productId);
+        }
+
+        private void SetPerson(ProductDto product, PersonDto person)
+        {
+            selectedPerson = person;
         }
     }
 }

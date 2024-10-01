@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Blazored.LocalStorage;
+using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Api.DuHttpClient;
 using DivvyUp_Impl_Maui.CodeReader;
 using DivvyUp_Impl_Maui.Service;
@@ -37,7 +38,7 @@ namespace DivvyUp_App
             builder.Services.AddSingleton<CodeReaderResponse>();
             builder.Services.AddSingleton<UserAppService>();
             builder.Services.AddScoped<DialogService>();
-            builder.Services.AddSingleton<DDialogService>();
+            builder.Services.AddScoped<DDialogService>();
             builder.Services.AddSingleton<DAlertService>();
             builder.Services.AddScoped<HeaderService>();
             builder.Services.AddTransient<IAuthService, AuthService>();

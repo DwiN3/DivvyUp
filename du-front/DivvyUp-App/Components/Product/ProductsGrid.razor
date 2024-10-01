@@ -1,5 +1,7 @@
 ﻿@using DivvyUp_Shared.Dto
 
+<RadzenDialog />
+
 <RadzenDataGrid @ref="@Grid"
                 Data="@Products"
                 TItem="ProductDto"
@@ -35,7 +37,7 @@
                 <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
             </FilterTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.settled)" Title="Rozliczono" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.settled)" Title="Rozliczono" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
                 <RadzenCheckBox class="button" @bind-Value="@product.settled" Change="@(async (bool Check) => await ChangeSettled(product.productId, product.settled))" />
             </Template>
@@ -43,7 +45,7 @@
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@product.settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.divisible)" Title="Podzielność" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.divisible)" Title="Podzielność" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
                 <RadzenCheckBox class="button" @bind-Value="@product.divisible" ReadOnly="true" />
             </Template>
@@ -51,7 +53,7 @@
                 <RadzenCheckBox class="button" @bind-Value="@product.divisible" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.productName)" Title="Nazwa" Width="30%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.productName)" Title="Nazwa" Width="25%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="product">
                 <RadzenTextBox @bind-value="@product.productName" Style="width: 100%;" />
             </EditTemplate>
@@ -98,6 +100,31 @@
                 {
                     <div>-</div>
                 }
+            </Template>
+            <EditTemplate>
+                -
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Title="Osoby" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="product">
+            @*
+                @if (product.divisible)
+                {
+                    <RadzenButton Text="Osoby" Click="@(async () => { await ManagePerson(product.productId); })"></RadzenButton>
+                }
+                else
+                {
+
+                    <RadzenDropDownDataGrid
+                        TValue="PersonDto"
+                        @bind-Value="selectedPerson"
+                        Change="@((args) => SetPerson(product, selectedPerson))"
+                        Data="@Persons"
+                        TextProperty="@nameof(PersonDto.name)"
+                        ValueProperty="@nameof(PersonDto.personId)"/>
+
+                }
+            *@
             </Template>
             <EditTemplate>
                 -

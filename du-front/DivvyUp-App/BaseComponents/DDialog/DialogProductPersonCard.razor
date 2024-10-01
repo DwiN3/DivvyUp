@@ -1,0 +1,57 @@
+﻿@using DivvyUp_Shared.Dto
+@using DivvyUp_Shared.Interface
+@inject DialogService DialogService
+
+<div class="card-dialog">
+    <div class="content-dialog">
+        @ProductId.ToString()
+    </div>
+
+    <footer class="footer">
+        <RadzenButton Text="Okej" ButtonStyle="ButtonStyle.Info" Click="@(async () => { DialogService.Close(false); })"></RadzenButton>
+    </footer>
+</div>
+
+@code {
+    [Parameter] 
+    public int ProductId { get; set; }
+
+    [Inject]
+    private IPersonService PersonService { get; set; }
+
+    private List<PersonDto> Persons { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Persons = await PersonService.ShowPersons();
+    }
+}
+
+<style>
+    .card-dialog {
+        display: flex;
+        flex-direction: column;
+        min-height: 120px;
+        width: 596px;
+        position: relative;
+    }
+
+    .content-dialog {
+        flex-grow: 1;
+        padding: 16px;
+        width: 100%;
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 10px;
+        background-color: #f0f0f0;
+        width: 100%;
+    }
+
+    .rz-dialog-content{
+        padding: 2px;
+    }
+</style>

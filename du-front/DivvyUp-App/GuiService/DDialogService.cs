@@ -1,7 +1,8 @@
-﻿//using DivvyUp_Impl_Maui.BaseComponents.DDialog;
+﻿using DivvyUp_App.BaseComponents.DDialog;
 using Radzen;
 
-namespace DivvyUp_Impl_Maui.Service
+
+namespace DivvyUp_App.GuiService
 {
     public class DDialogService
     {
@@ -11,8 +12,6 @@ namespace DivvyUp_Impl_Maui.Service
         {
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         }
-
-        /*
 
         public async Task OpenDialog(string title, string content)
         {
@@ -33,6 +32,14 @@ namespace DivvyUp_Impl_Maui.Service
 
             return result != null && (bool)result;
         }
-        */
+
+        public async Task OpenProductPersonDialog(int productId)
+        {
+            await _dialogService.OpenAsync<DialogProductPersonCard>(
+                string.Empty,
+                new Dictionary<string, object> { { "ProductId", productId } },
+                new DialogOptions()
+            );
+        }
     }
 }
