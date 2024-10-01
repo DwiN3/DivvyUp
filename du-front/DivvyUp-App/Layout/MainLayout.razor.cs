@@ -51,7 +51,6 @@ namespace DivvyUp_App.Layout
                 {
                     UserAppService.ClearUser();
                     DuHttpClient.UpdateToken(string.Empty);
-                    Navigation.NavigateTo("/");
                 }
                 catch (Exception)
                 {

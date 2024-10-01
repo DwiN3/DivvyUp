@@ -72,6 +72,29 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
+        public async Task RemoveReceipt(int receiptId)
+        {
+            try
+            {
+                if (receiptId == null)
+                    throw new InvalidOperationException("Nie mozna usunąć rachunku które nie posiada id");
+
+                var url = _url.RemoveReceipt.Replace(Route.ID, receiptId.ToString());
+                var response = await _duHttpClient.DeleteAsync(url);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji rachunku: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji rachunku: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task SetSettled(int receiptId, bool isSettled)
         {
             try
@@ -100,30 +123,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemoveReceipt(int receiptId)
-        {
-            try
-            {
-                if (receiptId == null)
-                    throw new InvalidOperationException("Nie mozna usunąć rachunku które nie posiada id");
-
-                var url = _url.ReceiptRemove.Replace(Route.ID, receiptId.ToString());
-                var response = await _duHttpClient.DeleteAsync(url);
-                await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
-            }
-            catch (InvalidOperationException ex)
-            {
-                _logger.LogError(ex, "Błąd w czasie edycji rachunku: {Message}", ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Błąd w czasie edycji rachunku: {Message}", ex.Message);
-                throw;
-            }
-        }
-
-        public async Task<List<ReceiptDto>> ShowAllReceipts()
+        public async Task<List<ReceiptDto>> ShowReceipts()
         {
             try
             {

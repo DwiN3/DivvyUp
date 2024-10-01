@@ -45,7 +45,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonDto.receiptsCount)" Title="Ilość rachunków" Width="19%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b>@(person.totalPurchaseAmount)zł</b>
+                <b>@(person.receiptsCount)</b>
             </Template>
             <EditTemplate>
                 -

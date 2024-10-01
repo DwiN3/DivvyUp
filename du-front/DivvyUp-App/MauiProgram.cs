@@ -43,7 +43,7 @@ namespace DivvyUp_App
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
             builder.Services.AddTransient<IPersonService, PersonService>();
-            
+            builder.Services.AddTransient<IProductService, ProductService>();
             ;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

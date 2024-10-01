@@ -27,7 +27,7 @@ namespace DivvyUp_App.Components.Receipt
 
         private async Task LoadGrid()
         {
-            Receipts = await ReceiptService.ShowAllReceipts();
+            Receipts = await ReceiptService.ShowReceipts();
             StateHasChanged();
         }
 
