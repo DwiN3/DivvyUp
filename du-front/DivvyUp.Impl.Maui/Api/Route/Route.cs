@@ -33,5 +33,13 @@
         public readonly string SetSettledProduct = $"http://localhost:8080/rm/receipt/set-is-settled/{ID}";
         public readonly string ShowProduct = $"http://localhost:8080/rm/product/show/{ID}";
         public readonly string ShowProducts = $"http://localhost:8080/rm/receipt/{ID}/product/show-all";
+
+        // Person Product
+        public readonly string AddPersonProduct = $"http://localhost:8080/rm/product/{ID}/person-product/add";
+        public readonly string RemovePersonProduct = $"http://localhost:8080/rm/person-product/remove/{ID}";
+        public readonly string SetSettledPersonProduct = $"http://localhost:8080/rm/receipt/set-is-settled/{ID}";
+        public readonly string SetCompensationPersonProduct = $"http://localhost:8080/rm/receipt/set-is-settled/{ID}";
+        public readonly string ShowPersonProduct = $"http://localhost:8080/rm/person-product/show/{ID}";
+        public readonly string ShowPersonProducts = $"http://localhost:8080/rm/product/{ID}/person-product/show-all";
     }
 }

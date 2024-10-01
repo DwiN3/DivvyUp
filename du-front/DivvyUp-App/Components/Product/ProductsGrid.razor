@@ -107,7 +107,9 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Title="Osoby" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-            @*
+                
+                <RadzenButton Text="Osoby" Click="@(async () => { await ManagePerson(product.productId); })"></RadzenButton>
+                @*
                 @if (product.divisible)
                 {
                     <RadzenButton Text="Osoby" Click="@(async () => { await ManagePerson(product.productId); })"></RadzenButton>

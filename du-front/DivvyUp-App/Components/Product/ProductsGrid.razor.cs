@@ -32,12 +32,12 @@ namespace DivvyUp_App.Components.Product
         protected override async Task OnInitializedAsync()
         {
             await LoadGrid();
+            Persons = await PersonService.ShowPersons();
         }
 
         private async Task LoadGrid()
         {
             Products = await ProductService.ShowProducts(ReceiptId);
-            Persons = await PersonService.ShowPersons();
             StateHasChanged();
         }
 
