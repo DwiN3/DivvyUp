@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Radzen;
 
 namespace DivvyUp_App.Components.PersonProduct
 {
@@ -17,12 +18,17 @@ namespace DivvyUp_App.Components.PersonProduct
         private IPersonService PersonService { get; set; }
         [Inject]
         private IPersonProductService PersonProductService { get; set; }
+        [Inject]
+        private IProductService ProductService { get; set; }
+        [Inject]
+        private DAlertService AlertService { get; set; }
 
         [Parameter]
         public int ProductId { get; set; }
 
         private List<PersonDto> Persons { get; set; }
         private List<PersonProductDto> PersonProducts { get; set; }
+        private ProductDto Product { get; set; }
 
         private RadzenDataGrid<PersonProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
@@ -31,6 +37,7 @@ namespace DivvyUp_App.Components.PersonProduct
         protected override async Task OnInitializedAsync()
         {
             Persons = await PersonService.ShowPersons();
+            Product = await ProductService.ShowProduct(ProductId);
             await LoadGrid();
         }
 
@@ -42,9 +49,16 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task InsertRow()
         {
-            var personProduct = new PersonProductDto();
-            PersonProducts.Add(personProduct);
-            await Grid.InsertRow(personProduct);
+            if (CountLastPart() > 0)
+            {
+                var personProduct = new PersonProductDto();
+                PersonProducts.Add(personProduct);
+                await Grid.InsertRow(personProduct);
+            }
+            else
+            {
+                AlertService.ShowAlert("Nie można przypisać więcej osób", AlertStyle.Secondary);
+            }
         }
 
         private async Task EditRow(PersonProductDto personProduct)
@@ -94,11 +108,11 @@ namespace DivvyUp_App.Components.PersonProduct
             }
         }
 
-        private async Task ChangeSettled(int personProduct, bool isChecked)
+        private async Task ChangeSettled(int personProductId, bool isChecked)
         {
             try
             {
-                await PersonProductService.SetSettledProductPerson(personProduct, isChecked);
+                await PersonProductService.SetSettledProductPerson(personProductId, isChecked);
             }
             catch (InvalidOperationException)
             {
@@ -106,7 +120,16 @@ namespace DivvyUp_App.Components.PersonProduct
             catch (Exception)
             {
             }
+        }
 
+        private int CountLastPart()
+        {
+            int lastParts = Product.maxQuantity;
+            
+            foreach (var personProduct in PersonProducts)
+                lastParts -= personProduct.quantity;
+
+            return lastParts;
         }
     }
 }

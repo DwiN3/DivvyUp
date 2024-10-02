@@ -39,6 +39,10 @@ namespace DivvyUp_App.GuiService
                 "Osoby przypisane do produktu",
                 new Dictionary<string, object> { { "ProductId", productId } },
                 new DialogOptions()
+                {
+                    Width = "80%",
+                    Height = "75%",
+                }
             );
         }
     }

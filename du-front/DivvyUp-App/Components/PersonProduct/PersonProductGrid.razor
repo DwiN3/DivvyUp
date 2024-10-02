@@ -17,14 +17,14 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj produkt" Click="@InsertRow" />
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Przypisz osobę" Click="@InsertRow" />
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@LoadGrid" />
     </HeaderTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
                 @*<RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />*@
-                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct.productId))" />
+                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct.personProductId))" />
             </Template>
             <EditTemplate Context="personProduct">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(personProduct))" />
@@ -36,7 +36,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.settled)" Title="Rozliczono" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                <RadzenCheckBox class="button" @bind-Value="@personProduct.settled" Change="@(async (bool Check) => await ChangeSettled(personProduct.productId, personProduct.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@personProduct.settled" Change="@(async (bool Check) => await ChangeSettled(personProduct.personProductId, personProduct.settled))" />
             </Template>
             <EditTemplate Context="personProduct">
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.settled" ReadOnly="true" />
@@ -44,7 +44,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.isCompensation)" Title="Wyrównanie" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                <RadzenCheckBox class="button" @bind-Value="@personProduct.isCompensation" Change="@(async (bool Check) => await ChangeSettled(personProduct.productId, personProduct.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@personProduct.isCompensation" Change="@(async (bool Check) => await ChangeSettled(personProduct.personProductId, personProduct.settled))" />
             </Template>
             <EditTemplate Context="personProduct">
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.isCompensation" ReadOnly="true" />
@@ -52,23 +52,19 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.quantity)" Title="Ilośc" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                @personProduct.quantity
+                @($"{personProduct.quantity}/{Product.maxQuantity}")
             </Template>
             <EditTemplate Context="personProduct">
-                <RadzenNumeric @bind-Value="@personProduct.quantity" />
-            </EditTemplate>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonProductDto.maxQuantity)" Title="Max" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
-            <Template Context="personProduct">
-                @personProduct.maxQuantity
-            </Template>
-            <EditTemplate Context="personProduct">
-                -
+                @if (personProduct.quantity == 0)
+                {
+                    personProduct.quantity = CountLastPart();
+                }
+                <RadzenNumeric @bind-Value="@personProduct.quantity" Max="@CountLastPart()" Min="1" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.partOfPrice)" Title="Cena" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                @personProduct.partOfPrice.ToString("0.00")
+                @personProduct.partOfPrice.ToString("0.00zł")
             </Template>
             <EditTemplate Context="personProduct">
                 -
