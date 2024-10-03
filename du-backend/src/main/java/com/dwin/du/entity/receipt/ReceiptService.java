@@ -15,7 +15,7 @@ public class ReceiptService {
     private final UserRepository userRepository;
     private final ReceiptRepository receiptRepository;
 
-    public ResponseEntity<?> addReceipt(ReceiptDto request, String username) {
+    public ResponseEntity<?> add(ReceiptDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -33,7 +33,7 @@ public class ReceiptService {
             return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editReceipt(int receiptId, ReceiptDto request, String username) {
+    public ResponseEntity<?> edit(int receiptId, ReceiptDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -54,7 +54,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> removeReceipt(int receiptId, String username) {
+    public ResponseEntity<?> remove(int receiptId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -113,7 +113,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> getReceiptById(int receiptId, String username) {
+    public ResponseEntity<?> getReceipt(int receiptId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

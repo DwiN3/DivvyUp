@@ -17,7 +17,7 @@ public class PersonService {
     private final UserRepository userRepository;
     private final PersonRepository personRepository;
 
-    public ResponseEntity<?> addPerson(PersonDto request, String username) {
+    public ResponseEntity<?> add(PersonDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -36,7 +36,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editPerson(int personId, PersonDto request, String username) {
+    public ResponseEntity<?> edit(int personId, PersonDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -56,7 +56,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> removePerson(int personId, String username) {
+    public ResponseEntity<?> remove(int personId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -122,7 +122,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> getPersonById(int personId, String username) {
+    public ResponseEntity<?> getPerson(int personId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

@@ -1,6 +1,6 @@
-package com.dwin.du.entity.person_product;
+package com.dwin.du.entity.person_item_share;
 import com.dwin.du.entity.person.Person;
-import com.dwin.du.entity.product.Product;
+import com.dwin.du.entity.item.Item;
 import com.dwin.du.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "person_product")
-public class PersonProduct {
+@Table(name = "person_item_share")
+public class PersonItemShare {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,8 +22,8 @@ public class PersonProduct {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "item_id")
+    private Item item;
 
     @ManyToOne
     @JoinColumn(name = "person_id")

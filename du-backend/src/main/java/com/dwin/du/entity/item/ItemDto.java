@@ -1,11 +1,11 @@
-package com.dwin.du.entity.product;
+package com.dwin.du.entity.item;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class ProductDto {
+public class ItemDto {
     public int id;
     public int receiptId;
     public String name;
