@@ -1,4 +1,4 @@
-package com.dwin.du.entity.item;
+package com.dwin.du.entity.product;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.user.User;
 import jakarta.persistence.*;
@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "item")
-public class Item {
+@Table(name = "product")
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

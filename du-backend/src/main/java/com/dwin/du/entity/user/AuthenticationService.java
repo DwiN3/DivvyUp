@@ -44,7 +44,7 @@ public class AuthenticationService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<String> authenticate(UserDto request) {
+    public ResponseEntity<String> auth(UserDto request) {
         try {
             Optional<User> optionalUser = repository.findByUsername(request.getUsername());
             if(!optionalUser.isPresent()){

@@ -17,59 +17,59 @@ public class PersonController {
 
   private final PersonService personService;
 
-    @PostMapping("/add")
     @Operation(summary = "Add a new person", description = "Adds a new person to the system.")
-    public ResponseEntity<?> add(@RequestBody PersonDto request){
+    @PostMapping("/add")
+    public ResponseEntity<?> addPerson(@RequestBody PersonDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated())
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         String currentUsername = authentication.getName();
-        return personService.add(request, currentUsername);
+        return personService.addPerson(request, currentUsername);
     }
 
-    @PutMapping("/edit/{id}")
-    @Operation(summary = "Edit a person", description = "Edits an existing person by ID.")
-    public ResponseEntity<?> edit(@PathVariable int id, @RequestBody PersonDto request) {
+    @Operation(summary = "Edit a person", description = "Edits an existing person by personId.")
+    @PutMapping("/edit/{personId}")
+    public ResponseEntity<?> editPerson(@PathVariable int personId, @RequestBody PersonDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.edit(id, request, currentUsername);
+        return personService.editPerson(personId, request, currentUsername);
     }
 
-    @DeleteMapping("/remove/{id}")
-    @Operation(summary = "Remove a person", description = "Removes a person by ID.")
-    public ResponseEntity<?> remove(@PathVariable int id) {
+    @Operation(summary = "Remove a person", description = "Removes a person by personId.")
+    @DeleteMapping("/remove/{personId}")
+    public ResponseEntity<?> removePerson(@PathVariable int personId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.remove(id, currentUsername);
+        return personService.removePerson(personId, currentUsername);
     }
 
-    @PutMapping("/set-receipts-counts/{id}")
-    @Operation(summary = "Set receipts counts", description = "Sets the receipts counts for a person by ID.")
-    public ResponseEntity<?> setReceiptsCounts(@PathVariable int id, @RequestBody PersonDto request) {
+    @Operation(summary = "Set receipts counts", description = "Sets the receipts counts for a person by personId.")
+    @PutMapping("/set-receipts-counts/{personId}")
+    public ResponseEntity<?> setReceiptsCounts(@PathVariable int personId, @RequestBody PersonDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.setReceiptsCounts(id, request, currentUsername);
+        return personService.setReceiptsCounts(personId, request, currentUsername);
     }
 
-    @PutMapping("/set-total-amount/{id}")
-    @Operation(summary = "Set total amount", description = "Sets the total amount for a person by ID.")
-    public ResponseEntity<?> setTotaleAmount(@PathVariable int id, @RequestBody PersonDto request) {
+    @Operation(summary = "Set total amount", description = "Sets the total amount for a person by personId.")
+    @PutMapping("/set-total-amount/{personId}")
+    public ResponseEntity<?> setTotaleAmount(@PathVariable int personId, @RequestBody PersonDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.setTotalAmount(id, request, currentUsername);
+        return personService.setTotalAmount(personId, request, currentUsername);
     }
 
-    @GetMapping("/{id}")
     @Operation(summary = "Get person by ID", description = "Retrieves a person by their ID.")
-    public ResponseEntity<?> getPerson(@PathVariable int id) {
+    @GetMapping("/{personId}")
+    public ResponseEntity<?> getPerson(@PathVariable int personId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.getPerson(id, currentUsername);
+        return personService.getPersonById(personId, currentUsername);
     }
 
-    @GetMapping("")
     @Operation(summary = "Get all persons", description = "Retrieves all persons.")
+    @GetMapping("")
     public ResponseEntity<?> getPersons(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();

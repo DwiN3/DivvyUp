@@ -1,13 +1,13 @@
-package com.dwin.du.entity.person_item_share;
+package com.dwin.du.entity.person_product;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class PersonItemShareDto {
+public class PersonProductDto {
     public int id;
-    public int itemId;
+    public int productId;
     public int personId;
     public double partOfPrice;
     public int quantity;

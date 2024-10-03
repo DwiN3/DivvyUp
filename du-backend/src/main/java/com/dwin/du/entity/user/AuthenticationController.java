@@ -14,29 +14,29 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
-    @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user account in the system.")
+    @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDto request){
         ResponseEntity<?> response = service.register(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
-    @PostMapping("/auth")
     @Operation(summary = "Authenticate user", description = "Authenticates a user and provides a token.")
+    @PostMapping("/auth")
     public ResponseEntity<?> authenticate(@RequestBody UserDto request){
-        ResponseEntity<String> response = service.authenticate(request);
+        ResponseEntity<String> response = service.auth(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
-    @DeleteMapping("/remove-account")
     @Operation(summary = "Remove user account", description = "Removes a user account from the system.")
-    public ResponseEntity<?> remove(@RequestBody UserDto request){
+    @DeleteMapping("/remove-account")
+    public ResponseEntity<?> removeAccount(@RequestBody UserDto request){
         ResponseEntity<?> response = service.remove(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
-    @GetMapping("/validate-token")
     @Operation(summary = "Validate token", description = "Checks the validity of the token")
+    @GetMapping("/validate-token")
     public ResponseEntity<?> validateToken(@RequestParam String token) {
         ResponseEntity<?> response = service.validateToken(token);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());

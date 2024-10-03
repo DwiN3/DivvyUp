@@ -1,4 +1,4 @@
-package com.dwin.du.entity.item;
+package com.dwin.du.entity.product;
 
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptDto;
@@ -14,13 +14,13 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class ItemService {
+public class ProductService {
 
     private final UserRepository userRepository;
     private final ReceiptRepository receiptRepository;
-    private final ItemRepository itemRepository;
+    private final ProductRepository productRepository;
 
-    public ResponseEntity<?> add(ItemDto request, int receiptId, String username) {
+    public ResponseEntity<?> addProductToReceipt(ProductDto request, int receiptId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -35,7 +35,7 @@ public class ItemService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
 
-        Item item = Item.builder()
+        Product product = Product.builder()
                 .receipt(receipt)
                 .name(request.getName())
                 .price(request.getPrice())
@@ -45,105 +45,105 @@ public class ItemService {
                 .isSettled(receipt.isSettled())
                 .build();
 
-        if(item.isDivisible())
-            item.setMaxQuantity(request.getMaxQuantity());
+        if(product.isDivisible())
+            product.setMaxQuantity(request.getMaxQuantity());
         else
-            item.setMaxQuantity(1);
+            product.setMaxQuantity(1);
 
-        itemRepository.save(item);
+        productRepository.save(product);
 
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> edit(int itemId, ReceiptDto request, String username) {
+    public ResponseEntity<?> editProduct(int productId, ReceiptDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Optional<Item> optionalReceipt = itemRepository.findById(itemId);
+        Optional<Product> optionalReceipt = productRepository.findById(productId);
         if (!optionalReceipt.isPresent())
             return ResponseEntity.notFound().build();
 
-        Item item = optionalReceipt.get();
-        if (!item.getUser().getUsername().equals(username))
+        Product product = optionalReceipt.get();
+        if (!product.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        item.setName(request.getName());
-        itemRepository.save(item);
+        product.setName(request.getName());
+        productRepository.save(product);
 
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> remove(int itemId, String username) {
+    public ResponseEntity<?> removeProduct(int productId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Optional<Item> optionalItem = itemRepository.findById(itemId);
-        if (!optionalItem.isPresent())
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
 
-        Item item = optionalItem.get();
-        if (!item.getReceipt().getUser().getUsername().equals(username))
+        Product product = optionalProduct.get();
+        if (!product.getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        itemRepository.delete(item);
+        productRepository.delete(product);
 
         return ResponseEntity.ok().build();
     }
 
 
-    public ResponseEntity<?> setIsSettled(int itemId, ItemDto request, String username) {
+    public ResponseEntity<?> setIsSettled(int productId, ProductDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Optional<Item> optionalItem = itemRepository.findById(itemId);
-        if (!optionalItem.isPresent())
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
 
-        Item item = optionalItem.get();
-        if (!item.getReceipt().getUser().getUsername().equals(username))
+        Product product = optionalProduct.get();
+        if (!product.getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        item.setSettled(request.isSettled());
-        itemRepository.save(item);
+        product.setSettled(request.isSettled());
+        productRepository.save(product);
 
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> getItemById(int itemId, String username) {
+    public ResponseEntity<?> getProductById(int productId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Optional<Item> optionalItem = itemRepository.findById(itemId);
-        if (!optionalItem.isPresent())
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
 
-        Item item = optionalItem.get();
-        if (!item.getReceipt().getUser().getUsername().equals(username))
+        Product product = optionalProduct.get();
+        if (!product.getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        ItemDto response = ItemDto.builder()
-                .id(item.getId())
-                .receiptId(item.getReceipt().getId())
-                .name(item.getName())
-                .price(item.getPrice())
-                .compensationPrice(item.getCompensationPrice())
-                .divisible(item.isDivisible())
-                .maxQuantity(item.getMaxQuantity())
-                .isSettled(item.isSettled())
+        ProductDto response = ProductDto.builder()
+                .id(product.getId())
+                .receiptId(product.getReceipt().getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .compensationPrice(product.getCompensationPrice())
+                .divisible(product.isDivisible())
+                .maxQuantity(product.getMaxQuantity())
+                .isSettled(product.isSettled())
                 .build();
 
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<?> getItemsFromReceipt(int receiptId, String username) {
+    public ResponseEntity<?> getProductsFromReceipt(int receiptId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -157,19 +157,19 @@ public class ItemService {
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        List<Item> items = itemRepository.findByReceipt(optionalReceipt.get());
+        List<Product> products = productRepository.findByReceipt(optionalReceipt.get());
 
-        List<ItemDto> responseList = new ArrayList<>();
-        for (Item item : items) {
-            ItemDto response = ItemDto.builder()
-                    .id(item.getId())
-                    .receiptId(item.getReceipt().getId())
-                    .name(item.getName())
-                    .price(item.getPrice())
-                    .compensationPrice(item.getCompensationPrice())
-                    .divisible(item.isDivisible())
-                    .maxQuantity(item.getMaxQuantity())
-                    .isSettled(item.isSettled())
+        List<ProductDto> responseList = new ArrayList<>();
+        for (Product product : products) {
+            ProductDto response = ProductDto.builder()
+                    .id(product.getId())
+                    .receiptId(product.getReceipt().getId())
+                    .name(product.getName())
+                    .price(product.getPrice())
+                    .compensationPrice(product.getCompensationPrice())
+                    .divisible(product.isDivisible())
+                    .maxQuantity(product.getMaxQuantity())
+                    .isSettled(product.isSettled())
                     .build();
             responseList.add(response);
         }
