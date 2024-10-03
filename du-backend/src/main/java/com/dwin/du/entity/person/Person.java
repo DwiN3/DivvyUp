@@ -12,8 +12,8 @@ import lombok.*;
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "person_id")
-    private int personId;
+    @Column(name = "id")
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -28,6 +28,9 @@ public class Person {
     @Column(name = "receipts_count")
     private int receiptsCount;
 
-    @Column(name = "total_purchase_amount")
-    private Double totalPurchaseAmount;
+    @Column(name = "total_amount")
+    private Double totalAmount;
+
+    @Column(name = "unpaid_amount")
+    private Double unpaidAmount;
 }

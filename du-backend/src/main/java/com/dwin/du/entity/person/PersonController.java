@@ -48,11 +48,11 @@ public class PersonController {
         return personService.setReceiptsCounts(personId, request, currentUsername);
     }
 
-    @PutMapping("/set-total-purchase-amount/{personId}")
-    public ResponseEntity<?> setTotalPurchaseAmount(@PathVariable int personId, @RequestBody SetTotalAmountReceiptRequest request) {
+    @PutMapping("/set-total-amount/{personId}")
+    public ResponseEntity<?> setTotaleAmount(@PathVariable int personId, @RequestBody SetTotalAmountReceiptRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.setTotalPurchaseAmount(personId, request, currentUsername);
+        return personService.setTotalAmount(personId, request, currentUsername);
     }
 
     @GetMapping("/{personId}")

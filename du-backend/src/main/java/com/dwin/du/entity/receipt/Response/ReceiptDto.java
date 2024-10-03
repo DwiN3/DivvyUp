@@ -7,8 +7,8 @@ import java.util.Date;
 
 @Data
 @Builder
-public class ShowReceiptResponse {
-    private int receiptId;
+public class ReceiptDto {
+    private int id;
     private String receiptName;
     private Date date;
     private Double totalAmount;

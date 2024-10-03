@@ -75,7 +75,7 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                if (personProduct.personProductId == 0)
+                if (personProduct.id == 0)
                     await PersonProductService.AddProductPerson(personProduct, ProductId);
             }
             catch (InvalidOperationException)

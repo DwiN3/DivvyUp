@@ -13,8 +13,8 @@ import lombok.*;
 public class PersonProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "person_product_id")
-    private int personProductId;
+    @Column(name = "id")
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

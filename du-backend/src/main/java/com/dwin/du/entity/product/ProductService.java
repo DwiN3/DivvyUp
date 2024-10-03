@@ -1,12 +1,10 @@
 package com.dwin.du.entity.product;
 
 
-import com.dwin.du.entity.person.Person;
-import com.dwin.du.entity.person.PersonRepository;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Request.AddProductRequest;
-import com.dwin.du.entity.product.Response.ShowProductResponse;
+import com.dwin.du.entity.product.Response.ProductDto;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.receipt.Request.SetIsSettledRequest;
@@ -17,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +25,6 @@ public class ProductService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
-    private final PersonRepository personRepository;
 
     public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -64,7 +58,7 @@ public class ProductService {
             product.setMaxQuantity(1);
 
         productRepository.save(product);
-        updateReceiptTotalAmount(receipt);
+
         return ResponseEntity.ok().build();
     }
 
@@ -82,14 +76,9 @@ public class ProductService {
         if (!product.getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        Receipt receipt = product.getReceipt();
-
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         personProductRepository.deleteAll(personProducts);
         productRepository.delete(product);
-        updateBalancesAfterProductChange(personProducts);
-
-        updateReceiptTotalAmount(receipt);
 
         return ResponseEntity.ok().build();
     }
@@ -118,7 +107,6 @@ public class ProductService {
             personProductRepository.save(personProduct);
         }
 
-        updateBalancesAfterProductChange(personProducts);
         return ResponseEntity.ok().build();
     }
 
@@ -136,9 +124,9 @@ public class ProductService {
         if (!product.getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        ShowProductResponse response = ShowProductResponse.builder()
-                .productId(product.getProductId())
-                .receiptId(product.getReceipt().getReceiptId())
+        ProductDto response = ProductDto.builder()
+                .id(product.getId())
+                .receiptId(product.getReceipt().getId())
                 .productName(product.getProductName())
                 .price(product.getPrice())
                 .compensationAmount(product.getCompensationAmount())
@@ -147,6 +135,7 @@ public class ProductService {
                 .maxQuantity(product.getMaxQuantity())
                 .isSettled(product.isSettled())
                 .build();
+
         return ResponseEntity.ok(response);
     }
 
@@ -165,11 +154,11 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         List<Product> products = productRepository.findByReceipt(optionalReceipt.get());
-        List<ShowProductResponse> responseList = new ArrayList<>();
+        List<ProductDto> responseList = new ArrayList<>();
         for (Product product : products) {
-            ShowProductResponse response = ShowProductResponse.builder()
-                    .productId(product.getProductId())
-                    .receiptId(product.getReceipt().getReceiptId())
+            ProductDto response = ProductDto.builder()
+                    .id(product.getId())
+                    .receiptId(product.getReceipt().getId())
                     .productName(product.getProductName())
                     .price(product.getPrice())
                     .compensationAmount(product.getCompensationAmount())
@@ -180,45 +169,7 @@ public class ProductService {
                     .build();
             responseList.add(response);
         }
+
         return ResponseEntity.ok(responseList);
-    }
-
-    private void updateBalancesAfterProductChange(List<PersonProduct> personProducts) {
-        Set<Person> involvedPersons = personProducts.stream()
-                .map(PersonProduct::getPerson)
-                .collect(Collectors.toSet());
-
-        for (Person person : involvedPersons) {
-            updateTotalPurchaseAmountForPerson(person);
-        }
-    }
-
-    public void updateTotalPurchaseAmountForPerson(Person person) {
-        List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
-
-        double totalPurchaseAmount = 0.0;
-
-        for (PersonProduct personProduct : personProducts) {
-            if (!personProduct.isSettled()) {
-                double partOfPrice = personProduct.getPartOfPrice();
-                totalPurchaseAmount += partOfPrice;
-
-                if(personProduct.isCompensation()){
-                    totalPurchaseAmount += personProduct.getProduct().getCompensationAmount();
-                }
-            }
-        }
-
-        BigDecimal compensationRounded = new BigDecimal(totalPurchaseAmount).setScale(2, RoundingMode.UP);
-        person.setTotalPurchaseAmount(compensationRounded.doubleValue());
-        personRepository.save(person);
-    }
-
-    private void updateReceiptTotalAmount(Receipt receipt) {
-        List<Product> products = productRepository.findByReceipt(receipt);
-        double totalAmount = products.stream().mapToDouble(Product::getPrice).sum();
-
-        receipt.setTotalAmount(totalAmount);
-        receiptRepository.save(receipt);
     }
 }

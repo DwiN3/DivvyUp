@@ -56,7 +56,7 @@ namespace DivvyUp_Impl_Maui.Service
                 if (receipt.receiptName.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna edytować rachunku bez nazwy");
 
-                var url = _url.EditReceipt.Replace(Route.ID, receipt.receiptId.ToString());
+                var url = _url.EditReceipt.Replace(Route.ID, receipt.id.ToString());
                 var response = await _duHttpClient.PutAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }

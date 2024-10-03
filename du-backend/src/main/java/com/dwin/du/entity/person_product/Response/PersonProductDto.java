@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ShowPersonProductResponse {
-    private int personProductId;
+public class PersonProductDto {
+    private int id;
     private int productId;
     private int personId;
     private double partOfPrice;

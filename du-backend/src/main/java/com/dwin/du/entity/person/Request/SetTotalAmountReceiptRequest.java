@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class SetTotalAmountReceiptRequest {
-    private double totalPurchaseAmount;
+    private double totalAmount;
 }

@@ -64,7 +64,7 @@ namespace DivvyUp_App.Components.Product
             {
                 product.receiptId = ReceiptId;
 
-                if (product.productId == 0)
+                if (product.id == 0)
                     await ProductService.AddProduct(product);
                 else
                     await ProductService.EditProduct(product);

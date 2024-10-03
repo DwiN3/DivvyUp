@@ -59,7 +59,7 @@ namespace DivvyUp_Impl_Maui.Service
                 if (person.surname.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna dodać edytować bez nazwiska");
 
-                var url = _url.EditPerson.Replace(Route.ID, person.personId.ToString());
+                var url = _url.EditPerson.Replace(Route.ID, person.id.ToString());
                 var response = await _duHttpClient.PutAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }

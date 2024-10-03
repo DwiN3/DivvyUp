@@ -3,7 +3,7 @@ package com.dwin.du.entity.person_product;
 import com.dwin.du.entity.person.Person;
 import com.dwin.du.entity.person.PersonRepository;
 import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
-import com.dwin.du.entity.person_product.Response.ShowPersonProductResponse;
+import com.dwin.du.entity.person_product.Response.PersonProductDto;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Request.SetIsSettledRequest;
@@ -14,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -85,8 +83,6 @@ public class PersonProductService {
         personProduct.setCompensation(isCompensation);
         personProductRepository.save(personProduct);
 
-        updateTotalPurchaseAmountForPerson(person);
-        updateCompensationAmount(product);
         return ResponseEntity.ok().build();
     }
 
@@ -107,8 +103,6 @@ public class PersonProductService {
         }
 
         personProductRepository.delete(personProduct);
-        updateTotalPurchaseAmountForPerson(personProduct.getPerson());
-        updateCompensationAmount(personProduct.getProduct());
 
         return ResponseEntity.ok().build();
     }
@@ -130,7 +124,6 @@ public class PersonProductService {
 
         personProduct.setSettled(request.isSettled());
         personProductRepository.save(personProduct);
-        updateTotalPurchaseAmountForPerson(personProduct.getPerson());
 
         return ResponseEntity.ok().build();
     }
@@ -152,7 +145,7 @@ public class PersonProductService {
         List<PersonProduct> personProducts = personProductRepository.findByProduct(personProduct.getProduct());
 
         for (PersonProduct pp : personProducts) {
-            if (pp.getPersonProductId() != personProductId && pp.isCompensation()) {
+            if (pp.getId() != personProductId && pp.isCompensation()) {
                 pp.setCompensation(false);
                 personProductRepository.save(pp);
             }
@@ -160,7 +153,7 @@ public class PersonProductService {
 
         personProduct.setCompensation(true);
         personProductRepository.save(personProduct);
-        updateTotalPurchaseAmountForPerson(personProduct.getPerson());
+
         return ResponseEntity.ok().build();
     }
 
@@ -177,16 +170,17 @@ public class PersonProductService {
         if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        ShowPersonProductResponse response = ShowPersonProductResponse.builder()
-                .personProductId(personProduct.getPersonProductId())
-                .productId(personProduct.getProduct().getProductId())
-                .personId(personProduct.getPerson().getPersonId())
+        PersonProductDto response = PersonProductDto.builder()
+                .id(personProduct.getId())
+                .productId(personProduct.getProduct().getId())
+                .personId(personProduct.getPerson().getId())
                 .partOfPrice(personProduct.getPartOfPrice())
                 .maxQuantity(personProduct.getMaxQuantity())
                 .quantity(personProduct.getQuantity())
                 .isCompensation(personProduct.isCompensation())
                 .isSettled(personProduct.isSettled())
                 .build();
+
         return ResponseEntity.ok(response);
     }
 
@@ -204,12 +198,12 @@ public class PersonProductService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-        List<ShowPersonProductResponse> responseList = new ArrayList<>();
+        List<PersonProductDto> responseList = new ArrayList<>();
         for (PersonProduct personProduct : personProducts) {
-            ShowPersonProductResponse response = ShowPersonProductResponse.builder()
-                    .personProductId(personProduct.getPersonProductId())
-                    .productId(personProduct.getProduct().getProductId())
-                    .personId(personProduct.getPerson().getPersonId())
+            PersonProductDto response = PersonProductDto.builder()
+                    .id(personProduct.getId())
+                    .productId(personProduct.getProduct().getId())
+                    .personId(personProduct.getPerson().getId())
                     .partOfPrice(personProduct.getPartOfPrice())
                     .quantity(personProduct.getQuantity())
                     .maxQuantity(personProduct.getMaxQuantity())
@@ -218,39 +212,7 @@ public class PersonProductService {
                     .build();
             responseList.add(response);
         }
+
         return ResponseEntity.ok(responseList);
-    }
-
-    private void updateTotalPurchaseAmountForPerson(Person person) {
-        List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
-
-        double totalPurchaseAmount = 0.0;
-        for (PersonProduct personProduct : personProducts) {
-            if (!personProduct.isSettled()) {
-                totalPurchaseAmount += personProduct.getPartOfPrice();
-
-                if (personProduct.isCompensation()) {
-                    totalPurchaseAmount += personProduct.getProduct().getCompensationAmount();
-                }
-            }
-        }
-
-        BigDecimal compensationRounded = new BigDecimal(totalPurchaseAmount).setScale(2, RoundingMode.UP);
-        person.setTotalPurchaseAmount(compensationRounded.doubleValue());
-        personRepository.save(person);
-    }
-
-    public  void updateCompensationAmount(Product product){
-        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-
-        double totalCompensationAmount = product.getPrice();
-
-        for(PersonProduct personProduct : personProducts){
-            totalCompensationAmount -= personProduct.getPartOfPrice();
-        }
-
-        BigDecimal compensationRounded = new BigDecimal(totalCompensationAmount).setScale(2, RoundingMode.UP);
-        product.setCompensationAmount(compensationRounded.doubleValue());
-        productRepository.save(product);
     }
 }

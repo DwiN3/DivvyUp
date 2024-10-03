@@ -24,7 +24,7 @@
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
                 @*<RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />*@
-                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct.personProductId))" />
+                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct.id))" />
             </Template>
             <EditTemplate Context="personProduct">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(personProduct))" />
@@ -36,7 +36,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.settled)" Title="Rozliczono" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                <RadzenCheckBox class="button" @bind-Value="@personProduct.settled" Change="@(async (bool Check) => await ChangeSettled(personProduct.personProductId, personProduct.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@personProduct.settled" Change="@(async (bool Check) => await ChangeSettled(personProduct.id, personProduct.settled))" />
             </Template>
             <EditTemplate Context="personProduct">
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.settled" ReadOnly="true" />
@@ -44,7 +44,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.isCompensation)" Title="Wyrównanie" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                <RadzenCheckBox class="button" @bind-Value="@personProduct.isCompensation" Change="@(async (bool Check) => await ChangeSettled(personProduct.personProductId, personProduct.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@personProduct.isCompensation" Change="@(async (bool Check) => await ChangeSettled(personProduct.id, personProduct.settled))" />
             </Template>
             <EditTemplate Context="personProduct">
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.isCompensation" ReadOnly="true" />
@@ -74,7 +74,7 @@
             <Template Context="personProduct">
                 @if (Persons != null && Persons.Count > 0)
                 {
-                    PersonDto person = Persons.FirstOrDefault(e => e.personId == personProduct.personId);
+                    PersonDto person = Persons.FirstOrDefault(e => e.id == personProduct.personId);
                     <div>@(person != null ? person.name : "-")</div>
                 }
                 else
@@ -89,7 +89,7 @@
                     @bind-Value="personProduct.personId"
                     Data="@Persons"
                     TextProperty="@nameof(PersonDto.name)"
-                    ValueProperty="@nameof(PersonDto.personId)" />
+                    ValueProperty="@nameof(PersonDto.id)" />
             </EditTemplate>
         </RadzenDataGridColumn>
 

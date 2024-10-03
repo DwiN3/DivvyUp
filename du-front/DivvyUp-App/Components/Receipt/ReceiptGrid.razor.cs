@@ -52,7 +52,7 @@ namespace DivvyUp_App.Components.Receipt
         {
             try
             {
-                if (r.receiptId == 0)
+                if (r.id == 0)
                     await ReceiptService.AddReceipt(r);
                 else
                     await ReceiptService.EditReceipt(r);

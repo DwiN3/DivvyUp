@@ -12,8 +12,8 @@ import lombok.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private int productId;
+    @Column(name = "id")
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "receipt_id")

@@ -15,8 +15,8 @@ public class Receipt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "receipt_id")
-    private int receiptId;
+    @Column(name = "id")
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

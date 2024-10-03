@@ -3,11 +3,7 @@ package com.dwin.du.entity.person;
 import com.dwin.du.entity.person.Request.AddPersonRequest;
 import com.dwin.du.entity.person.Request.SetPersonReceiptsCountsRequest;
 import com.dwin.du.entity.person.Request.SetTotalAmountReceiptRequest;
-import com.dwin.du.entity.person.Response.ShowPersonResponse;
-import com.dwin.du.entity.person_product.PersonProduct;
-import com.dwin.du.entity.person_product.PersonProductRepository;
-import com.dwin.du.entity.product.ProductRepository;
-import com.dwin.du.entity.receipt.ReceiptRepository;
+import com.dwin.du.entity.person.Response.PersonDto;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PersonService {
 
-    private final ReceiptRepository receiptRepository;
     private final UserRepository userRepository;
-    private final ProductRepository productRepository;
-    private final PersonProductRepository personProductRepository;
     private final PersonRepository personRepository;
 
     public ResponseEntity<?> addPerson(AddPersonRequest request, String username) {
@@ -43,7 +34,7 @@ public class PersonService {
                 .name(request.getName())
                 .surname(request.getSurname())
                 .receiptsCount(0)
-                .totalPurchaseAmount(0.0)
+                .totalAmount(0.0)
                 .build();
         personRepository.save(person);
         return ResponseEntity.ok().build();
@@ -116,7 +107,7 @@ public class PersonService {
     }
 
 
-    public ResponseEntity<?> setTotalPurchaseAmount(int personId, SetTotalAmountReceiptRequest request, String username) {
+    public ResponseEntity<?> setTotalAmount(int personId, SetTotalAmountReceiptRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -130,7 +121,7 @@ public class PersonService {
         if (!person.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        person.setTotalPurchaseAmount(request.getTotalPurchaseAmount());
+        person.setTotalAmount(request.getTotalAmount());
         personRepository.save(person);
         return ResponseEntity.ok().build();
     }
@@ -149,14 +140,14 @@ public class PersonService {
         if (!person.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        ShowPersonResponse response = ShowPersonResponse.builder()
-                .personId(person.getPersonId())
+        PersonDto response = PersonDto.builder()
+                .id(person.getId())
                 .name(person.getName())
                 .surname(person.getSurname())
                 .receiptsCount(person.getReceiptsCount())
-                .totalPurchaseAmount(person.getTotalPurchaseAmount())
+                .totalAmount(person.getTotalAmount())
                 .build();
-        updateTotalPurchaseAmountForPerson(person);
+
         return ResponseEntity.ok(response);
     }
 
@@ -168,39 +159,18 @@ public class PersonService {
 
         User user = optionalUser.get();
         List<Person> persons = personRepository.findByUser(user);
-        List<ShowPersonResponse> responseList = new ArrayList<>();
+        List<PersonDto> responseList = new ArrayList<>();
         for (Person person : persons) {
-            ShowPersonResponse response = ShowPersonResponse.builder()
-                    .personId(person.getPersonId())
+            PersonDto response = PersonDto.builder()
+                    .id(person.getId())
                     .name(person.getName())
                     .surname(person.getSurname())
                     .receiptsCount(person.getReceiptsCount())
-                    .totalPurchaseAmount(person.getTotalPurchaseAmount())
+                    .totalAmount(person.getTotalAmount())
                     .build();
             responseList.add(response);
-            updateTotalPurchaseAmountForPerson(person);
+
         }
         return ResponseEntity.ok(responseList);
-    }
-
-    public void updateTotalPurchaseAmountForPerson(Person person) {
-        List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
-
-        double totalPurchaseAmount = 0.0;
-
-        for (PersonProduct personProduct : personProducts) {
-            if (!personProduct.isSettled()) {
-                double partOfPrice = personProduct.getPartOfPrice();
-                totalPurchaseAmount += partOfPrice;
-
-                if(personProduct.isCompensation()){
-                    totalPurchaseAmount += personProduct.getProduct().getCompensationAmount();
-                }
-            }
-        }
-
-        BigDecimal compensationRounded = new BigDecimal(totalPurchaseAmount).setScale(2, RoundingMode.UP);
-        person.setTotalPurchaseAmount(compensationRounded.doubleValue());
-        personRepository.save(person);
     }
 }

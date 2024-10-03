@@ -23,9 +23,9 @@
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="receipt">
-                <RadzenButton class="button" Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Click="@((args) => OpenProductsList(receipt.receiptId))" />
+                <RadzenButton class="button" Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Click="@((args) => OpenProductsList(receipt.id))" />
                 <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(receipt))" />
-                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(receipt.receiptId))" />
+                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(receipt.id))" />
             </Template>
             <EditTemplate Context="receipt">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(receipt))"/>
@@ -37,7 +37,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.settled)" Title="Rozliczono" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="receipt">
-                <RadzenCheckBox class="button" @bind-Value="@receipt.settled" Change="@(async (bool Check) => await ChangeSettled(receipt.receiptId, receipt.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@receipt.settled" Change="@(async (bool Check) => await ChangeSettled(receipt.id, receipt.settled))" />
             </Template>
             <EditTemplate Context="receipt">
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@receipt.settled" ReadOnly="true" />
