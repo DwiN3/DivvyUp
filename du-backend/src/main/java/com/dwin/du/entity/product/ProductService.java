@@ -1,10 +1,7 @@
 package com.dwin.du.entity.product;
 
-
-import com.dwin.du.entity.product.Request.AddProductRequest;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
-import com.dwin.du.entity.receipt.Request.SetIsSettledRequest;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +19,7 @@ public class ProductService {
     private final ReceiptRepository receiptRepository;
     private final ProductRepository productRepository;
 
-    public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
+    public ResponseEntity<?> addProductToReceipt(ProductDto request, int receiptId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -78,7 +75,7 @@ public class ProductService {
     }
 
 
-    public ResponseEntity<?> setIsSettled(int productId, SetIsSettledRequest request, String username) {
+    public ResponseEntity<?> setIsSettled(int productId, ProductDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

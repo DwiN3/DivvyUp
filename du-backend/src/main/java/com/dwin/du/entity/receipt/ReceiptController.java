@@ -1,8 +1,5 @@
 package com.dwin.du.entity.receipt;
 
-import com.dwin.du.entity.receipt.Request.AddReceiptRequest;
-import com.dwin.du.entity.receipt.Request.SetIsSettledRequest;
-import com.dwin.du.entity.receipt.Request.SetTotalAmountReceiptRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,14 +14,14 @@ public class ReceiptController {
     private final ReceiptService receiptService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addReceipt(@RequestBody AddReceiptRequest request){
+    public ResponseEntity<?> addReceipt(@RequestBody ReceiptDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return receiptService.addReceipt(request, currentUsername);
     }
 
     @PutMapping("/edit/{receiptId}")
-    public ResponseEntity<?> editReceipt(@PathVariable int receiptId, @RequestBody AddReceiptRequest request) {
+    public ResponseEntity<?> editReceipt(@PathVariable int receiptId, @RequestBody ReceiptDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return receiptService.editReceipt(receiptId, request, currentUsername);
@@ -38,14 +35,14 @@ public class ReceiptController {
     }
 
     @PutMapping("/set-total-amount/{receiptId}")
-    public ResponseEntity<?> setTotalAmount(@PathVariable int receiptId, @RequestBody SetTotalAmountReceiptRequest request){
+    public ResponseEntity<?> setTotalAmount(@PathVariable int receiptId, @RequestBody ReceiptDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return receiptService.setTotalAmount(receiptId, request, currentUsername);
     }
 
     @PutMapping("/set-is-settled/{receiptId}")
-    public ResponseEntity<?> setIsSettled(@PathVariable int receiptId, @RequestBody SetIsSettledRequest request){
+    public ResponseEntity<?> setIsSettled(@PathVariable int receiptId, @RequestBody ReceiptDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return receiptService.setIsSettled(receiptId, request, currentUsername);

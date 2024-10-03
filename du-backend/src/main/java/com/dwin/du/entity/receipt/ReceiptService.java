@@ -1,15 +1,11 @@
 package com.dwin.du.entity.receipt;
 
-import com.dwin.du.entity.receipt.Request.AddReceiptRequest;
-import com.dwin.du.entity.receipt.Request.SetIsSettledRequest;
-import com.dwin.du.entity.receipt.Request.SetTotalAmountReceiptRequest;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 @Service
@@ -19,7 +15,7 @@ public class ReceiptService {
     private final UserRepository userRepository;
     private final ReceiptRepository receiptRepository;
 
-    public ResponseEntity<?> addReceipt(AddReceiptRequest request, String username) {
+    public ResponseEntity<?> addReceipt(ReceiptDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -37,7 +33,7 @@ public class ReceiptService {
             return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editReceipt(int receiptId, AddReceiptRequest request, String username) {
+    public ResponseEntity<?> editReceipt(int receiptId, ReceiptDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -77,7 +73,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setTotalAmount(int receiptId, SetTotalAmountReceiptRequest request, String username) {
+    public ResponseEntity<?> setTotalAmount(int receiptId, ReceiptDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -97,7 +93,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setIsSettled(int receiptId, SetIsSettledRequest request, String username) {
+    public ResponseEntity<?> setIsSettled(int receiptId, ReceiptDto request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

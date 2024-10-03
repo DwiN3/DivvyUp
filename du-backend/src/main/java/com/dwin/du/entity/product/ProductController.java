@@ -1,8 +1,5 @@
 package com.dwin.du.entity.product;
 
-
-import com.dwin.du.entity.product.Request.AddProductRequest;
-import com.dwin.du.entity.receipt.Request.SetIsSettledRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,7 +14,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/receipt/{receiptID}/product/add")
-    public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptID, @RequestBody AddProductRequest request) {
+    public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptID, @RequestBody ProductDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.addProductToReceipt(request, receiptID, currentUsername);
@@ -31,7 +28,7 @@ public class ProductController {
     }
 
     @PutMapping("/product/set-is-settled/{productId}")
-    public ResponseEntity<?> setIsSettled(@PathVariable int productId, @RequestBody SetIsSettledRequest request){
+    public ResponseEntity<?> setIsSettled(@PathVariable int productId, @RequestBody ProductDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.setIsSettled(productId, request, currentUsername);

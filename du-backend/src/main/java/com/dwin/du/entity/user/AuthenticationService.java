@@ -1,8 +1,5 @@
 package com.dwin.du.entity.user;
 
-import com.dwin.du.entity.user.Request.AuthenticationRequest;
-import com.dwin.du.entity.user.Request.RegisterRequest;
-import com.dwin.du.entity.user.Request.RemoveAccountRequest;
 import com.dwin.du.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +25,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<?> register(RegisterRequest request) {
+    public ResponseEntity<?> register(UserDto request) {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); 
         } else if (repository.findByUsername(request.getUsername()).isPresent()) {
@@ -47,7 +44,7 @@ public class AuthenticationService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<String> auth(AuthenticationRequest request) {
+    public ResponseEntity<String> auth(UserDto request) {
         try {
             Optional<User> optionalUser = repository.findByUsername(request.getUsername());
             if(!optionalUser.isPresent()){
@@ -78,7 +75,7 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<?> remove(RemoveAccountRequest request) {
+    public ResponseEntity<?> remove(UserDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         Optional<User> optionalUser = repository.findByUsername(currentUsername);

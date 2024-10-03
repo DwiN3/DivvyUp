@@ -1,8 +1,5 @@
 package com.dwin.du.entity.person;
 
-import com.dwin.du.entity.person.Request.AddPersonRequest;
-import com.dwin.du.entity.person.Request.SetPersonReceiptsCountsRequest;
-import com.dwin.du.entity.person.Request.SetTotalAmountReceiptRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,7 +15,7 @@ public class PersonController {
   private final PersonService personService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addPerson(@RequestBody AddPersonRequest request){
+    public ResponseEntity<?> addPerson(@RequestBody PersonDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated())
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -28,7 +25,7 @@ public class PersonController {
     }
 
     @PutMapping("/edit/{personId}")
-    public ResponseEntity<?> editPerson(@PathVariable int personId, @RequestBody AddPersonRequest request) {
+    public ResponseEntity<?> editPerson(@PathVariable int personId, @RequestBody PersonDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personService.editPerson(personId, request, currentUsername);
@@ -42,14 +39,14 @@ public class PersonController {
     }
 
     @PutMapping("/set-receipts-counts/{personId}")
-    public ResponseEntity<?> setReceiptsCounts(@PathVariable int personId, @RequestBody SetPersonReceiptsCountsRequest request) {
+    public ResponseEntity<?> setReceiptsCounts(@PathVariable int personId, @RequestBody PersonDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personService.setReceiptsCounts(personId, request, currentUsername);
     }
 
     @PutMapping("/set-total-amount/{personId}")
-    public ResponseEntity<?> setTotaleAmount(@PathVariable int personId, @RequestBody SetTotalAmountReceiptRequest request) {
+    public ResponseEntity<?> setTotaleAmount(@PathVariable int personId, @RequestBody PersonDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personService.setTotalAmount(personId, request, currentUsername);
