@@ -123,6 +123,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
+        public Task<ReceiptDto> GetReceipt(int receiptId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<ReceiptDto>> GetReceipts()
         {
             try
