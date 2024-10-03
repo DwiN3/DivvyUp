@@ -29,21 +29,21 @@
         public readonly string GetReceipt = $"{BaseUrl}/receipt/{ID}";
         public readonly string GetReceipts = $"{BaseUrl}/receipt";
 
-        // Item
-        public readonly string AddItem = $"{BaseUrl}/receipt/{ID}/item/add";
-        public readonly string EditItem = $"{BaseUrl}/item/edit/{ID}";
-        public readonly string RemoveItem = $"{BaseUrl}/item/remove/{ID}";
-        public readonly string SetSettledItem = $"{BaseUrl}/item/set-settled/{ID}";
-        public readonly string SetCompensationPriceItem = $"{BaseUrl}/item/set-compensation-price/{ID}";
-        public readonly string GetItem = $"{BaseUrl}/item/{ID}";
-        public readonly string GetItems = $"{BaseUrl}/receipt/{ID}/item";
+        // Product
+        public readonly string AddProduct = $"{BaseUrl}/receipt/{ID}/product/add";
+        public readonly string EditProduct = $"{BaseUrl}/product/edit/{ID}";
+        public readonly string RemoveProduct = $"{BaseUrl}/product/remove/{ID}";
+        public readonly string SetSettledProduct = $"{BaseUrl}/product/set-settled/{ID}";
+        public readonly string SetCompensationPriceProduct = $"{BaseUrl}/product/set-compensation-price/{ID}";
+        public readonly string GetProduct = $"{BaseUrl}/product/{ID}";
+        public readonly string GetProducts = $"{BaseUrl}/receipt/{ID}/product";
 
-        // Person Item Share
-        public readonly string AddPersonItemShare = $"{BaseUrl}/item/{ID}/person-item-share/add";
-        public readonly string RemovePersonItemShare = $"{BaseUrl}/person-item-share/remove/{ID}";
-        public readonly string SetSettledPersonItemShare = $"{BaseUrl}/person-item-share/set-settled/{ID}";
-        public readonly string SetCompensationPersonItemShare = $"{BaseUrl}/person-item-share/set-compensation/{ID}";
-        public readonly string GetPersonItemShare = $"{BaseUrl}/person-item-share/{ID}";
-        public readonly string GetPersonItemsShare = $"{BaseUrl}/item/{ID}/person-item-share";
+        // Person Product
+        public readonly string AddPersonProduct = $"{BaseUrl}/product/{ID}/person-product/add";
+        public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/remove/{ID}";
+        public readonly string SetSettledPersonProduct = $"{BaseUrl}/person-product/set-settled/{ID}";
+        public readonly string SetCompensationPersonProduct = $"{BaseUrl}/person-product/set-compensation/{ID}";
+        public readonly string GetPersonProduct = $"{BaseUrl}/person-product/{ID}";
+        public readonly string GetPersonProducts = $"{BaseUrl}/product/{ID}/person-product";
     }
 }

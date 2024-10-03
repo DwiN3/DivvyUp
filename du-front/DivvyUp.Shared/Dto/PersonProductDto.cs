@@ -3,10 +3,10 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DivvyUp_Shared.Dto
 {
-    public class PersonItemShareDto
+    public class PersonProductDto
     {
         public int id { get; set; }
-        public int itemId { get; set; }
+        public int productId { get; set; }
         public int personId { get; set; }
         public double partOfPrice { get; set; }
         public int quantity { get; set; }
@@ -14,10 +14,10 @@ namespace DivvyUp_Shared.Dto
         public bool compensation { get; set; }
         public bool settled { get; set; }
 
-        public PersonItemShareDto()
+        public PersonProductDto()
         {
             id = 0;
-            itemId = 0;
+            productId = 0;
             personId = 0;
             quantity = 0;
             maxQuantity = 1;
@@ -26,10 +26,10 @@ namespace DivvyUp_Shared.Dto
             settled = false;
         }
 
-        public PersonItemShareDto(int id, int itemId, int personId, double partOfPrice, int quantity, int maxQuantity, bool compensation, bool settled)
+        public PersonProductDto(int id, int productId, int personId, double partOfPrice, int quantity, int maxQuantity, bool compensation, bool settled)
         {
             this.id = id;
-            this.itemId = itemId;
+            this.productId = productId;
             this.personId = personId;
             this.partOfPrice = partOfPrice;
             this.quantity = quantity;

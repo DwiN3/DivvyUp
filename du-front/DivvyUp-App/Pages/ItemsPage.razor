@@ -1,9 +1,0 @@
-﻿@page "/receipt/{id:int}/items"
-@using DivvyUp_App.Components.Item
-
-<ItemGrid ReceiptId="@id"/>
-
-@code {
-    [Parameter]
-    public int id { get; set; }
-}

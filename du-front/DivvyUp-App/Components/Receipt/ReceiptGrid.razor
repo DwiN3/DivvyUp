@@ -23,7 +23,7 @@
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="receipt">
-                <RadzenButton class="button" Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Click="@((args) => OpenItemsList(receipt.id))" />
+                <RadzenButton class="button" Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Click="@((args) => OpenProductsList(receipt.id))" />
                 <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(receipt))" />
                 <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(receipt.id))" />
             </Template>

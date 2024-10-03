@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Radzen;
 
-namespace DivvyUp_App.Components.Item
+namespace DivvyUp_App.Components.Product
 {
-    partial class ItemGrid
+    partial class ProductsGrid
     {
         [Parameter]
         public int ReceiptId { get; set; }
         [Inject]
-        private IItemService ItemService { get; set; }
+        private IProductService ProductService { get; set; }
         [Inject]
         private IPersonService PersonService { get; set; }
         [Inject]
@@ -23,9 +23,9 @@ namespace DivvyUp_App.Components.Item
         [Inject]
         private DDialogService DDialogService { get; set; }
 
-        private List<ItemDto> Items { get; set; }
-        private List<PersonDto> Persons { get; set; }
-        private RadzenDataGrid<ItemDto> Grid { get; set; }
+        private List<ProductDto> Products { get; set; }
+        private IEnumerable<PersonDto> Persons { get; set; }
+        private RadzenDataGrid<ProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private PersonDto selectedPerson { get; set; } = new();
 
@@ -37,37 +37,37 @@ namespace DivvyUp_App.Components.Item
 
         private async Task LoadGrid()
         {
-            Items = await ItemService.GetItems(ReceiptId);
+            Products = await ProductService.GetProducts(ReceiptId);
             StateHasChanged();
         }
 
         private async Task InsertRow()
         {
-            var item = new ItemDto();
-            Items.Add(item);
-            await Grid.InsertRow(item);
+            var product = new ProductDto();
+            Products.Add(product);
+            await Grid.InsertRow(product);
         }
 
-        private async Task EditRow(ItemDto item)
+        private async Task EditRow(ProductDto product)
         {
-            await Grid.EditRow(item);
+            await Grid.EditRow(product);
         }
 
-        private void CancelEdit(ItemDto item)
+        private void CancelEdit(ProductDto product)
         {
-            Grid.CancelEditRow(item);
+            Grid.CancelEditRow(product);
         }
 
-        private async Task SaveRow(ItemDto item)
+        private async Task SaveRow(ProductDto product)
         {
             try
             {
-                item.receiptId = ReceiptId;
+                product.receiptId = ReceiptId;
 
-                if (item.id == 0)
-                    await ItemService.AddItem(item);
+                if (product.id == 0)
+                    await ProductService.AddProduct(product);
                 else
-                    await ItemService.EditItem(item);
+                    await ProductService.EditProduct(product);
             }
             catch (InvalidOperationException)
             {
@@ -81,11 +81,11 @@ namespace DivvyUp_App.Components.Item
             }
         }
 
-        private async Task RemoveRow(int itemId)
+        private async Task RemoveRow(int productId)
         {
             try
             {
-                await ItemService.RemoveItem(itemId);
+                await ProductService.RemoveProduct(productId);
                 AlertService.ShowAlert("Usunięto produkt", AlertStyle.Success);
             }
             catch (InvalidOperationException)
@@ -100,11 +100,11 @@ namespace DivvyUp_App.Components.Item
             }
         }
 
-        private async Task ChangeSettled(int itemId, bool isChecked)
+        private async Task ChangeSettled(int productId, bool isChecked)
         {
             try
             {
-                await ItemService.SetSettledItem(itemId, isChecked);
+                await ProductService.SetSettledProduct(productId, isChecked);
             }
             catch (InvalidOperationException)
             {
@@ -115,12 +115,12 @@ namespace DivvyUp_App.Components.Item
         
         }
 
-        private async Task ManagePerson(int itemId)
+        private async Task ManagePerson(int productId)
         {
-            await DDialogService.OpenPersonItemShareDialog(itemId);
+            await DDialogService.OpenProductPersonDialog(productId);
         }
 
-        private void SetPerson(ItemDto item, PersonDto person)
+        private void SetPerson(ProductDto product, PersonDto person)
         {
             selectedPerson = person;
         }

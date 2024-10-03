@@ -33,11 +33,11 @@ namespace DivvyUp_App.GuiService
             return result != null && (bool)result;
         }
 
-        public async Task OpenPersonItemShareDialog(int itemId)
+        public async Task OpenProductPersonDialog(int productId)
         {
-            await _dialogService.OpenAsync<DialogPersonItemShareCard>(
+            await _dialogService.OpenAsync<DialogProductPersonCard>(
                 "Osoby przypisane do produktu",
-                new Dictionary<string, object> { { "ItemId", itemId } },
+                new Dictionary<string, object> { { "ProductId", productId } },
                 new DialogOptions()
                 {
                     Width = "80%",

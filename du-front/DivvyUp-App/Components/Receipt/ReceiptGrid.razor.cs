@@ -88,11 +88,11 @@ namespace DivvyUp_App.Components.Receipt
             }
         }
 
-        private async Task OpenItemsList(int receiptId)
+        private async Task OpenProductsList(int receiptId)
         {
             if (receiptId > 0)
             {
-                Navigation.NavigateTo($"/receipt/{receiptId}/items");
+                Navigation.NavigateTo($"/receipt/{receiptId}/products");
             }
         }
 

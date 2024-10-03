@@ -14,28 +14,28 @@ using Newtonsoft.Json;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class PersonItemShareService : IPersonItemShareService
+    public class PersonProductService : IPersonProductService
     {
         [Inject]
         private DuHttpClient _duHttpClient { get; set; }
         private Route _url { get; } = new();
-        private readonly ILogger<PersonItemShareService> _logger;
+        private readonly ILogger<PersonProductService> _logger;
 
-        public PersonItemShareService(DuHttpClient duHttpClient, ILogger<PersonItemShareService> logger)
+        public PersonProductService(DuHttpClient duHttpClient, ILogger<PersonProductService> logger)
         {
             _duHttpClient = duHttpClient;
             _logger = logger;
         }
 
-        public async Task AddPersonItemShare(PersonItemShareDto personItemShare, int itemId)
+        public async Task AddPersonProduct(PersonProductDto personProduct, int productId)
         {
             try
             {
-                if (personItemShare == null)
+                if (personProduct == null)
                     throw new InvalidOperationException("Nie mozna dodać pustych produktu osób");
 
-                var url = _url.AddPersonItemShare.Replace(Route.ID, itemId.ToString()); ;
-                var response = await _duHttpClient.PostAsync(url, personItemShare);
+                var url = _url.AddPersonProduct.Replace(Route.ID, productId.ToString()); ;
+                var response = await _duHttpClient.PostAsync(url, personProduct);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania produktu osób");
             }
             catch (InvalidOperationException ex)
@@ -50,15 +50,14 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemovePersonItemShare(int id)
+        public async Task RemovePersonProduct(int personProductId)
         {
             try
             {
-                if (id == null)
+                if (personProductId == null)
                     throw new InvalidOperationException("Nie mozna usunąć produktu osób które nie posiada id");
 
-                var url = _url.RemovePerson
-                    .Replace(Route.ID, id.ToString());
+                var url = _url.RemovePersonProduct.Replace(Route.ID, personProductId.ToString());
                 var response = await _duHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osób");
             }
@@ -74,11 +73,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetPersonItemShare(int id, bool isSettled)
+        public async Task SetSettledPersonProduct(int personProductId, bool isSettled)
         {
             try
             {
-                if (id == null)
+                if (personProductId == null)
                     throw new InvalidOperationException("Nie mozna rozliczyć produktu osoby nie posiadającego id");
 
                 var data = new
@@ -86,7 +85,7 @@ namespace DivvyUp_Impl_Maui.Service
                     settled = isSettled
                 };
 
-                var url = _url.SetSettledPersonItemShare.Replace(Route.ID, id.ToString());
+                var url = _url.SetSettledPersonProduct.Replace(Route.ID, personProductId.ToString());
                 var response = await _duHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
             }
@@ -102,11 +101,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetCompensationPersonItemShare(int id)
+        public async Task SetCompensationPersonProduct(int personProductId)
         {
             try
             {
-                if (id == null)
+                if (personProductId == null)
                     throw new InvalidOperationException("Nie mozna ustawić ceny produktu osoby nie posiadającego id");
 
                 var data = new
@@ -114,7 +113,7 @@ namespace DivvyUp_Impl_Maui.Service
                     compensation = true
                 };
 
-                var url = _url.SetCompensationPersonItemShare.Replace(Route.ID, id.ToString());
+                var url = _url.SetCompensationPersonProduct.Replace(Route.ID, personProductId.ToString());
                 var response = await _duHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
@@ -130,14 +129,14 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<PersonItemShareDto> GetPersonItemShare(int id)
+        public async Task<PersonProductDto> GetPersonProduct(int personProductId)
         {
             try
             {
-                var url = _url.GetPersonItemShare.Replace(Route.ID, id.ToString());
+                var url = _url.GetPersonProduct.Replace(Route.ID, personProductId.ToString());
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<PersonItemShareDto>(jsonResponse);
+                var result = JsonConvert.DeserializeObject<PersonProductDto>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu osób");
                 return result;
             }
@@ -148,14 +147,14 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<PersonItemShareDto>> GetPersonItemShares(int itemId)
+        public async Task<List<PersonProductDto>> GetPersonProducts(int productId)
         {
             try
             {
-                var url = _url.GetPersonItemsShare.Replace(Route.ID, itemId.ToString());
+                var url = _url.GetPersonProducts.Replace(Route.ID, productId.ToString());
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<List<PersonItemShareDto>>(jsonResponse);
+                var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów osób");
                 return result;
             }

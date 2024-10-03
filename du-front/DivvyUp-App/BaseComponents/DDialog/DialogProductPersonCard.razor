@@ -1,9 +1,9 @@
-﻿@using DivvyUp_App.Components.PersonItemShare
+﻿@using DivvyUp_App.Components.PersonProduct
 @inject DialogService DialogService
 
 <div class="card-dialog">
     <div class="content-dialog">
-        <PersonItemShareGrid ItemId="@ItemId" />
+        <PersonProductGrid ProductId="@ProductId" />
     </div>
     <footer class="footer">
         <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Info" Click="@(async () => { DialogService.Close(false); })"></RadzenButton>
@@ -12,7 +12,7 @@
 
 @code {
     [Parameter] 
-    public int ItemId { get; set; }
+    public int ProductId { get; set; }
     [Parameter]
     public int ReceiptId { get; set; }
 }

@@ -71,14 +71,14 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemovePerson(int id)
+        public async Task RemovePerson(int personId)
         {
             try
             {
-                if (id == null)
+                if (personId == null)
                     throw new InvalidOperationException("Nie mozna usunąć osoby które nie posiada id");
 
-                var url = _url.RemovePerson.Replace(Route.ID, id.ToString());
+                var url = _url.RemovePerson.Replace(Route.ID, personId.ToString());
                 var response = await _duHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
@@ -94,11 +94,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetReceiptsCountsPerson(int id, int receiptsCounts)
+        public async Task SetReceiptsCountsPerson(int personId, int receiptsCounts)
         {
             try
             {
-                if (id == null)
+                if (personId == null)
                     throw new InvalidOperationException("Nie mozna ustawić ilości rachunków nie posiadającego id");
 
                 var data = new
@@ -106,7 +106,7 @@ namespace DivvyUp_Impl_Maui.Service
                     receiptsCounts = receiptsCounts
                 };
 
-                var url = _url.SetReceiptsCountsPerson.Replace(Route.ID, id.ToString());
+                var url = _url.SetReceiptsCountsPerson.Replace(Route.ID, personId.ToString());
                 var response = await _duHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji ilości rachunków");
             }
@@ -122,11 +122,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetTotalAmountPerson(int id, double totalAmount)
+        public async Task SetTotalAmountPerson(int personId, double totalAmount)
         {
             try
             {
-                if (id == null)
+                if (personId == null)
                     throw new InvalidOperationException("Nie mozna ustawić bilansu nie posiadającego id");
 
                 var data = new
@@ -134,7 +134,7 @@ namespace DivvyUp_Impl_Maui.Service
                     totalAmount = totalAmount
                 };
 
-                var url = _url.SetTotalPurchaseAmountPerson.Replace(Route.ID, id.ToString());
+                var url = _url.SetTotalPurchaseAmountPerson.Replace(Route.ID, personId.ToString());
                 var response = await _duHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji bilansu");
             }
@@ -150,11 +150,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<PersonDto> GetPerson(int id)
+        public async Task<PersonDto> GetPerson(int personId)
         {
             try
             {
-                var url = _url.GetPerson.Replace(Route.ID, id.ToString());
+                var url = _url.GetPerson.Replace(Route.ID, personId.ToString());
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<PersonDto>(jsonResponse);

@@ -3,7 +3,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DivvyUp_Shared.Dto
 {
-    public class ItemDto
+    public class ProductDto
     {
         public int id { get; set; }
         public int receiptId { get; set; }
@@ -14,7 +14,7 @@ namespace DivvyUp_Shared.Dto
         public bool settled { get; set; }
         public int maxQuantity { get; set; }
 
-        public ItemDto()
+        public ProductDto()
         {
             id = 0;
             receiptId = 0;
@@ -26,7 +26,7 @@ namespace DivvyUp_Shared.Dto
             maxQuantity = 1;
         }
 
-        public ItemDto(int id, int receiptId, string name, double price, double compensationPrice, bool divisible, bool settled, int maxQuantity, double packagePrice)
+        public ProductDto(int id, int receiptId, string name, double price, double compensationPrice, bool divisible, bool settled, int maxQuantity, double packagePrice)
         {
             this.id = id;
             this.receiptId = receiptId;
