@@ -6,9 +6,9 @@ namespace DivvyUp_Shared.Interface
     {
         Task AddProduct(ProductDto product);
         Task EditProduct(ProductDto product);
-        Task SetSettledProduct(int productId, bool isSettled);
         Task RemoveProduct(int productId);
-        Task<ProductDto> ShowProduct(int productId);
-        Task<List<ProductDto>> ShowProducts(int receiptID);
+        Task SetSettledProduct(int productId, bool isSettled);
+        Task<ProductDto> GetProduct(int productId);
+        Task<List<ProductDto>> GetProducts(int receiptId);
     }
 }

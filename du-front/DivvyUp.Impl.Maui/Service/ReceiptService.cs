@@ -123,11 +123,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<ReceiptDto>> ShowReceipts()
+        public async Task<List<ReceiptDto>> GetReceipts()
         {
             try
             {
-                var url = _url.ShowReceipts;
+                var url = _url.GetReceipts;
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ReceiptDto>>(jsonResponse);

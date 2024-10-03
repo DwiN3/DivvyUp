@@ -3,43 +3,44 @@
     public class Route
     {
         public const string ID = "{id}";
+        public const string BaseUrl = "http://localhost:8080/rm";
 
         /// Auth
-        public readonly string Login = $"http://localhost:8080/rm/auth";
-        public readonly string Register = $"http://localhost:8080/rm/register";
-        public readonly string Remove = $"http://localhost:8080/rm/remove-account";
-        public readonly string IsValid = $"http://localhost:8080/rm/validate-token";
+        public readonly string Login = $"{BaseUrl}/auth";
+        public readonly string Register = $"{BaseUrl}/register";
+        public readonly string Remove = $"{BaseUrl}/remove-account";
+        public readonly string IsValid = $"{BaseUrl}/validate-token";
 
         // Person
-        public readonly string AddPerson = $"http://localhost:8080/rm/person/add";
-        public readonly string EditPerson = $"http://localhost:8080/rm/person/edit/{ID}";
-        public readonly string RemovePerson = $"http://localhost:8080/rm/person/remove/{ID}";
-        public readonly string SetReceiptsCountsPerson = $"http://localhost:8080/rm/person/set-receipts-counts/{ID}";
-        public readonly string SetTotalPurchaseAmountPerson = $"http://localhost:8080/rm/person/set-total-purchase-amount/{ID}";
-        public readonly string ShowPerson = $"http://localhost:8080/rm/person/show/{ID}";
-        public readonly string ShowPersons = $"http://localhost:8080/rm/person/show-all";
+        public readonly string AddPerson = $"{BaseUrl}/person/add";
+        public readonly string EditPerson = $"{BaseUrl}/person/edit/{ID}";
+        public readonly string RemovePerson = $"{BaseUrl}/person/remove/{ID}";
+        public readonly string SetReceiptsCountsPerson = $"{BaseUrl}/person/set-receipts-counts/{ID}";
+        public readonly string SetTotalPurchaseAmountPerson = $"{BaseUrl}/person/set-total-purchase-amount/{ID}";
+        public readonly string GetPerson = $"{BaseUrl}/person/show/{ID}";
+        public readonly string GetPersons = $"{BaseUrl}/person/show-all";
 
         // Receipt
-        public readonly string AddReceipt = $"http://localhost:8080/rm/receipt/add";
-        public readonly string EditReceipt = $"http://localhost:8080/rm/receipt/edit/{ID}";
-        public readonly string RemoveReceipt = $"http://localhost:8080/rm/receipt/remove/{ID}";
-        public readonly string SetSettledReceipt = $"http://localhost:8080/rm/receipt/set-is-settled/{ID}";
-        public readonly string ShowReceipts = $"http://localhost:8080/rm/receipt/show-all";
+        public readonly string AddReceipt = $"{BaseUrl}/receipt/add";
+        public readonly string EditReceipt = $"{BaseUrl}/receipt/edit/{ID}";
+        public readonly string RemoveReceipt = $"{BaseUrl}/receipt/remove/{ID}";
+        public readonly string SetSettledReceipt = $"{BaseUrl}/receipt/set-is-settled/{ID}";
+        public readonly string GetReceipts = $"{BaseUrl}/receipt/show-all";
 
         // Product
-        public readonly string AddProduct = $"http://localhost:8080/rm/receipt/{ID}/product/add";
-        public readonly string EditProduct = $"http://localhost:8080/rm/receipt/product/edit/{ID}";
-        public readonly string RemoveProduct = $"http://localhost:8080/rm/product/remove/{ID}";
-        public readonly string SetSettledProduct = $"http://localhost:8080/rm/receipt/set-is-settled/{ID}";
-        public readonly string ShowProduct = $"http://localhost:8080/rm/product/show/{ID}";
-        public readonly string ShowProducts = $"http://localhost:8080/rm/receipt/{ID}/product/show-all";
+        public readonly string AddProduct = $"{BaseUrl}/receipt/{ID}/product/add";
+        public readonly string EditProduct = $"{BaseUrl}/product/edit/{ID}";
+        public readonly string RemoveProduct = $"{BaseUrl}/product/remove/{ID}";
+        public readonly string SetSettledProduct = $"{BaseUrl}/product/set-is-settled/{ID}";
+        public readonly string GetProduct = $"{BaseUrl}/product/show/{ID}";
+        public readonly string GetProducts = $"{BaseUrl}/receipt/{ID}/product/show-all";
 
         // Person Product
-        public readonly string AddPersonProduct = $"http://localhost:8080/rm/product/{ID}/person-product/add";
-        public readonly string RemovePersonProduct = $"http://localhost:8080/rm/person-product/remove/{ID}";
-        public readonly string SetSettledPersonProduct = $"http://localhost:8080/rm/receipt/set-is-settled/{ID}";
-        public readonly string SetCompensationPersonProduct = $"http://localhost:8080/rm/receipt/set-is-settled/{ID}";
-        public readonly string ShowPersonProduct = $"http://localhost:8080/rm/person-product/show/{ID}";
-        public readonly string ShowPersonProducts = $"http://localhost:8080/rm/product/{ID}/person-product/show-all";
+        public readonly string AddPersonProduct = $"{BaseUrl}/product/{ID}/person-product/add";
+        public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/remove/{ID}";
+        public readonly string SetSettledPersonProduct = $"{BaseUrl}/receipt/set-is-settled/{ID}";
+        public readonly string SetCompensationPersonProduct = $"{BaseUrl}/receipt/set-is-settled/{ID}";
+        public readonly string GetPersonProduct = $"{BaseUrl}/person-product/show/{ID}";
+        public readonly string GetPersonProducts = $"{BaseUrl}/product/{ID}/person-product/show-all";
     }
 }

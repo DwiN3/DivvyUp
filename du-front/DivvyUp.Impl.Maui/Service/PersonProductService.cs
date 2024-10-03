@@ -65,16 +65,16 @@ namespace DivvyUp_Impl_Maui.Service
             throw new NotImplementedException();
         }
 
-        public async Task<PersonProductDto> ShowPersonProduct(int personProductId)
+        public async Task<PersonProductDto> GetPersonProduct(int personProductId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<PersonProductDto>> ShowPersonProducts(int productId)
+        public async Task<List<PersonProductDto>> GetPersonProducts(int productId)
         {
             try
             {
-                var url = _url.ShowPersonProducts.Replace(Route.ID, productId.ToString());
+                var url = _url.GetPersonProducts.Replace(Route.ID, productId.ToString());
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);

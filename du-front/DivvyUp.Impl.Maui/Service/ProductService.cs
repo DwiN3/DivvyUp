@@ -108,11 +108,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<ProductDto> ShowProduct(int productId)
+        public async Task<ProductDto> GetProduct(int productId)
         {
             try
             {
-                var url = _url.ShowProduct.Replace(Route.ID, productId.ToString());
+                var url = _url.GetProduct.Replace(Route.ID, productId.ToString());
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<ProductDto>(jsonResponse);
@@ -126,11 +126,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<ProductDto>> ShowProducts(int receiptId)
+        public async Task<List<ProductDto>> GetProducts(int receiptId)
         {
             try
             {
-                var url = _url.ShowProducts.Replace(Route.ID, receiptId.ToString());
+                var url = _url.GetProducts.Replace(Route.ID, receiptId.ToString());
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ProductDto>>(jsonResponse);

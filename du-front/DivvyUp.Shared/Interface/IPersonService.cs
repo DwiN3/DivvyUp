@@ -9,7 +9,7 @@ namespace DivvyUp_Shared.Interface
         Task RemovePerson(int personId);
         Task SetReceiptsCountsPerson(int personId, int receiptsCounts);
         Task SetTotalPurchaseAmountPerson(int personId, double totalPurchaseAmount);
-        Task<PersonDto> ShowPerson();
-        Task<List<PersonDto>> ShowPersons();
+        Task<PersonDto> GetPerson(int personId);
+        Task<List<PersonDto>> GetPersons();
     }
 }

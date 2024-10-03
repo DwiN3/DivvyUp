@@ -25,7 +25,7 @@ namespace DivvyUp_App.Components.Person
 
         private async Task LoadGrid()
         {
-            Persons = await PersonService.ShowPersons();
+            Persons = await PersonService.GetPersons();
             StateHasChanged();
         }
 

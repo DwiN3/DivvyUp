@@ -8,7 +8,7 @@ namespace DivvyUp_Shared.Interface
         Task RemoveProductPerson(int personProductId);
         Task SetSettledProductPerson(int personProductId, bool isSettled);
         Task SetCompensation(int personProductId, bool isCompensation);
-        Task<PersonProductDto> ShowPersonProduct(int personProductId);
-        Task<List<PersonProductDto>> ShowPersonProducts(int productId);
+        Task<PersonProductDto> GetPersonProduct(int personProductId);
+        Task<List<PersonProductDto>> GetPersonProducts(int productId);
     }
 }

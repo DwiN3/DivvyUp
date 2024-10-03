@@ -8,6 +8,6 @@ namespace DivvyUp_Shared.Interface
         Task EditReceipt(ReceiptDto receipt);
         Task RemoveReceipt(int receiptId);
         Task SetSettled(int receiptId, bool isSettled);
-        Task<List<ReceiptDto>> ShowReceipts();
+        Task<List<ReceiptDto>> GetReceipts();
     }
 }

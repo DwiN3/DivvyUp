@@ -154,11 +154,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<PersonDto> ShowPerson()
+        public async Task<PersonDto> GetPerson(int personId)
         {
             try
             {
-                var url = _url.ShowPerson;
+                var url = _url.GetPerson.Replace(Route.ID, personId.ToString());
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<PersonDto>(jsonResponse);
@@ -172,11 +172,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<PersonDto>> ShowPersons()
+        public async Task<List<PersonDto>> GetPersons()
         {
             try
             {
-                var url = _url.ShowPersons;
+                var url = _url.GetPersons;
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
