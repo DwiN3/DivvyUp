@@ -65,7 +65,6 @@ public class PersonProductService {
                 .person(person)
                 .maxQuantity(product.getMaxQuantity())
                 .isSettled(product.isSettled())
-                .isCompensation(request.isCompensation())
                 .build();
 
         if (product.isDivisible()) {

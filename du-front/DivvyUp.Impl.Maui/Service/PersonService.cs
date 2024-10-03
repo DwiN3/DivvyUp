@@ -122,7 +122,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetTotalPurchaseAmountPerson(int personId, double totalAmount)
+        public async Task SetTotalAmountPerson(int personId, double totalAmount)
         {
             try
             {

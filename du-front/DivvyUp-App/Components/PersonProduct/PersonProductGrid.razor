@@ -36,7 +36,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.settled)" Title="Rozliczono" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                <RadzenCheckBox class="button" @bind-Value="@personProduct.settled" Change="@(async (bool Check) => await ChangeSettled(personProduct.id, personProduct.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@personProduct.settled" Change="@(async (bool check) => await ChangeSettled(personProduct.id, personProduct.settled))" />
             </Template>
             <EditTemplate Context="personProduct">
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.settled" ReadOnly="true" />
@@ -44,7 +44,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.compensation)" Title="Wyrównanie" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                <RadzenCheckBox class="button" @bind-Value="@personProduct.compensation" Change="@(async (bool Check) => await ChangeSettled(personProduct.id, personProduct.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@personProduct.compensation" Change="@(async (bool check) => await ChangeCompensation(personProduct.id))"/>
             </Template>
             <EditTemplate Context="personProduct">
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.compensation" ReadOnly="true" />
@@ -59,7 +59,7 @@
                 {
                     personProduct.quantity = CountLastPart();
                 }
-                <RadzenNumeric @bind-Value="@personProduct.quantity" Max="@CountLastPart()" Min="1" />
+                <RadzenNumeric @bind-Value="@personProduct.quantity" Min="1" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.partOfPrice)" Title="Cena" Width="7%" TextAlign="TextAlign.Center" Frozen="true">

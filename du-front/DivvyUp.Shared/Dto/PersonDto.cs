@@ -18,5 +18,15 @@
             totalAmount = 0;
             unpaidAmount = 0;
         }
+
+        public PersonDto(int id, string name, string surname, int receiptsCount, double totalAmount, double unpaidAmount)
+        {
+            this.id = id;
+            this.name = name;
+            this.surname = surname;
+            this.receiptsCount = receiptsCount;
+            this.totalAmount = totalAmount;
+            this.unpaidAmount = unpaidAmount;
+        }
     }
 }

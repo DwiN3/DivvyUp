@@ -76,7 +76,7 @@ namespace DivvyUp_App.Components.PersonProduct
             try
             {
                 if (personProduct.id == 0)
-                    await PersonProductService.AddProductPerson(personProduct, ProductId);
+                    await PersonProductService.AddPersonProduct(personProduct, ProductId);
             }
             catch (InvalidOperationException)
             {
@@ -94,7 +94,7 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                await PersonProductService.RemoveProductPerson(personProductId);
+                await PersonProductService.RemovePersonProduct(personProductId);
             }
             catch (InvalidOperationException)
             {
@@ -112,7 +112,22 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                await PersonProductService.SetSettledProductPerson(personProductId, isChecked);
+                await PersonProductService.SetSettledPersonProduct(personProductId, isChecked);
+            }
+            catch (InvalidOperationException)
+            {
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private async Task ChangeCompensation(int personProductId)
+        {
+            try
+            {
+                await PersonProductService.SetCompensationPersonProduct(personProductId);
+                await LoadGrid();
             }
             catch (InvalidOperationException)
             {

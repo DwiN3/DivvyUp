@@ -19,7 +19,7 @@ namespace DivvyUp_Shared.Dto
             id = 0;
             productId = 0;
             personId = 0;
-            quantity = 1;
+            quantity = 0;
             maxQuantity = 1;
             partOfPrice = 0;
             compensation = false;

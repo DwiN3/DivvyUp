@@ -1,6 +1,7 @@
 package com.dwin.du.entity.person_product;
 import com.dwin.du.entity.person.Person;
 import com.dwin.du.entity.product.Product;
+import com.dwin.du.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,6 +16,10 @@ public class PersonProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

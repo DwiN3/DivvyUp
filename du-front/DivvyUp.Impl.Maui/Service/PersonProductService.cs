@@ -27,47 +27,124 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task AddProductPerson(PersonProductDto personProduct, int productId)
+        public async Task AddPersonProduct(PersonProductDto personProduct, int productId)
         {
             try
             {
                 if (personProduct == null)
-                    throw new InvalidOperationException("Nie mozna dodać pustych detali produktu");
+                    throw new InvalidOperationException("Nie mozna dodać pustych produktu osób");
 
                 var url = _url.AddPersonProduct.Replace(Route.ID, productId.ToString()); ;
                 var response = await _duHttpClient.PostAsync(url, personProduct);
-                await EnsureCorrectResponse(response, "Błąd w czasie dodawania rachunku");
+                await EnsureCorrectResponse(response, "Błąd w czasie dodawania produktu osób");
             }
             catch (InvalidOperationException ex)
             {
-                _logger.LogError(ex, "Błąd w czasie dodawania rachunku: {Message}", ex.Message);
+                _logger.LogError(ex, "Błąd w czasie dodawania produktu osób: {Message}", ex.Message);
                 throw;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Błąd w czasie dodawania rachunku: {Message}", ex.Message);
+                _logger.LogError(ex, "Błąd w czasie dodawania produktu osób: {Message}", ex.Message);
                 throw;
             }
         }
 
-        public async Task RemoveProductPerson(int personProductId)
+        public async Task RemovePersonProduct(int personProductId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (personProductId == null)
+                    throw new InvalidOperationException("Nie mozna usunąć produktu osób które nie posiada id");
+
+                var url = _url.RemovePersonProduct.Replace(Route.ID, personProductId.ToString());
+                var response = await _duHttpClient.DeleteAsync(url);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osób");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu osób: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu osób: {Message}", ex.Message);
+                throw;
+            }
         }
 
-        public async Task SetSettledProductPerson(int personProductId, bool isSettled)
+        public async Task SetSettledPersonProduct(int personProductId, bool isSettled)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (personProductId == null)
+                    throw new InvalidOperationException("Nie mozna rozliczyć produktu osoby nie posiadającego id");
+
+                var data = new
+                {
+                    settled = isSettled
+                };
+
+                var url = _url.SetSettledPersonProduct.Replace(Route.ID, personProductId.ToString());
+                var response = await _duHttpClient.PutAsync(url, data);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                throw;
+            }
         }
 
-        public async Task SetCompensation(int personProductId, bool isCompensation)
+        public async Task SetCompensationPersonProduct(int personProductId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (personProductId == null)
+                    throw new InvalidOperationException("Nie mozna ustawić ceny produktu osoby nie posiadającego id");
+
+                var data = new
+                {
+                    compensation = true
+                };
+
+                var url = _url.SetCompensationPersonProduct.Replace(Route.ID, personProductId.ToString());
+                var response = await _duHttpClient.PutAsync(url, data);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                throw;
+            }
         }
 
         public async Task<PersonProductDto> GetPersonProduct(int personProductId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var url = _url.GetPersonProduct.Replace(Route.ID, personProductId.ToString());
+                var response = await _duHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<PersonProductDto>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu osób");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie pobierania listy produktu osób do tabeli: {Message}", ex.Message);
+                throw;
+            }
         }
 
         public async Task<List<PersonProductDto>> GetPersonProducts(int productId)
@@ -78,12 +155,12 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);
-                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunków");
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów osób");
                 return result;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Błąd w czasie pobierania listy rachunków do tabeli: {Message}", ex.Message);
+                _logger.LogError(ex, "Błąd w czasie pobierania listy produktów osób do tabeli: {Message}", ex.Message);
                 throw;
             }
         }

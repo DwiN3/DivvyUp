@@ -100,7 +100,7 @@ namespace DivvyUp_App.Components.Receipt
         {
             try
             {
-                await ReceiptService.SetSettled(receiptId, isChecked);
+                await ReceiptService.SetSettledReceipt(receiptId, isChecked);
             }
             catch (InvalidOperationException)
             {

@@ -1,6 +1,7 @@
 package com.dwin.du.entity.product;
 
 import com.dwin.du.entity.receipt.Receipt;
+import com.dwin.du.entity.receipt.ReceiptDto;
 import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
@@ -49,6 +50,26 @@ public class ProductService {
         else
             product.setMaxQuantity(1);
 
+        productRepository.save(product);
+
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> editProduct(int productId, ReceiptDto request, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Optional<Product> optionalReceipt = productRepository.findById(productId);
+        if (!optionalReceipt.isPresent())
+            return ResponseEntity.notFound().build();
+
+        Product product = optionalReceipt.get();
+        if (!product.getUser().getUsername().equals(username))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        product.setName(request.getName());
         productRepository.save(product);
 
         return ResponseEntity.ok().build();

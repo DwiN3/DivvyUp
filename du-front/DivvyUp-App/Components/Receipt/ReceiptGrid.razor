@@ -56,10 +56,10 @@
                 <RadzenDatePicker @bind-Value="@receipt.date" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ReceiptDto.totalAmount)" Title="Kwota" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.totalPrice)" Title="Kwota" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="receipt">                
                 <div style="color: @(receipt.settled ? "green" : "red")">
-                    <b>@(receipt.totalAmount)zł</b>
+                    <b>@(receipt.totalPrice)zł</b>
                 </div>
             </Template>
             <EditTemplate>

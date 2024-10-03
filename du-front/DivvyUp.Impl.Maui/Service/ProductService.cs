@@ -54,7 +54,50 @@ namespace DivvyUp_Impl_Maui.Service
 
         public async Task EditProduct(ProductDto product)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (product == null)
+                    throw new InvalidOperationException("Nie mozna edytować pustego produktu");
+                if (product.name.Equals(string.Empty))
+                    throw new InvalidOperationException("Nie mozna edytować productu bez nazwy");
+
+                var url = _url.EditProduct.Replace(Route.ID, product.id.ToString());
+                var response = await _duHttpClient.PutAsync(url, product);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task RemoveProduct(int productId)
+        {
+            try
+            {
+                if (productId == null)
+                    throw new InvalidOperationException("Nie mozna usunąć produktu które nie posiada id");
+
+                var url = _url.RemoveProduct.Replace(Route.ID, productId.ToString());
+                var response = await _duHttpClient.DeleteAsync(url);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                throw;
+            }
         }
 
         public async Task SetSettledProduct(int productId, bool isSettled)
@@ -85,15 +128,20 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemoveProduct(int productId)
+        public async Task SetCompensationPriceProduct(int productId, double compensationPrice)
         {
             try
             {
                 if (productId == null)
-                    throw new InvalidOperationException("Nie mozna usunąć produktu które nie posiada id");
+                    throw new InvalidOperationException("Nie mozna ustawić ceny produktu nie posiadającego id");
 
-                var url = _url.RemoveProduct.Replace(Route.ID, productId.ToString());
-                var response = await _duHttpClient.DeleteAsync(url);
+                var data = new
+                {
+                    compensationPrice = compensationPrice
+                };
+
+                var url = _url.SetCompensationPriceProduct.Replace(Route.ID, productId.ToString());
+                var response = await _duHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (InvalidOperationException ex)
