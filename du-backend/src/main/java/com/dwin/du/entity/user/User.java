@@ -1,4 +1,4 @@
-package com.dwin.du.security.user;
+package com.dwin.du.entity.user;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

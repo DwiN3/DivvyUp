@@ -1,5 +1,5 @@
 package com.dwin.du.entity.receipt;
-import com.dwin.du.security.user.User;
+import com.dwin.du.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 

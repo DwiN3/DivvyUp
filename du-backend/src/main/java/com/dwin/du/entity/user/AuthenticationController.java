@@ -1,8 +1,8 @@
-package com.dwin.du.security.user;
+package com.dwin.du.entity.user;
 
-import com.dwin.du.security.user.Request.RegisterRequest;
-import com.dwin.du.security.user.Request.AuthenticationRequest;
-import com.dwin.du.security.user.Request.RemoveAccountRequest;
+import com.dwin.du.entity.user.Request.RegisterRequest;
+import com.dwin.du.entity.user.Request.AuthenticationRequest;
+import com.dwin.du.entity.user.Request.RemoveAccountRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,9 @@
-package com.dwin.du.security.user;
+package com.dwin.du.entity.user;
 
-import com.dwin.du.security.user.Request.AuthenticationRequest;
-import com.dwin.du.security.user.Request.RegisterRequest;
-import com.dwin.du.security.user.Request.RemoveAccountRequest;
-import com.dwin.du.security.config.JwtService;
+import com.dwin.du.entity.user.Request.AuthenticationRequest;
+import com.dwin.du.entity.user.Request.RegisterRequest;
+import com.dwin.du.entity.user.Request.RemoveAccountRequest;
+import com.dwin.du.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

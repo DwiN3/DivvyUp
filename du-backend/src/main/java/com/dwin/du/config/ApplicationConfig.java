@@ -1,5 +1,5 @@
-package com.dwin.du.security.config;
-import com.dwin.du.security.user.UserRepository;
+package com.dwin.du.config;
+import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.dwin.du.security.config;
+package com.dwin.du.config;
 
 import java.io.IOException;
 import jakarta.servlet.FilterChain;

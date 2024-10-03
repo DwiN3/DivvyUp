@@ -1,4 +1,4 @@
-package com.dwin.du.security.config;
+package com.dwin.du.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

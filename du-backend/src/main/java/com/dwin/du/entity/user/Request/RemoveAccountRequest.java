@@ -1,4 +1,4 @@
-package com.dwin.du.security.user.Request;
+package com.dwin.du.entity.user.Request;
 
 import lombok.Data;
 

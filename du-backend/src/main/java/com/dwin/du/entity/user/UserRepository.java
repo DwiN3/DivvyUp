@@ -1,4 +1,4 @@
-package com.dwin.du.security.user;
+package com.dwin.du.entity.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

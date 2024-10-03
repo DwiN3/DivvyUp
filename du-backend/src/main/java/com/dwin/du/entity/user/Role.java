@@ -1,4 +1,4 @@
-package com.dwin.du.security.user;
+package com.dwin.du.entity.user;
 
 public enum Role {
     USER,
