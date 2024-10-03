@@ -1,5 +1,7 @@
 package com.dwin.du.entity.user;
 
+import com.dwin.du.entity.user.Request.LoginRequest;
+import com.dwin.du.entity.user.Request.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +18,14 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user account in the system.")
-    public ResponseEntity<?> register(@RequestBody UserDto request){
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request){
         ResponseEntity<?> response = service.register(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
     @PostMapping("/auth")
     @Operation(summary = "Authenticate user", description = "Authenticates a user and provides a token.")
-    public ResponseEntity<?> authenticate(@RequestBody UserDto request){
+    public ResponseEntity<?> authenticate(@RequestBody LoginRequest request){
         ResponseEntity<String> response = service.auth(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }

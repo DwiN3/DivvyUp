@@ -1,6 +1,8 @@
 package com.dwin.du.entity.user;
 
 import com.dwin.du.config.JwtService;
+import com.dwin.du.entity.user.Request.LoginRequest;
+import com.dwin.du.entity.user.Request.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<?> register(UserDto request) {
+    public ResponseEntity<?> register(RegisterRequest request) {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); 
         } else if (repository.findByUsername(request.getUsername()).isPresent()) {
@@ -44,7 +46,7 @@ public class AuthenticationService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<String> auth(UserDto request) {
+    public ResponseEntity<String> auth(LoginRequest request) {
         try {
             Optional<User> optionalUser = repository.findByUsername(request.getUsername());
             if(!optionalUser.isPresent()){

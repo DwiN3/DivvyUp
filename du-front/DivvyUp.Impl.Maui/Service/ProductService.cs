@@ -109,7 +109,7 @@ namespace DivvyUp_Impl_Maui.Service
 
                 var data = new
                 {
-                    settled = isSettled
+                    isSettled = isSettled
                 };
 
                 var url = _url.SetSettledProduct.Replace(Route.ID, productId.ToString());

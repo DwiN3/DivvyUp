@@ -1,12 +1,11 @@
-package com.dwin.du.entity.user;
+package com.dwin.du.entity.user.Request;
 
 import lombok.Builder;
 import lombok.Data;
 
-@Data
 @Builder
-public class UserDto {
-    public  int id;
+@Data
+public class RegisterRequest {
     public String username;
     public String email;
     public String password;

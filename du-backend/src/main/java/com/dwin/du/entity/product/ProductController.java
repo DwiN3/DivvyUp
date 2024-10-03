@@ -1,6 +1,9 @@
 package com.dwin.du.entity.product;
 
+import com.dwin.du.entity.product.Request.AddProductRequest;
+import com.dwin.du.entity.product.Request.EditProductRequest;
 import com.dwin.du.entity.receipt.ReceiptDto;
+import com.dwin.du.entity.receipt.Request.SetSettledRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +22,7 @@ public class ProductController {
 
     @PostMapping("/receipt/{receiptID}/product/add")
     @Operation(summary = "Add a product to a receipt", description = "Adds a new product to a specific receipt.")
-    public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptID, @RequestBody ProductDto request) {
+    public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptID, @RequestBody AddProductRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.addProductToReceipt(request, receiptID, currentUsername);
@@ -27,7 +30,7 @@ public class ProductController {
 
     @PutMapping("/product/edit/{productId}")
     @Operation(summary = "Edit a product", description = "Edits an existing product by ID.")
-    public ResponseEntity<?> editProduct(@PathVariable int productId, @RequestBody ReceiptDto request) {
+    public ResponseEntity<?> editProduct(@PathVariable int productId, @RequestBody EditProductRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.editProduct(productId, request, currentUsername);
@@ -43,7 +46,7 @@ public class ProductController {
 
     @PutMapping("/product/set-settled/{productId}")
     @Operation(summary = "Mark product as settled", description = "Marks a product as settled.")
-    public ResponseEntity<?> setIsSettled(@PathVariable int productId, @RequestBody ProductDto request){
+    public ResponseEntity<?> setIsSettled(@PathVariable int productId, @RequestBody SetSettledRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.setIsSettled(productId, request, currentUsername);

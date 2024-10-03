@@ -1,5 +1,8 @@
 package com.dwin.du.entity.receipt;
 
+import com.dwin.du.entity.receipt.Request.AddEditReceiptRequest;
+import com.dwin.du.entity.receipt.Request.SetSettledRequest;
+import com.dwin.du.entity.receipt.Request.SetTotalPriceRequest;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +18,7 @@ public class ReceiptService {
     private final UserRepository userRepository;
     private final ReceiptRepository receiptRepository;
 
-    public ResponseEntity<?> addReceipt(ReceiptDto request, String username) {
+    public ResponseEntity<?> addReceipt(AddEditReceiptRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -33,7 +36,7 @@ public class ReceiptService {
             return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editReceipt(int receiptId, ReceiptDto request, String username) {
+    public ResponseEntity<?> editReceipt(int receiptId, AddEditReceiptRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -73,7 +76,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setTotalAmount(int receiptId, ReceiptDto request, String username) {
+    public ResponseEntity<?> setTotalPrice(int receiptId, SetTotalPriceRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -93,7 +96,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setIsSettled(int receiptId, ReceiptDto request, String username) {
+    public ResponseEntity<?> setIsSettled(int receiptId, SetSettledRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -107,7 +110,7 @@ public class ReceiptService {
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        receipt.setSettled(request.isSettled());
+        receipt.setSettled(request.isSettled);
         receiptRepository.save(receipt);
 
         return ResponseEntity.ok().build();

@@ -1,5 +1,8 @@
 package com.dwin.du.entity.person_product;
 
+import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
+import com.dwin.du.entity.product.Request.AddProductRequest;
+import com.dwin.du.entity.receipt.Request.SetSettledRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +22,7 @@ public class PersonProductController {
 
     @PostMapping("/product/{productId}/person-product/add")
     @Operation(summary = "Add person to product", description = "Associates a person with a specific product.")
-    public ResponseEntity<?> addPersonProduct(@PathVariable int productId, @RequestBody PersonProductDto request){
+    public ResponseEntity<?> addPersonProduct(@PathVariable int productId, @RequestBody AddPersonProductRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.addPersonProduct(request, productId, currentUsername);
@@ -35,7 +38,7 @@ public class PersonProductController {
 
     @PutMapping("/person-product/set-settled/{personProductId}")
     @Operation(summary = "Set person-product as settled", description = "Marks a person-product association as settled.")
-    public ResponseEntity<?> setIsSettled(@PathVariable int personProductId, @RequestBody PersonProductDto request){
+    public ResponseEntity<?> setIsSettled(@PathVariable int personProductId, @RequestBody SetSettledRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.setIsSettled(personProductId, request, currentUsername);

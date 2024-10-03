@@ -104,7 +104,7 @@ namespace DivvyUp_Impl_Maui.Service
 
                 var data = new
                 {
-                    settled = isSettled
+                    isSettled = isSettled
                 };
 
                 var url = _url.SetSettledReceipt.Replace(Route.ID, receiptId.ToString());

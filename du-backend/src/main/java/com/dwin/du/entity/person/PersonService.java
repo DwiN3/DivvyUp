@@ -1,5 +1,8 @@
 package com.dwin.du.entity.person;
 
+import com.dwin.du.entity.person.Request.AddEditPersonRequest;
+import com.dwin.du.entity.person.Request.SetReceiptsCountsRequest;
+import com.dwin.du.entity.person.Request.SetTotalAmountRequest;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +20,7 @@ public class PersonService {
     private final UserRepository userRepository;
     private final PersonRepository personRepository;
 
-    public ResponseEntity<?> addPerson(PersonDto request, String username) {
+    public ResponseEntity<?> addPerson(AddEditPersonRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -36,7 +39,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editPerson(int personId, PersonDto request, String username) {
+    public ResponseEntity<?> editPerson(int personId, AddEditPersonRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -83,7 +86,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setReceiptsCounts(int personId, PersonDto request, String username) {
+    public ResponseEntity<?> setReceiptsCounts(int personId, SetReceiptsCountsRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -103,7 +106,7 @@ public class PersonService {
     }
 
 
-    public ResponseEntity<?> setTotalAmount(int personId, PersonDto request, String username) {
+    public ResponseEntity<?> setTotalAmount(int personId, SetTotalAmountRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
