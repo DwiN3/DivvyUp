@@ -1,4 +1,4 @@
-package com.dwin.du.entity.person.Response;
+package com.dwin.du.entity.person;
 
 import lombok.Builder;
 import lombok.Data;
@@ -11,4 +11,5 @@ public class PersonDto {
     private String surname;
     private int receiptsCount;
     private Double totalAmount;
+    private Double unpaidAmount;
 }

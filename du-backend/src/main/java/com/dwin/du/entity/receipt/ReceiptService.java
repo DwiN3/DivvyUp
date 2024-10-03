@@ -1,15 +1,8 @@
 package com.dwin.du.entity.receipt;
 
-import com.dwin.du.entity.person.Person;
-import com.dwin.du.entity.person.PersonRepository;
-import com.dwin.du.entity.person_product.PersonProduct;
-import com.dwin.du.entity.person_product.PersonProductRepository;
-import com.dwin.du.entity.product.Product;
-import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Request.AddReceiptRequest;
 import com.dwin.du.entity.receipt.Request.SetIsSettledRequest;
 import com.dwin.du.entity.receipt.Request.SetTotalAmountReceiptRequest;
-import com.dwin.du.entity.receipt.Response.ReceiptDto;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ReceiptService {
 
-    private final ReceiptRepository receiptRepository;
     private final UserRepository userRepository;
-    private final ProductRepository productRepository;
-    private final PersonProductRepository personProductRepository;
-    private final PersonRepository personRepository;
+    private final ReceiptRepository receiptRepository;
 
     public ResponseEntity<?> addReceipt(AddReceiptRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -83,19 +72,6 @@ public class ReceiptService {
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        List<Product> products = productRepository.findByReceipt(receipt);
-
-        Set<Person> involvedPersons = new HashSet<>();
-        for (Product product : products) {
-            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-            involvedPersons.addAll(
-                    personProducts.stream().map(PersonProduct::getPerson).collect(Collectors.toSet())
-            );
-
-            personProductRepository.deleteAll(personProducts);
-        }
-
-        productRepository.deleteAll(products);
         receiptRepository.delete(receipt);
 
         return ResponseEntity.ok().build();
@@ -137,18 +113,6 @@ public class ReceiptService {
 
         receipt.setSettled(request.isSettled());
         receiptRepository.save(receipt);
-
-        List<Product> products = productRepository.findByReceipt(receipt);
-        for (Product product : products) {
-            product.setSettled(request.isSettled());
-            productRepository.save(product);
-
-            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-            for (PersonProduct personProduct : personProducts) {
-                personProduct.setSettled(request.isSettled());
-                personProductRepository.save(personProduct);
-            }
-        }
 
         return ResponseEntity.ok().build();
     }

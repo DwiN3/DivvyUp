@@ -1,4 +1,4 @@
-package com.dwin.du.entity.receipt.Response;
+package com.dwin.du.entity.receipt;
 
 import lombok.Builder;
 import lombok.Data;

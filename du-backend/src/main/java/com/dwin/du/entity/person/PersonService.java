@@ -3,7 +3,6 @@ package com.dwin.du.entity.person;
 import com.dwin.du.entity.person.Request.AddPersonRequest;
 import com.dwin.du.entity.person.Request.SetPersonReceiptsCountsRequest;
 import com.dwin.du.entity.person.Request.SetTotalAmountReceiptRequest;
-import com.dwin.du.entity.person.Response.PersonDto;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +34,7 @@ public class PersonService {
                 .surname(request.getSurname())
                 .receiptsCount(0)
                 .totalAmount(0.0)
+                .unpaidAmount(0.0)
                 .build();
         personRepository.save(person);
         return ResponseEntity.ok().build();
@@ -146,6 +146,7 @@ public class PersonService {
                 .surname(person.getSurname())
                 .receiptsCount(person.getReceiptsCount())
                 .totalAmount(person.getTotalAmount())
+                .unpaidAmount(person.getUnpaidAmount())
                 .build();
 
         return ResponseEntity.ok(response);

@@ -1,4 +1,4 @@
-package com.dwin.du.entity.product.Response;
+package com.dwin.du.entity.product;
 
 import lombok.Builder;
 import lombok.Data;

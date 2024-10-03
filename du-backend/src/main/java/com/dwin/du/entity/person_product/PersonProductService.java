@@ -3,7 +3,6 @@ package com.dwin.du.entity.person_product;
 import com.dwin.du.entity.person.Person;
 import com.dwin.du.entity.person.PersonRepository;
 import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
-import com.dwin.du.entity.person_product.Response.PersonProductDto;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Request.SetIsSettledRequest;
@@ -23,9 +22,9 @@ import java.util.Optional;
 public class PersonProductService {
 
     private final UserRepository userRepository;
+    private final PersonRepository personRepository;
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
-    private final PersonRepository personRepository;
 
     public ResponseEntity<?> addPersonProduct(AddPersonProductRequest request, int productId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -140,7 +139,6 @@ public class PersonProductService {
         PersonProduct personProduct = optionalPersonProduct.get();
         if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(personProduct.getProduct());
 
