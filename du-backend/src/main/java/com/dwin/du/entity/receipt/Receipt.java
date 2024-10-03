@@ -22,14 +22,14 @@ public class Receipt {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "receipt_name", nullable = false)
-    private String receiptName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "date")
     private Date date;
 
-    @Column(name = "total_amount")
-    private Double totalAmount;
+    @Column(name = "total_price")
+    private Double totalPrice;
 
     @Column(name = "is_settled")
     private boolean isSettled;

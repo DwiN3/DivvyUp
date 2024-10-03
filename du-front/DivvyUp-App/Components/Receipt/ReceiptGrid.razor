@@ -43,9 +43,9 @@
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@receipt.settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ReceiptDto.receiptName)" Title="Nazwa" Width="30%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.name)" Title="Nazwa" Width="30%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="receipt">
-                <RadzenTextBox @bind-value="@receipt.receiptName" Style="width: 100%;"/>
+                <RadzenTextBox @bind-value="@receipt.name" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >

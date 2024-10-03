@@ -28,7 +28,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 if (receipt == null)
                     throw new InvalidOperationException("Nie mozna dodać pustego rachunku");
-                if (receipt.receiptName.Equals(string.Empty))
+                if (receipt.name.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna dodać rachunku bez nazwy");
 
                 var url = _url.AddReceipt;
@@ -53,7 +53,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 if (receipt == null)
                     throw new InvalidOperationException("Nie mozna edytować pustego rachunku");
-                if (receipt.receiptName.Equals(string.Empty))
+                if (receipt.name.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna edytować rachunku bez nazwy");
 
                 var url = _url.EditReceipt.Replace(Route.ID, receipt.id.ToString());

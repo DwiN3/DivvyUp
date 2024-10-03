@@ -11,7 +11,7 @@ namespace DivvyUp_Shared.Dto
         public double partOfPrice { get; set; }
         public int quantity { get; set; }
         public int maxQuantity { get; set; }
-        public bool isCompensation { get; set; }
+        public bool compensation { get; set; }
         public bool settled { get; set; }
 
         public PersonProductDto()
@@ -19,14 +19,14 @@ namespace DivvyUp_Shared.Dto
             id = 0;
             productId = 0;
             personId = 0;
-            quantity = 0;
+            quantity = 1;
             maxQuantity = 1;
             partOfPrice = 0;
-            isCompensation = false;
+            compensation = false;
             settled = false;
         }
 
-        public PersonProductDto(int id, int productId, int personId, double partOfPrice, int quantity, int maxQuantity, bool isCompensation, bool settled)
+        public PersonProductDto(int id, int productId, int personId, double partOfPrice, int quantity, int maxQuantity, bool compensation, bool settled)
         {
             this.id = id;
             this.productId = productId;
@@ -34,7 +34,7 @@ namespace DivvyUp_Shared.Dto
             this.partOfPrice = partOfPrice;
             this.quantity = quantity;
             this.maxQuantity = maxQuantity;
-            this.isCompensation = isCompensation;
+            this.compensation = compensation;
             this.settled = settled;
         }
     }

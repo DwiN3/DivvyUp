@@ -36,12 +36,11 @@ public class ProductService {
 
         Product product = Product.builder()
                 .receipt(receipt)
-                .productName(request.getProductName())
+                .name(request.getName())
                 .price(request.getPrice())
-                .packagePrice(request.getPackagePrice())
                 .divisible(request.isDivisible())
                 .maxQuantity(request.getMaxQuantity())
-                .compensationAmount(0)
+                .compensationPrice(0)
                 .isSettled(receipt.isSettled())
                 .build();
 
@@ -112,10 +111,9 @@ public class ProductService {
         ProductDto response = ProductDto.builder()
                 .id(product.getId())
                 .receiptId(product.getReceipt().getId())
-                .productName(product.getProductName())
+                .name(product.getName())
                 .price(product.getPrice())
-                .compensationAmount(product.getCompensationAmount())
-                .packagePrice(product.getPackagePrice())
+                .compensationPrice(product.getCompensationPrice())
                 .divisible(product.isDivisible())
                 .maxQuantity(product.getMaxQuantity())
                 .isSettled(product.isSettled())
@@ -139,15 +137,15 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         List<Product> products = productRepository.findByReceipt(optionalReceipt.get());
+
         List<ProductDto> responseList = new ArrayList<>();
         for (Product product : products) {
             ProductDto response = ProductDto.builder()
                     .id(product.getId())
                     .receiptId(product.getReceipt().getId())
-                    .productName(product.getProductName())
+                    .name(product.getName())
                     .price(product.getPrice())
-                    .compensationAmount(product.getCompensationAmount())
-                    .packagePrice(product.getPackagePrice())
+                    .compensationPrice(product.getCompensationPrice())
                     .divisible(product.isDivisible())
                     .maxQuantity(product.getMaxQuantity())
                     .isSettled(product.isSettled())

@@ -24,7 +24,8 @@
         public readonly string AddReceipt = $"{BaseUrl}/receipt/add";
         public readonly string EditReceipt = $"{BaseUrl}/receipt/edit/{ID}";
         public readonly string RemoveReceipt = $"{BaseUrl}/receipt/remove/{ID}";
-        public readonly string SetSettledReceipt = $"{BaseUrl}/receipt/set-is-settled/{ID}";
+        public readonly string SetSettledReceipt = $"{BaseUrl}/receipt/set-settled/{ID}";
+        public readonly string SetTotalPriceReceipt = $"{BaseUrl}/receipt/set-total-price/{ID}";
         public readonly string GetReceipt = $"{BaseUrl}/receipt/{ID}";
         public readonly string GetReceipts = $"{BaseUrl}/receipt";
 
@@ -32,15 +33,16 @@
         public readonly string AddProduct = $"{BaseUrl}/receipt/{ID}/product/add";
         public readonly string EditProduct = $"{BaseUrl}/product/edit/{ID}";
         public readonly string RemoveProduct = $"{BaseUrl}/product/remove/{ID}";
-        public readonly string SetSettledProduct = $"{BaseUrl}/product/set-is-settled/{ID}";
+        public readonly string SetSettledProduct = $"{BaseUrl}/product/set-settled/{ID}";
+        public readonly string SetCompensationPriceProduct = $"{BaseUrl}/product/set-compensation-price/{ID}";
         public readonly string GetProduct = $"{BaseUrl}/product/{ID}";
         public readonly string GetProducts = $"{BaseUrl}/receipt/{ID}/product";
 
         // Person Product
         public readonly string AddPersonProduct = $"{BaseUrl}/product/{ID}/person-product/add";
         public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/remove/{ID}";
-        public readonly string SetSettledPersonProduct = $"{BaseUrl}/receipt/set-is-settled/{ID}";
-        public readonly string SetCompensationPersonProduct = $"{BaseUrl}/receipt/set-is-settled/{ID}";
+        public readonly string SetSettledPersonProduct = $"{BaseUrl}/receipt/set-settled/{ID}";
+        public readonly string SetCompensationPersonProduct = $"{BaseUrl}/receipt/set-compensation/{ID}";
         public readonly string GetPersonProduct = $"{BaseUrl}/person-product/{ID}";
         public readonly string GetPersonProducts = $"{BaseUrl}/product/{ID}/person-product";
     }

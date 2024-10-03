@@ -27,7 +27,7 @@ public class ProductController {
         return productService.removeProduct(productId, currentUsername);
     }
 
-    @PutMapping("/product/set-is-settled/{productId}")
+    @PutMapping("/product/set-settled/{productId}")
     public ResponseEntity<?> setIsSettled(@PathVariable int productId, @RequestBody ProductDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();

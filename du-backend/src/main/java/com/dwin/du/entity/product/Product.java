@@ -19,14 +19,11 @@ public class Product {
     @JoinColumn(name = "receipt_id")
     private Receipt receipt;
 
-    @Column(name = "product_name", nullable = false)
-    private String productName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "price", nullable = false)
     private Double price;
-
-    @Column(name = "package_price")
-    private double packagePrice;
 
     @Column(name = "divisible")
     private boolean divisible;
@@ -34,8 +31,8 @@ public class Product {
     @Column(name = "max_quantity")
     private int maxQuantity;
 
-    @Column(name = "compensation_amount")
-    private double compensationAmount;
+    @Column(name = "compensation_price")
+    private double compensationPrice;
 
     @Column(name = "is_settled")
     private boolean isSettled;

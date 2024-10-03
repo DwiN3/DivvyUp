@@ -24,9 +24,9 @@ public class ReceiptService {
             User user = userRepository.findByUsername(username).get();
             Receipt receipt = Receipt.builder()
                     .user(user)
-                    .receiptName(request.getReceiptName())
+                    .name(request.getName())
                     .date(request.getDate())
-                    .totalAmount(0.0)
+                    .totalPrice(0.0)
                     .isSettled(false)
                     .build();
             receiptRepository.save(receipt);
@@ -47,7 +47,7 @@ public class ReceiptService {
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        receipt.setReceiptName(request.getReceiptName());
+        receipt.setName(request.getName());
         receipt.setDate(request.getDate());
         receiptRepository.save(receipt);
 
@@ -87,7 +87,7 @@ public class ReceiptService {
         if (!receipt.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        receipt.setTotalAmount(request.getTotalAmount());
+        receipt.setTotalPrice(request.getTotalPrice());
         receiptRepository.save(receipt);
 
         return ResponseEntity.ok().build();
@@ -129,9 +129,9 @@ public class ReceiptService {
 
         Receipt response = Receipt.builder()
                 .id(receipt.getId())
-                .receiptName(receipt.getReceiptName())
+                .name(receipt.getName())
                 .date(receipt.getDate())
-                .totalAmount(receipt.getTotalAmount())
+                .totalPrice(receipt.getTotalPrice())
                 .isSettled(receipt.isSettled())
                 .user(receipt.getUser())
                 .build();
@@ -150,9 +150,9 @@ public class ReceiptService {
         for (Receipt receipt : receipts) {
             ReceiptDto response = ReceiptDto.builder()
                     .id(receipt.getId())
-                    .receiptName(receipt.getReceiptName())
+                    .name(receipt.getName())
                     .date(receipt.getDate())
-                    .totalAmount(receipt.getTotalAmount())
+                    .totalPrice(receipt.getTotalPrice())
                     .isSettled(receipt.isSettled())
                     .build();
             responseList.add(response);

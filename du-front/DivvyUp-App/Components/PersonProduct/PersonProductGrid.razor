@@ -42,12 +42,12 @@
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonProductDto.isCompensation)" Title="Wyrównanie" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonProductDto.compensation)" Title="Wyrównanie" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                <RadzenCheckBox class="button" @bind-Value="@personProduct.isCompensation" Change="@(async (bool Check) => await ChangeSettled(personProduct.id, personProduct.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@personProduct.compensation" Change="@(async (bool Check) => await ChangeSettled(personProduct.id, personProduct.settled))" />
             </Template>
             <EditTemplate Context="personProduct">
-                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.isCompensation" ReadOnly="true" />
+                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.compensation" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.quantity)" Title="Ilośc" Width="7%" TextAlign="TextAlign.Center" Frozen="true">

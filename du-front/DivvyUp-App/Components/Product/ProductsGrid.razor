@@ -53,9 +53,9 @@
                 <RadzenCheckBox class="button" @bind-Value="@product.divisible" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.productName)" Title="Nazwa" Width="25%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.name)" Title="Nazwa" Width="25%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="product">
-                <RadzenTextBox @bind-value="@product.productName" Style="width: 100%;" />
+                <RadzenTextBox @bind-value="@product.name" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ProductDto.price)" Title="Kwota" Width="15%" TextAlign="TextAlign.Start" Frozen="true">
@@ -90,11 +90,11 @@
                 }
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.compensationAmount)" Title="Wyrównanie" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.compensationPrice)" Title="Wyrównanie" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
                 @if (product.divisible)
                 {
-                    @product.compensationAmount
+                    @product.compensationPrice
                 }
                 else
                 {

@@ -33,7 +33,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 if (product == null)
                     throw new InvalidOperationException("Nie mozna dodać pustego produktu");
-                if (product.productName.Equals(string.Empty))
+                if (product.name.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna dodać productu bez nazwy");
 
                 var url = _url.AddProduct.Replace(Route.ID, product.receiptId.ToString());

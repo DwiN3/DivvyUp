@@ -34,14 +34,14 @@ public class ReceiptController {
         return receiptService.removeReceipt(receiptId, currentUsername);
     }
 
-    @PutMapping("/set-total-amount/{receiptId}")
+    @PutMapping("/set-total-price/{receiptId}")
     public ResponseEntity<?> setTotalAmount(@PathVariable int receiptId, @RequestBody ReceiptDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return receiptService.setTotalAmount(receiptId, request, currentUsername);
     }
 
-    @PutMapping("/set-is-settled/{receiptId}")
+    @PutMapping("/set-settled/{receiptId}")
     public ResponseEntity<?> setIsSettled(@PathVariable int receiptId, @RequestBody ReceiptDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();

@@ -65,12 +65,12 @@ public class PersonProductService {
                 .person(person)
                 .maxQuantity(product.getMaxQuantity())
                 .isSettled(product.isSettled())
+                .isCompensation(request.isCompensation())
                 .build();
 
         if (product.isDivisible()) {
             personProduct.setQuantity(request.getQuantity());
-            double partOfPrice = product.getPrice() * ((double) request.getQuantity() / product.getMaxQuantity());
-            personProduct.setPartOfPrice(partOfPrice);
+            personProduct.setPartOfPrice(request.getPartOfPrice());
         } else {
             personProduct.setQuantity(1);
             personProduct.setPartOfPrice(product.getPrice());

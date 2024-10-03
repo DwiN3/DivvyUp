@@ -28,14 +28,14 @@ public class PersonProductController {
         return personProductService.removePersonProduct(personProductId, currentUsername);
     }
 
-    @PutMapping("/person-product/set-is-settled/{personProductId}")
+    @PutMapping("/person-product/set-settled/{personProductId}")
     public ResponseEntity<?> setIsSettled(@PathVariable int personProductId, @RequestBody PersonProductDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.setIsSettled(personProductId, request, currentUsername);
     }
 
-    @PutMapping("/person-product/set-is-compensation/{personProductId}")
+    @PutMapping("/person-product/set-compensation/{personProductId}")
     public ResponseEntity<?> setIsCompensation(@PathVariable int personProductId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
