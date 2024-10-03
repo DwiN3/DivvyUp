@@ -2,7 +2,7 @@
 {
     public class ReceiptDto
     {
-        public int receiptId { get; set; }
+        public int id { get; set; }
         public int userId { get; set; }
         public string receiptName { get; set; }
         public DateTime date { get; set; }
@@ -11,7 +11,7 @@
 
         public ReceiptDto()
         {
-            receiptId = 0;
+            id = 0;
             userId = 0;
             receiptName = string.Empty;
             date = DateTime.Now;
@@ -19,9 +19,9 @@
             settled = false;
         }
 
-        public ReceiptDto(int receiptId, int userId, string receiptName, DateTime date, double totalAmount, bool settled)
+        public ReceiptDto(int id, int userId, string receiptName, DateTime date, double totalAmount, bool settled)
         {
-            this.receiptId = receiptId;
+            this.id = id;
             this.userId = userId;
             this.receiptName = receiptName;
             this.date = date;

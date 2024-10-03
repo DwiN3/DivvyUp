@@ -29,8 +29,6 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna dodać osoby");
                 if (person.name.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna dodać osoby bez imienia");
-                if (person.surname.Equals(string.Empty))
-                    throw new InvalidOperationException("Nie mozna dodać osoby bez nazwiska");
 
                 var url = _url.AddPerson;
                 var response = await _duHttpClient.PostAsync(url, person);
@@ -56,8 +54,6 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna edytować osoby");
                 if (person.name.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna dodać edytować bez imienia");
-                if (person.surname.Equals(string.Empty))
-                    throw new InvalidOperationException("Nie mozna dodać edytować bez nazwiska");
 
                 var url = _url.EditPerson.Replace(Route.ID, person.id.ToString());
                 var response = await _duHttpClient.PutAsync(url, person);
@@ -126,7 +122,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetTotalPurchaseAmountPerson(int personId, double totalPurchaseAmount)
+        public async Task SetTotalPurchaseAmountPerson(int personId, double totalAmount)
         {
             try
             {
@@ -135,7 +131,7 @@ namespace DivvyUp_Impl_Maui.Service
 
                 var data = new
                 {
-                    totalPurchaseAmount = totalPurchaseAmount
+                    totalAmount = totalAmount
                 };
 
                 var url = _url.SetTotalPurchaseAmountPerson.Replace(Route.ID, personId.ToString());

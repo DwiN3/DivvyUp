@@ -9,6 +9,9 @@
         <RadzenFormField class="input" Text="Hasło">
             <RadzenPassword @bind-Value="@Password"/>
         </RadzenFormField>
+        <RadzenFormField class="input" Text="Powtórz Hasło">
+            <RadzenPassword @bind-Value="@RePassword" />
+        </RadzenFormField>
         <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Stwórz konto" Click="@CreateAccount"/>
         <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Wróć do logowania" Click="@(() => Navigation.NavigateTo("/login"))"/>
     </div>

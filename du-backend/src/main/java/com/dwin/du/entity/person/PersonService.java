@@ -168,6 +168,7 @@ public class PersonService {
                     .surname(person.getSurname())
                     .receiptsCount(person.getReceiptsCount())
                     .totalAmount(person.getTotalAmount())
+                    .unpaidAmount(person.getUnpaidAmount())
                     .build();
             responseList.add(response);
 

@@ -5,7 +5,7 @@ namespace DivvyUp_Shared.Dto
 {
     public class ProductDto
     {
-        public int productId { get; set; }
+        public int id { get; set; }
         public int receiptId { get; set; }
         public string productName { get; set; }
         public double price { get; set; }
@@ -17,7 +17,7 @@ namespace DivvyUp_Shared.Dto
 
         public ProductDto()
         {
-            productId = 0;
+            id = 0;
             receiptId = 0;
             productName = string.Empty;
             compensationAmount = 0;
@@ -26,6 +26,19 @@ namespace DivvyUp_Shared.Dto
             settled = false;
             maxQuantity = 1;
             packagePrice = 0;
+        }
+
+        public ProductDto(int id, int receiptId, string productName, double price, double compensationAmount, bool divisible, bool settled, int maxQuantity, double packagePrice)
+        {
+            this.id = id;
+            this.receiptId = receiptId;
+            this.productName = productName;
+            this.price = price;
+            this.compensationAmount = compensationAmount;
+            this.divisible = divisible;
+            this.settled = settled;
+            this.maxQuantity = maxQuantity;
+            this.packagePrice = packagePrice;
         }
     }
 }

@@ -22,31 +22,40 @@ namespace DivvyUp_App.Components.Register
         private string Username { get; set; }
         private string Email { get; set; }
         private string Password { get; set; }
+        private string RePassword { get; set; }
 
 
         private async Task CreateAccount()
         {
-            try
+            if (Password.Equals(RePassword))
             {
-                UserDto user = new UserDto
+                try
                 {
-                    username = Username,
-                    email = Email,
-                    password = Password
-                };
-                await AuthService.Register(user);
+                    UserDto user = new UserDto
+                    {
+                        username = Username,
+                        email = Email,
+                        password = Password
+                    };
+                    await AuthService.Register(user);
+                    AlertService.ShowAlert("Pomyślnie utworzono użytkownika", AlertStyle.Success);
+                }
+                catch (HttpResponseException ex)
+                {
+                    var message = RCR.ReadRegister(ex.StatusCode);
+                    AlertService.ShowAlert(message, AlertStyle.Danger);
+                }
+                catch (HttpRequestException)
+                {
+                    AlertService.ShowAlert("Błąd połączenia z serwerem", AlertStyle.Warning);
+                }
+                catch (Exception)
+                {
+                }
             }
-            catch (HttpResponseException ex)
+            else
             {
-                var message = RCR.ReadRegister(ex.StatusCode);
-                AlertService.ShowAlert(message, AlertStyle.Danger);
-            }
-            catch (HttpRequestException)
-            {
-                AlertService.ShowAlert("Błąd połączenia z serwerem", AlertStyle.Warning);
-            }
-            catch (Exception)
-            {
+                AlertService.ShowAlert("Hasła są różne", AlertStyle.Danger);
             }
         }
     }

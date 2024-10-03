@@ -10,6 +10,7 @@ namespace DivvyUp_Impl_Maui.Service
 
         public void ShowAlert(string message, AlertStyle style)
         {
+            CloseAlert();
             OnAlert?.Invoke(message, style);
         }
 
