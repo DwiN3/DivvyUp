@@ -59,7 +59,7 @@
                 {
                     personProduct.quantity = CountLastPart();
                 }
-                <RadzenNumeric @bind-Value="@personProduct.quantity" Min="1" />
+                <RadzenNumeric @bind-Value="@personProduct.quantity" Min="1" Max="CountLastPart()" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.partOfPrice)" Title="Cena" Width="7%" TextAlign="TextAlign.Center" Frozen="true">

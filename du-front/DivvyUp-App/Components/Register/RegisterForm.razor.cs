@@ -39,6 +39,7 @@ namespace DivvyUp_App.Components.Register
                     };
                     await AuthService.Register(user);
                     AlertService.ShowAlert("Pomyślnie utworzono użytkownika", AlertStyle.Success);
+                    Navigation.NavigateTo("/login");
                 }
                 catch (HttpResponseException ex)
                 {

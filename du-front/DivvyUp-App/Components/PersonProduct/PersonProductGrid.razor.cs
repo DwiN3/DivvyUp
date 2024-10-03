@@ -140,10 +140,13 @@ namespace DivvyUp_App.Components.PersonProduct
         private int CountLastPart()
         {
             int lastParts = Product.maxQuantity;
-            
-            foreach (var personProduct in PersonProducts)
-                lastParts -= personProduct.quantity;
 
+            foreach (var personProduct in PersonProducts)
+            {
+                if(personProduct.id != 0)
+                    lastParts -= personProduct.quantity;
+            }
+   
             return lastParts;
         }
     }

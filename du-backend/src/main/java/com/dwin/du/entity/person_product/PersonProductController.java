@@ -17,48 +17,48 @@ public class PersonProductController {
 
     private final PersonProductService personProductService;
 
-    @Operation(summary = "Add person to product", description = "Associates a person with a specific product.")
     @PostMapping("/product/{productId}/person-product/add")
+    @Operation(summary = "Add person to product", description = "Associates a person with a specific product.")
     public ResponseEntity<?> addPersonProduct(@PathVariable int productId, @RequestBody PersonProductDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.addPersonProduct(request, productId, currentUsername);
     }
 
-    @Operation(summary = "Remove person-product association", description = "Removes an association between a person and a product.")
     @DeleteMapping("/person-product/remove/{personProductId}")
+    @Operation(summary = "Remove person-product association", description = "Removes an association between a person and a product.")
     public ResponseEntity<?> removePersonProduct(@PathVariable int personProductId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.removePersonProduct(personProductId, currentUsername);
     }
 
-    @Operation(summary = "Set person-product as settled", description = "Marks a person-product association as settled.")
     @PutMapping("/person-product/set-settled/{personProductId}")
+    @Operation(summary = "Set person-product as settled", description = "Marks a person-product association as settled.")
     public ResponseEntity<?> setIsSettled(@PathVariable int personProductId, @RequestBody PersonProductDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.setIsSettled(personProductId, request, currentUsername);
     }
 
-    @Operation(summary = "Set person-product as compensation", description = "Marks a person-product association as a compensation.")
     @PutMapping("/person-product/set-compensation/{personProductId}")
+    @Operation(summary = "Set person-product as compensation", description = "Marks a person-product association as a compensation.")
     public ResponseEntity<?> setIsCompensation(@PathVariable int personProductId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.setIsCompensation(personProductId, currentUsername);
     }
 
-    @Operation(summary = "Get person-product association", description = "Retrieves a person-product association by ID.")
     @GetMapping("/person-product/{personProductId}")
+    @Operation(summary = "Get person-product association", description = "Retrieves a person-product association by ID.")
     public ResponseEntity<?> getPersonProduct(@PathVariable int personProductId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.getPersonProductById(personProductId, currentUsername);
     }
 
-    @Operation(summary = "Get all person-product associations for a product", description = "Retrieves all person-product associations for a specific product.")
     @GetMapping("/product/{productId}/person-product")
+    @Operation(summary = "Get all person-product associations for a product", description = "Retrieves all person-product associations for a specific product.")
     public ResponseEntity<?> getPersonProducts(@PathVariable int productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();

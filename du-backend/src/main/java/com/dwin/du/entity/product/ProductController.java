@@ -17,48 +17,48 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @Operation(summary = "Add a product to a receipt", description = "Adds a new product to a specific receipt.")
     @PostMapping("/receipt/{receiptID}/product/add")
+    @Operation(summary = "Add a product to a receipt", description = "Adds a new product to a specific receipt.")
     public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptID, @RequestBody ProductDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.addProductToReceipt(request, receiptID, currentUsername);
     }
 
-    @Operation(summary = "Edit a product", description = "Edits an existing product by ID.")
     @PutMapping("/product/edit/{productId}")
+    @Operation(summary = "Edit a product", description = "Edits an existing product by ID.")
     public ResponseEntity<?> editProduct(@PathVariable int productId, @RequestBody ReceiptDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.editProduct(productId, request, currentUsername);
     }
 
-    @Operation(summary = "Remove a product", description = "Removes a product by ID.")
     @DeleteMapping("/product/remove/{productId}")
+    @Operation(summary = "Remove a product", description = "Removes a product by ID.")
     public ResponseEntity<?> removeProduct(@PathVariable int productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.removeProduct(productId, currentUsername);
     }
 
-    @Operation(summary = "Mark product as settled", description = "Marks a product as settled.")
     @PutMapping("/product/set-settled/{productId}")
+    @Operation(summary = "Mark product as settled", description = "Marks a product as settled.")
     public ResponseEntity<?> setIsSettled(@PathVariable int productId, @RequestBody ProductDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.setIsSettled(productId, request, currentUsername);
     }
 
-    @Operation(summary = "Get a product", description = "Retrieves a product by ID.")
     @GetMapping("/product/{productId}")
+    @Operation(summary = "Get a product", description = "Retrieves a product by ID.")
     public ResponseEntity<?> getProduct(@PathVariable int productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return productService.getProductById(productId, currentUsername);
     }
 
-    @Operation(summary = "Get all products in a receipt", description = "Retrieves all products within a specific receipt.")
     @GetMapping("/receipt/{receiptID}/product")
+    @Operation(summary = "Get all products in a receipt", description = "Retrieves all products within a specific receipt.")
     public ResponseEntity<?> getProducts(@PathVariable int receiptID) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
