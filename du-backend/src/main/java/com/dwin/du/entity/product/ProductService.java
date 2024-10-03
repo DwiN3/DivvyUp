@@ -122,7 +122,7 @@ public class ProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> showProductById(int productId, String username) {
+    public ResponseEntity<?> getProductById(int productId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -150,7 +150,7 @@ public class ProductService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<?> showAllProductsFromReceipt(int receiptId, String username) {
+    public ResponseEntity<?> getProductsFromReceipt(int receiptId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

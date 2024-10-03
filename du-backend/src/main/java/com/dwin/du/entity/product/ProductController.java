@@ -37,17 +37,17 @@ public class ProductController {
         return productService.setIsSettled(productId, request, currentUsername);
     }
 
-    @GetMapping("/product/show/{productId}")
-    public ResponseEntity<?> showProduct(@PathVariable int productId) {
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<?> getProduct(@PathVariable int productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return productService.showProductById(productId, currentUsername);
+        return productService.getProductById(productId, currentUsername);
     }
 
-    @GetMapping("/receipt/{receiptID}/product/show-all")
-    public ResponseEntity<?> showProducts(@PathVariable int receiptID) {
+    @GetMapping("/receipt/{receiptID}/product")
+    public ResponseEntity<?> getProducts(@PathVariable int receiptID) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return productService.showAllProductsFromReceipt(receiptID, currentUsername);
+        return productService.getProductsFromReceipt(receiptID, currentUsername);
     }
 }

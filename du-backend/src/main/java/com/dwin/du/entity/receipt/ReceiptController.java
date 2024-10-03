@@ -51,17 +51,17 @@ public class ReceiptController {
         return receiptService.setIsSettled(receiptId, request, currentUsername);
     }
 
-    @GetMapping("/show/{receiptId}")
-    public ResponseEntity<?> showReceipt(@PathVariable int receiptId) {
+    @GetMapping("/{receiptId}")
+    public ResponseEntity<?> getReceipt(@PathVariable int receiptId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.showReceipt(receiptId, currentUsername);
+        return receiptService.getReceiptById(receiptId, currentUsername);
     }
 
-    @GetMapping("/show-all")
-    public ResponseEntity<?> showReceipts(){
+    @GetMapping("")
+    public ResponseEntity<?> getReceipts(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.showReceipts(currentUsername);
+        return receiptService.getReceipts(currentUsername);
     }
 }

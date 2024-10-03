@@ -159,7 +159,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> showReceipt(int receiptId, String username) {
+    public ResponseEntity<?> getReceiptById(int receiptId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -184,7 +184,7 @@ public class ReceiptService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<?> showReceipts(String username) {
+    public ResponseEntity<?> getReceipts(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

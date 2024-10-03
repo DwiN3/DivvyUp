@@ -44,17 +44,17 @@ public class PersonProductController {
         return personProductService.setIsCompensation(personProductId, currentUsername);
     }
 
-    @GetMapping("/person-product/show/{personProductId}")
-    public ResponseEntity<?> showPersonProduct(@PathVariable int personProductId) {
+    @GetMapping("/person-product/{personProductId}")
+    public ResponseEntity<?> getPersonProduct(@PathVariable int personProductId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personProductService.showPersonProduct(personProductId, currentUsername);
+        return personProductService.getPersonProductById(personProductId, currentUsername);
     }
 
-    @GetMapping("/product/{productId}/person-product/show-all")
-    public ResponseEntity<?> showPersonProducts(@PathVariable int productId) {
+    @GetMapping("/product/{productId}/person-product")
+    public ResponseEntity<?> getPersonProducts(@PathVariable int productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personProductService.showPersonProducts(productId, currentUsername);
+        return personProductService.getProductPersonProductsFromProduct(productId, currentUsername);
     }
 }

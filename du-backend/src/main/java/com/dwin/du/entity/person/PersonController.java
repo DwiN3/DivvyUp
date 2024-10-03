@@ -55,17 +55,17 @@ public class PersonController {
         return personService.setTotalPurchaseAmount(personId, request, currentUsername);
     }
 
-    @GetMapping("/show/{personId}")
-    public ResponseEntity<?> showPerson(@PathVariable int personId) {
+    @GetMapping("/{personId}")
+    public ResponseEntity<?> getPerson(@PathVariable int personId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.showPerson(personId, currentUsername);
+        return personService.getPersonById(personId, currentUsername);
     }
 
-    @GetMapping("/show-all")
-    public ResponseEntity<?> showPersons(){
+    @GetMapping("")
+    public ResponseEntity<?> getPersons(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.showPersons(currentUsername);
+        return personService.getPersons(currentUsername);
     }
 }

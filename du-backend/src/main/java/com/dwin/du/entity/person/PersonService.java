@@ -7,7 +7,6 @@ import com.dwin.du.entity.person.Response.ShowPersonResponse;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.ProductRepository;
-import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.security.user.User;
 import com.dwin.du.security.user.UserRepository;
@@ -136,7 +135,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> showPerson(int personId, String username) {
+    public ResponseEntity<?> getPersonById(int personId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -161,7 +160,7 @@ public class PersonService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<?> showPersons(String username) {
+    public ResponseEntity<?> getPersons(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
