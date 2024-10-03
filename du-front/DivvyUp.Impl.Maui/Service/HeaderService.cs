@@ -22,7 +22,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             var relativePath = new Uri(url).AbsolutePath;
 
-            if (relativePath.Contains("/receipt/") && relativePath.Contains("/products"))
+            if (relativePath.Contains("/receipt/") && relativePath.Contains("/items"))
                 return "Rachunek " + relativePath.Split('/')[2];
             
             else if (MenuItems.ContainsKey(relativePath))

@@ -10,40 +10,40 @@ using System.Text;
 using System.Threading.Tasks;
 using Radzen;
 
-namespace DivvyUp_App.Components.PersonProduct
+namespace DivvyUp_App.Components.PersonItemShare
 {
-    partial class PersonProductGrid
+    partial class PersonItemShareGrid
     {
         [Inject]
         private IPersonService PersonService { get; set; }
         [Inject]
-        private IPersonProductService PersonProductService { get; set; }
+        private IPersonItemShareService PersonItemShareService { get; set; }
         [Inject]
-        private IProductService ProductService { get; set; }
+        private IItemService ItemService { get; set; }
         [Inject]
         private DAlertService AlertService { get; set; }
 
         [Parameter]
-        public int ProductId { get; set; }
+        public int ItemId { get; set; }
 
         private List<PersonDto> Persons { get; set; }
-        private List<PersonProductDto> PersonProducts { get; set; }
-        private ProductDto Product { get; set; }
+        private List<PersonItemShareDto> PersonItems { get; set; }
+        private ItemDto Item { get; set; }
 
-        private RadzenDataGrid<PersonProductDto> Grid { get; set; }
+        private RadzenDataGrid<PersonItemShareDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
 
 
         protected override async Task OnInitializedAsync()
         {
             Persons = await PersonService.GetPersons();
-            Product = await ProductService.GetProduct(ProductId);
+            Item = await ItemService.GetItem(ItemId);
             await LoadGrid();
         }
 
         private async Task LoadGrid()
         {
-            PersonProducts = await PersonProductService.GetPersonProducts(ProductId);
+            PersonItems = await PersonItemShareService.GetPersonItemShares(ItemId);
             StateHasChanged();
         }
 
@@ -51,9 +51,9 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             if (CountLastPart() > 0)
             {
-                var personProduct = new PersonProductDto();
-                PersonProducts.Add(personProduct);
-                await Grid.InsertRow(personProduct);
+                var personItem = new PersonItemShareDto();
+                PersonItems.Add(personItem);
+                await Grid.InsertRow(personItem);
             }
             else
             {
@@ -61,22 +61,22 @@ namespace DivvyUp_App.Components.PersonProduct
             }
         }
 
-        private async Task EditRow(PersonProductDto personProduct)
+        private async Task EditRow(PersonItemShareDto personItem)
         {
-            await Grid.EditRow(personProduct);
+            await Grid.EditRow(personItem);
         }
 
-        private void CancelEdit(PersonProductDto personProduct)
+        private void CancelEdit(PersonItemShareDto personItem)
         {
-            Grid.CancelEditRow(personProduct);
+            Grid.CancelEditRow(personItem);
         }
 
-        private async Task SaveRow(PersonProductDto personProduct)
+        private async Task SaveRow(PersonItemShareDto personItem)
         {
             try
             {
-                if (personProduct.id == 0)
-                    await PersonProductService.AddPersonProduct(personProduct, ProductId);
+                if (personItem.id == 0)
+                    await PersonItemShareService.AddPersonItemShare(personItem, ItemId);
             }
             catch (InvalidOperationException)
             {
@@ -90,11 +90,11 @@ namespace DivvyUp_App.Components.PersonProduct
             }
         }
 
-        private async Task RemoveRow(int personProductId)
+        private async Task RemoveRow(int personItemId)
         {
             try
             {
-                await PersonProductService.RemovePersonProduct(personProductId);
+                await PersonItemShareService.RemovePersonItemShare(personItemId);
             }
             catch (InvalidOperationException)
             {
@@ -108,11 +108,11 @@ namespace DivvyUp_App.Components.PersonProduct
             }
         }
 
-        private async Task ChangeSettled(int personProductId, bool isChecked)
+        private async Task ChangeSettled(int personItemId, bool isChecked)
         {
             try
             {
-                await PersonProductService.SetSettledPersonProduct(personProductId, isChecked);
+                await PersonItemShareService.SetPersonItemShare(personItemId, isChecked);
             }
             catch (InvalidOperationException)
             {
@@ -122,11 +122,11 @@ namespace DivvyUp_App.Components.PersonProduct
             }
         }
 
-        private async Task ChangeCompensation(int personProductId)
+        private async Task ChangeCompensation(int personItemId)
         {
             try
             {
-                await PersonProductService.SetCompensationPersonProduct(personProductId);
+                await PersonItemShareService.SetCompensationPersonItemShare(personItemId);
                 await LoadGrid();
             }
             catch (InvalidOperationException)
@@ -139,10 +139,10 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private int CountLastPart()
         {
-            int lastParts = Product.maxQuantity;
+            int lastParts = Item.maxQuantity;
             
-            foreach (var personProduct in PersonProducts)
-                lastParts -= personProduct.quantity;
+            foreach (var personItem in PersonItems)
+                lastParts -= personItem.quantity;
 
             return lastParts;
         }
