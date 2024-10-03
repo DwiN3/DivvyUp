@@ -402,3 +402,5 @@ FodyWeavers.xsd
 *.sln.iml
 *.cache
 du-front/DivvyUp-App/wwwroot/user/user_data.json
+/du-front/DivvyUp-App/wwwroot/user
+du-front/DivvyUp-App/wwwroot/user/user_data.json

@@ -26,6 +26,10 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui.html")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/webjars/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/rm/auth")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/rm/register")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/rm/validate-token")).permitAll()
