@@ -31,44 +31,44 @@ public class PersonController {
         return personService.addPerson(request, currentUsername);
     }
 
-    @PutMapping("/edit/{personId}")
+    @PutMapping("/edit/{id}")
     @Operation(summary = "Edit a person", description = "Edits an existing person by personId.")
-    public ResponseEntity<?> editPerson(@PathVariable int personId, @RequestBody AddEditPersonRequest request) {
+    public ResponseEntity<?> editPerson(@PathVariable int id, @RequestBody AddEditPersonRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.editPerson(personId, request, currentUsername);
+        return personService.editPerson(id, request, currentUsername);
     }
 
-    @DeleteMapping("/remove/{personId}")
+    @DeleteMapping("/remove/{id}")
     @Operation(summary = "Remove a person", description = "Removes a person by personId.")
-    public ResponseEntity<?> removePerson(@PathVariable int personId) {
+    public ResponseEntity<?> removePerson(@PathVariable int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.removePerson(personId, currentUsername);
+        return personService.removePerson(id, currentUsername);
     }
 
-    @PutMapping("/set-receipts-counts/{personId}")
+    @PutMapping("/set-receipts-counts/{id}")
     @Operation(summary = "Set receipts counts", description = "Sets the receipts counts for a person by personId.")
-    public ResponseEntity<?> setReceiptsCounts(@PathVariable int personId, @RequestBody SetReceiptsCountsRequest request) {
+    public ResponseEntity<?> setReceiptsCounts(@PathVariable int id, @RequestBody SetReceiptsCountsRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.setReceiptsCounts(personId, request, currentUsername);
+        return personService.setReceiptsCounts(id, request, currentUsername);
     }
 
-    @PutMapping("/set-total-amount/{personId}")
+    @PutMapping("/set-total-amount/{id}")
     @Operation(summary = "Set total amount", description = "Sets the total amount for a person by personId.")
-    public ResponseEntity<?> setTotaleAmount(@PathVariable int personId, @RequestBody SetTotalAmountRequest request) {
+    public ResponseEntity<?> setTotaleAmount(@PathVariable int id, @RequestBody SetTotalAmountRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.setTotalAmount(personId, request, currentUsername);
+        return personService.setTotalAmount(id, request, currentUsername);
     }
 
-    @GetMapping("/{personId}")
+    @GetMapping("/{id}")
     @Operation(summary = "Get person by ID", description = "Retrieves a person by their ID.")
-    public ResponseEntity<?> getPerson(@PathVariable int personId) {
+    public ResponseEntity<?> getPerson(@PathVariable int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.getPersonById(personId, currentUsername);
+        return personService.getPersonById(id, currentUsername);
     }
 
     @GetMapping("")

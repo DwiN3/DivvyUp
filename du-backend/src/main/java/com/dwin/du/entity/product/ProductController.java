@@ -20,51 +20,51 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping("/receipt/{receiptID}/product/add")
+    @PostMapping("/receipt/{receiptId}/product/add")
     @Operation(summary = "Add a product to a receipt", description = "Adds a new product to a specific receipt.")
-    public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptID, @RequestBody AddProductRequest request) {
+    public ResponseEntity<?> addProductToReceipt(@PathVariable int receiptId, @RequestBody AddProductRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return productService.addProductToReceipt(request, receiptID, currentUsername);
+        return productService.addProductToReceipt(request, receiptId, currentUsername);
     }
 
-    @PutMapping("/product/edit/{productId}")
+    @PutMapping("/product/edit/{id}")
     @Operation(summary = "Edit a product", description = "Edits an existing product by ID.")
-    public ResponseEntity<?> editProduct(@PathVariable int productId, @RequestBody EditProductRequest request) {
+    public ResponseEntity<?> editProduct(@PathVariable int id, @RequestBody EditProductRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return productService.editProduct(productId, request, currentUsername);
+        return productService.editProduct(id, request, currentUsername);
     }
 
-    @DeleteMapping("/product/remove/{productId}")
+    @DeleteMapping("/product/remove/{id}")
     @Operation(summary = "Remove a product", description = "Removes a product by ID.")
-    public ResponseEntity<?> removeProduct(@PathVariable int productId) {
+    public ResponseEntity<?> removeProduct(@PathVariable int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return productService.removeProduct(productId, currentUsername);
+        return productService.removeProduct(id, currentUsername);
     }
 
-    @PutMapping("/product/set-settled/{productId}")
+    @PutMapping("/product/set-settled/{id}")
     @Operation(summary = "Mark product as settled", description = "Marks a product as settled.")
-    public ResponseEntity<?> setIsSettled(@PathVariable int productId, @RequestBody SetSettledRequest request){
+    public ResponseEntity<?> setIsSettled(@PathVariable int id, @RequestBody SetSettledRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return productService.setIsSettled(productId, request, currentUsername);
+        return productService.setIsSettled(id, request, currentUsername);
     }
 
-    @GetMapping("/product/{productId}")
+    @GetMapping("/product/{id}")
     @Operation(summary = "Get a product", description = "Retrieves a product by ID.")
-    public ResponseEntity<?> getProduct(@PathVariable int productId) {
+    public ResponseEntity<?> getProduct(@PathVariable int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return productService.getProductById(productId, currentUsername);
+        return productService.getProductById(id, currentUsername);
     }
 
-    @GetMapping("/receipt/{receiptID}/product")
+    @GetMapping("/receipt/{receiptId}/product")
     @Operation(summary = "Get all products in a receipt", description = "Retrieves all products within a specific receipt.")
-    public ResponseEntity<?> getProducts(@PathVariable int receiptID) {
+    public ResponseEntity<?> getProducts(@PathVariable int receiptId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return productService.getProductsFromReceipt(receiptID, currentUsername);
+        return productService.getProductsFromReceipt(receiptId, currentUsername);
     }
 }

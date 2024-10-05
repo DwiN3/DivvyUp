@@ -3,6 +3,7 @@ package com.dwin.du.entity.user;
 import com.dwin.du.config.JwtService;
 import com.dwin.du.entity.user.Request.LoginRequest;
 import com.dwin.du.entity.user.Request.RegisterRequest;
+import com.dwin.du.entity.user.Request.RemoveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,7 +78,7 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<?> remove(UserDto request) {
+    public ResponseEntity<?> remove(RemoveRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         Optional<User> optionalUser = repository.findByUsername(currentUsername);

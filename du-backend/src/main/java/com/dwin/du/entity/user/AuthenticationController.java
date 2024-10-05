@@ -2,6 +2,7 @@ package com.dwin.du.entity.user;
 
 import com.dwin.du.entity.user.Request.LoginRequest;
 import com.dwin.du.entity.user.Request.RegisterRequest;
+import com.dwin.du.entity.user.Request.RemoveRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class AuthenticationController {
 
     @DeleteMapping("/remove-account")
     @Operation(summary = "Remove user account", description = "Removes a user account from the system.")
-    public ResponseEntity<?> removeAccount(@RequestBody UserDto request){
+    public ResponseEntity<?> removeAccount(@RequestBody RemoveRequest request){
         ResponseEntity<?> response = service.remove(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
