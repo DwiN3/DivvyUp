@@ -27,7 +27,7 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task AddProduct(ProductDto product)
+        public async Task<ProductDto> AddProduct(ProductDto product)
         {
             try
             {
@@ -38,7 +38,10 @@ namespace DivvyUp_Impl_Maui.Service
 
                 var url = _url.AddProduct.Replace(Route.ID, product.receiptId.ToString());
                 var response = await _duHttpClient.PostAsync(url, product);
-                await EnsureCorrectResponse(response, "Błąd w czasie dodawania produktu");
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ProductDto>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
+                return result;
             }
             catch (InvalidOperationException ex)
             {

@@ -3,6 +3,10 @@ package com.dwin.du.entity.person;
 import com.dwin.du.entity.person.Request.AddEditPersonRequest;
 import com.dwin.du.entity.person.Request.SetReceiptsCountsRequest;
 import com.dwin.du.entity.person.Request.SetTotalAmountRequest;
+import com.dwin.du.entity.person_product.PersonProduct;
+import com.dwin.du.entity.person_product.PersonProductRepository;
+import com.dwin.du.entity.product.ProductRepository;
+import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,7 @@ public class PersonService {
 
     private final UserRepository userRepository;
     private final PersonRepository personRepository;
+    private final PersonProductRepository personProductRepository;
 
     public ResponseEntity<?> addPerson(AddEditPersonRequest request, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -73,14 +78,10 @@ public class PersonService {
         if (!person.getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        // TO DO DO poprawki
-        /*
-        List<Receipt> receipts = receiptRepository.findByUser(person.getUser());
         List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
-        if (!receipts.isEmpty() || !personProducts.isEmpty()) {
+        if (!personProducts.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        */
 
         personRepository.delete(person);
         return ResponseEntity.ok().build();

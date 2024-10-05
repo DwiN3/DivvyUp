@@ -19,8 +19,8 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj produkt" Click="@InsertRow" />
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="@LoadGrid" />
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj produkt" Click="InsertRow" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="LoadGrid" />
         <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="receipt_long" Text="Powrót do rachunków" Click="@(() => { Navigation.NavigateTo("/receipt"); } )" />
     </HeaderTemplate>
     <Columns>
@@ -107,31 +107,28 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Title="Osoby" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                
                 <RadzenButton Text="Osoby" Click="@(async () => { await ManagePerson(product.id); })"></RadzenButton>
-                @*
-                @if (product.divisible)
-                {
-                    <RadzenButton Text="Osoby" Click="@(async () => { await ManagePerson(product.id); })"></RadzenButton>
-                }
-                else
-                {
-
-                    <RadzenDropDownDataGrid
-                        TValue="PersonDto"
-                        @bind-Value="selectedPerson"
-                        Change="@((args) => SetPerson(product, selectedPerson))"
-                        Data="@Persons"
-                        TextProperty="@nameof(PersonDto.name)"
-                        ValueProperty="@nameof(PersonDto.personId)"/>
-
-                }
-            *@
             </Template>
-            <EditTemplate>
-                -
+
+            <EditTemplate Context="product">
+                @if (Persons.Count > 0)
+                {
+                    if (product.divisible && product.id != 0)
+                    {
+                        <RadzenButton Text="Osoby" Click="@(async () => { await ManagePerson(product.id); })"></RadzenButton>
+                    }
+                    else if (!product.divisible)
+                    {
+                        <RadzenDropDownDataGrid TValue="PersonDto"
+                                                Value="SelectedPerson"
+                                                ValueChanged="OnPersonSet"
+                                                Data="@Persons"
+                                                TextProperty="@nameof(PersonDto.name)"/>
+                    }
+                }
             </EditTemplate>
         </RadzenDataGridColumn>
+
     </Columns>
 </RadzenDataGrid>
 

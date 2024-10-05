@@ -1,6 +1,7 @@
 package com.dwin.du.entity.person_product;
 
 import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
+import com.dwin.du.entity.person_product.Request.ChangePersonRequest;
 import com.dwin.du.entity.product.Request.AddProductRequest;
 import com.dwin.du.entity.receipt.Request.SetSettledRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +37,14 @@ public class PersonProductController {
         return personProductService.removePersonProduct(id, currentUsername);
     }
 
+    @PutMapping("/person-product/change-person/{id}")
+    @Operation(summary = "Set person in person-product", description = "Set person in person-product.")
+    public ResponseEntity<?> changePerson(@PathVariable int id, @RequestBody ChangePersonRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personProductService.changePerson(id, request, currentUsername);
+    }
+
     @PutMapping("/person-product/set-settled/{id}")
     @Operation(summary = "Set person-product as settled", description = "Marks a person-product association as settled.")
     public ResponseEntity<?> setIsSettled(@PathVariable int id, @RequestBody SetSettledRequest request){
@@ -66,5 +75,13 @@ public class PersonProductController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.getProductPersonProductsFromProduct(productId, currentUsername);
+    }
+
+    @GetMapping("/person-product")
+    @Operation(summary = "Get all person-product for user", description = "Retrieves all person-product for user.")
+    public ResponseEntity<?> getAllPersonProducts() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personProductService.getAllProductPersonProductsFromProduct(currentUsername);
     }
 }

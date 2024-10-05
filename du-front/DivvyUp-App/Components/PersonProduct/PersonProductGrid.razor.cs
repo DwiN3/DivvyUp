@@ -43,7 +43,7 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task LoadGrid()
         {
-            PersonProducts = await PersonProductService.GetPersonProducts(ProductId);
+            PersonProducts = await PersonProductService.GetPersonProductsFromProduct(ProductId);
             StateHasChanged();
         }
 
@@ -139,15 +139,20 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private int CountLastPart()
         {
-            int lastParts = Product.maxQuantity;
-
-            foreach (var personProduct in PersonProducts)
+            if (Product != null)
             {
-                if(personProduct.id != 0)
-                    lastParts -= personProduct.quantity;
+                int lastParts = Product.maxQuantity;
+
+                foreach (var personProduct in PersonProducts)
+                {
+                    if (personProduct.id != 0)
+                        lastParts -= personProduct.quantity;
+                }
+
+                return lastParts;
             }
-   
-            return lastParts;
+
+            return 0;
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.dwin.du.entity.product;
 
+import com.dwin.du.entity.person_product.PersonProduct;
+import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Request.AddProductRequest;
 import com.dwin.du.entity.product.Request.EditProductRequest;
 import com.dwin.du.entity.receipt.Receipt;
@@ -21,6 +23,7 @@ public class ProductService {
     private final UserRepository userRepository;
     private final ReceiptRepository receiptRepository;
     private final ProductRepository productRepository;
+    private final PersonProductRepository personProductRepository;
 
     public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -54,7 +57,7 @@ public class ProductService {
 
         productRepository.save(product);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(product);
     }
 
     public ResponseEntity<?> editProduct(int productId, EditProductRequest request, String username) {
@@ -91,6 +94,8 @@ public class ProductService {
         if (!product.getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
+        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+        personProductRepository.deleteAll(personProducts);
         productRepository.delete(product);
 
         return ResponseEntity.ok().build();
@@ -113,6 +118,12 @@ public class ProductService {
 
         product.setSettled(request.isSettled);
         productRepository.save(product);
+
+        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+        for (PersonProduct personProduct : personProducts) {
+            personProduct.setSettled(request.isSettled);
+            personProductRepository.save(personProduct);
+        }
 
         return ResponseEntity.ok().build();
     }

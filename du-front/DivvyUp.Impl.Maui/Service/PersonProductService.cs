@@ -73,6 +73,34 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
+        public async Task ChangePersonPersonProduct(int personProductId, int personId)
+        {
+            try
+            {
+                if (personProductId == null)
+                    throw new InvalidOperationException("Nie mozna rozliczyć produktu osoby nie posiadającego id");
+
+                var data = new
+                {
+                    personId = personId
+                };
+
+                var url = _url.SetChangePersonPersonProduct.Replace(Route.ID, personProductId.ToString());
+                var response = await _duHttpClient.PutAsync(url, data);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task SetSettledPersonProduct(int personProductId, bool isSettled)
         {
             try
@@ -147,11 +175,29 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<PersonProductDto>> GetPersonProducts(int productId)
+        public async Task<List<PersonProductDto>> GetPersonProductsFromProduct(int productId)
         {
             try
             {
-                var url = _url.GetPersonProducts.Replace(Route.ID, productId.ToString());
+                var url = _url.GetPersonProductsForProduct.Replace(Route.ID, productId.ToString());
+                var response = await _duHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów osób");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie pobierania listy produktów osób do tabeli: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<PersonProductDto>> GetPersonProducts()
+        {
+            try
+            {
+                var url = _url.GetPersonProducts;
                 var response = await _duHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);
