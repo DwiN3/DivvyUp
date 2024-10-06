@@ -31,7 +31,7 @@ public class PersonController {
         return personService.addPerson(request, currentUsername);
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}/edit")
     @Operation(summary = "Edit a person", description = "Edits an existing person by personId.")
     public ResponseEntity<?> editPerson(@PathVariable int id, @RequestBody AddEditPersonRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -39,7 +39,7 @@ public class PersonController {
         return personService.editPerson(id, request, currentUsername);
     }
 
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping("/{id}/remove")
     @Operation(summary = "Remove a person", description = "Removes a person by personId.")
     public ResponseEntity<?> removePerson(@PathVariable int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -47,7 +47,7 @@ public class PersonController {
         return personService.removePerson(id, currentUsername);
     }
 
-    @PutMapping("/set-receipts-counts/{id}")
+    @PutMapping("/{id}/set-receipts-counts")
     @Operation(summary = "Set receipts counts", description = "Sets the receipts counts for a person by personId.")
     public ResponseEntity<?> setReceiptsCounts(@PathVariable int id, @RequestBody SetReceiptsCountsRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -55,7 +55,7 @@ public class PersonController {
         return personService.setReceiptsCounts(id, request, currentUsername);
     }
 
-    @PutMapping("/set-total-amount/{id}")
+    @PutMapping("/{id}/set-total-amount")
     @Operation(summary = "Set total amount", description = "Sets the total amount for a person by personId.")
     public ResponseEntity<?> setTotaleAmount(@PathVariable int id, @RequestBody SetTotalAmountRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -78,4 +78,21 @@ public class PersonController {
         String currentUsername = authentication.getName();
         return personService.getPersons(currentUsername);
     }
+
+    @GetMapping("/{receiptId}/from-receipt")
+    @Operation(summary = "Get all persons from receipt", description = "Retrieves all persons associated with a specific receipt.")
+    public ResponseEntity<?> getPersonsReceipt(@PathVariable int receiptId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personService.getPersonsFromReceipt(currentUsername, receiptId);
+    }
+
+    @GetMapping("/{productId}/from-product")
+    @Operation(summary = "Get all persons from product", description = "Retrieves all persons associated with a specific product.")
+    public ResponseEntity<?> getPersonsProduct(@PathVariable int productId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personService.getPersonsFromProduct(currentUsername, productId);
+    }
+
 }

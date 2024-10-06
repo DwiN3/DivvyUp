@@ -72,17 +72,11 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.personId)" Title="Osoba" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                @if (Persons != null && Persons.Count > 0)
-                {
-                    PersonDto person = Persons.FirstOrDefault(e => e.id == personProduct.personId);
-                    <div>@(person != null ? person.name : "-")</div>
-                }
-                else
-                {
-                    <div>-</div>
+                @{
+                    var personName = GetPersonName(personProduct.personId);
+                    <div>@personName</div>
                 }
             </Template>
-    
             <EditTemplate Context="personProduct">
                 <RadzenDropDownDataGrid
                     TValue="int"

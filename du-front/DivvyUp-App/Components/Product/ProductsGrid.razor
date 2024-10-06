@@ -53,12 +53,12 @@
                 <RadzenCheckBox class="button" @bind-Value="@product.divisible" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.name)" Title="Nazwa" Width="25%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.name)" Title="Nazwa" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="product">
                 <RadzenTextBox @bind-value="@product.name" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.price)" Title="Kwota" Width="15%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.price)" Title="Kwota" Width="12%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="product">
                 <div style="color: @(product.settled ? "green" : "red")">
                     <b>@(product.price)zł</b>
@@ -105,11 +105,22 @@
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Title="Osoby" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.personNames)" Title="Osoby" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                <RadzenButton Text="Osoby" Click="@(async () => { await ManagePerson(product.id); })"></RadzenButton>
+                @{
+                    string buttonText;
+                    if (string.IsNullOrEmpty(product.personNames))
+                        buttonText = "Osoby";
+                    else
+                        buttonText = product.personNames;
+                }
+                <RadzenButton Click="@(async () => { await ManagePerson(product.id); })" Style="width: 100%;">
+                    @if (!string.IsNullOrEmpty(product.personNames))
+                    {
+                        <div style="font-size: 10px;">@((MarkupString)product.personNames)</div>
+                    }
+                </RadzenButton>
             </Template>
-
             <EditTemplate Context="product">
                 @if (Persons.Count > 0)
                 {

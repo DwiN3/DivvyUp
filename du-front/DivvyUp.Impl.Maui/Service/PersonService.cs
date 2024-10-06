@@ -185,7 +185,43 @@ namespace DivvyUp_Impl_Maui.Service
                 throw;
             }
         }
-        
+
+        public async Task<List<PersonDto>> GetPersonFromReceipt(int receiptId)
+        {
+            try
+            {
+                var url = _url.GetPersonsFromReceipt.Replace(Route.ID, receiptId.ToString());
+                var response = await _duHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie pobierania listy osób do tabeli: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<PersonDto>> GetPersonFromProduct(int productId)
+        {
+            try
+            {
+                var url = _url.GetPersonsFromProduct.Replace(Route.ID, productId.ToString());
+                var response = await _duHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie pobierania listy osób do tabeli: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         private async Task EnsureCorrectResponse(HttpResponseMessage response, string errorMessage)
         {
             if (!response.IsSuccessStatusCode)

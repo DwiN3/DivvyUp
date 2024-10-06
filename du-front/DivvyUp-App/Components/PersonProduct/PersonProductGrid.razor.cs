@@ -154,5 +154,18 @@ namespace DivvyUp_App.Components.PersonProduct
 
             return 0;
         }
+
+        private string GetPersonName(int personId)
+        {
+            if (Persons != null && Persons.Count > 0)
+            {
+                PersonDto person = Persons.FirstOrDefault(e => e.id == personId);
+
+                if (person != null)
+                    return $"{person.name} {person.surname}";
+            }
+
+            return "-";
+        }
     }
 }

@@ -13,12 +13,14 @@
 
         // Person
         public readonly string AddPerson = $"{BaseUrl}/person/add";
-        public readonly string EditPerson = $"{BaseUrl}/person/edit/{ID}";
-        public readonly string RemovePerson = $"{BaseUrl}/person/remove/{ID}";
-        public readonly string SetReceiptsCountsPerson = $"{BaseUrl}/person/set-receipts-counts/{ID}";
-        public readonly string SetTotalPurchaseAmountPerson = $"{BaseUrl}/person/set-total-purchase-amount/{ID}";
+        public readonly string EditPerson = $"{BaseUrl}/person/{ID}/edit";
+        public readonly string RemovePerson = $"{BaseUrl}/person/{ID}/remove";
+        public readonly string SetReceiptsCountsPerson = $"{BaseUrl}/person/{ID}/set-receipts-counts";
+        public readonly string SetTotalPurchaseAmountPerson = $"{BaseUrl}/person/{ID}/set-total-purchase-amount";
         public readonly string GetPerson = $"{BaseUrl}/person/{ID}";
         public readonly string GetPersons = $"{BaseUrl}/person";
+        public readonly string GetPersonsFromReceipt = $"{BaseUrl}/person/{ID}/from-receipt";
+        public readonly string GetPersonsFromProduct = $"{BaseUrl}/person/{ID}/from-product";
 
         // Receipt
         public readonly string AddReceipt = $"{BaseUrl}/receipt/add";

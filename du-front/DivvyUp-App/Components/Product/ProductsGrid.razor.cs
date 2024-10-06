@@ -1,4 +1,5 @@
-﻿using DivvyUp_App.GuiService;
+﻿using System.Text;
+using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
@@ -34,18 +35,20 @@ namespace DivvyUp_App.Components.Product
 
         protected override async Task OnInitializedAsync()
         {
+            await LoadGrid();
             Persons = await PersonService.GetPersons();
             if (Persons != null && Persons.Count > 0)
             {
                 SelectedPerson = Persons.First();
             }
             PersonProducts = await PersonProductService.GetPersonProducts();
-            await LoadGrid();
         }
 
         private async Task LoadGrid()
         {
             Products = await ProductService.GetProducts(ReceiptId);
+            foreach (var product in Products) 
+                product.personNames = await GetPersonNames(product.id);
             StateHasChanged();
         }
 
@@ -141,35 +144,30 @@ namespace DivvyUp_App.Components.Product
 
         private async Task ManagePerson(int productId)
         {
-            await DDialogService.OpenProductPersonDialog(productId);
+            var result = await DDialogService.OpenProductPersonDialog(productId);
+            if (!result) 
+                await LoadGrid();
         }
 
         private void OnPersonSet(object personObject)
         {
             if (personObject is PersonDto person)
-            {
                 SelectedPerson = person;
-            }
+            
         }
 
-        private List<PersonDto> GetPersonNames(int productId)
+        private async Task<string> GetPersonNames(int productId)
         {
-            List<PersonDto> persons = new List<PersonDto>();
-
-            if (PersonProducts != null)
+            StringBuilder personsNames = new StringBuilder();
+            var persons = await PersonService.GetPersonFromProduct(productId);
+            if (persons != null)
             {
-                foreach (var personProduct in PersonProducts)
+                foreach (var person in persons)
                 {
-                    if (personProduct.productId == productId)
-                    {
-                        var person = Persons.FirstOrDefault(c => c.id == personProduct.personId);
-                        if (person != null)
-                            persons.Add(person);
-                    }
+                    personsNames.Append($"<div>{person.name} {person.surname}</div>");
                 }
             }
-
-            return persons;
+            return personsNames.ToString();
         }
     }
 }
