@@ -46,16 +46,20 @@ public class ProductService {
                 .price(request.getPrice())
                 .divisible(request.isDivisible())
                 .maxQuantity(request.getMaxQuantity())
-                .compensationPrice(0)
                 .isSettled(receipt.isSettled())
                 .build();
 
-        if(product.isDivisible())
+        if(product.isDivisible()) {
             product.setMaxQuantity(request.getMaxQuantity());
-        else
+            product.setCompensationPrice(request.getPrice());
+        }
+        else {
             product.setMaxQuantity(1);
+            product.setCompensationPrice(0);
+        }
 
         productRepository.save(product);
+        updateTotalPriceReceipt(receipt);
 
         return ResponseEntity.ok(product);
     }
@@ -94,9 +98,17 @@ public class ProductService {
         if (!product.getReceipt().getUser().getUsername().equals(username))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
+        Optional<Receipt> optionalReceipt = receiptRepository.findById(product.getReceipt().getId());
+        if (!optionalReceipt.isPresent())
+            return ResponseEntity.notFound().build();
+
+        Receipt receipt = optionalReceipt.get();
+
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         personProductRepository.deleteAll(personProducts);
         productRepository.delete(product);
+
+        updateTotalPriceReceipt(receipt);
 
         return ResponseEntity.ok().build();
     }
@@ -188,5 +200,15 @@ public class ProductService {
         }
 
         return ResponseEntity.ok(responseList);
+    }
+
+    private void updateTotalPriceReceipt(Receipt receipt) {
+        List<Product> products = productRepository.findByReceipt(receipt);
+        double totalPrice = 0.00;
+        for(var item : products)
+            totalPrice += item.getPrice();
+
+        receipt.setTotalPrice(totalPrice);
+        receiptRepository.save(receipt);
     }
 }

@@ -6,14 +6,13 @@ import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
 import com.dwin.du.entity.person_product.Request.ChangePersonRequest;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
-import com.dwin.du.entity.receipt.Receipt;
-import com.dwin.du.entity.receipt.ReceiptDto;
 import com.dwin.du.entity.receipt.Request.SetSettledRequest;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,8 @@ public class PersonProductService {
 
         if (product.isDivisible()) {
             personProduct.setQuantity(request.getQuantity());
-            personProduct.setPartOfPrice(request.getPartOfPrice());
+            double partPrice = calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
+            personProduct.setPartOfPrice(partPrice);
         } else {
             personProduct.setQuantity(1);
             personProduct.setPartOfPrice(product.getPrice());
@@ -82,6 +82,8 @@ public class PersonProductService {
 
         personProduct.setCompensation(isCompensation);
         personProductRepository.save(personProduct);
+
+        updateCompensationPrice(product);
 
         return ResponseEntity.ok().build();
     }
@@ -103,6 +105,12 @@ public class PersonProductService {
         }
 
         personProductRepository.delete(personProduct);
+
+        Optional<Product> optionalProduct = productRepository.findById(personProduct.getProduct().getId());
+        if (!optionalProduct.isPresent())
+            return ResponseEntity.notFound().build();
+        Product product = optionalProduct.get();
+        updateCompensationPrice(product);
 
         return ResponseEntity.ok().build();
     }
@@ -267,5 +275,26 @@ public class PersonProductService {
         }
 
         return ResponseEntity.ok(responseList);
+    }
+
+    private double calculatePartPrice(int quantity, int maxQuantity, double price) {
+        double partPrice = ((double) quantity / maxQuantity) * price;
+        return partPrice;
+    }
+
+    private double calculateCompensationPrice(List<PersonProduct> personProductDtos, double price){
+        double compensationPrice = 0;
+        for(var item : personProductDtos){
+            compensationPrice += item.getPartOfPrice();
+        }
+        compensationPrice = price - compensationPrice;
+        return compensationPrice;
+    }
+
+    private void updateCompensationPrice(Product product) {
+        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+        double compensationPrice = calculateCompensationPrice(personProducts, product.getPrice());
+        product.setCompensationPrice(compensationPrice);
+        productRepository.save(product);
     }
 }
