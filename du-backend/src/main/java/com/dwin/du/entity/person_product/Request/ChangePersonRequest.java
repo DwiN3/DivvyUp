@@ -1,11 +1,19 @@
 package com.dwin.du.entity.person_product.Request;
 
-import lombok.Builder;
-import lombok.Data;
-
-
-@Builder
-@Data
 public class ChangePersonRequest {
-    public int personId;
+    private int personId;
+
+    public ChangePersonRequest() {}
+
+    public ChangePersonRequest(int personId) {
+        this.personId = personId;
+    }
+
+    public int getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(int personId) {
+        this.personId = personId;
+    }
 }

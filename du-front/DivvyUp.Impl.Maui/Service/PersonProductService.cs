@@ -85,7 +85,7 @@ namespace DivvyUp_Impl_Maui.Service
                     personId = personId
                 };
 
-                var url = _url.SetChangePersonPersonProduct.Replace(Route.ID, personProductId.ToString());
+                var url = _url.ChangePersonPersonProduct.Replace(Route.ID, personProductId.ToString());
                 var response = await _duHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
             }

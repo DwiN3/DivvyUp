@@ -9,6 +9,8 @@
         public double totalAmount { get; set; }
         public double unpaidAmount { get; set; }
 
+        public string fullName => $"{name} {surname}";
+
         public PersonDto()
         {
             id = 0;

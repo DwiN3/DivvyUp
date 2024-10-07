@@ -13,7 +13,7 @@ namespace DivvyUp_Shared.Dto
         public bool divisible { get; set; }
         public bool settled { get; set; }
         public int maxQuantity { get; set; }
-        public string personNames { get; set; } = string.Empty;
+        public List<PersonDto> persons { get; set; } 
 
         public ProductDto()
         {

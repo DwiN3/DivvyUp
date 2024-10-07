@@ -105,21 +105,35 @@
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.personNames)" Title="Osoby" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.persons)" Title="Osoby" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                @{
-                    string buttonText;
-                    if (string.IsNullOrEmpty(product.personNames))
-                        buttonText = "Osoby";
-                    else
-                        buttonText = product.personNames;
+                @if (product.divisible)
+                {
+                    <RadzenButton Click="@(async () => { await ManagePerson(product.id); })" Style="width: 100%;">
+                        @if (product.persons != null && product.persons.Count() > 0)
+                        {
+                            <div style="display: flex; flex-direction: column;">
+                                @foreach (var person in product.persons)
+                                {
+                                    <div>@($"{person.name} {person.surname}")</div>
+                                }
+                            </div>
+                        }
+                    </RadzenButton>
                 }
-                <RadzenButton Click="@(async () => { await ManagePerson(product.id); })" Style="width: 100%;">
-                    @if (!string.IsNullOrEmpty(product.personNames))
+                else
+                {
+                    @if (product.persons != null && product.persons.Count() > 0)
                     {
-                        <div style="font-size: 10px;">@((MarkupString)product.personNames)</div>
+                        PersonDto person = product.persons.First();
+
+                        <RadzenDropDownDataGrid TValue="PersonDto"
+                                                Value="person"
+                                                ValueChanged="async (PersonDto person) => await OnPersonChange(product.id, person)"
+                                                Data="@Persons"
+                                                TextProperty="@nameof(PersonDto.fullName)" />
                     }
-                </RadzenButton>
+                }
             </Template>
             <EditTemplate Context="product">
                 @if (Persons.Count > 0)
@@ -134,12 +148,11 @@
                                                 Value="SelectedPerson"
                                                 ValueChanged="OnPersonSet"
                                                 Data="@Persons"
-                                                TextProperty="@nameof(PersonDto.name)"/>
+                                                TextProperty="@nameof(PersonDto.fullName)" />
                     }
                 }
             </EditTemplate>
         </RadzenDataGridColumn>
-
     </Columns>
 </RadzenDataGrid>
 

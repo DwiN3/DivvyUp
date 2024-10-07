@@ -48,7 +48,7 @@ namespace DivvyUp_App.Components.Product
         {
             Products = await ProductService.GetProducts(ReceiptId);
             foreach (var product in Products) 
-                product.personNames = await GetPersonNames(product.id);
+                product.persons = await PersonService.GetPersonFromProduct(product.id);
             StateHasChanged();
         }
 
@@ -156,18 +156,20 @@ namespace DivvyUp_App.Components.Product
             
         }
 
-        private async Task<string> GetPersonNames(int productId)
+        private async Task OnPersonChange(int productId, PersonDto person)
         {
-            StringBuilder personsNames = new StringBuilder();
-            var persons = await PersonService.GetPersonFromProduct(productId);
-            if (persons != null)
+            var personProductList = await PersonProductService.GetPersonProductsFromProduct(productId);
+            var personProduct = personProductList.First();
+            try
             {
-                foreach (var person in persons)
-                {
-                    personsNames.Append($"<div>{person.name} {person.surname}</div>");
-                }
+                await PersonProductService.ChangePersonPersonProduct(personProduct.id, person.id);
             }
-            return personsNames.ToString();
+            catch (InvalidOperationException)
+            {
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

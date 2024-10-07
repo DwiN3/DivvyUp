@@ -43,7 +43,7 @@
         // Person Product
         public readonly string AddPersonProduct = $"{BaseUrl}/product/{ID}/person-product/add";
         public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/remove/{ID}";
-        public readonly string SetChangePersonPersonProduct = $"{BaseUrl}/person-product/change-person/{ID}";
+        public readonly string ChangePersonPersonProduct = $"{BaseUrl}/person-product/change-person/{ID}";
         public readonly string SetSettledPersonProduct = $"{BaseUrl}/person-product/set-settled/{ID}";
         public readonly string SetCompensationPersonProduct = $"{BaseUrl}/person-product/set-compensation/{ID}";
         public readonly string GetPersonProduct = $"{BaseUrl}/person-product/{ID}";
