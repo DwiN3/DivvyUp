@@ -8,9 +8,8 @@ import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.receipt.Request.SetSettledRequest;
 import com.dwin.du.entity.user.User;
-import com.dwin.du.entity.user.UserRepository;
+import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,27 +19,17 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final UserRepository userRepository;
     private final ReceiptRepository receiptRepository;
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
+    private final ValidService valid;
 
     public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Receipt receipt = optionalReceipt.get();
-        if (!receipt.getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
+        User user = valid.validateUser(username);
+        Receipt receipt = valid.validateReceipt(username, receiptId);
 
         Product product = Product.builder()
+                .user(user)
                 .receipt(receipt)
                 .name(request.getName())
                 .price(request.getPrice())
@@ -65,18 +54,8 @@ public class ProductService {
     }
 
     public ResponseEntity<?> editProduct(int productId, EditProductRequest request, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Product> optionalReceipt = productRepository.findById(productId);
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Product product = optionalReceipt.get();
-        if (!product.getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        Product product = valid.validateProduct(username, productId);
 
         product.setName(request.getName());
         productRepository.save(product);
@@ -85,24 +64,9 @@ public class ProductService {
     }
 
     public ResponseEntity<?> removeProduct(int productId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        if (!optionalProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Product product = optionalProduct.get();
-        if (!product.getReceipt().getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        Optional<Receipt> optionalReceipt = receiptRepository.findById(product.getReceipt().getId());
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Receipt receipt = optionalReceipt.get();
+        valid.validateUser(username);
+        Product product = valid.validateProduct(username, productId);
+        Receipt receipt = valid.validateReceipt(username, product.getReceipt().getId());
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         personProductRepository.deleteAll(personProducts);
@@ -115,18 +79,8 @@ public class ProductService {
 
 
     public ResponseEntity<?> setIsSettled(int productId, SetSettledRequest request, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        if (!optionalProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Product product = optionalProduct.get();
-        if (!product.getReceipt().getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        Product product = valid.validateProduct(username, productId);
 
         product.setSettled(request.isSettled);
         productRepository.save(product);
@@ -141,18 +95,8 @@ public class ProductService {
     }
 
     public ResponseEntity<?> getProductById(int productId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        if (!optionalProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Product product = optionalProduct.get();
-        if (!product.getReceipt().getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        Product product = valid.validateProduct(username, productId);
 
         ProductDto response = ProductDto.builder()
                 .id(product.getId())
@@ -169,20 +113,10 @@ public class ProductService {
     }
 
     public ResponseEntity<?> getProductsFromReceipt(int receiptId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        valid.validateUser(username);
+        Receipt receipt = valid.validateReceipt(username, receiptId);
 
-        Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Receipt receipt = optionalReceipt.get();
-        if (!receipt.getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        List<Product> products = productRepository.findByReceipt(optionalReceipt.get());
+        List<Product> products = productRepository.findByReceipt(receipt);
 
         List<ProductDto> responseList = new ArrayList<>();
         for (Product product : products) {

@@ -9,9 +9,8 @@ import com.dwin.du.entity.receipt.Request.AddEditReceiptRequest;
 import com.dwin.du.entity.receipt.Request.SetSettledRequest;
 import com.dwin.du.entity.receipt.Request.SetTotalPriceRequest;
 import com.dwin.du.entity.user.User;
-import com.dwin.du.entity.user.UserRepository;
+import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -21,42 +20,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReceiptService {
 
-    private final UserRepository userRepository;
     private final ReceiptRepository receiptRepository;
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
+    private final ValidService valid;
 
     public ResponseEntity<?> addReceipt(AddEditReceiptRequest request, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        User user = valid.validateUser(username);
 
-            User user = userRepository.findByUsername(username).get();
-            Receipt receipt = Receipt.builder()
-                    .user(user)
-                    .name(request.getName())
-                    .date(request.getDate())
-                    .totalPrice(0.0)
-                    .isSettled(false)
-                    .build();
-            receiptRepository.save(receipt);
-            return ResponseEntity.ok().build();
+        Receipt receipt = Receipt.builder()
+                .user(user)
+                .name(request.getName())
+                .date(request.getDate())
+                .totalPrice(0.0)
+                .isSettled(false)
+                .build();
+
+        receiptRepository.save(receipt);
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> editReceipt(int receiptId, AddEditReceiptRequest request, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Receipt receipt = optionalReceipt.get();
-        if (!receipt.getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        Receipt receipt = valid.validateReceipt(username, receiptId);
 
         receipt.setName(request.getName());
         receipt.setDate(request.getDate());
@@ -66,18 +52,8 @@ public class ReceiptService {
     }
 
     public ResponseEntity<?> removeReceipt(int receiptId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Receipt receipt = optionalReceipt.get();
-        if (!receipt.getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        Receipt receipt = valid.validateReceipt(username, receiptId);
 
         List<Product> products = productRepository.findByReceipt(receipt);
 
@@ -98,18 +74,8 @@ public class ReceiptService {
     }
 
     public ResponseEntity<?> setTotalPrice(int receiptId, SetTotalPriceRequest request, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Receipt receipt = optionalReceipt.get();
-        if (!receipt.getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        Receipt receipt = valid.validateReceipt(username, receiptId);
 
         receipt.setTotalPrice(request.getTotalPrice());
         receiptRepository.save(receipt);
@@ -118,18 +84,8 @@ public class ReceiptService {
     }
 
     public ResponseEntity<?> setIsSettled(int receiptId, SetSettledRequest request, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Receipt receipt = optionalReceipt.get();
-        if (!receipt.getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        Receipt receipt = valid.validateReceipt(username, receiptId);
 
         receipt.setSettled(request.isSettled);
         receiptRepository.save(receipt);
@@ -150,18 +106,8 @@ public class ReceiptService {
     }
 
     public ResponseEntity<?> getReceiptById(int receiptId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
-        if (!optionalReceipt.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Receipt receipt = optionalReceipt.get();
-        if (!receipt.getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        Receipt receipt = valid.validateReceipt(username, receiptId);
 
         Receipt response = Receipt.builder()
                 .id(receipt.getId())
@@ -175,12 +121,8 @@ public class ReceiptService {
     }
 
     public ResponseEntity<?> getReceipts(String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        User user = valid.validateUser(username);
 
-        User user = optionalUser.get();
         List<Receipt> receipts = receiptRepository.findByUser(user);
         List<ReceiptDto> responseList = new ArrayList<>();
         for (Receipt receipt : receipts) {

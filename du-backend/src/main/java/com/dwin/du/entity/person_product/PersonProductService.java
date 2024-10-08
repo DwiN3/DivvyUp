@@ -6,9 +6,11 @@ import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
 import com.dwin.du.entity.person_product.Request.ChangePersonRequest;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
+import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.Request.SetSettledRequest;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
+import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,36 +24,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PersonProductService {
 
-    private final UserRepository userRepository;
-    private final PersonRepository personRepository;
-    private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
+    private final ProductRepository productRepository;
+    private final ValidService valid;
 
     public ResponseEntity<?> addPersonProduct(AddPersonProductRequest request, int productId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        if (!optionalProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Product product = optionalProduct.get();
-        if (!product.getReceipt().getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        Optional<Person> optionalPerson = personRepository.findById(request.getPersonId());
-        if (!optionalPerson.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Person person = optionalPerson.get();
-        if (!person.getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        Optional<PersonProduct> existingPersonProduct = personProductRepository.findByProductAndPerson(product, person);
-        if (existingPersonProduct.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        User user = valid.validateUser(username);
+        Product product = valid.validateProduct(username, productId);
+        Person person = valid.validatePerson(username, request.getPersonId());
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         int currentTotalQuantity = personProducts.stream()
@@ -65,6 +45,7 @@ public class PersonProductService {
         boolean isCompensation = personProducts.isEmpty();
 
         PersonProduct personProduct = PersonProduct.builder()
+                .user(user)
                 .product(product)
                 .person(person)
                 .maxQuantity(product.getMaxQuantity())
@@ -90,45 +71,20 @@ public class PersonProductService {
 
 
     public ResponseEntity<?> removePersonProduct(int personProductId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
-        if (!optionalPersonProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        PersonProduct personProduct = optionalPersonProduct.get();
-        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        valid.validateUser(username);
+        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
         personProductRepository.delete(personProduct);
 
-        Optional<Product> optionalProduct = productRepository.findById(personProduct.getProduct().getId());
-        if (!optionalProduct.isPresent())
-            return ResponseEntity.notFound().build();
-        Product product = optionalProduct.get();
+        Product product = valid.validateProduct(username, personProduct.getProduct().getId());
         updateCompensationPrice(product);
 
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> setIsSettled(int personProductId, SetSettledRequest request, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
-        if (!optionalPersonProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        PersonProduct personProduct = optionalPersonProduct.get();
-        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        valid.validateUser(username);
+        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
         personProduct.setSettled(request.isSettled);
         personProductRepository.save(personProduct);
@@ -137,26 +93,10 @@ public class PersonProductService {
     }
 
     public ResponseEntity<?> changePerson(int personProductId, ChangePersonRequest request, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        valid.validateUser(username);
+        Person person = valid.validatePerson(username, request.getPersonId());
+        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
-        Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
-        if (!optionalPersonProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        PersonProduct personProduct = optionalPersonProduct.get();
-        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Optional<Person> optionalPerson = personRepository.findById(request.getPersonId());
-        if (!optionalPerson.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        Person person = optionalPerson.get();
         personProduct.setPerson(person);
         personProductRepository.save(personProduct);
 
@@ -164,17 +104,8 @@ public class PersonProductService {
     }
 
     public ResponseEntity<?> setIsCompensation(int personProductId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
-        if (!optionalPersonProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        PersonProduct personProduct = optionalPersonProduct.get();
-        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(personProduct.getProduct());
 
@@ -192,17 +123,8 @@ public class PersonProductService {
     }
 
     public ResponseEntity<?> getPersonProductById(int personProductId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
-        if (!optionalPersonProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        PersonProduct personProduct = optionalPersonProduct.get();
-        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
         PersonProductDto response = PersonProductDto.builder()
                 .id(personProduct.getId())
@@ -219,17 +141,8 @@ public class PersonProductService {
     }
 
     public ResponseEntity<?> getProductPersonProductsFromProduct(int productId, String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        if (!optionalProduct.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Product product = optionalProduct.get();
-        if (!product.getReceipt().getUser().getUsername().equals(username))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        valid.validateUser(username);
+        Product product = valid.validateProduct(username, productId);
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         List<PersonProductDto> responseList = new ArrayList<>();
@@ -251,12 +164,8 @@ public class PersonProductService {
     }
 
     public ResponseEntity<?> getAllProductPersonProductsFromProduct(String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        User user = valid.validateUser(username);
 
-        User user = optionalUser.get();
         List<PersonProduct> personProducts = personProductRepository.findByUser(user);
         List<PersonProductDto> responseList = new ArrayList<>();
 
