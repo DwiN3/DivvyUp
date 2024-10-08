@@ -1,24 +1,16 @@
 package com.dwin.du.entity.person_product;
 
 import com.dwin.du.entity.person.Person;
-import com.dwin.du.entity.person.PersonRepository;
 import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
-import com.dwin.du.entity.person_product.Request.ChangePersonRequest;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
-import com.dwin.du.entity.receipt.Receipt;
-import com.dwin.du.entity.receipt.Request.SetSettledRequest;
 import com.dwin.du.entity.user.User;
-import com.dwin.du.entity.user.UserRepository;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -82,19 +74,19 @@ public class PersonProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setIsSettled(int personProductId, SetSettledRequest request, String username) {
+    public ResponseEntity<?> setIsSettled(int personProductId, boolean settled, String username) {
         valid.validateUser(username);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
-        personProduct.setSettled(request.isSettled);
+        personProduct.setSettled(settled);
         personProductRepository.save(personProduct);
 
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> changePerson(int personProductId, ChangePersonRequest request, String username) {
+    public ResponseEntity<?> changePerson(int personProductId, int personId, String username) {
         valid.validateUser(username);
-        Person person = valid.validatePerson(username, request.getPersonId());
+        Person person = valid.validatePerson(username, personId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
         personProduct.setPerson(person);

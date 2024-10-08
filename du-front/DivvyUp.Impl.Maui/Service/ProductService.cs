@@ -103,20 +103,17 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetSettledProduct(int productId, bool isSettled)
+        public async Task SetSettledProduct(int productId, bool settled)
         {
             try
             {
                 if (productId == null)
                     throw new InvalidOperationException("Nie mozna rozliczyć produktu nie posiadającego id");
 
-                var data = new
-                {
-                    isSettled = isSettled
-                };
-
-                var url = _url.SetSettledProduct.Replace(Route.ID, productId.ToString());
-                var response = await _duHttpClient.PutAsync(url, data);
+                var url = _url.SetSettledProduct
+                    .Replace(Route.ID, productId.ToString())
+                    .Replace(Route.Settled, settled.ToString());
+                var response = await _duHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (InvalidOperationException ex)
@@ -138,13 +135,10 @@ namespace DivvyUp_Impl_Maui.Service
                 if (productId == null)
                     throw new InvalidOperationException("Nie mozna ustawić ceny produktu nie posiadającego id");
 
-                var data = new
-                {
-                    compensationPrice = compensationPrice
-                };
-
-                var url = _url.SetCompensationPriceProduct.Replace(Route.ID, productId.ToString());
-                var response = await _duHttpClient.PutAsync(url, data);
+                var url = _url.SetCompensationPriceProduct
+                    .Replace(Route.ID, productId.ToString())
+                    .Replace(Route.CompensationPrice, compensationPrice.ToString());
+                var response = await _duHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (InvalidOperationException ex)

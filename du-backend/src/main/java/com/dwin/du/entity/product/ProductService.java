@@ -6,7 +6,6 @@ import com.dwin.du.entity.product.Request.AddProductRequest;
 import com.dwin.du.entity.product.Request.EditProductRequest;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
-import com.dwin.du.entity.receipt.Request.SetSettledRequest;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
@@ -78,16 +77,16 @@ public class ProductService {
     }
 
 
-    public ResponseEntity<?> setIsSettled(int productId, SetSettledRequest request, String username) {
+    public ResponseEntity<?> setIsSettled(int productId, boolean settled, String username) {
         valid.validateUser(username);
         Product product = valid.validateProduct(username, productId);
 
-        product.setSettled(request.isSettled);
+        product.setSettled(settled);
         productRepository.save(product);
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         for (PersonProduct personProduct : personProducts) {
-            personProduct.setSettled(request.isSettled);
+            personProduct.setSettled(settled);
             personProductRepository.save(personProduct);
         }
 

@@ -78,15 +78,14 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 if (personProductId == null)
-                    throw new InvalidOperationException("Nie mozna rozliczyć produktu osoby nie posiadającego id");
+                    throw new InvalidOperationException("Nie mozna zmienić osoby nie posiadającego id person produktu");
+                if (personId == null)
+                    throw new InvalidOperationException("Nie mozna zmienić osoby nie posiadającego id person osoby");
 
-                var data = new
-                {
-                    personId = personId
-                };
-
-                var url = _url.ChangePersonPersonProduct.Replace(Route.ID, personProductId.ToString());
-                var response = await _duHttpClient.PutAsync(url, data);
+                var url = _url.ChangePersonPersonProduct
+                    .Replace(Route.ID, personProductId.ToString())
+                    .Replace(Route.PersonId, personId.ToString());
+                var response = await _duHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
             }
             catch (InvalidOperationException ex)
@@ -101,20 +100,18 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetSettledPersonProduct(int personProductId, bool isSettled)
+        public async Task SetSettledPersonProduct(int personProductId, bool settled)
         {
             try
             {
                 if (personProductId == null)
                     throw new InvalidOperationException("Nie mozna rozliczyć produktu osoby nie posiadającego id");
 
-                var data = new
-                {
-                    isSettled = isSettled
-                };
+                var url = _url.SetSettledPersonProduct
+                    .Replace(Route.ID, personProductId.ToString())
+                    .Replace(Route.Settled, settled.ToString());
 
-                var url = _url.SetSettledPersonProduct.Replace(Route.ID, personProductId.ToString());
-                var response = await _duHttpClient.PutAsync(url, data);
+                var response = await _duHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
             }
             catch (InvalidOperationException ex)

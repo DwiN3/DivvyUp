@@ -34,6 +34,11 @@ namespace DivvyUp_Impl_Maui.Api.DuHttpClient
             return await _httpClient.PutAsync(url, content);
         }
 
+        public async Task<HttpResponseMessage> PutAsync(string url)
+        {
+            return await _httpClient.PutAsync(url, null);
+        }
+
         public async Task<HttpResponseMessage> DeleteAsync(string url)
         {
             return await _httpClient.DeleteAsync(url);

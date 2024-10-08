@@ -101,13 +101,10 @@ namespace DivvyUp_Impl_Maui.Service
                 if (personId == null)
                     throw new InvalidOperationException("Nie mozna ustawić ilości rachunków nie posiadającego id");
 
-                var data = new
-                {
-                    receiptsCounts = receiptsCounts
-                };
-
-                var url = _url.SetReceiptsCountsPerson.Replace(Route.ID, personId.ToString());
-                var response = await _duHttpClient.PutAsync(url, data);
+                var url = _url.SetReceiptsCountsPerson
+                    .Replace(Route.ID, personId.ToString())
+                    .Replace(Route.ReceiptsCount, receiptsCounts.ToString());
+                var response = await _duHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji ilości rachunków");
             }
             catch (InvalidOperationException ex)
@@ -129,13 +126,10 @@ namespace DivvyUp_Impl_Maui.Service
                 if (personId == null)
                     throw new InvalidOperationException("Nie mozna ustawić bilansu nie posiadającego id");
 
-                var data = new
-                {
-                    totalAmount = totalAmount
-                };
-
-                var url = _url.SetTotalPurchaseAmountPerson.Replace(Route.ID, personId.ToString());
-                var response = await _duHttpClient.PutAsync(url, data);
+                var url = _url.SetTotalAmountPerson
+                    .Replace(Route.ID, personId.ToString())
+                    .Replace(Route.TotalAmount, totalAmount.ToString());
+                var response = await _duHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji bilansu");
             }
             catch (InvalidOperationException ex)

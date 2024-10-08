@@ -95,20 +95,17 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetSettledReceipt(int receiptId, bool isSettled)
+        public async Task SetSettledReceipt(int receiptId, bool settled)
         {
             try
             {
                 if (receiptId == null)
                     throw new InvalidOperationException("Nie mozna rozliczyć rachunku nie posiadającego id");
 
-                var data = new
-                {
-                    isSettled = isSettled
-                };
-
-                var url = _url.SetSettledReceipt.Replace(Route.ID, receiptId.ToString());
-                var response = await _duHttpClient.PutAsync(url, data);
+                var url = _url.SetSettledReceipt
+                    .Replace(Route.ID, receiptId.ToString())
+                    .Replace(Route.Settled, settled.ToString());
+                var response = await _duHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
             catch (InvalidOperationException ex)
@@ -130,13 +127,10 @@ namespace DivvyUp_Impl_Maui.Service
                 if (receiptId == null)
                     throw new InvalidOperationException("Nie mozna ustawić ceny rachunku nie posiadającego id");
 
-                var data = new
-                {
-                    totalPrice = totalPrice
-                };
-
-                var url = _url.SetTotalPriceReceipt.Replace(Route.ID, receiptId.ToString());
-                var response = await _duHttpClient.PutAsync(url, data);
+                var url = _url.SetTotalPriceReceipt
+                    .Replace(Route.ID, receiptId.ToString())
+                    .Replace(Route.TotalPrice, totalPrice.ToString());
+                var response = await _duHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
             catch (InvalidOperationException ex)

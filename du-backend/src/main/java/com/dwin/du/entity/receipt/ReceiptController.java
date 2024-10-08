@@ -1,8 +1,6 @@
 package com.dwin.du.entity.receipt;
 
 import com.dwin.du.entity.receipt.Request.AddEditReceiptRequest;
-import com.dwin.du.entity.receipt.Request.SetSettledRequest;
-import com.dwin.du.entity.receipt.Request.SetTotalPriceRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +25,7 @@ public class ReceiptController {
         return receiptService.addReceipt(request, currentUsername);
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}/edit")
     @Operation(summary = "Edit a receipt", description = "Edits an existing receipt by ID.")
     public ResponseEntity<?> editReceipt(@PathVariable int id, @RequestBody AddEditReceiptRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -35,7 +33,7 @@ public class ReceiptController {
         return receiptService.editReceipt(id, request, currentUsername);
     }
 
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping("/{id}/remove")
     @Operation(summary = "Remove a receipt", description = "Removes a receipt by ID.")
     public ResponseEntity<?> removeReceipt(@PathVariable int id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -43,20 +41,20 @@ public class ReceiptController {
         return receiptService.removeReceipt(id, currentUsername);
     }
 
-    @PutMapping("/set-total-price/{id}")
+    @PutMapping("/{id}/set-total-price")
     @Operation(summary = "Set total price of a receipt", description = "Sets the total price for a specific receipt.")
-    public ResponseEntity<?> setTotalPrice(@PathVariable int id, @RequestBody SetTotalPriceRequest request){
+    public ResponseEntity<?> setTotalPrice(@PathVariable int id, @RequestParam Double totalPrice){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.setTotalPrice(id, request, currentUsername);
+        return receiptService.setTotalPrice(id, totalPrice, currentUsername);
     }
 
-    @PutMapping("/set-settled/{id}")
+    @PutMapping("/{id}/set-settled")
     @Operation(summary = "Set receipt as settled", description = "Marks a receipt as settled by its ID.")
-    public ResponseEntity<?> setIsSettled(@PathVariable int id, @RequestBody SetSettledRequest request){
+    public ResponseEntity<?> setIsSettled(@PathVariable int id, @RequestParam boolean settled) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.setIsSettled(id, request, currentUsername);
+        return receiptService.setIsSettled(id, settled, currentUsername);
     }
 
     @GetMapping("/{id}")

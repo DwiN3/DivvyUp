@@ -1,8 +1,6 @@
 package com.dwin.du.entity.person;
 
 import com.dwin.du.entity.person.Request.AddEditPersonRequest;
-import com.dwin.du.entity.person.Request.SetReceiptsCountsRequest;
-import com.dwin.du.entity.person.Request.SetTotalAmountRequest;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;
@@ -69,21 +67,21 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setReceiptsCounts(int personId, SetReceiptsCountsRequest request, String username) {
+    public ResponseEntity<?> setReceiptsCounts(int personId, int receiptsCount, String username) {
         valid.validateUser(username);
         Person person = valid.validatePerson(username, personId);
 
-        person.setReceiptsCount(request.getReceiptsCount());
+        person.setReceiptsCount(receiptsCount);
         personRepository.save(person);
         return ResponseEntity.ok().build();
     }
 
 
-    public ResponseEntity<?> setTotalAmount(int personId, SetTotalAmountRequest request, String username) {
+    public ResponseEntity<?> setTotalAmount(int personId, Double totalAmount, String username) {
         valid.validateUser(username);
         Person person = valid.validatePerson(username, personId);
 
-        person.setTotalAmount(request.getTotalAmount());
+        person.setTotalAmount(totalAmount);
         personRepository.save(person);
         return ResponseEntity.ok().build();
     }

@@ -1,8 +1,6 @@
 package com.dwin.du.entity.person;
 
 import com.dwin.du.entity.person.Request.AddEditPersonRequest;
-import com.dwin.du.entity.person.Request.SetReceiptsCountsRequest;
-import com.dwin.du.entity.person.Request.SetTotalAmountRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -49,18 +47,18 @@ public class PersonController {
 
     @PutMapping("/{id}/set-receipts-counts")
     @Operation(summary = "Set receipts counts", description = "Sets the receipts counts for a person by personId.")
-    public ResponseEntity<?> setReceiptsCounts(@PathVariable int id, @RequestBody SetReceiptsCountsRequest request) {
+    public ResponseEntity<?> setReceiptsCounts(@PathVariable int id, @RequestParam int receiptsCount) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.setReceiptsCounts(id, request, currentUsername);
+        return personService.setReceiptsCounts(id, receiptsCount, currentUsername);
     }
 
     @PutMapping("/{id}/set-total-amount")
     @Operation(summary = "Set total amount", description = "Sets the total amount for a person by personId.")
-    public ResponseEntity<?> setTotaleAmount(@PathVariable int id, @RequestBody SetTotalAmountRequest request) {
+    public ResponseEntity<?> setTotaleAmount(@PathVariable int id, @RequestParam Double totalAmount) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personService.setTotalAmount(id, request, currentUsername);
+        return personService.setTotalAmount(id, totalAmount, currentUsername);
     }
 
     @GetMapping("/{id}")
