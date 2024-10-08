@@ -41,7 +41,7 @@ public class PersonProductService {
                 .product(product)
                 .person(person)
                 .maxQuantity(product.getMaxQuantity())
-                .isSettled(product.isSettled())
+                .settled(product.isSettled())
                 .build();
 
         if (product.isDivisible()) {
@@ -125,8 +125,8 @@ public class PersonProductService {
                 .partOfPrice(personProduct.getPartOfPrice())
                 .maxQuantity(personProduct.getMaxQuantity())
                 .quantity(personProduct.getQuantity())
-                .isCompensation(personProduct.isCompensation())
-                .isSettled(personProduct.isSettled())
+                .compensation(personProduct.isCompensation())
+                .settled(personProduct.isSettled())
                 .build();
 
         return ResponseEntity.ok(response);
@@ -146,8 +146,8 @@ public class PersonProductService {
                     .partOfPrice(personProduct.getPartOfPrice())
                     .quantity(personProduct.getQuantity())
                     .maxQuantity(personProduct.getMaxQuantity())
-                    .isCompensation(personProduct.isCompensation())
-                    .isSettled(personProduct.isSettled())
+                    .compensation(personProduct.isCompensation())
+                    .settled(personProduct.isSettled())
                     .build();
             responseList.add(response);
         }
@@ -169,8 +169,8 @@ public class PersonProductService {
                     .partOfPrice(personProduct.getPartOfPrice())
                     .quantity(personProduct.getQuantity())
                     .maxQuantity(personProduct.getMaxQuantity())
-                    .isCompensation(personProduct.isCompensation())
-                    .isSettled(personProduct.isSettled())
+                    .compensation(personProduct.isCompensation())
+                    .settled(personProduct.isSettled())
                     .build();
             responseList.add(response);
         }

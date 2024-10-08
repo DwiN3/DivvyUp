@@ -32,5 +32,5 @@ public class Receipt {
     private Double totalPrice;
 
     @Column(name = "is_settled")
-    private boolean isSettled;
+    private boolean settled;
 }

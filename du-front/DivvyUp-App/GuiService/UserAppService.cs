@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using DivvyUp_Shared.Model;
 
-namespace DivvyUp_Impl_Maui.Service
+namespace DivvyUp_App.GuiService
 {
     public class UserAppService
     {

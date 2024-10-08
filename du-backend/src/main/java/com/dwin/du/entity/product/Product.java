@@ -40,5 +40,5 @@ public class Product {
     private double compensationPrice;
 
     @Column(name = "is_settled")
-    private boolean isSettled;
+    private boolean settled;
 }

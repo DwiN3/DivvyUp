@@ -34,7 +34,7 @@ public class ProductService {
                 .price(request.getPrice())
                 .divisible(request.isDivisible())
                 .maxQuantity(request.getMaxQuantity())
-                .isSettled(receipt.isSettled())
+                .settled(receipt.isSettled())
                 .build();
 
         if(product.isDivisible()) {
@@ -105,7 +105,7 @@ public class ProductService {
                 .compensationPrice(product.getCompensationPrice())
                 .divisible(product.isDivisible())
                 .maxQuantity(product.getMaxQuantity())
-                .isSettled(product.isSettled())
+                .settled(product.isSettled())
                 .build();
 
         return ResponseEntity.ok(response);
@@ -127,7 +127,7 @@ public class ProductService {
                     .compensationPrice(product.getCompensationPrice())
                     .divisible(product.isDivisible())
                     .maxQuantity(product.getMaxQuantity())
-                    .isSettled(product.isSettled())
+                    .settled(product.isSettled())
                     .build();
             responseList.add(response);
         }

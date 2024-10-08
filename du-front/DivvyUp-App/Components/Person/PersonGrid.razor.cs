@@ -1,4 +1,4 @@
-﻿using DivvyUp_Impl_Maui.Service;
+﻿using DivvyUp_App.GuiService;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;

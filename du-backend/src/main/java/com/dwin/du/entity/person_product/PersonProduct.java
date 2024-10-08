@@ -39,8 +39,8 @@ public class PersonProduct {
     private int maxQuantity;
 
     @Column(name = "is_compensation")
-    private boolean isCompensation;
+    private boolean compensation;
 
     @Column(name = "is_settled")
-    private  boolean isSettled;
+    private  boolean settled;
 }

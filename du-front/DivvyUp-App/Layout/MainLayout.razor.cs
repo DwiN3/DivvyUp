@@ -1,6 +1,6 @@
 ﻿using DivvyUp_App.BaseComponents.DAlert;
+using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Api.DuHttpClient;
-using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;

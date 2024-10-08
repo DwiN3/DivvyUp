@@ -13,5 +13,5 @@ public class ProductDto {
     public Double compensationPrice;
     public boolean divisible;
     public int maxQuantity;
-    public  boolean isSettled;
+    public  boolean settled;
 }

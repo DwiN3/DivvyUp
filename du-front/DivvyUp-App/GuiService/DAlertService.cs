@@ -1,7 +1,7 @@
 ﻿using DivvyUp_Shared.Interface;
 using Radzen;
 
-namespace DivvyUp_Impl_Maui.Service
+namespace DivvyUp_App.GuiService
 {
     public class DAlertService
     {

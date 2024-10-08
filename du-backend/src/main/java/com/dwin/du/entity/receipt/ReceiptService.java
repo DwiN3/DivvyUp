@@ -31,7 +31,7 @@ public class ReceiptService {
                 .name(request.getName())
                 .date(request.getDate())
                 .totalPrice(0.0)
-                .isSettled(false)
+                .settled(false)
                 .build();
 
         receiptRepository.save(receipt);
@@ -112,7 +112,7 @@ public class ReceiptService {
                 .name(receipt.getName())
                 .date(receipt.getDate())
                 .totalPrice(receipt.getTotalPrice())
-                .isSettled(receipt.isSettled())
+                .settled(receipt.isSettled())
                 .user(receipt.getUser())
                 .build();
         return ResponseEntity.ok(response);

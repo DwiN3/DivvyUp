@@ -1,13 +1,8 @@
-﻿using DivvyUp_Impl_Maui.Service;
-using DivvyUp_Shared.Dto;
+﻿using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DivvyUp_App.GuiService;
 using Radzen;
 
 namespace DivvyUp_App.Components.PersonProduct
