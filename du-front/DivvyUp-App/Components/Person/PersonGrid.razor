@@ -1,4 +1,6 @@
-﻿@using DivvyUp_Shared.Dto
+﻿@using DivvyUp_Shared.AppConstants
+@using DivvyUp_Shared.Dto
+
 <RadzenDataGrid @ref="@Grid"
                 Data="@Persons"
                 TItem="PersonDto"
@@ -53,7 +55,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonDto.unpaidAmount)" Title="Kwota" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b style="color: @(person.unpaidAmount > 0 ? "red" : "green")">@(person.unpaidAmount)zł</b>
+                <b style="color: @(person.unpaidAmount > 0 ? "red" : "green")">@person.unpaidAmount.ToString(AppConstants.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -
@@ -61,7 +63,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonDto.totalAmount)" Title="Kwota całościowa" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b>@(person.totalAmount)zł</b>
+                <b>@person.totalAmount.ToString(AppConstants.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -

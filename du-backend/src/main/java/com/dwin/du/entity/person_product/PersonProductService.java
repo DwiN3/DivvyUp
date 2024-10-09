@@ -1,6 +1,7 @@
 package com.dwin.du.entity.person_product;
 
 import com.dwin.du.entity.person.Person;
+import com.dwin.du.entity.person.PersonUpdateService;
 import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
@@ -19,6 +20,7 @@ public class PersonProductService {
     private final PersonProductRepository personProductRepository;
     private final ProductRepository productRepository;
     private final ValidService valid;
+    private final PersonUpdateService updatePerson;
 
     public ResponseEntity<?> addPersonProduct(AddPersonProductRequest request, int productId, String username) {
         User user = valid.validateUser(username);
@@ -57,6 +59,7 @@ public class PersonProductService {
         personProductRepository.save(personProduct);
 
         updateCompensationPrice(product);
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }
@@ -70,6 +73,7 @@ public class PersonProductService {
 
         Product product = valid.validateProduct(username, personProduct.getProduct().getId());
         updateCompensationPrice(product);
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }
@@ -81,6 +85,8 @@ public class PersonProductService {
         personProduct.setSettled(settled);
         personProductRepository.save(personProduct);
 
+        updatePerson.updateUnpaidAmount(username);
+
         return ResponseEntity.ok().build();
     }
 
@@ -91,6 +97,8 @@ public class PersonProductService {
 
         personProduct.setPerson(person);
         personProductRepository.save(personProduct);
+
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }
@@ -107,6 +115,8 @@ public class PersonProductService {
                 personProductRepository.save(pp);
             }
         }
+
+        updatePerson.updateAllData(username);
 
         personProduct.setCompensation(true);
         personProductRepository.save(personProduct);

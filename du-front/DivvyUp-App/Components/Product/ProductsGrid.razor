@@ -1,7 +1,7 @@
-﻿@using DivvyUp_Shared.Dto
+﻿@using DivvyUp_Shared.AppConstants
+@using DivvyUp_Shared.Dto
 
 <RadzenDialog />
-
 <RadzenDataGrid @ref="@Grid"
                 Data="@Products"
                 TItem="ProductDto"
@@ -61,7 +61,7 @@
         <RadzenDataGridColumn Property="@nameof(ProductDto.price)" Title="Kwota" Width="12%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="product">
                 <div style="color: @(product.settled ? "green" : "red")">
-                    <b>@(product.price.ToString(("0.00")))zł</b>
+                    <b>@product.price.ToString((AppConstants.PriceFormat))</b>
                 </div>
             </Template>
             <EditTemplate Context="product">

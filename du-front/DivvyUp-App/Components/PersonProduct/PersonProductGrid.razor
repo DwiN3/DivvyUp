@@ -1,4 +1,5 @@
-﻿@using DivvyUp_Shared.Dto
+﻿@using DivvyUp_Shared.AppConstants
+@using DivvyUp_Shared.Dto
 
 <RadzenDataGrid @ref="@Grid"
                 Data="@PersonProducts"
@@ -64,7 +65,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.partOfPrice)" Title="Cena" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                @personProduct.partOfPrice.ToString("0.00zł")
+                @personProduct.partOfPrice.ToString(AppConstants.PriceFormat)
             </Template>
             <EditTemplate Context="personProduct">
                 -

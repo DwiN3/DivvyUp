@@ -1,5 +1,6 @@
 package com.dwin.du.entity.product;
 
+import com.dwin.du.entity.person.PersonUpdateService;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Request.AddProductRequest;
@@ -22,6 +23,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
     private final ValidService valid;
+    private final PersonUpdateService updatePerson;
 
     public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
         User user = valid.validateUser(username);
@@ -72,6 +74,7 @@ public class ProductService {
         productRepository.delete(product);
 
         updateTotalPriceReceipt(receipt);
+        updatePerson.updateAmounts(username);
 
         return ResponseEntity.ok().build();
     }
@@ -89,6 +92,8 @@ public class ProductService {
             personProduct.setSettled(settled);
             personProductRepository.save(personProduct);
         }
+
+        updatePerson.updateUnpaidAmount(username);
 
         return ResponseEntity.ok().build();
     }
