@@ -83,7 +83,7 @@ namespace DivvyUp_App.Components.AccountManager
                 {
                     await AuthService.RemoveUser();
                     UserAppService.ClearUser();
-                    DuHttpClient.UpdateToken("");
+                    DuHttpClient.UpdateToken(string.Empty);
                     StateHasChanged();
                     Navigation.NavigateTo("/");
                 }
