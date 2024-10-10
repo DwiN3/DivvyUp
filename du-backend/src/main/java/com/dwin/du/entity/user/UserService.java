@@ -1,7 +1,16 @@
 package com.dwin.du.entity.user;
 
 import com.dwin.du.config.JwtService;
+import com.dwin.du.entity.person.Person;
+import com.dwin.du.entity.person.PersonRepository;
+import com.dwin.du.entity.person_product.PersonProduct;
+import com.dwin.du.entity.person_product.PersonProductRepository;
+import com.dwin.du.entity.product.Product;
+import com.dwin.du.entity.product.ProductRepository;
+import com.dwin.du.entity.receipt.Receipt;
+import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.user.Request.LoginRequest;
+import com.dwin.du.entity.user.Request.PasswordChangeRequest;
 import com.dwin.du.entity.user.Request.RegisterRequest;
 import com.dwin.du.entity.user.Request.RemoveRequest;
 import com.dwin.du.valid.ValidException;
@@ -19,6 +28,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +40,10 @@ public class UserService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ValidService valid;
+    private final ReceiptRepository receiptRepository;
+    private final ProductRepository productRepository;
+    private final PersonProductRepository personProductRepository;
+    private final PersonRepository personRepository;
 
     public ResponseEntity<?> register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -82,8 +96,19 @@ public class UserService {
 
     public ResponseEntity<?> remove(String username) {
         User user = valid.validateUser(username);
+
+        List<PersonProduct> personProducts = personProductRepository.findByUser(user);
+        personProductRepository.deleteInBatch(personProducts);
+        List<Product> products = productRepository.findByUser(user);
+        productRepository.deleteInBatch(products);
+        List<Receipt> receipts = receiptRepository.findByUser(user);
+        receiptRepository.deleteInBatch(receipts);
+        List<Person> persons = personRepository.findByUser(user);
+        personRepository.deleteInBatch(persons);
+
         userRepository.delete(user);
 
+        SecurityContextHolder.clearContext();
         return ResponseEntity.ok().build();
     }
 
@@ -111,7 +136,7 @@ public class UserService {
         userRepository.save(user);
 
         String newToken = jwtService.generateTokem(user);
-        
+
         return ResponseEntity.ok(newToken);
     }
 
@@ -134,5 +159,19 @@ public class UserService {
         } catch (Exception e) {
             throw new ValidException(401);
         }
+    }
+
+    public ResponseEntity<?> changePassword(String username, PasswordChangeRequest request) {
+        User user = valid.validateUser(username);
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Old password is incorrect.");
+
+        String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
+
+        user.setPassword(newPasswordEncoded);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Password changed successfully.");
     }
 }

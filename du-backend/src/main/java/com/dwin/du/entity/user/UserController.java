@@ -1,6 +1,7 @@
 package com.dwin.du.entity.user;
 
 import com.dwin.du.entity.user.Request.LoginRequest;
+import com.dwin.du.entity.user.Request.PasswordChangeRequest;
 import com.dwin.du.entity.user.Request.RegisterRequest;
 import com.dwin.du.entity.user.Request.RemoveRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +41,14 @@ public class UserController {
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
+    @PutMapping("/user/change-password")
+    @Operation(summary = "Change password in user", description = "Change password in user.")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return userService.changePassword(currentUsername, request);
+    }
+
     @PutMapping("/user/edit")
     @Operation(summary = "Edit a user", description = "Edits an existing user.")
     public ResponseEntity<?> editUser(@RequestBody UserDto request) {
@@ -48,9 +57,9 @@ public class UserController {
         return userService.editUser(currentUsername, request);
     }
 
-    @PutMapping("/user/remove")
+    @DeleteMapping("/user/remove")
     @Operation(summary = "Remove user account", description = "Removes a user account from the system.")
-    public ResponseEntity<?> removeUser(@RequestBody RemoveRequest request){
+    public ResponseEntity<?> removeUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return userService.remove(currentUsername);

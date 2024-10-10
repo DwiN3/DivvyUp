@@ -10,6 +10,7 @@
         public readonly string Login = $"{BaseUrl}/auth";
         public readonly string Register = $"{BaseUrl}/register";
         public readonly string EditUser = $"{BaseUrl}/user/edit";
+        public readonly string ChangePasswordUser = $"{BaseUrl}/user/change-password";
         public readonly string RemoveUser = $"{BaseUrl}/user/remove";
         public readonly string GetUser = $"{BaseUrl}/user";
         public readonly string IsValid = $"{BaseUrl}/validate-token";

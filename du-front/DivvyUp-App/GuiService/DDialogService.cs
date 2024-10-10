@@ -36,7 +36,7 @@ namespace DivvyUp_App.GuiService
         public async Task<bool> OpenResetPasswordDialog()
         {
             var result = await _dialogService.OpenAsync<DDialogResetPasswordCard>(
-                "Resetowanie hasła",
+                "Zmiana hasła",
                 new Dictionary<string, object> { },
                 new DialogOptions()
             );

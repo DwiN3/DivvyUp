@@ -120,9 +120,30 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public Task ChangePassword(string password, string newPassword)
+        public async Task ChangePassword(string password, string newPassword)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = new
+                {
+                    password = password,
+                    newPassword = newPassword
+                };
+
+                var url = _url.ChangePasswordUser;
+                var response = await _duHttpClient.PutAsync(url, data);
+                await EnsureCorrectResponse(response, "Błąd w czasie zmieniania hasła");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie zmieniania hasła\": {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie zmieniania hasła\" {Message}", ex.Message);
+                throw;
+            }
         }
 
         public async Task RemoveUser()
