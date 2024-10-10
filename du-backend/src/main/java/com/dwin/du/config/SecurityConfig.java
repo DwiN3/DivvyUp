@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/rm/auth")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/rm/register")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/rm/validate-token")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/rm/user")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((sessionManagement) -> sessionManagement

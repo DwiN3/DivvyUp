@@ -4,6 +4,8 @@ import com.dwin.du.config.JwtService;
 import com.dwin.du.entity.user.Request.LoginRequest;
 import com.dwin.du.entity.user.Request.RegisterRequest;
 import com.dwin.du.entity.user.Request.RemoveRequest;
+import com.dwin.du.valid.ValidException;
+import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +23,18 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ValidService valid;
 
     public ResponseEntity<?> register(RegisterRequest request) {
-        if (repository.findByEmail(request.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build(); 
-        } else if (repository.findByUsername(request.getUsername()).isPresent()) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } else if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
@@ -42,14 +45,14 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
 
-        repository.save(user);
+        userRepository.save(user);
 
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<String> auth(LoginRequest request) {
         try {
-            Optional<User> optionalUser = repository.findByUsername(request.getUsername());
+            Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
             if(!optionalUser.isPresent()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
@@ -68,8 +71,7 @@ public class AuthenticationService {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            var user = repository.findByUsername(request.getUsername()).orElseThrow();
-
+            var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
             var jwtToken = jwtService.generateTokem(user);
             return ResponseEntity.ok(jwtToken);
 
@@ -78,28 +80,17 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<?> remove(RemoveRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        Optional<User> optionalUser = repository.findByUsername(currentUsername);
+    public ResponseEntity<?> remove(String username) {
+        User user = valid.validateUser(username);
+        userRepository.delete(user);
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-                repository.delete(user);
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> validateToken(String token) {
         try {
             String username = jwtService.extractUsername(token);
-            UserDetails userDetails = repository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            UserDetails userDetails = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             boolean isValid = jwtService.isTokenValid(token, userDetails);
 
             if (isValid) {
@@ -109,6 +100,39 @@ public class AuthenticationService {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    public ResponseEntity<?> editUser(String username, UserDto request) {
+        User user = valid.validateUser(username);
+
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        userRepository.save(user);
+
+        String newToken = jwtService.generateTokem(user);
+        
+        return ResponseEntity.ok(newToken);
+    }
+
+    public ResponseEntity<?> getUser(String token) {
+        try {
+            String username = jwtService.extractUsername(token);
+            User user = userRepository.findByUsername(username).orElseThrow(() -> new ValidException(404));
+            boolean isValid = jwtService.isTokenValid(token, user);
+            if(isValid){
+                UserDto response = UserDto.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .email(user.getEmail())
+                        .password(user.getPassword())
+                        .build();
+                return ResponseEntity.ok(response);
+            } else{
+                throw new ValidException(401);
+            }
+        } catch (Exception e) {
+            throw new ValidException(401);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace DivvyUp_App.Layout
                     bool isValid = await AuthService.IsValid(user.token);
                     if (isValid)
                     {
-                        UserAppService.SetUser(user.username, user.token, true);
+                        UserAppService.SetUser(user.username, user.email, user.token, true);
                         DuHttpClient.UpdateToken(user.token);
                         Navigation.NavigateTo("/receipt");
                     }

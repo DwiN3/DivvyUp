@@ -85,6 +85,5 @@ public class PersonUpdateService {
         updateTotalAmount(username);
         updateUnpaidAmount(username);
     }
-
 }
 

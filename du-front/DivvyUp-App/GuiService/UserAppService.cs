@@ -18,9 +18,9 @@ namespace DivvyUp_App.GuiService
 
         public User GetUser() => _currentUser;
 
-        public void SetUser(string username, string token, bool isLogin)
+        public void SetUser(string username, string email, string token, bool isLogin)
         {
-            _currentUser = new User { username = username, token = token, isLogin = isLogin };
+            _currentUser = new User {username = username, email = email, token = token, isLogin = isLogin };
             SaveUserData();
         }
 
@@ -46,6 +46,7 @@ namespace DivvyUp_App.GuiService
                 string userData = JsonSerializer.Serialize(new User
                 {
                     username = _currentUser.username,
+                    email = _currentUser.email,
                     token = _currentUser.token,
                     isLogin = _currentUser.isLogin
                 }, options);
@@ -89,6 +90,7 @@ namespace DivvyUp_App.GuiService
                     string userData = JsonSerializer.Serialize(new User
                     {
                         username = string.Empty,
+                        email = string.Empty,
                         token = string.Empty,
                         isLogin = false
                     }, options);

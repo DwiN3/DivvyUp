@@ -9,7 +9,9 @@
         /// Auth
         public readonly string Login = $"{BaseUrl}/auth";
         public readonly string Register = $"{BaseUrl}/register";
-        public readonly string Remove = $"{BaseUrl}/remove-account";
+        public readonly string EditUser = $"{BaseUrl}/user/edit";
+        public readonly string RemoveUser = $"{BaseUrl}/user/remove";
+        public readonly string GetUser = $"{BaseUrl}/user";
         public readonly string IsValid = $"{BaseUrl}/validate-token";
 
         // Person

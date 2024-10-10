@@ -15,7 +15,7 @@ namespace DivvyUp_App.GuiService
 
         public async Task OpenDialog(string title, string content)
         {
-            await _dialogService.OpenAsync<DialogCard>(
+            await _dialogService.OpenAsync<DDialogCard>(
                 title,
                 new Dictionary<string, object> { { "Content", content } },
                 new DialogOptions()
@@ -24,7 +24,7 @@ namespace DivvyUp_App.GuiService
 
         public async Task<bool> OpenYesNoDialog(string title, string content)
         {
-            var result = await _dialogService.OpenAsync<DialogYesNoCard>(
+            var result = await _dialogService.OpenAsync<DDialogYesNoCard>(
                 title,
                 new Dictionary<string, object> { { "Content", content } },
                 new DialogOptions()
@@ -33,9 +33,20 @@ namespace DivvyUp_App.GuiService
             return result != null && (bool)result;
         }
 
+        public async Task<bool> OpenResetPasswordDialog()
+        {
+            var result = await _dialogService.OpenAsync<DDialogResetPasswordCard>(
+                "Resetowanie hasła",
+                new Dictionary<string, object> { },
+                new DialogOptions()
+            );
+
+            return result != null && (bool)result;
+        }
+
         public async Task<bool> OpenProductPersonDialog(int productId)
         {
-            var result = await _dialogService.OpenAsync<DialogProductPersonCard>(
+            var result = await _dialogService.OpenAsync<DDialogProductPersonCard>(
                 "Osoby przypisane do produktu",
                 new Dictionary<string, object> { { "ProductId", productId } },
                 new DialogOptions()

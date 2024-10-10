@@ -5,6 +5,9 @@ using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
+using System.Linq.Dynamic.Core.Tokenizer;
+using DivvyUp_Shared.Model;
 
 namespace DivvyUp_Impl_Maui.Service
 {
@@ -88,10 +91,60 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemoveAccount()
+        public async Task<string> EditUser(UserDto user)
+        {
+            try
+            {
+                if (user == null)
+                    throw new InvalidOperationException("Nie mozna edytować pustego użytkownika");
+                if (user.username.Equals(string.Empty))
+                    throw new InvalidOperationException("Nie mozna edytować użytkownika bez nazwy");
+                if (user.email.Equals(string.Empty))
+                    throw new InvalidOperationException("Nie mozna edytować użytkownika bez emaila");
+
+                var url = _url.EditUser;
+                var response = await _duHttpClient.PutAsync(url, user);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji użytkownika"); 
+                var result = await response.Content.ReadAsStringAsync();
+                return result;
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji użytkownika: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji użytkownika: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public Task ChangePassword(string password, string newPassword)
         {
             throw new NotImplementedException();
         }
+
+        public async Task RemoveUser()
+        {
+            try
+            {
+                var url = _url.RemoveUser;
+                var response = await _duHttpClient.DeleteAsync(url);
+                await EnsureCorrectResponse(response, "Błąd w czasie usuwania użytkownika");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie usuwania użytkownika: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie usuwania użytkownika: {Message}", ex.Message);
+                throw;
+            }
+        }
+
 
         public async Task<bool> IsValid(string token)
         {
@@ -120,6 +173,24 @@ namespace DivvyUp_Impl_Maui.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie walidacji: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<UserDto> GetUser(string token)
+        {
+            try
+            {
+                var url = $"{_url.GetUser}?token={token}";
+                var response = await _duHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<UserDto>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie użytkownika");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie pobierania użytkownika: {Message}", ex.Message);
                 throw;
             }
         }

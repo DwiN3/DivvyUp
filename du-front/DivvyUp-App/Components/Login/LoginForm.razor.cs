@@ -22,21 +22,15 @@ namespace DivvyUp_App.Components.Login
         [Inject]
         private DAlertService AlertService { get; set; }
         private CodeReaderResponse RCR { get; set; } = new();
-        private string Username { get; set; }
-        private string Password { get; set; }
+        private UserDto User { get; set; } = new();
 
         private async Task SignUp()
         {
-            UserDto user = new UserDto
-            {
-                username = Username,
-                password = Password
-            };
-
             try
             {
-                var token = await AuthService.Login(user);
-                UserAppService.SetUser(user.username, token, true);
+                var token = await AuthService.Login(User);
+                UserDto user = await AuthService.GetUser(token);
+                UserAppService.SetUser(user.username, user.email, token, true);
                 HttpClient.UpdateToken(token);
                 Navigation.NavigateTo("/receipt");
             }

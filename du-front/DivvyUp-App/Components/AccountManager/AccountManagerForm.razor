@@ -1,1 +1,52 @@
-﻿
+﻿<div style="height: 100%; width: 100%; display:flex; justify-content: center; align-items: center;">
+    <RadzenDialog />
+    <div style="width: 65%">
+        <RadzenFieldset Text="Zdjęcie profilu" class="form">
+            <RadzenFileInput @bind-Value="@Avatar" TValue="string" Style="width: 100%" InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "Wybierz obraz" } })" ChooseText="Wybierz obraz"/>
+        </RadzenFieldset>
+
+        <RadzenFieldset Text="Informacje o koncie" class="form">
+            <div class="section">
+                <b class="name-section">Nazwa</b>
+                <RadzenTextBox class="section-input" @bind-Value="@User.username"/>
+            </div>
+            <div class="section">
+                <b class="name-section">Email</b>
+                <RadzenTextBox class="section-input" @bind-Value="@User.email"/>
+            </div>
+            <div class="section" style="justify-content: space-evenly">
+                <RadzenButton Style="margin-top: 20px; width: 40%;" Text="Zmień hasło" ButtonStyle="ButtonStyle.Light" Click="ChangePassword"/>
+                <RadzenButton Style="margin-top: 20px; width: 40%;" Text="Usuń konto" ButtonStyle="ButtonStyle.Danger" Click="RemoveUser"/>
+            </div>
+            <div class="section" style="justify-content: center">
+                <RadzenButton Style="margin-top: 20px; width: 87%;" Text="Zapisz" ButtonStyle="ButtonStyle.Success" Click="SaveChanges"/>
+            </div>
+        </RadzenFieldset>
+    </div>
+</div>
+
+<style>
+    .form {
+        width: 100%;
+        padding: 10px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 10px; 
+    }
+
+    .name-section {
+        width: 25%;
+        font-weight: bold;
+    }
+
+    .section-input {
+        width: 75%;
+    }
+</style>>
