@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Blazored.LocalStorage;
 using DivvyUp_App.GuiService;
-using DivvyUp_Impl_Maui.Api.DuHttpClient;
-using DivvyUp_Impl_Maui.CodeReader;
 using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Interface;
 using Radzen;
+using DivvyUp_Impl_Maui.Api.CodeReader;
+using DivvyUp_Impl_Maui.Api.DHttpClient;
 
 namespace DivvyUp_App
 {
@@ -21,11 +21,11 @@ namespace DivvyUp_App
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
-            builder.Services.AddSingleton<DuHttpClient>(sp =>
+            builder.Services.AddSingleton<DHttpClient>(sp =>
             {
                 var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
                 var httpClient = httpClientFactory.CreateClient();
-                return new DuHttpClient(httpClient);
+                return new DHttpClient(httpClient);
             });
 
             

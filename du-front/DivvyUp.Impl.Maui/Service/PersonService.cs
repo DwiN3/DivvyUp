@@ -1,6 +1,6 @@
-﻿using DivvyUp_Impl_Maui.Api.DuHttpClient;
+﻿using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.HttpResponseException;
-using DivvyUp_Impl_Maui.Api.Route;
+using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
@@ -12,13 +12,13 @@ namespace DivvyUp_Impl_Maui.Service
     public class PersonService : IPersonService
     {
         [Inject]
-        private DuHttpClient _duHttpClient { get; set; }
-        private Route _url { get; } = new();
+        private DHttpClient _dHttpClient { get; set; }
+        private ApiRoute _url { get; } = new();
         private readonly ILogger<PersonService> _logger;
 
-        public PersonService(DuHttpClient duHttpClient, ILogger<PersonService> logger)
+        public PersonService(DHttpClient dHttpClient, ILogger<PersonService> logger)
         {
-            _duHttpClient = duHttpClient;
+            _dHttpClient = dHttpClient;
             _logger = logger;
         }
         public async Task AddPerson(PersonDto person)
@@ -31,7 +31,7 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna dodać osoby bez imienia");
 
                 var url = _url.AddPerson;
-                var response = await _duHttpClient.PostAsync(url, person);
+                var response = await _dHttpClient.PostAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania osoby");
             }
             catch (InvalidOperationException ex)
@@ -55,8 +55,8 @@ namespace DivvyUp_Impl_Maui.Service
                 if (person.name.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna dodać edytować bez imienia");
 
-                var url = _url.EditPerson.Replace(Route.ID, person.id.ToString());
-                var response = await _duHttpClient.PutAsync(url, person);
+                var url = _url.EditPerson.Replace(ApiRoute.ID, person.id.ToString());
+                var response = await _dHttpClient.PutAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
             catch (InvalidOperationException ex)
@@ -78,8 +78,8 @@ namespace DivvyUp_Impl_Maui.Service
                 if (personId == null)
                     throw new InvalidOperationException("Nie mozna usunąć osoby które nie posiada id");
 
-                var url = _url.RemovePerson.Replace(Route.ID, personId.ToString());
-                var response = await _duHttpClient.DeleteAsync(url);
+                var url = _url.RemovePerson.Replace(ApiRoute.ID, personId.ToString());
+                var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
             catch (InvalidOperationException ex)
@@ -102,9 +102,9 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna ustawić ilości rachunków nie posiadającego id");
 
                 var url = _url.SetReceiptsCountsPerson
-                    .Replace(Route.ID, personId.ToString())
-                    .Replace(Route.ReceiptsCount, receiptsCounts.ToString());
-                var response = await _duHttpClient.PutAsync(url);
+                    .Replace(ApiRoute.ID, personId.ToString())
+                    .Replace(ApiRoute.ReceiptsCount, receiptsCounts.ToString());
+                var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji ilości rachunków");
             }
             catch (InvalidOperationException ex)
@@ -127,9 +127,9 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna ustawić bilansu nie posiadającego id");
 
                 var url = _url.SetTotalAmountPerson
-                    .Replace(Route.ID, personId.ToString())
-                    .Replace(Route.TotalAmount, totalAmount.ToString());
-                var response = await _duHttpClient.PutAsync(url);
+                    .Replace(ApiRoute.ID, personId.ToString())
+                    .Replace(ApiRoute.TotalAmount, totalAmount.ToString());
+                var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji bilansu");
             }
             catch (InvalidOperationException ex)
@@ -148,8 +148,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPerson.Replace(Route.ID, personId.ToString());
-                var response = await _duHttpClient.GetAsync(url);
+                var url = _url.GetPerson.Replace(ApiRoute.ID, personId.ToString());
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<PersonDto>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osoby");
@@ -167,7 +167,7 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.GetPersons;
-                var response = await _duHttpClient.GetAsync(url);
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
@@ -184,8 +184,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonsFromReceipt.Replace(Route.ID, receiptId.ToString());
-                var response = await _duHttpClient.GetAsync(url);
+                var url = _url.GetPersonsFromReceipt.Replace(ApiRoute.ID, receiptId.ToString());
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
@@ -202,8 +202,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonsFromProduct.Replace(Route.ID, productId.ToString());
-                var response = await _duHttpClient.GetAsync(url);
+                var url = _url.GetPersonsFromProduct.Replace(ApiRoute.ID, productId.ToString());
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");

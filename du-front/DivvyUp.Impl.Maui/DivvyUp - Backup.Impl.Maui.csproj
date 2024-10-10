@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace>DivvyUp_Impl_Maui</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.4" />
+		<PackageReference Include="Radzen.Blazor" Version="5.2.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DivvyUp.Shared\DivvyUp.Shared.csproj" />
+		<!--
+		<Content Include="..\DivvyUp-App\BaseComponents\DDialog\DialogCard.razor" Link="BaseComponents\DDialog\DialogCard.razor" />
+		<Content Include="..\DivvyUp-App\BaseComponents\DDialog\DialogYesNoCard.razor" Link="BaseComponents\DDialog\DialogYesNoCard.razor" />
+		<Content Include="..\DivvyUp-App\BaseComponents\_Imports.razor" Link="BaseComponents\_Imports.razor" />
+		-->
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="NewFolder\" />
+	</ItemGroup>
+
+</Project>
+

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DivvyUp_Impl_Maui.Api.DuHttpClient;
+﻿using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.HttpResponseException;
-using DivvyUp_Impl_Maui.Api.Route;
+using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
@@ -17,13 +12,13 @@ namespace DivvyUp_Impl_Maui.Service
     public class ProductService : IProductService
     {
         [Inject]
-        private DuHttpClient _duHttpClient { get; set; }
-        private Route _url { get; } = new();
+        private DHttpClient _dHttpClient { get; set; }
+        private ApiRoute _url { get; } = new();
         private readonly ILogger<ProductService> _logger;
 
-        public ProductService(DuHttpClient duHttpClient, ILogger<ProductService> logger)
+        public ProductService(DHttpClient dHttpClient, ILogger<ProductService> logger)
         {
-            _duHttpClient = duHttpClient;
+            _dHttpClient = dHttpClient;
             _logger = logger;
         }
 
@@ -36,8 +31,8 @@ namespace DivvyUp_Impl_Maui.Service
                 if (product.name.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna dodać productu bez nazwy");
 
-                var url = _url.AddProduct.Replace(Route.ID, product.receiptId.ToString());
-                var response = await _duHttpClient.PostAsync(url, product);
+                var url = _url.AddProduct.Replace(ApiRoute.ID, product.receiptId.ToString());
+                var response = await _dHttpClient.PostAsync(url, product);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<ProductDto>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
@@ -64,8 +59,8 @@ namespace DivvyUp_Impl_Maui.Service
                 if (product.name.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna edytować productu bez nazwy");
 
-                var url = _url.EditProduct.Replace(Route.ID, product.id.ToString());
-                var response = await _duHttpClient.PutAsync(url, product);
+                var url = _url.EditProduct.Replace(ApiRoute.ID, product.id.ToString());
+                var response = await _dHttpClient.PutAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (InvalidOperationException ex)
@@ -87,8 +82,8 @@ namespace DivvyUp_Impl_Maui.Service
                 if (productId == null)
                     throw new InvalidOperationException("Nie mozna usunąć produktu które nie posiada id");
 
-                var url = _url.RemoveProduct.Replace(Route.ID, productId.ToString());
-                var response = await _duHttpClient.DeleteAsync(url);
+                var url = _url.RemoveProduct.Replace(ApiRoute.ID, productId.ToString());
+                var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (InvalidOperationException ex)
@@ -111,9 +106,9 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna rozliczyć produktu nie posiadającego id");
 
                 var url = _url.SetSettledProduct
-                    .Replace(Route.ID, productId.ToString())
-                    .Replace(Route.Settled, settled.ToString());
-                var response = await _duHttpClient.PutAsync(url);
+                    .Replace(ApiRoute.ID, productId.ToString())
+                    .Replace(ApiRoute.Settled, settled.ToString());
+                var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (InvalidOperationException ex)
@@ -136,9 +131,9 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna ustawić ceny produktu nie posiadającego id");
 
                 var url = _url.SetCompensationPriceProduct
-                    .Replace(Route.ID, productId.ToString())
-                    .Replace(Route.CompensationPrice, compensationPrice.ToString());
-                var response = await _duHttpClient.PutAsync(url);
+                    .Replace(ApiRoute.ID, productId.ToString())
+                    .Replace(ApiRoute.CompensationPrice, compensationPrice.ToString());
+                var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (InvalidOperationException ex)
@@ -157,8 +152,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetProduct.Replace(Route.ID, productId.ToString());
-                var response = await _duHttpClient.GetAsync(url);
+                var url = _url.GetProduct.Replace(ApiRoute.ID, productId.ToString());
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<ProductDto>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
@@ -175,8 +170,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetProducts.Replace(Route.ID, receiptId.ToString());
-                var response = await _duHttpClient.GetAsync(url);
+                var url = _url.GetProducts.Replace(ApiRoute.ID, receiptId.ToString());
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ProductDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów");

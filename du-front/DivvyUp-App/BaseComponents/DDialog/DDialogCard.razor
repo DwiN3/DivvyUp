@@ -4,9 +4,8 @@
     <div class="content-dialog">
         @Content
     </div>
-
     <footer class="footer">
-        <RadzenButton Text="Okej" ButtonStyle="ButtonStyle.Info" Click="@(async () => { DialogService.Close(false); })"></RadzenButton>
+        <RadzenButton Text="Okej" ButtonStyle="ButtonStyle.Info" Click="@(() => DialogService.Close())"/>
     </footer>
 </div>
 

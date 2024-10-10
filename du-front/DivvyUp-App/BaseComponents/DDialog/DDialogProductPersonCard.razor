@@ -6,7 +6,7 @@
         <PersonProductGrid ProductId="@ProductId" />
     </div>
     <footer class="footer">
-        <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Info" Click="@(async () => { DialogService.Close(false); })"></RadzenButton>
+        <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Info" Click="@(() => DialogService.Close())" />
     </footer>
 </div>
 

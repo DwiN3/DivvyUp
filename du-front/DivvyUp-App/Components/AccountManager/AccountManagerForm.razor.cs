@@ -1,10 +1,10 @@
 ﻿using DivvyUp_App.GuiService;
-using DivvyUp_Impl_Maui.Api.DuHttpClient;
+using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.Model;
 using Microsoft.AspNetCore.Components;
+using Radzen;
 
 namespace DivvyUp_App.Components.AccountManager
 {
@@ -15,7 +15,7 @@ namespace DivvyUp_App.Components.AccountManager
         [Inject]
         private UserAppService UserAppService { get; set; }
         [Inject]
-        private DuHttpClient DuHttpClient { get; set; }
+        private DHttpClient DHttpClient { get; set; }
         [Inject]
         private DAlertService AlertService { get; set; }
         [Inject]
@@ -39,8 +39,9 @@ namespace DivvyUp_App.Components.AccountManager
             try
             {
                 var token = await AuthService.EditUser(User);
-                DuHttpClient.UpdateToken(token);
+                DHttpClient.setToken(token);
                 UserAppService.SetUser(User.username, User.email, token, true);
+                AlertService.ShowAlert("Zapisano zmiany", AlertStyle.Success);
             }
             catch (HttpResponseException ex)
             {
@@ -59,7 +60,7 @@ namespace DivvyUp_App.Components.AccountManager
         {
             try
             {
-                var result = await DDialogService.OpenResetPasswordDialog();
+                await DDialogService.OpenResetPasswordDialog();
             }
             catch (HttpResponseException ex)
             {
@@ -83,7 +84,7 @@ namespace DivvyUp_App.Components.AccountManager
                 {
                     await AuthService.RemoveUser();
                     UserAppService.ClearUser();
-                    DuHttpClient.UpdateToken(string.Empty);
+                    DHttpClient.setToken(string.Empty);
                     StateHasChanged();
                     Navigation.NavigateTo("/");
                 }

@@ -2,14 +2,14 @@
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace DivvyUp_Impl_Maui.Api.DuHttpClient
+namespace DivvyUp_Impl_Maui.Api.DHttpClient
 {
-    public class DuHttpClient
+    public class DHttpClient
     {
         private readonly HttpClient _httpClient;
         private string _token;
 
-        public DuHttpClient(HttpClient httpClient)
+        public DHttpClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
             AddAuthorizationHeader();
@@ -44,7 +44,7 @@ namespace DivvyUp_Impl_Maui.Api.DuHttpClient
             return await _httpClient.DeleteAsync(url);
         }
 
-        public void UpdateToken(string token)
+        public void setToken(string token)
         {
             _token = token;
             AddAuthorizationHeader();

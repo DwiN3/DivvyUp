@@ -1,26 +1,24 @@
-﻿using DivvyUp_Impl_Maui.Api.DuHttpClient;
-using DivvyUp_Impl_Maui.Api.HttpResponseException;
-using DivvyUp_Impl_Maui.Api.Route;
+﻿using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
-using System.Linq.Dynamic.Core.Tokenizer;
-using DivvyUp_Shared.Model;
+using DivvyUp_Impl_Maui.Api.DHttpClient;
+using DivvyUp_Shared.AppConstants;
 
 namespace DivvyUp_Impl_Maui.Service
 {
     public class AuthService : IAuthService
     {
         [Inject]
-        private DuHttpClient _duHttpClient { get; set; }
-        private Route _url { get; } = new();
+        private DHttpClient _dHttpClient { get; set; }
+        private ApiRoute _url { get; } = new();
         private readonly ILogger<ReceiptService> _logger;
 
-        public AuthService(DuHttpClient duHttpClient, ILogger<ReceiptService> logger)
+        public AuthService(DHttpClient dHttpClient, ILogger<ReceiptService> logger)
         {
-            _duHttpClient = duHttpClient;
+            _dHttpClient = dHttpClient;
             _logger = logger;
         }
 
@@ -36,7 +34,7 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Hasło jest puste");
 
                 var url = _url.Login;
-                var response = await _duHttpClient.PostAsync(url, user);
+                var response = await _dHttpClient.PostAsync(url, user);
                 var result = await response.Content.ReadAsStringAsync();
                 await EnsureCorrectResponse(response, "Błąd w czasie logowania");
                 return result;
@@ -71,7 +69,7 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Email");
 
                 var url = _url.Register;
-                var response = await _duHttpClient.PostAsync(url, user);
+                var response = await _dHttpClient.PostAsync(url, user);
                 await EnsureCorrectResponse(response, "Błąd w czasie rejestracji");
             }
             catch (InvalidOperationException ex)
@@ -103,7 +101,7 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna edytować użytkownika bez emaila");
 
                 var url = _url.EditUser;
-                var response = await _duHttpClient.PutAsync(url, user);
+                var response = await _dHttpClient.PutAsync(url, user);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji użytkownika"); 
                 var result = await response.Content.ReadAsStringAsync();
                 return result;
@@ -131,7 +129,7 @@ namespace DivvyUp_Impl_Maui.Service
                 };
 
                 var url = _url.ChangePasswordUser;
-                var response = await _duHttpClient.PutAsync(url, data);
+                var response = await _dHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie zmieniania hasła");
             }
             catch (InvalidOperationException ex)
@@ -151,7 +149,7 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.RemoveUser;
-                var response = await _duHttpClient.DeleteAsync(url);
+                var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie usuwania użytkownika");
             }
             catch (InvalidOperationException ex)
@@ -175,7 +173,7 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Brak tokenu");
 
                 var url = $"{_url.IsValid}?token={token}";
-                var response = await _duHttpClient.GetAsync(url);
+                var response = await _dHttpClient.GetAsync(url);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 bool result = bool.Parse(responseContent);
                 await EnsureCorrectResponse(response, "Błąd w czasie walidacji");
@@ -203,7 +201,7 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = $"{_url.GetUser}?token={token}";
-                var response = await _duHttpClient.GetAsync(url);
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<UserDto>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie użytkownika");

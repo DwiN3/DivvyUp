@@ -61,7 +61,7 @@
         <RadzenDataGridColumn Property="@nameof(ProductDto.price)" Title="Kwota" Width="12%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="product">
                 <div style="color: @(product.settled ? "green" : "red")">
-                    <b>@product.price.ToString((AppConstants.PriceFormat))</b>
+                    <b>@product.price.ToString((Format.PriceFormat))</b>
                 </div>
             </Template>
             <EditTemplate Context="product">
@@ -94,7 +94,7 @@
             <Template Context="product">
                 @if (product.divisible)
                 {
-                    @($"{product.compensationPrice.ToString("0.00")}zł")
+                    @product.compensationPrice.ToString(Format.PriceFormat)
                 }
                 else
                 {

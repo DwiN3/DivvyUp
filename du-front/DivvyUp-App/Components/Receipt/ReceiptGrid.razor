@@ -60,7 +60,7 @@
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.totalPrice)" Title="Kwota" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="receipt">                
                 <div style="color: @(receipt.settled ? "green" : "red")">
-                    <b>@receipt.totalPrice.ToString(AppConstants.PriceFormat)</b>
+                    <b>@receipt.totalPrice.ToString(Format.PriceFormat)</b>
                 </div>
             </Template>
             <EditTemplate>

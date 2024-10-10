@@ -1,6 +1,6 @@
-﻿namespace DivvyUp_Impl_Maui.Api.Route
+﻿namespace DivvyUp_Shared.AppConstants
 {
-    public class Route
+    public class ApiRoute
     {
         public const string ID = "{id}";
         private const string BaseUrl = "http://localhost:8080/rm";

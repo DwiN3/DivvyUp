@@ -1,6 +1,6 @@
 ﻿using DivvyUp_App.BaseComponents.DAlert;
 using DivvyUp_App.GuiService;
-using DivvyUp_Impl_Maui.Api.DuHttpClient;
+using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -14,7 +14,7 @@ namespace DivvyUp_App.Layout
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
-        private DuHttpClient DuHttpClient { get; set; }
+        private DHttpClient DHttpClient { get; set; }
         [Inject]
         private DAlertService AlertService { get; set; }
         [Inject]
@@ -31,7 +31,13 @@ namespace DivvyUp_App.Layout
             Navigation.LocationChanged += OnLocationChanged;
             AlertService.OnAlert += ShowAlert;
             AlertService.OnCloseAlert += HideAlert;
+            await SetUser();
+            SetHeader(Navigation.Uri);
+            StateHasChanged();
+        }
 
+        private async Task SetUser()
+        {
             var user = UserAppService.GetUser();
             UserAppService.SetLoggedIn(false);
 
@@ -42,25 +48,23 @@ namespace DivvyUp_App.Layout
                     bool isValid = await AuthService.IsValid(user.token);
                     if (isValid)
                     {
-                        UserAppService.SetUser(user.username, user.email, user.token, true);
-                        DuHttpClient.UpdateToken(user.token);
+                        UserAppService.SetLoggedIn(true);
+                        DHttpClient.setToken(user.token);
                         Navigation.NavigateTo("/receipt");
                     }
                 }
                 catch (HttpRequestException)
                 {
                     UserAppService.ClearUser();
-                    DuHttpClient.UpdateToken(string.Empty);
+                    DHttpClient.setToken(string.Empty);
                 }
                 catch (Exception)
                 {
                     UserAppService.ClearUser();
-                    DuHttpClient.UpdateToken(string.Empty);
+                    DHttpClient.setToken(string.Empty);
                     Navigation.NavigateTo("/");
                 }
             }
-            SetHeader(Navigation.Uri);
-            StateHasChanged();
         }
 
         private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)

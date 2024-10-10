@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
-using DivvyUp_Impl_Maui.Api.DuHttpClient;
-using DivvyUp_Impl_Maui.Api.Route;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Newtonsoft.Json;
 using DivvyUp_Impl_Maui.Api.HttpResponseException;
+using DivvyUp_Impl_Maui.Api;
+using DivvyUp_Impl_Maui.Api.DHttpClient;
+using DivvyUp_Shared.AppConstants;
 
 namespace DivvyUp_Impl_Maui.Service
 {
     public class ReceiptService : IReceiptService
     {
         [Inject]
-        private DuHttpClient _duHttpClient { get; set; }
-        private Route _url { get; } = new();
+        private DHttpClient _dHttpClient { get; set; }
+        private ApiRoute _url { get; } = new();
         private readonly ILogger<ReceiptService> _logger;
 
-        public ReceiptService(DuHttpClient duHttpClient, ILogger<ReceiptService> logger)
+        public ReceiptService(DHttpClient dHttpClient, ILogger<ReceiptService> logger)
         {
-            _duHttpClient = duHttpClient;
+            _dHttpClient = dHttpClient;
             _logger = logger;
         }
 
@@ -32,7 +33,7 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna dodać rachunku bez nazwy");
 
                 var url = _url.AddReceipt;
-                var response = await _duHttpClient.PostAsync(url, receipt);
+                var response = await _dHttpClient.PostAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania rachunku");
             }
             catch (InvalidOperationException ex)
@@ -56,8 +57,8 @@ namespace DivvyUp_Impl_Maui.Service
                 if (receipt.name.Equals(string.Empty))
                     throw new InvalidOperationException("Nie mozna edytować rachunku bez nazwy");
 
-                var url = _url.EditReceipt.Replace(Route.ID, receipt.id.ToString());
-                var response = await _duHttpClient.PutAsync(url, receipt);
+                var url = _url.EditReceipt.Replace(ApiRoute.ID, receipt.id.ToString());
+                var response = await _dHttpClient.PutAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
             catch (InvalidOperationException ex)
@@ -79,8 +80,8 @@ namespace DivvyUp_Impl_Maui.Service
                 if (receiptId == null)
                     throw new InvalidOperationException("Nie mozna usunąć rachunku które nie posiada id");
 
-                var url = _url.RemoveReceipt.Replace(Route.ID, receiptId.ToString());
-                var response = await _duHttpClient.DeleteAsync(url);
+                var url = _url.RemoveReceipt.Replace(ApiRoute.ID, receiptId.ToString());
+                var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
             catch (InvalidOperationException ex)
@@ -103,9 +104,9 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna rozliczyć rachunku nie posiadającego id");
 
                 var url = _url.SetSettledReceipt
-                    .Replace(Route.ID, receiptId.ToString())
-                    .Replace(Route.Settled, settled.ToString());
-                var response = await _duHttpClient.PutAsync(url);
+                    .Replace(ApiRoute.ID, receiptId.ToString())
+                    .Replace(ApiRoute.Settled, settled.ToString());
+                var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
             catch (InvalidOperationException ex)
@@ -128,9 +129,9 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna ustawić ceny rachunku nie posiadającego id");
 
                 var url = _url.SetTotalPriceReceipt
-                    .Replace(Route.ID, receiptId.ToString())
-                    .Replace(Route.TotalPrice, totalPrice.ToString());
-                var response = await _duHttpClient.PutAsync(url);
+                    .Replace(ApiRoute.ID, receiptId.ToString())
+                    .Replace(ApiRoute.TotalPrice, totalPrice.ToString());
+                var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
             catch (InvalidOperationException ex)
@@ -149,8 +150,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetReceipt.Replace(Route.ID, receiptId.ToString());
-                var response = await _duHttpClient.GetAsync(url);
+                var url = _url.GetReceipt.Replace(ApiRoute.ID, receiptId.ToString());
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<ReceiptDto>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunku");
@@ -168,7 +169,7 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.GetReceipts;
-                var response = await _duHttpClient.GetAsync(url);
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ReceiptDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunków");

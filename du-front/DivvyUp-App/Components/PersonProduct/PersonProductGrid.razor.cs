@@ -52,7 +52,7 @@ namespace DivvyUp_App.Components.PersonProduct
             }
             else
             {
-                AlertService.ShowAlert("Nie można przypisać więcej osób", AlertStyle.Secondary);
+                AlertService.ShowAlert("Nie można przypisać więcej osób", AlertStyle.Danger);
             }
         }
 

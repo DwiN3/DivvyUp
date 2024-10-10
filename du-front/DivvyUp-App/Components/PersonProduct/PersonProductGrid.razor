@@ -65,7 +65,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.partOfPrice)" Title="Cena" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                @personProduct.partOfPrice.ToString(AppConstants.PriceFormat)
+                @personProduct.partOfPrice.ToString(Format.PriceFormat)
             </Template>
             <EditTemplate Context="personProduct">
                 -

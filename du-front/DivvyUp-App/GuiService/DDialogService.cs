@@ -33,15 +33,13 @@ namespace DivvyUp_App.GuiService
             return result != null && (bool)result;
         }
 
-        public async Task<bool> OpenResetPasswordDialog()
-        {
-            var result = await _dialogService.OpenAsync<DDialogResetPasswordCard>(
+        public async Task OpenResetPasswordDialog()
+        { 
+            await _dialogService.OpenAsync<DDialogResetPasswordCard>(
                 "Zmiana hasła",
                 new Dictionary<string, object> { },
                 new DialogOptions()
             );
-
-            return result != null && (bool)result;
         }
 
         public async Task<bool> OpenProductPersonDialog(int productId)

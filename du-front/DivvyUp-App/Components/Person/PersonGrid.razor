@@ -53,17 +53,17 @@
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.unpaidAmount)" Title="Kwota" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.unpaidAmount)" Title="Kwota aktualna" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b style="color: @(person.unpaidAmount > 0 ? "red" : "green")">@person.unpaidAmount.ToString(AppConstants.PriceFormat)</b>
+                <b style="color: @(person.unpaidAmount > 0 ? "red" : "green")">@person.unpaidAmount.ToString(Format.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.totalAmount)" Title="Kwota całościowa" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.totalAmount)" Title="Kwota łączna" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b>@person.totalAmount.ToString(AppConstants.PriceFormat)</b>
+                <b>@person.totalAmount.ToString(Format.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -

@@ -1,7 +1,7 @@
 ﻿using DivvyUp_App.GuiService;
-using DivvyUp_Impl_Maui.Api.DuHttpClient;
+using DivvyUp_Impl_Maui.Api.CodeReader;
+using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.HttpResponseException;
-using DivvyUp_Impl_Maui.CodeReader;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
@@ -16,7 +16,7 @@ namespace DivvyUp_App.Components.Login
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
-        private DuHttpClient HttpClient { get; set; }
+        private DHttpClient DHttpClient { get; set; }
         [Inject]
         private UserAppService UserAppService { get; set; }
         [Inject]
@@ -31,7 +31,7 @@ namespace DivvyUp_App.Components.Login
                 var token = await AuthService.Login(User);
                 UserDto user = await AuthService.GetUser(token);
                 UserAppService.SetUser(user.username, user.email, token, true);
-                HttpClient.UpdateToken(token);
+                DHttpClient.setToken(token);
                 Navigation.NavigateTo("/receipt");
             }
             catch (HttpResponseException ex)

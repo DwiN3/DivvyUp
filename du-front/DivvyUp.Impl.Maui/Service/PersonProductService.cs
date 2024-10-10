@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DivvyUp_Impl_Maui.Api.DuHttpClient;
-using DivvyUp_Impl_Maui.Api.HttpResponseException;
-using DivvyUp_Impl_Maui.Api.Route;
+﻿using DivvyUp_Impl_Maui.Api.HttpResponseException;
+using DivvyUp_Impl_Maui.Api.DHttpClient;
+using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
@@ -17,13 +12,13 @@ namespace DivvyUp_Impl_Maui.Service
     public class PersonProductService : IPersonProductService
     {
         [Inject]
-        private DuHttpClient _duHttpClient { get; set; }
-        private Route _url { get; } = new();
+        private DHttpClient _dHttpClient { get; set; }
+        private ApiRoute _url { get; } = new();
         private readonly ILogger<PersonProductService> _logger;
 
-        public PersonProductService(DuHttpClient duHttpClient, ILogger<PersonProductService> logger)
+        public PersonProductService(DHttpClient dHttpClient, ILogger<PersonProductService> logger)
         {
-            _duHttpClient = duHttpClient;
+            _dHttpClient = dHttpClient;
             _logger = logger;
         }
 
@@ -34,8 +29,8 @@ namespace DivvyUp_Impl_Maui.Service
                 if (personProduct == null)
                     throw new InvalidOperationException("Nie mozna dodać pustych produktu osób");
 
-                var url = _url.AddPersonProduct.Replace(Route.ID, productId.ToString()); ;
-                var response = await _duHttpClient.PostAsync(url, personProduct);
+                var url = _url.AddPersonProduct.Replace(ApiRoute.ID, productId.ToString()); ;
+                var response = await _dHttpClient.PostAsync(url, personProduct);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania produktu osób");
             }
             catch (InvalidOperationException ex)
@@ -57,8 +52,8 @@ namespace DivvyUp_Impl_Maui.Service
                 if (personProductId == null)
                     throw new InvalidOperationException("Nie mozna usunąć produktu osób które nie posiada id");
 
-                var url = _url.RemovePersonProduct.Replace(Route.ID, personProductId.ToString());
-                var response = await _duHttpClient.DeleteAsync(url);
+                var url = _url.RemovePersonProduct.Replace(ApiRoute.ID, personProductId.ToString());
+                var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osób");
             }
             catch (InvalidOperationException ex)
@@ -83,9 +78,9 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna zmienić osoby nie posiadającego id person osoby");
 
                 var url = _url.ChangePersonPersonProduct
-                    .Replace(Route.ID, personProductId.ToString())
-                    .Replace(Route.PersonId, personId.ToString());
-                var response = await _duHttpClient.PutAsync(url);
+                    .Replace(ApiRoute.ID, personProductId.ToString())
+                    .Replace(ApiRoute.PersonId, personId.ToString());
+                var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
             }
             catch (InvalidOperationException ex)
@@ -108,10 +103,10 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna rozliczyć produktu osoby nie posiadającego id");
 
                 var url = _url.SetSettledPersonProduct
-                    .Replace(Route.ID, personProductId.ToString())
-                    .Replace(Route.Settled, settled.ToString());
+                    .Replace(ApiRoute.ID, personProductId.ToString())
+                    .Replace(ApiRoute.Settled, settled.ToString());
 
-                var response = await _duHttpClient.PutAsync(url);
+                var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
             }
             catch (InvalidOperationException ex)
@@ -138,8 +133,8 @@ namespace DivvyUp_Impl_Maui.Service
                     compensation = true
                 };
 
-                var url = _url.SetCompensationPersonProduct.Replace(Route.ID, personProductId.ToString());
-                var response = await _duHttpClient.PutAsync(url, data);
+                var url = _url.SetCompensationPersonProduct.Replace(ApiRoute.ID, personProductId.ToString());
+                var response = await _dHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (InvalidOperationException ex)
@@ -158,8 +153,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonProduct.Replace(Route.ID, personProductId.ToString());
-                var response = await _duHttpClient.GetAsync(url);
+                var url = _url.GetPersonProduct.Replace(ApiRoute.ID, personProductId.ToString());
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<PersonProductDto>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu osób");
@@ -176,8 +171,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonProductsForProduct.Replace(Route.ID, productId.ToString());
-                var response = await _duHttpClient.GetAsync(url);
+                var url = _url.GetPersonProductsForProduct.Replace(ApiRoute.ID, productId.ToString());
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów osób");
@@ -195,7 +190,7 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.GetPersonProducts;
-                var response = await _duHttpClient.GetAsync(url);
+                var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów osób");

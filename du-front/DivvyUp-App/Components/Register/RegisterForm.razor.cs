@@ -1,10 +1,10 @@
 ﻿using DivvyUp_App.GuiService;
-using DivvyUp_Impl_Maui.CodeReader;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
-using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using Radzen;
+using DivvyUp_Impl_Maui.Api.HttpResponseException;
+using DivvyUp_Impl_Maui.Api.CodeReader;
 
 namespace DivvyUp_App.Components.Register
 {
@@ -19,25 +19,17 @@ namespace DivvyUp_App.Components.Register
         private NavigationManager Navigation { get; set; }
         private CodeReaderResponse RCR { get; set; } = new();
 
-        private string Username { get; set; }
-        private string Email { get; set; }
-        private string Password { get; set; }
+        private UserDto User { get; set; } = new();
         private string RePassword { get; set; }
 
 
         private async Task CreateAccount()
         {
-            if (Password.Equals(RePassword))
+            if (User.password.Equals(RePassword))
             {
                 try
                 {
-                    UserDto user = new UserDto
-                    {
-                        username = Username,
-                        email = Email,
-                        password = Password
-                    };
-                    await AuthService.Register(user);
+                    await AuthService.Register(User);
                     AlertService.ShowAlert("Pomyślnie utworzono użytkownika", AlertStyle.Success);
                     Navigation.NavigateTo("/login");
                 }
