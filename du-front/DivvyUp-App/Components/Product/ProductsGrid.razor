@@ -26,7 +26,7 @@
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                @*<RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />*@
+                <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />
                 <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(product.id))" />
             </Template>
             <EditTemplate Context="product">
@@ -86,6 +86,7 @@
                 }
                 else
                 {
+                    product.maxQuantity = 1;
                     <div>-</div>                    
                 }
             </EditTemplate>
@@ -135,22 +136,8 @@
                     }
                 }
             </Template>
-            <EditTemplate Context="product">
-                @if (Persons.Count > 0)
-                {
-                    if (product.divisible && product.id != 0)
-                    {
-                        <RadzenButton Text="Osoby" Click="@(async () => { await ManagePerson(product.id); })"></RadzenButton>
-                    }
-                    else if (!product.divisible)
-                    {
-                        <RadzenDropDownDataGrid TValue="PersonDto"
-                                                Value="SelectedPerson"
-                                                ValueChanged="OnPersonSet"
-                                                Data="@Persons"
-                                                TextProperty="@nameof(PersonDto.fullName)" />
-                    }
-                }
+            <EditTemplate>
+                -
             </EditTemplate>
         </RadzenDataGridColumn>
     </Columns>

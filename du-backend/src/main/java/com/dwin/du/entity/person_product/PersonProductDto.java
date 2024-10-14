@@ -11,7 +11,6 @@ public class PersonProductDto {
     public int personId;
     public double partOfPrice;
     public int quantity;
-    public int maxQuantity;
     public boolean compensation;
     public  boolean settled;
 }

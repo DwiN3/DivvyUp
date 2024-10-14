@@ -7,4 +7,7 @@ import lombok.Data;
 @Data
 public class EditProductRequest {
     public String name;
+    public Double price;
+    public boolean divisible;
+    public int maxQuantity;
 }

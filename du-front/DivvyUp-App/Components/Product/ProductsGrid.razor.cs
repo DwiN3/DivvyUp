@@ -85,7 +85,6 @@ namespace DivvyUp_App.Components.Product
                         {
                             productId = newProduct.id,
                             personId = SelectedPerson.id,
-                            maxQuantity = product.maxQuantity,
                             compensation = true,
                             partOfPrice = product.price,
                             quantity = 1

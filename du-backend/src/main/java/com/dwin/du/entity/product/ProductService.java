@@ -58,8 +58,26 @@ public class ProductService {
         valid.validateUser(username);
         Product product = valid.validateProduct(username, productId);
 
+        if(product.isDivisible() && !request.isDivisible()){
+            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+            personProductRepository.deleteAll(personProducts);
+        }
+
         product.setName(request.getName());
+        product.setPrice(request.getPrice());
+        product.setDivisible(request.isDivisible());
+
+        if(request.isDivisible()) {
+            product.setMaxQuantity(request.getMaxQuantity());
+            product.setCompensationPrice(request.getPrice());
+        }
+        else {
+            product.setMaxQuantity(1);
+            product.setCompensationPrice(0);
+        }
+
         productRepository.save(product);
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }
@@ -93,6 +111,10 @@ public class ProductService {
             personProductRepository.save(personProduct);
         }
 
+        Receipt receipt = product.getReceipt();
+        boolean allSettled = areAllProductsSettled(receipt);
+        receipt.setSettled(allSettled);
+        receiptRepository.save(receipt);
         updatePerson.updateUnpaidAmount(username);
 
         return ResponseEntity.ok().build();
@@ -148,5 +170,10 @@ public class ProductService {
 
         receipt.setTotalPrice(totalPrice);
         receiptRepository.save(receipt);
+    }
+
+    private boolean areAllProductsSettled(Receipt receipt) {
+        List<Product> products = productRepository.findByReceipt(receipt);
+        return products.stream().allMatch(Product::isSettled);
     }
 }
