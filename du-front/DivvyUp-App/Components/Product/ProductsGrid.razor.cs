@@ -75,25 +75,26 @@ namespace DivvyUp_App.Components.Product
             try
             {
                 product.receiptId = ReceiptId;
+                var newProduct = new ProductDto();
 
-                if (product.id == 0)
-                {
-                    var newProduct = await ProductService.AddProduct(product);
-                    if (!product.divisible && Persons.Count > 0)
-                    {
-                        PersonProductDto personProduct = new PersonProductDto
-                        {
-                            productId = newProduct.id,
-                            personId = SelectedPerson.id,
-                            compensation = true,
-                            partOfPrice = product.price,
-                            quantity = 1
-                        };
-                        await PersonProductService.AddPersonProduct(personProduct, newProduct.id);
-                    }
-                }
+                if (product.id == 0) 
+                    newProduct = await ProductService.AddProduct(product);
+                
                 else
-                    await ProductService.EditProduct(product);
+                    newProduct = await ProductService.EditProduct(product);
+                
+                if (!product.divisible && Persons.Count > 0)
+                {
+                    PersonProductDto personProduct = new PersonProductDto
+                    {
+                        productId = newProduct.id,
+                        personId = SelectedPerson.id,
+                        compensation = true,
+                        partOfPrice = product.price,
+                        quantity = 1
+                    };
+                    await PersonProductService.AddPersonProduct(personProduct, newProduct.id);
+                }
             }
             catch (InvalidOperationException)
             {

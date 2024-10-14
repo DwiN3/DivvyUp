@@ -5,6 +5,7 @@ namespace DivvyUp_Shared.Interface
     public interface IPersonProductService
     {
         Task AddPersonProduct(PersonProductDto personProduct, int productId);
+        Task EditPersonProduct(PersonProductDto personProduct);
         Task RemovePersonProduct(int personProductId);
         Task ChangePersonPersonProduct(int personProductId, int personId);
         Task SetSettledPersonProduct(int personProductId, bool isSettled);

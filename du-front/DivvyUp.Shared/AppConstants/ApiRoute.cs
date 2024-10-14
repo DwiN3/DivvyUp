@@ -52,6 +52,7 @@
         public const string PersonId = "{personId}";
         public const string Compensation = "{compensation}";
         public readonly string AddPersonProduct = $"{BaseUrl}/product/{ID}/person-product/add";
+        public readonly string EditPersonProduct = $"{BaseUrl}/person-product/{ID}/edit";
         public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/{ID}/remove";
         public readonly string ChangePersonPersonProduct = $"{BaseUrl}/person-product/{ID}/change-person?personId={PersonId}";
         public readonly string SetSettledPersonProduct = $"{BaseUrl}/person-product/{ID}/set-settled?settled={Settled}";

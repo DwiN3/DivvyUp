@@ -1,6 +1,6 @@
 package com.dwin.du.entity.product;
 
-import com.dwin.du.entity.person.PersonUpdateService;
+import com.dwin.du.service.PersonUpdateService;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Request.AddProductRequest;
@@ -8,7 +8,7 @@ import com.dwin.du.entity.product.Request.EditProductRequest;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.user.User;
-import com.dwin.du.service.OperationService;
+import com.dwin.du.service.DataUpdateService;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class ProductService {
     private final PersonProductRepository personProductRepository;
     private final ValidService valid;
     private final PersonUpdateService updatePerson;
-    private final OperationService operation;
+    private final DataUpdateService operation;
 
     public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
         User user = valid.validateUser(username);
@@ -83,7 +83,7 @@ public class ProductService {
         operation.updatePartPricesPersonProduct(product);
         operation.updateCompensationPrice(product);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(product);
     }
 
     public ResponseEntity<?> removeProduct(int productId, String username) {

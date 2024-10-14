@@ -45,6 +45,29 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
+        public async Task EditPersonProduct(PersonProductDto personProduct)
+        {
+            try
+            {
+                if (personProduct == null)
+                    throw new InvalidOperationException("Nie mozna edytować pustego przypisu osoby do produktu");
+
+                var url = _url.EditPersonProduct.Replace(ApiRoute.ID, personProduct.id.ToString());
+                var response = await _dHttpClient.PutAsync(url, personProduct);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task RemovePersonProduct(int personProductId)
         {
             try

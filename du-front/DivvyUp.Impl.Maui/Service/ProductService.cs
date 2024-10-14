@@ -50,7 +50,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task EditProduct(ProductDto product)
+        public async Task<ProductDto> EditProduct(ProductDto product)
         {
             try
             {
@@ -61,7 +61,10 @@ namespace DivvyUp_Impl_Maui.Service
 
                 var url = _url.EditProduct.Replace(ApiRoute.ID, product.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, product);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ProductDto>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
+                return result;
             }
             catch (InvalidOperationException ex)
             {

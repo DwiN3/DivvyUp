@@ -137,13 +137,26 @@
                 }
             </Template>
             <EditTemplate Context="product">
-                @if (Persons.Count > 0 && !product.divisible && product.id == 0)
+                @if (Persons.Count > 0 && !product.divisible)
                 {
-                    <RadzenDropDownDataGrid TValue="PersonDto"
-                                            Value="SelectedPerson"
-                                            ValueChanged="OnPersonSet"
-                                            Data="@Persons"
-                                            TextProperty="@nameof(PersonDto.fullName)" />
+                    if (product.id != 0 && product.persons != null && product.persons.Count() > 0)
+                    {
+                        PersonDto person = product.persons.First();
+
+                        <RadzenDropDownDataGrid TValue="PersonDto"
+                                                Value="person"
+                                                ValueChanged="async(PersonDto person) => await OnPersonChange(product.id, person)"
+                                                Data="@Persons"
+                                                TextProperty="@nameof(PersonDto.fullName)" />
+                    }
+                    else
+                    {
+                        <RadzenDropDownDataGrid TValue="PersonDto"
+                                                Value="SelectedPerson"
+                                                ValueChanged="OnPersonSet"
+                                                Data="@Persons"
+                                                TextProperty="@nameof(PersonDto.fullName)" />
+                    }
                 }
             </EditTemplate>
         </RadzenDataGridColumn>

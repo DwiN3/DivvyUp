@@ -1,7 +1,7 @@
 package com.dwin.du.entity.receipt;
 
 import com.dwin.du.entity.person.Person;
-import com.dwin.du.entity.person.PersonUpdateService;
+import com.dwin.du.service.PersonUpdateService;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;

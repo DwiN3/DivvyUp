@@ -44,7 +44,7 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task InsertRow()
         {
-            if (CountLastPart() > 0)
+            if (CountLastPart(0) > 0)
             {
                 var personProduct = new PersonProductDto();
                 PersonProducts.Add(personProduct);
@@ -72,6 +72,8 @@ namespace DivvyUp_App.Components.PersonProduct
             {
                 if (personProduct.id == 0)
                     await PersonProductService.AddPersonProduct(personProduct, ProductId);
+                else
+                    await PersonProductService.EditPersonProduct(personProduct);
             }
             catch (InvalidOperationException)
             {
@@ -147,7 +149,7 @@ namespace DivvyUp_App.Components.PersonProduct
             }
         }
 
-        private int CountLastPart()
+        private int CountLastPart(int personProductId)
         {
             if (Product != null)
             {
@@ -155,8 +157,10 @@ namespace DivvyUp_App.Components.PersonProduct
 
                 foreach (var personProduct in PersonProducts)
                 {
-                    if (personProduct.id != 0)
-                        lastParts -= personProduct.quantity;
+                    if (personProduct.id == 0 || personProductId == personProduct.id)
+                        continue;
+                    
+                    lastParts -= personProduct.quantity;
                 }
 
                 return lastParts;

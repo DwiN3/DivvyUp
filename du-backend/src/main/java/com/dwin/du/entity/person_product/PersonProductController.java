@@ -1,6 +1,7 @@
 package com.dwin.du.entity.person_product;
 
 import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
+import com.dwin.du.entity.product.Request.EditProductRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,14 @@ public class PersonProductController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.addPersonProduct(request, productId, currentUsername);
+    }
+
+    @PutMapping("/person-product/{id}/edit")
+    @Operation(summary = "Edit a person prodcut", description = "Edits an existing person product by ID.")
+    public ResponseEntity<?> editPersonProduct(@PathVariable int id, @RequestBody AddPersonProductRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personProductService.editPersonProduct(id, request, currentUsername);
     }
 
     @DeleteMapping("/person-product/{id}/remove")

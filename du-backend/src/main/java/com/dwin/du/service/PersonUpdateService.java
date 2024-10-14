@@ -1,5 +1,7 @@
-package com.dwin.du.entity.person;
+package com.dwin.du.service;
 
+import com.dwin.du.entity.person.Person;
+import com.dwin.du.entity.person.PersonRepository;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;

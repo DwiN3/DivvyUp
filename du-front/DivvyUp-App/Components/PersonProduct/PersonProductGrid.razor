@@ -24,7 +24,7 @@
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                @*<RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />*@
+                <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(personProduct))" />
                 <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct.id))" />
             </Template>
             <EditTemplate Context="personProduct">
@@ -58,9 +58,9 @@
             <EditTemplate Context="personProduct">
                 @if (personProduct.quantity == 0)
                 {
-                    personProduct.quantity = CountLastPart();
+                    personProduct.quantity = CountLastPart(personProduct.id);
                 }
-                <RadzenNumeric @bind-Value="@personProduct.quantity" Min="1" Max="CountLastPart()" />
+                <RadzenNumeric @bind-Value="@personProduct.quantity" Min="1" Max="CountLastPart(personProduct.id)" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.partOfPrice)" Title="Cena" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
