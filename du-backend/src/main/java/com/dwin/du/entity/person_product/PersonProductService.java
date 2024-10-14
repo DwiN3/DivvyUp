@@ -8,6 +8,7 @@ import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.user.User;
+import com.dwin.du.service.OperationService;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class PersonProductService {
     private final ReceiptRepository receiptRepository;
     private final ValidService valid;
     private final PersonUpdateService updatePerson;
+    private final OperationService operation;
 
     public ResponseEntity<?> addPersonProduct(AddPersonProductRequest request, int productId, String username) {
         User user = valid.validateUser(username);
@@ -50,7 +52,7 @@ public class PersonProductService {
 
         if (product.isDivisible()) {
             personProduct.setQuantity(request.getQuantity());
-            double partPrice = calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
+            double partPrice = operation.calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
             personProduct.setPartOfPrice(partPrice);
         } else {
             personProduct.setQuantity(1);
@@ -60,7 +62,7 @@ public class PersonProductService {
         personProduct.setCompensation(isCompensation);
         personProductRepository.save(personProduct);
 
-        updateCompensationPrice(product);
+        operation.updateCompensationPrice(product);
         updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
@@ -74,7 +76,7 @@ public class PersonProductService {
         personProductRepository.delete(personProduct);
 
         Product product = valid.validateProduct(username, personProduct.getProduct().getId());
-        updateCompensationPrice(product);
+        operation.updateCompensationPrice(product);
         updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
@@ -88,12 +90,12 @@ public class PersonProductService {
         personProductRepository.save(personProduct);
 
         Product product = personProduct.getProduct();
-        boolean allPersonProductsSettled = areAllPersonProductsSettled(product);
+        boolean allPersonProductsSettled = operation.areAllPersonProductsSettled(product);
         product.setSettled(allPersonProductsSettled);
         productRepository.save(product);
 
         Receipt receipt = product.getReceipt();
-        boolean allProductsSettled = areAllProductsSettled(receipt);
+        boolean allProductsSettled = operation.areAllProductsSettled(receipt);
         receipt.setSettled(allProductsSettled);
         receiptRepository.save(receipt);
 
@@ -195,36 +197,5 @@ public class PersonProductService {
         }
 
         return ResponseEntity.ok(responseList);
-    }
-
-    private double calculatePartPrice(int quantity, int maxQuantity, double price) {
-        double partPrice = ((double) quantity / maxQuantity) * price;
-        return partPrice;
-    }
-
-    private double calculateCompensationPrice(List<PersonProduct> personProductDtos, double price){
-        double compensationPrice = 0;
-        for(var item : personProductDtos){
-            compensationPrice += item.getPartOfPrice();
-        }
-        compensationPrice = price - compensationPrice;
-        return compensationPrice;
-    }
-
-    private void updateCompensationPrice(Product product) {
-        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-        double compensationPrice = calculateCompensationPrice(personProducts, product.getPrice());
-        product.setCompensationPrice(compensationPrice);
-        productRepository.save(product);
-    }
-
-    private boolean areAllPersonProductsSettled(Product product) {
-        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-        return personProducts.stream().allMatch(PersonProduct::isSettled);
-    }
-
-    private boolean areAllProductsSettled(Receipt receipt) {
-        List<Product> products = productRepository.findByReceipt(receipt);
-        return products.stream().allMatch(Product::isSettled);
     }
 }

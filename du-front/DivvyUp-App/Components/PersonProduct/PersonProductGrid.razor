@@ -73,18 +73,26 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.personId)" Title="Osoba" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                @{
-                    var personName = GetPersonName(personProduct.personId);
-                    <div>@personName</div>
-                }
+                <RadzenDropDownDataGrid TValue="int"
+                                        Value="@personProduct.personId"
+                                        ValueChanged="async (int personId) => await OnPersonChange(personProduct, personId)"
+                                        Data="@Persons"
+                                        TextProperty="@nameof(PersonDto.fullName)"
+                                        ValueProperty="@nameof(PersonDto.id)" />
             </Template>
             <EditTemplate Context="personProduct">
+                @{
+                    if (Persons != null && Persons.Count > 0 && personProduct.personId == 0)
+                    {
+                        personProduct.personId = Persons.First().id;
+                    }
+                }
                 <RadzenDropDownDataGrid
                     TValue="int"
                     @bind-Value="personProduct.personId"
                     Data="@Persons"
                     TextProperty="@nameof(PersonDto.fullName)"
-                    ValueProperty="@nameof(PersonDto.id)" />
+                    ValueProperty="@nameof(PersonDto.id)"/>
             </EditTemplate>
         </RadzenDataGridColumn>
 

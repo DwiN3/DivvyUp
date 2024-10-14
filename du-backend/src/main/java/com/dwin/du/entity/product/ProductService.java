@@ -8,6 +8,7 @@ import com.dwin.du.entity.product.Request.EditProductRequest;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.user.User;
+import com.dwin.du.service.OperationService;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class ProductService {
     private final PersonProductRepository personProductRepository;
     private final ValidService valid;
     private final PersonUpdateService updatePerson;
+    private final OperationService operation;
 
     public ResponseEntity<?> addProductToReceipt(AddProductRequest request, int receiptId, String username) {
         User user = valid.validateUser(username);
@@ -49,7 +51,7 @@ public class ProductService {
         }
 
         productRepository.save(product);
-        updateTotalPriceReceipt(receipt);
+        operation.updateTotalPriceReceipt(receipt);
 
         return ResponseEntity.ok(product);
     }
@@ -78,6 +80,8 @@ public class ProductService {
 
         productRepository.save(product);
         updatePerson.updateAllData(username);
+        operation.updatePartPricesPersonProduct(product);
+        operation.updateCompensationPrice(product);
 
         return ResponseEntity.ok().build();
     }
@@ -91,7 +95,7 @@ public class ProductService {
         personProductRepository.deleteAll(personProducts);
         productRepository.delete(product);
 
-        updateTotalPriceReceipt(receipt);
+        operation.updateTotalPriceReceipt(receipt);
         updatePerson.updateAmounts(username);
 
         return ResponseEntity.ok().build();
@@ -112,7 +116,7 @@ public class ProductService {
         }
 
         Receipt receipt = product.getReceipt();
-        boolean allSettled = areAllProductsSettled(receipt);
+        boolean allSettled = operation.areAllProductsSettled(receipt);
         receipt.setSettled(allSettled);
         receiptRepository.save(receipt);
         updatePerson.updateUnpaidAmount(username);
@@ -160,20 +164,5 @@ public class ProductService {
         }
 
         return ResponseEntity.ok(responseList);
-    }
-
-    private void updateTotalPriceReceipt(Receipt receipt) {
-        List<Product> products = productRepository.findByReceipt(receipt);
-        double totalPrice = 0.00;
-        for(var item : products)
-            totalPrice += item.getPrice();
-
-        receipt.setTotalPrice(totalPrice);
-        receiptRepository.save(receipt);
-    }
-
-    private boolean areAllProductsSettled(Receipt receipt) {
-        List<Product> products = productRepository.findByReceipt(receipt);
-        return products.stream().allMatch(Product::isSettled);
     }
 }

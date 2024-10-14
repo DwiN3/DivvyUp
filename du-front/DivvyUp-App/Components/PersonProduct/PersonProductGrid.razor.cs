@@ -132,6 +132,21 @@ namespace DivvyUp_App.Components.PersonProduct
             }
         }
 
+        private async Task OnPersonChange(PersonProductDto personProduct, int personId)
+        {
+            try
+            {
+                personProduct.personId = personId;
+                await PersonProductService.ChangePersonPersonProduct(personProduct.id, personId);
+            }
+            catch (InvalidOperationException)
+            {
+            }
+            catch (Exception)
+            {
+            }
+        }
+
         private int CountLastPart()
         {
             if (Product != null)
