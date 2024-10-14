@@ -11,6 +11,7 @@ import com.dwin.du.entity.user.User;
 import com.dwin.du.service.DataUpdateService;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -36,6 +37,10 @@ public class PersonProductService {
         int currentTotalQuantity = personProducts.stream()
                 .mapToInt(PersonProduct::getQuantity)
                 .sum();
+
+        var personProductExists = personProductRepository.findByProductAndPerson(product, person);
+        if (!personProductExists.isEmpty())
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
         if (currentTotalQuantity + request.getQuantity() > product.getMaxQuantity()) {
             return ResponseEntity.badRequest().build();
@@ -132,6 +137,10 @@ public class PersonProductService {
         valid.validateUser(username);
         Person person = valid.validatePerson(username, personId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
+
+        var personProductExists = personProductRepository.findByProductAndPerson(personProduct.getProduct(), person);
+        if (!personProductExists.isEmpty())
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
         personProduct.setPerson(person);
         personProductRepository.save(personProduct);

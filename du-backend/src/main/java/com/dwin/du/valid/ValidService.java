@@ -11,6 +11,8 @@ import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,13 +47,6 @@ public class ValidService {
         Person person = optionalPerson.get();
         if (!person.getUser().getUsername().equals(userId))
             throw new ValidException(401);
-
-        /*
-        List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
-        if (!personProducts.isEmpty())
-            throw new ValidException(409);
-
-         */
 
         return person;
     }

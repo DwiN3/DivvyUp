@@ -48,14 +48,14 @@ namespace DivvyUp_App.Components.Receipt
             Grid.CancelEditRow(receipt);
         }
 
-        private async Task SaveRow(ReceiptDto r)
+        private async Task SaveRow(ReceiptDto receipt)
         {
             try
             {
-                if (r.id == 0)
-                    await ReceiptService.AddReceipt(r);
+                if (receipt.id == 0)
+                    await ReceiptService.AddReceipt(receipt);
                 else
-                    await ReceiptService.EditReceipt(r);
+                    await ReceiptService.EditReceipt(receipt);
             } 
             catch (InvalidOperationException)
             {

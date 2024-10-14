@@ -163,12 +163,17 @@ namespace DivvyUp_App.Components.Product
             try
             {
                 await PersonProductService.ChangePersonPersonProduct(personProduct.id, person.id);
+                
             }
             catch (InvalidOperationException)
             {
             }
             catch (Exception)
             {
+            }
+            finally
+            {
+                await LoadGrid();
             }
         }
     }

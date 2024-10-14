@@ -92,6 +92,7 @@ namespace DivvyUp_App.Components.PersonProduct
             try
             {
                 await PersonProductService.RemovePersonProduct(personProductId);
+                AlertService.ShowAlert("Usunięto przypisaną osobę", AlertStyle.Success);
             }
             catch (InvalidOperationException)
             {
@@ -124,13 +125,16 @@ namespace DivvyUp_App.Components.PersonProduct
             try
             {
                 await PersonProductService.SetCompensationPersonProduct(personProductId);
-                await LoadGrid();
             }
             catch (InvalidOperationException)
             {
             }
             catch (Exception)
             {
+            }
+            finally
+            {
+                await LoadGrid();
             }
         }
 
@@ -146,6 +150,10 @@ namespace DivvyUp_App.Components.PersonProduct
             }
             catch (Exception)
             {
+            }
+            finally
+            {
+                await LoadGrid();
             }
         }
 
