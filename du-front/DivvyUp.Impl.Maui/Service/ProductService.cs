@@ -26,11 +26,6 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (product == null)
-                    throw new InvalidOperationException("Nie mozna dodać pustego produktu");
-                if (product.name.Equals(string.Empty))
-                    throw new InvalidOperationException("Nie mozna dodać productu bez nazwy");
-
                 var url = _url.AddProduct.Replace(ApiRoute.ID, product.receiptId.ToString());
                 var response = await _dHttpClient.PostAsync(url, product);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -38,9 +33,9 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
                 return result;
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie dodawania produktu: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -54,11 +49,6 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (product == null)
-                    throw new InvalidOperationException("Nie mozna edytować pustego produktu");
-                if (product.name.Equals(string.Empty))
-                    throw new InvalidOperationException("Nie mozna edytować productu bez nazwy");
-
                 var url = _url.EditProduct.Replace(ApiRoute.ID, product.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, product);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -66,9 +56,9 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
                 return result;
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -82,16 +72,13 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (productId == null)
-                    throw new InvalidOperationException("Nie mozna usunąć produktu które nie posiada id");
-
                 var url = _url.RemoveProduct.Replace(ApiRoute.ID, productId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -105,18 +92,15 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (productId == null)
-                    throw new InvalidOperationException("Nie mozna rozliczyć produktu nie posiadającego id");
-
                 var url = _url.SetSettledProduct
                     .Replace(ApiRoute.ID, productId.ToString())
                     .Replace(ApiRoute.Settled, settled.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -130,18 +114,15 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (productId == null)
-                    throw new InvalidOperationException("Nie mozna ustawić ceny produktu nie posiadającego id");
-
                 var url = _url.SetCompensationPriceProduct
                     .Replace(ApiRoute.ID, productId.ToString())
                     .Replace(ApiRoute.CompensationPrice, compensationPrice.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -162,6 +143,11 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
                 return result;
             }
+            catch (HttpResponseException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie pobierania listy produktu do tabeli: {Message}", ex.Message);
@@ -180,6 +166,11 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów");
                 return result;
             }
+            catch (HttpResponseException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie pobierania listy produktów do tabeli: {Message}", ex.Message);
@@ -193,7 +184,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new HttpResponseException(response.StatusCode, errorMessage);
+                throw new HttpResponseException(response.StatusCode, content);
             }
         }
     }

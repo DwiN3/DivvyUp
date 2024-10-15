@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using DivvyUp_App.GuiService;
 using Radzen;
+using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp_App.Components.PersonProduct
 {
@@ -75,7 +76,7 @@ namespace DivvyUp_App.Components.PersonProduct
                 else
                     await PersonProductService.EditPersonProduct(personProduct);
             }
-            catch (InvalidOperationException)
+            catch (ValidException)
             {
             }
             catch (Exception)
@@ -91,18 +92,16 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                await PersonProductService.RemovePersonProduct(personProductId);
+                await PersonProductService.RemovePersonProduct(19);
                 AlertService.ShowAlert("Usunięto przypisaną osobę", AlertStyle.Success);
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
+                AlertService.ShowAlert(ex.Message, AlertStyle.Danger);
             }
             catch (Exception)
             {
-            }
-            finally
-            {
-                await LoadGrid();
+                
             }
         }
 
@@ -112,7 +111,7 @@ namespace DivvyUp_App.Components.PersonProduct
             {
                 await PersonProductService.SetSettledPersonProduct(personProductId, isChecked);
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
             }
             catch (Exception)
@@ -126,7 +125,7 @@ namespace DivvyUp_App.Components.PersonProduct
             {
                 await PersonProductService.SetCompensationPersonProduct(personProductId);
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
             }
             catch (Exception)
@@ -145,7 +144,7 @@ namespace DivvyUp_App.Components.PersonProduct
                 personProduct.personId = personId;
                 await PersonProductService.ChangePersonPersonProduct(personProduct.id, personId);
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
             }
             catch (Exception)

@@ -220,7 +220,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new HttpResponseException(response.StatusCode, errorMessage);
+                throw new HttpResponseException(response.StatusCode, content);
             }
         }
     }

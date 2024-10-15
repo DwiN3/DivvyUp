@@ -8,6 +8,7 @@ import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.entity.user.UserRepository;
+import com.dwin.du.valid.ValidException;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,8 @@ public class PersonService {
 
     public ResponseEntity<?> addPerson(PersonDto request, String username) {
         User user = valid.validateUser(username);
+        valid.isNull(request);
+        valid.isEmpty(request.getName());
 
         Person person = Person.builder()
                 .user(user)
@@ -44,6 +47,8 @@ public class PersonService {
     public ResponseEntity<?> editPerson(int personId, PersonDto request, String username) {
         valid.validateUser(username);
         Person person = valid.validatePerson(username, personId);
+        valid.isNull(request);
+        valid.isEmpty(request.getName());
 
         person.setName(request.getName());
         person.setSurname(request.getSurname());
@@ -53,6 +58,7 @@ public class PersonService {
 
     public ResponseEntity<?> removePerson(int personId, String username) {
         valid.validateUser(username);
+        valid.isNull(personId);
         Person person = valid.validatePerson(username, personId);
 
         List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
@@ -66,6 +72,7 @@ public class PersonService {
 
     public ResponseEntity<?> setReceiptsCounts(int personId, int receiptsCount, String username) {
         valid.validateUser(username);
+        valid.isNull(personId);
         Person person = valid.validatePerson(username, personId);
 
         person.setReceiptsCount(receiptsCount);
@@ -76,6 +83,7 @@ public class PersonService {
 
     public ResponseEntity<?> setTotalAmount(int personId, Double totalAmount, String username) {
         valid.validateUser(username);
+        valid.isNull(personId);
         Person person = valid.validatePerson(username, personId);
 
         person.setTotalAmount(totalAmount);
@@ -85,6 +93,7 @@ public class PersonService {
 
     public ResponseEntity<?> getPersonById(int personId, String username) {
         valid.validateUser(username);
+        valid.isNull(personId);
         Person person = valid.validatePerson(username, personId);
 
         PersonDto response = PersonDto.builder()

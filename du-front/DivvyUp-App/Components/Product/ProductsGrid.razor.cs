@@ -6,6 +6,7 @@ using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Radzen;
+using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp_App.Components.Product
 {
@@ -96,7 +97,7 @@ namespace DivvyUp_App.Components.Product
                     await PersonProductService.AddPersonProduct(personProduct, newProduct.id);
                 }
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
             }
             catch (Exception)
@@ -115,7 +116,7 @@ namespace DivvyUp_App.Components.Product
                 await ProductService.RemoveProduct(productId);
                 AlertService.ShowAlert("Usunięto produkt", AlertStyle.Success);
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
             }
             catch (Exception)
@@ -133,13 +134,12 @@ namespace DivvyUp_App.Components.Product
             {
                 await ProductService.SetSettledProduct(productId, isChecked);
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
             }
             catch (Exception)
             {
             }
-        
         }
 
         private async Task ManagePerson(int productId)
@@ -153,7 +153,6 @@ namespace DivvyUp_App.Components.Product
         {
             if (personObject is PersonDto person)
                 SelectedPerson = person;
-            
         }
 
         private async Task OnPersonChange(int productId, PersonDto person)
@@ -165,7 +164,7 @@ namespace DivvyUp_App.Components.Product
                 await PersonProductService.ChangePersonPersonProduct(personProduct.id, person.id);
                 
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
             }
             catch (Exception)

@@ -1,5 +1,6 @@
 ﻿using DivvyUp_App.GuiService;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -56,13 +57,13 @@ namespace DivvyUp_App.Components.Receipt
                     await ReceiptService.AddReceipt(receipt);
                 else
                     await ReceiptService.EditReceipt(receipt);
-            } 
-            catch (InvalidOperationException)
+            }
+            catch (ValidException ex)
             {
-            } 
+            }
             catch (Exception)
             {
-            } 
+            }
             finally
             {
                 await LoadGrid();
@@ -76,7 +77,7 @@ namespace DivvyUp_App.Components.Receipt
                 await ReceiptService.RemoveReceipt(receiptId);
                 AlertService.ShowAlert("Usunięto rachunek", AlertStyle.Success);
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
             }
             catch (Exception)
@@ -102,7 +103,7 @@ namespace DivvyUp_App.Components.Receipt
             {
                 await ReceiptService.SetSettledReceipt(receiptId, isChecked);
             }
-            catch (InvalidOperationException)
+            catch (ValidException ex)
             {
             }
             catch (Exception)

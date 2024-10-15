@@ -140,7 +140,7 @@ public class UserService {
     public ResponseEntity<?> getUser(String token) {
         try {
             String username = jwtService.extractUsername(token);
-            User user = userRepository.findByUsername(username).orElseThrow(() -> new ValidException(404));
+            User user = userRepository.findByUsername(username).orElseThrow(() -> new ValidException(404, "Nie znaleziono użytkownika: " + username));
             boolean isValid = jwtService.isTokenValid(token, user);
             if(isValid){
                 UserDto response = UserDto.builder()
@@ -151,10 +151,10 @@ public class UserService {
                         .build();
                 return ResponseEntity.ok(response);
             } else{
-                throw new ValidException(401);
+                throw new ValidException(401, "Brak dostępu do użytkownika: " + username);
             }
         } catch (Exception e) {
-            throw new ValidException(401);
+            throw new ValidException(401, "Brak dostępu do użytkownika");
         }
     }
 

@@ -2,6 +2,7 @@
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -43,13 +44,8 @@ namespace DivvyUp_App.Components.AccountManager
                 UserAppService.SetUser(User.username, User.email, token, true);
                 AlertService.ShowAlert("Zapisano zmiany", AlertStyle.Success);
             }
-            catch (HttpResponseException ex)
+            catch (ValidException ex)
             {
-
-            }
-            catch (HttpRequestException)
-            {
-
             }
             catch (Exception)
             {
@@ -62,13 +58,8 @@ namespace DivvyUp_App.Components.AccountManager
             {
                 await DDialogService.OpenResetPasswordDialog();
             }
-            catch (HttpResponseException ex)
+            catch (ValidException ex)
             {
-
-            }
-            catch (HttpRequestException)
-            {
-
             }
             catch (Exception)
             {
@@ -89,13 +80,8 @@ namespace DivvyUp_App.Components.AccountManager
                     Navigation.NavigateTo("/");
                 }
             }
-            catch (HttpResponseException ex)
+            catch (ValidException ex)
             {
-
-            }
-            catch (HttpRequestException)
-            {
-
             }
             catch (Exception)
             {

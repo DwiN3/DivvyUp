@@ -33,57 +33,76 @@ public class ValidService {
 
     public User validateUser(String username) throws ValidException {
         Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent())
-            throw new ValidException(401);
+        if (!optionalUser.isPresent()) {
+            throw new ValidException(401, "Brak dostępu do użytkownika: " + username);
+        }
 
         return optionalUser.get();
     }
 
     public Person validatePerson(String userId, int personId) throws ValidException {
         Optional<Person> optionalPerson = personRepository.findById(personId);
-        if (!optionalPerson.isPresent())
-            throw new ValidException(404);
+        if (!optionalPerson.isPresent()) {
+            throw new ValidException(404, "Nie znaleziono osobę o id: " + personId);
+        }
 
         Person person = optionalPerson.get();
-        if (!person.getUser().getUsername().equals(userId))
-            throw new ValidException(401);
+        if (!person.getUser().getUsername().equals(userId)) {
+            throw new ValidException(401, "Brak dostępu do osoby o id: " + personId);
+        }
 
         return person;
     }
 
     public Receipt validateReceipt(String userId, int receiptId) throws ValidException {
         Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
-        if (!optionalReceipt.isPresent())
-            throw new ValidException(404);
+        if (!optionalReceipt.isPresent()) {
+            throw new ValidException(404, "Nie znaleziono rachunku o id: " + receiptId);
+        }
 
         Receipt receipt = optionalReceipt.get();
-        if (!receipt.getUser().getUsername().equals(userId))
-            throw new ValidException(401);
+        if (!receipt.getUser().getUsername().equals(userId)) {
+            throw new ValidException(401, "Brak dostępu do rachunku o id: " + receiptId);
+        }
 
         return receipt;
     }
 
     public Product validateProduct(String userId, int productId) throws ValidException {
         Optional<Product> optionalProduct = productRepository.findById(productId);
-        if (!optionalProduct.isPresent())
-            throw new ValidException(404);
+        if (!optionalProduct.isPresent()) {
+            throw new ValidException(404, "Nie znaleziono produktu o id: " + productId);
+        }
 
         Product product = optionalProduct.get();
-        if (!product.getUser().getUsername().equals(userId))
-            throw new ValidException(401);
+        if (!product.getUser().getUsername().equals(userId)) {
+            throw new ValidException(401, "Brak dostępu do produktu o id: " + productId);
+        }
 
         return product;
     }
 
     public PersonProduct validatePersonProduct(String userId, int personProductId) throws ValidException {
         Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
-        if (!optionalPersonProduct.isPresent())
-            throw new ValidException(404);
+        if (!optionalPersonProduct.isPresent()) {
+            throw new ValidException(404, "Nie znaleziono przypisu osoby do produktu o id: " + personProductId);
+        }
 
         PersonProduct personProduct = optionalPersonProduct.get();
-        if (!personProduct.getUser().getUsername().equals(userId))
-            throw new ValidException(401);
+        if (!personProduct.getUser().getUsername().equals(userId)) {
+            throw new ValidException(401, "Brak dostępu do przypisu osoby do produktu o id: " + personProductId);
+        }
 
         return personProduct;
+    }
+
+    public void isNull(Object object){
+        if(object == null)
+            throw new ValidException(400, "Puste dane");
+    }
+
+    public void isEmpty(String string){
+        if(string.isEmpty())
+            throw new ValidException(400, "Puste dane");
     }
 }

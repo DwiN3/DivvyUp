@@ -27,18 +27,13 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (receipt == null)
-                    throw new InvalidOperationException("Nie mozna dodać pustego rachunku");
-                if (receipt.name.Equals(string.Empty))
-                    throw new InvalidOperationException("Nie mozna dodać rachunku bez nazwy");
-
                 var url = _url.AddReceipt;
                 var response = await _dHttpClient.PostAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania rachunku");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie dodawania rachunku: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -52,18 +47,13 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (receipt == null)
-                    throw new InvalidOperationException("Nie mozna edytować pustego rachunku");
-                if (receipt.name.Equals(string.Empty))
-                    throw new InvalidOperationException("Nie mozna edytować rachunku bez nazwy");
-
                 var url = _url.EditReceipt.Replace(ApiRoute.ID, receipt.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji rachunku: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -77,16 +67,13 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (receiptId == null)
-                    throw new InvalidOperationException("Nie mozna usunąć rachunku które nie posiada id");
-
                 var url = _url.RemoveReceipt.Replace(ApiRoute.ID, receiptId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji rachunku: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -100,18 +87,15 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (receiptId == null)
-                    throw new InvalidOperationException("Nie mozna rozliczyć rachunku nie posiadającego id");
-
                 var url = _url.SetSettledReceipt
                     .Replace(ApiRoute.ID, receiptId.ToString())
                     .Replace(ApiRoute.Settled, settled.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji rachunku: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -124,19 +108,16 @@ namespace DivvyUp_Impl_Maui.Service
         public async Task SetTotalPriceReceipt(int receiptId, double totalPrice)
         {
             try
-            {
-                if (receiptId == null)
-                    throw new InvalidOperationException("Nie mozna ustawić ceny rachunku nie posiadającego id");
-
+            { 
                 var url = _url.SetTotalPriceReceipt
                     .Replace(ApiRoute.ID, receiptId.ToString())
                     .Replace(ApiRoute.TotalPrice, totalPrice.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji ceny rachunku: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -157,6 +138,11 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunku");
                 return result;
             }
+            catch (HttpResponseException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie pobierania rachunku: {Message}", ex.Message);
@@ -175,6 +161,11 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunków");
                 return result;
             }
+            catch (HttpResponseException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie pobierania listy rachunków do tabeli: {Message}", ex.Message);
@@ -188,7 +179,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new HttpResponseException(response.StatusCode, errorMessage);
+                throw new HttpResponseException(response.StatusCode, content);
             }
         }
     }

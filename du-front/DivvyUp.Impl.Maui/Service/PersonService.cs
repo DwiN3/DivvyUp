@@ -25,19 +25,14 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (person == null)
-                    throw new InvalidOperationException("Nie mozna dodać osoby");
-                if (person.name.Equals(string.Empty))
-                    throw new InvalidOperationException("Nie mozna dodać osoby bez imienia");
-
                 var url = _url.AddPerson;
                 var response = await _dHttpClient.PostAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania osoby");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie dodawania osoby: {Message}", ex.Message);
-                throw;
+                _logger.LogError(httpEx, "Błąd w czasie dodawania osoby: {Message}", httpEx.Message);
+                throw new Exception(httpEx.Message);
             }
             catch (Exception ex)
             {
@@ -50,18 +45,13 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (person == null)
-                    throw new InvalidOperationException("Nie mozna edytować osoby");
-                if (person.name.Equals(string.Empty))
-                    throw new InvalidOperationException("Nie mozna dodać edytować bez imienia");
-
                 var url = _url.EditPerson.Replace(ApiRoute.ID, person.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji osoby: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -75,16 +65,13 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (personId == null)
-                    throw new InvalidOperationException("Nie mozna usunąć osoby które nie posiada id");
-
                 var url = _url.RemovePerson.Replace(ApiRoute.ID, personId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji osoby: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -98,18 +85,15 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (personId == null)
-                    throw new InvalidOperationException("Nie mozna ustawić ilości rachunków nie posiadającego id");
-
                 var url = _url.SetReceiptsCountsPerson
                     .Replace(ApiRoute.ID, personId.ToString())
                     .Replace(ApiRoute.ReceiptsCount, receiptsCounts.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji ilości rachunków");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji ilości rachunków: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -132,9 +116,9 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji bilansu");
             }
-            catch (InvalidOperationException ex)
+            catch (HttpResponseException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji bilansu: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -155,6 +139,11 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osoby");
                 return result;
             }
+            catch (HttpResponseException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie pobierania osoby: {Message}", ex.Message);
@@ -172,6 +161,11 @@ namespace DivvyUp_Impl_Maui.Service
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
                 return result;
+            }
+            catch (HttpResponseException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
             }
             catch (Exception ex)
             {
@@ -191,6 +185,11 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
                 return result;
             }
+            catch (HttpResponseException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie pobierania listy osób do tabeli: {Message}", ex.Message);
@@ -209,6 +208,11 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
                 return result;
             }
+            catch (HttpResponseException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie pobierania listy osób do tabeli: {Message}", ex.Message);
@@ -222,7 +226,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new HttpResponseException(response.StatusCode, errorMessage);
+                throw new HttpResponseException(response.StatusCode, content);
             }
         }
     }

@@ -27,6 +27,12 @@ public class ProductService {
 
     public ResponseEntity<?> addProductToReceipt(ProductDto request, int receiptId, String username) {
         User user = valid.validateUser(username);
+        valid.isNull(request);
+        valid.isEmpty(request.getName());
+        valid.isNull(request.getPrice());
+        valid.isNull(request.getMaxQuantity());
+        valid.isNull(request.isDivisible());
+        valid.isNull(receiptId);
         Receipt receipt = valid.validateReceipt(username, receiptId);
 
         Product product = Product.builder()
@@ -56,6 +62,12 @@ public class ProductService {
 
     public ResponseEntity<?> editProduct(int productId, ProductDto request, String username) {
         valid.validateUser(username);
+        valid.isNull(request);
+        valid.isEmpty(request.getName());
+        valid.isNull(request.getPrice());
+        valid.isNull(request.getMaxQuantity());
+        valid.isNull(request.isDivisible());
+        valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
 
         if(product.isDivisible() && !request.isDivisible()){
@@ -86,6 +98,7 @@ public class ProductService {
 
     public ResponseEntity<?> removeProduct(int productId, String username) {
         valid.validateUser(username);
+        valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
         Receipt receipt = valid.validateReceipt(username, product.getReceipt().getId());
 
@@ -102,6 +115,7 @@ public class ProductService {
 
     public ResponseEntity<?> setIsSettled(int productId, boolean settled, String username) {
         valid.validateUser(username);
+        valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
 
         product.setSettled(settled);
@@ -124,6 +138,7 @@ public class ProductService {
 
     public ResponseEntity<?> getProductById(int productId, String username) {
         valid.validateUser(username);
+        valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
 
         ProductDto response = ProductDto.builder()
@@ -142,6 +157,7 @@ public class ProductService {
 
     public ResponseEntity<?> getProductsFromReceipt(int receiptId, String username) {
         valid.validateUser(username);
+        valid.isNull(receiptId);
         Receipt receipt = valid.validateReceipt(username, receiptId);
 
         List<Product> products = productRepository.findByReceipt(receipt);

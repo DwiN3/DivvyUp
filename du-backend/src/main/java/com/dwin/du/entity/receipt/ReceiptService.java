@@ -26,6 +26,8 @@ public class ReceiptService {
 
     public ResponseEntity<?> addReceipt(ReceiptDto request, String username) {
         User user = valid.validateUser(username);
+        valid.isNull(request);
+        valid.isEmpty(request.getName());
 
         Receipt receipt = Receipt.builder()
                 .user(user)
@@ -43,6 +45,8 @@ public class ReceiptService {
 
     public ResponseEntity<?> editReceipt(int receiptId, ReceiptDto request, String username) {
         valid.validateUser(username);
+        valid.isNull(request);
+        valid.isEmpty(request.getName());
         Receipt receipt = valid.validateReceipt(username, receiptId);
 
         receipt.setName(request.getName());
@@ -54,6 +58,7 @@ public class ReceiptService {
 
     public ResponseEntity<?> removeReceipt(int receiptId, String username) {
         valid.validateUser(username);
+        valid.isNull(receiptId);
         Receipt receipt = valid.validateReceipt(username, receiptId);
 
         List<Product> products = productRepository.findByReceipt(receipt);
@@ -78,6 +83,8 @@ public class ReceiptService {
 
     public ResponseEntity<?> setTotalPrice(int receiptId, Double totalPrice, String username) {
         valid.validateUser(username);
+        valid.isNull(receiptId);
+        valid.isNull(totalPrice);
         Receipt receipt = valid.validateReceipt(username, receiptId);
 
         receipt.setTotalPrice(totalPrice);
@@ -90,6 +97,7 @@ public class ReceiptService {
 
     public ResponseEntity<?> setIsSettled(int receiptId, boolean settled, String username) {
         valid.validateUser(username);
+        valid.isNull(receiptId);
         Receipt receipt = valid.validateReceipt(username, receiptId);
 
         receipt.setSettled(settled);
@@ -114,6 +122,7 @@ public class ReceiptService {
 
     public ResponseEntity<?> getReceiptById(int receiptId, String username) {
         valid.validateUser(username);
+        valid.isNull(receiptId);
         Receipt receipt = valid.validateReceipt(username, receiptId);
 
         Receipt response = Receipt.builder()

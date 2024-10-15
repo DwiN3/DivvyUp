@@ -2,6 +2,7 @@
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
@@ -26,16 +27,13 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (personProduct == null)
-                    throw new InvalidOperationException("Nie mozna dodać pustych produktu osób");
-
                 var url = _url.AddPersonProduct.Replace(ApiRoute.ID, productId.ToString()); ;
                 var response = await _dHttpClient.PostAsync(url, personProduct);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania produktu osób");
             }
-            catch (InvalidOperationException ex)
+            catch (ValidException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie dodawania produktu osób: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -49,16 +47,13 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (personProduct == null)
-                    throw new InvalidOperationException("Nie mozna edytować pustego przypisu osoby do produktu");
-
                 var url = _url.EditPersonProduct.Replace(ApiRoute.ID, personProduct.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, personProduct);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
-            catch (InvalidOperationException ex)
+            catch (ValidException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -72,21 +67,18 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (personProductId == null)
-                    throw new InvalidOperationException("Nie mozna usunąć produktu osób które nie posiada id");
-
                 var url = _url.RemovePersonProduct.Replace(ApiRoute.ID, personProductId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
-                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osób");
+                await EnsureCorrectResponse(response, "Błąd w czasie usuwania produktu osób");
             }
-            catch (InvalidOperationException ex)
+            catch (ValidException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu osób: {Message}", ex.Message);
-                throw;
+                _logger.LogError(httpEx, httpEx.Message);
+                throw; 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu osób: {Message}", ex.Message);
+                _logger.LogError(ex, "Błąd w czasie usuwania produktu osób: {Message}", ex.Message);
                 throw;
             }
         }
@@ -95,20 +87,15 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (personProductId == null)
-                    throw new InvalidOperationException("Nie mozna zmienić osoby nie posiadającego id person produktu");
-                if (personId == null)
-                    throw new InvalidOperationException("Nie mozna zmienić osoby nie posiadającego id person osoby");
-
                 var url = _url.ChangePersonPersonProduct
                     .Replace(ApiRoute.ID, personProductId.ToString())
                     .Replace(ApiRoute.PersonId, personId.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
             }
-            catch (InvalidOperationException ex)
+            catch (ValidException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -122,9 +109,6 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (personProductId == null)
-                    throw new InvalidOperationException("Nie mozna rozliczyć produktu osoby nie posiadającego id");
-
                 var url = _url.SetSettledPersonProduct
                     .Replace(ApiRoute.ID, personProductId.ToString())
                     .Replace(ApiRoute.Settled, settled.ToString());
@@ -132,9 +116,9 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
             }
-            catch (InvalidOperationException ex)
+            catch (ValidException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -148,9 +132,6 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                if (personProductId == null)
-                    throw new InvalidOperationException("Nie mozna ustawić ceny produktu osoby nie posiadającego id");
-
                 var data = new
                 {
                     compensation = true
@@ -160,9 +141,9 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
-            catch (InvalidOperationException ex)
+            catch (ValidException httpEx)
             {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                _logger.LogError(httpEx, httpEx.Message);
                 throw;
             }
             catch (Exception ex)
@@ -183,6 +164,11 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu osób");
                 return result;
             }
+            catch (ValidException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie pobierania listy produktu osób do tabeli: {Message}", ex.Message);
@@ -200,6 +186,11 @@ namespace DivvyUp_Impl_Maui.Service
                 var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów osób");
                 return result;
+            }
+            catch (ValidException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
             }
             catch (Exception ex)
             {
@@ -219,6 +210,11 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów osób");
                 return result;
             }
+            catch (ValidException httpEx)
+            {
+                _logger.LogError(httpEx, httpEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Błąd w czasie pobierania listy produktów osób do tabeli: {Message}", ex.Message);
@@ -232,7 +228,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new HttpResponseException(response.StatusCode, errorMessage);
+                throw new ValidException(response.StatusCode, content);
             }
         }
     }

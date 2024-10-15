@@ -58,8 +58,9 @@ namespace DivvyUp_App.Components.Person
             catch (InvalidOperationException)
             {
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                AlertService.ShowAlert(ex.Message, AlertStyle.Danger);
             }
             finally
             {

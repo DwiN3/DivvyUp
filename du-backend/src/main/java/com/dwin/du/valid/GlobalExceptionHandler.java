@@ -14,6 +14,6 @@ public class GlobalExceptionHandler {
         if (status == null) {
             status = HttpStatus.BAD_REQUEST;
         }
-        return ResponseEntity.status(status).build();
+        return ResponseEntity.status(status).body(ex.getMessage());
     }
 }

@@ -29,6 +29,10 @@ public class PersonProductService {
 
     public ResponseEntity<?> addPersonProduct(PersonProductDto request, int productId, String username) {
         User user = valid.validateUser(username);
+        valid.isNull(request);
+        valid.isNull(request.getPersonId());
+        valid.isNull(request.getQuantity());
+        valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
         Person person = valid.validatePerson(username, request.getPersonId());
 
@@ -72,9 +76,14 @@ public class PersonProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editPersonProduct(int id, PersonProductDto request, String username) {
+    public ResponseEntity<?> editPersonProduct(int personProductId, PersonProductDto request, String username) {
         valid.validateUser(username);
-        PersonProduct personProduct = valid.validatePersonProduct(username, id);
+        valid.isNull(request);
+        valid.isNull(request.getPersonId());
+        valid.isNull(request.getProductId());
+        valid.isNull(request.getQuantity());
+        valid.isNull(personProductId);
+        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
         Product product = valid.validateProduct(username, personProduct.getProduct().getId());
         Person person = valid.validatePerson(username, request.getPersonId());
 
@@ -99,6 +108,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> removePersonProduct(int personProductId, String username) {
         valid.validateUser(username);
+        valid.isNull(personProductId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
         personProductRepository.delete(personProduct);
@@ -112,6 +122,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> setIsSettled(int personProductId, boolean settled, String username) {
         valid.validateUser(username);
+        valid.isNull(personProductId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
         personProduct.setSettled(settled);
@@ -134,6 +145,8 @@ public class PersonProductService {
 
     public ResponseEntity<?> changePerson(int personProductId, int personId, String username) {
         valid.validateUser(username);
+        valid.isNull(personProductId);
+        valid.isNull(personId);
         Person person = valid.validatePerson(username, personId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
@@ -151,6 +164,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> setIsCompensation(int personProductId, String username) {
         valid.validateUser(username);
+        valid.isNull(personProductId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(personProduct.getProduct());
@@ -172,6 +186,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> getPersonProductById(int personProductId, String username) {
         valid.validateUser(username);
+        valid.isNull(personProductId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
 
         PersonProductDto response = PersonProductDto.builder()
@@ -189,6 +204,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> getProductPersonProductsFromProduct(int productId, String username) {
         valid.validateUser(username);
+        valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
