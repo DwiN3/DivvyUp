@@ -1,5 +1,6 @@
 package com.dwin.du.entity.receipt;
 
+import com.dwin.du.entity.receipt.Request.AddEditReceiptRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class ReceiptController {
 
     @PostMapping("/add")
     @Operation(summary = "Add a new receipt", description = "Adds a new receipt.")
-    public ResponseEntity<?> addReceipt(@RequestBody ReceiptDto request){
+    public ResponseEntity<?> addReceipt(@RequestBody AddEditReceiptRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return receiptService.addReceipt(request, currentUsername);
@@ -26,7 +27,7 @@ public class ReceiptController {
 
     @PutMapping("/{receiptId}/edit")
     @Operation(summary = "Edit a receipt", description = "Edits an existing receipt by ID.")
-    public ResponseEntity<?> editReceipt(@PathVariable int receiptId, @RequestBody ReceiptDto request) {
+    public ResponseEntity<?> editReceipt(@PathVariable int receiptId, @RequestBody AddEditReceiptRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return receiptService.editReceipt(receiptId, request, currentUsername);

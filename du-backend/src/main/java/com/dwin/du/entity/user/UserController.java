@@ -1,6 +1,9 @@
 package com.dwin.du.entity.user;
 
+import com.dwin.du.entity.user.Request.EditUserRequest;
+import com.dwin.du.entity.user.Request.LoginRequest;
 import com.dwin.du.entity.user.Request.PasswordChangeRequest;
+import com.dwin.du.entity.user.Request.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +22,14 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user account in the system.")
-    public ResponseEntity<?> register(@RequestBody UserDto request){
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request){
         ResponseEntity<?> response = userService.register(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
     @PostMapping("/auth")
     @Operation(summary = "Authenticate user", description = "Authenticates a user and provides a token.")
-    public ResponseEntity<?> authenticate(@RequestBody UserDto request){
+    public ResponseEntity<?> authenticate(@RequestBody LoginRequest request){
         ResponseEntity<String> response = userService.auth(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
@@ -48,7 +51,7 @@ public class UserController {
 
     @PutMapping("/user/edit")
     @Operation(summary = "Edit a user", description = "Edits an existing user.")
-    public ResponseEntity<?> editUser(@RequestBody UserDto request) {
+    public ResponseEntity<?> editUser(@RequestBody EditUserRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return userService.editUser(currentUsername, request);

@@ -1,5 +1,6 @@
 package com.dwin.du.entity.person_product;
 
+import com.dwin.du.entity.person_product.Request.AddEditPersonProductRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class PersonProductController {
 
     @PostMapping("/product/{productId}/person-product/add")
     @Operation(summary = "Add person to product", description = "Associates a person with a specific product.")
-    public ResponseEntity<?> addPersonProduct(@PathVariable int productId, @RequestBody PersonProductDto request){
+    public ResponseEntity<?> addPersonProduct(@PathVariable int productId, @RequestBody AddEditPersonProductRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.addPersonProduct(request, productId, currentUsername);
@@ -27,7 +28,7 @@ public class PersonProductController {
 
     @PutMapping("/person-product/{personProductId}/edit")
     @Operation(summary = "Edit a person prodcut", description = "Edits an existing person product by ID.")
-    public ResponseEntity<?> editPersonProduct(@PathVariable int personProductId, @RequestBody PersonProductDto request) {
+    public ResponseEntity<?> editPersonProduct(@PathVariable int personProductId, @RequestBody AddEditPersonProductRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.editPersonProduct(personProductId, request, currentUsername);

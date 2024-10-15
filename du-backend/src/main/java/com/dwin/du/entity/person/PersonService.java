@@ -1,5 +1,6 @@
 package com.dwin.du.entity.person;
 
+import com.dwin.du.entity.person.Request.AddEditPersonRequest;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;
@@ -27,7 +28,7 @@ public class PersonService {
     private final ProductRepository productRepository;
     private final ValidService valid;
 
-    public ResponseEntity<?> addPerson(PersonDto request, String username) {
+    public ResponseEntity<?> addPerson(AddEditPersonRequest request, String username) {
         User user = valid.validateUser(username);
         valid.isNull(request);
         valid.isEmpty(request.getName());
@@ -44,7 +45,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editPerson(int personId, PersonDto request, String username) {
+    public ResponseEntity<?> editPerson(int personId, AddEditPersonRequest request, String username) {
         valid.validateUser(username);
         Person person = valid.validatePerson(username, personId);
         valid.isNull(request);

@@ -9,7 +9,10 @@ import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
+import com.dwin.du.entity.user.Request.EditUserRequest;
+import com.dwin.du.entity.user.Request.LoginRequest;
 import com.dwin.du.entity.user.Request.PasswordChangeRequest;
+import com.dwin.du.entity.user.Request.RegisterRequest;
 import com.dwin.du.valid.ValidException;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +45,7 @@ public class UserService {
     private final PersonRepository personRepository;
 
 
-    public ResponseEntity<String> auth(UserDto request) {
+    public ResponseEntity<String> auth(LoginRequest request) {
         valid.isNull(request);
         valid.isEmpty(request.getUsername());
         valid.isEmpty(request.getPassword());
@@ -70,7 +73,7 @@ public class UserService {
         return ResponseEntity.ok(jwtToken);
     }
 
-    public ResponseEntity<?> register(UserDto request) {
+    public ResponseEntity<?> register(RegisterRequest request) {
         valid.isNull(request);
         valid.isEmpty(request.getUsername());
         valid.isEmpty(request.getEmail());
@@ -94,7 +97,7 @@ public class UserService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editUser(String username, UserDto request) {
+    public ResponseEntity<?> editUser(String username, EditUserRequest request) {
         valid.isNull(request);
         valid.isEmpty(request.getUsername());
         valid.isEmpty(request.getEmail());

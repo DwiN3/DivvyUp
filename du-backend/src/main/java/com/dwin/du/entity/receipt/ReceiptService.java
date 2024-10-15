@@ -1,6 +1,7 @@
 package com.dwin.du.entity.receipt;
 
 import com.dwin.du.entity.person.Person;
+import com.dwin.du.entity.receipt.Request.AddEditReceiptRequest;
 import com.dwin.du.service.PersonUpdateService;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
@@ -24,7 +25,7 @@ public class ReceiptService {
     private final ValidService valid;
     private final PersonUpdateService updatePerson;
 
-    public ResponseEntity<?> addReceipt(ReceiptDto request, String username) {
+    public ResponseEntity<?> addReceipt(AddEditReceiptRequest request, String username) {
         User user = valid.validateUser(username);
         valid.isNull(request);
         valid.isEmpty(request.getName());
@@ -43,7 +44,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editReceipt(int receiptId, ReceiptDto request, String username) {
+    public ResponseEntity<?> editReceipt(int receiptId, AddEditReceiptRequest request, String username) {
         valid.validateUser(username);
         valid.isNull(request);
         valid.isEmpty(request.getName());

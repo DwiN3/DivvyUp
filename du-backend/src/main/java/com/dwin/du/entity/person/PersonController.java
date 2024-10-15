@@ -1,5 +1,6 @@
 package com.dwin.du.entity.person;
 
+import com.dwin.du.entity.person.Request.AddEditPersonRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class PersonController {
 
     @PostMapping("/add")
     @Operation(summary = "Add a new person", description = "Adds a new person to the system.")
-    public ResponseEntity<?> addPerson(@RequestBody PersonDto request){
+    public ResponseEntity<?> addPerson(@RequestBody AddEditPersonRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated())
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -30,7 +31,7 @@ public class PersonController {
 
     @PutMapping("/{personId}/edit")
     @Operation(summary = "Edit a person", description = "Edits an existing person by personId.")
-    public ResponseEntity<?> editPerson(@PathVariable int personId, @RequestBody PersonDto request) {
+    public ResponseEntity<?> editPerson(@PathVariable int personId, @RequestBody AddEditPersonRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personService.editPerson(personId, request, currentUsername);
