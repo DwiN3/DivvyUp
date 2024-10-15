@@ -7,6 +7,7 @@ using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Impl_Maui.Api;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Shared.AppConstants;
+using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp_Impl_Maui.Service
 {
@@ -31,9 +32,9 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PostAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania rachunku");
             }
-            catch (HttpResponseException httpEx)
+            catch (DuException ex)
             {
-                _logger.LogError(httpEx, httpEx.Message);
+                _logger.LogError(ex, ex.Message);
                 throw;
             }
             catch (Exception ex)
@@ -51,9 +52,9 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (HttpResponseException httpEx)
+            catch (DuException ex)
             {
-                _logger.LogError(httpEx, httpEx.Message);
+                _logger.LogError(ex, ex.Message);
                 throw;
             }
             catch (Exception ex)
@@ -71,9 +72,9 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (HttpResponseException httpEx)
+            catch (DuException ex)
             {
-                _logger.LogError(httpEx, httpEx.Message);
+                _logger.LogError(ex, ex.Message);
                 throw;
             }
             catch (Exception ex)
@@ -93,9 +94,9 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (HttpResponseException httpEx)
+            catch (DuException ex)
             {
-                _logger.LogError(httpEx, httpEx.Message);
+                _logger.LogError(ex, ex.Message);
                 throw;
             }
             catch (Exception ex)
@@ -115,9 +116,9 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (HttpResponseException httpEx)
+            catch (DuException ex)
             {
-                _logger.LogError(httpEx, httpEx.Message);
+                _logger.LogError(ex, ex.Message);
                 throw;
             }
             catch (Exception ex)
@@ -138,9 +139,9 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunku");
                 return result;
             }
-            catch (HttpResponseException httpEx)
+            catch (DuException ex)
             {
-                _logger.LogError(httpEx, httpEx.Message);
+                _logger.LogError(ex, ex.Message);
                 throw;
             }
             catch (Exception ex)
@@ -161,9 +162,9 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunków");
                 return result;
             }
-            catch (HttpResponseException httpEx)
+            catch (DuException ex)
             {
-                _logger.LogError(httpEx, httpEx.Message);
+                _logger.LogError(ex, ex.Message);
                 throw;
             }
             catch (Exception ex)
@@ -179,7 +180,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new HttpResponseException(response.StatusCode, content);
+                throw new DuException(response.StatusCode, content);
             }
         }
     }

@@ -58,7 +58,7 @@ namespace DivvyUp_App.Components.Receipt
                 else
                     await ReceiptService.EditReceipt(receipt);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)
@@ -77,7 +77,7 @@ namespace DivvyUp_App.Components.Receipt
                 await ReceiptService.RemoveReceipt(receiptId);
                 AlertService.ShowAlert("Usunięto rachunek", AlertStyle.Success);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)
@@ -103,7 +103,7 @@ namespace DivvyUp_App.Components.Receipt
             {
                 await ReceiptService.SetSettledReceipt(receiptId, isChecked);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)

@@ -76,7 +76,7 @@ namespace DivvyUp_App.Components.PersonProduct
                 else
                     await PersonProductService.EditPersonProduct(personProduct);
             }
-            catch (ValidException)
+            catch (DuException)
             {
             }
             catch (Exception)
@@ -92,16 +92,19 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                await PersonProductService.RemovePersonProduct(19);
+                await PersonProductService.RemovePersonProduct(personProductId);
                 AlertService.ShowAlert("Usunięto przypisaną osobę", AlertStyle.Success);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
                 AlertService.ShowAlert(ex.Message, AlertStyle.Danger);
             }
             catch (Exception)
             {
-                
+            }
+            finally
+            {
+                await LoadGrid();
             }
         }
 
@@ -111,7 +114,7 @@ namespace DivvyUp_App.Components.PersonProduct
             {
                 await PersonProductService.SetSettledPersonProduct(personProductId, isChecked);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)
@@ -125,7 +128,7 @@ namespace DivvyUp_App.Components.PersonProduct
             {
                 await PersonProductService.SetCompensationPersonProduct(personProductId);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)
@@ -144,7 +147,7 @@ namespace DivvyUp_App.Components.PersonProduct
                 personProduct.personId = personId;
                 await PersonProductService.ChangePersonPersonProduct(personProduct.id, personId);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)

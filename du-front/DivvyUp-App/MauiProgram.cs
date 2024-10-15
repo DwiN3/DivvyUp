@@ -41,7 +41,7 @@ namespace DivvyUp_App
             builder.Services.AddScoped<DDialogService>();
             builder.Services.AddSingleton<DAlertService>();
             builder.Services.AddScoped<HeaderService>();
-            builder.Services.AddTransient<IAuthService, AuthService>();
+            builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IPersonService, PersonService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
             builder.Services.AddTransient<IProductService, ProductService>();

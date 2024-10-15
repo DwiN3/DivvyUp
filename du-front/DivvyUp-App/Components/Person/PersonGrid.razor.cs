@@ -4,6 +4,7 @@ using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Radzen;
+using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp_App.Components.Person
 {
@@ -55,12 +56,12 @@ namespace DivvyUp_App.Components.Person
                 else
                     await PersonService.EditPerson(person);
             }
-            catch (InvalidOperationException)
-            {
-            }
-            catch (Exception ex)
+            catch (DuException ex)
             {
                 AlertService.ShowAlert(ex.Message, AlertStyle.Danger);
+            }
+            catch (Exception)
+            {
             }
             finally
             {
@@ -75,7 +76,7 @@ namespace DivvyUp_App.Components.Person
                 await PersonService.RemovePerson(personId);
                 AlertService.ShowAlert("Usunięto osobę", AlertStyle.Success);
             }
-            catch (InvalidOperationException)
+            catch (DuException ex)
             {
             }
             catch (Exception)

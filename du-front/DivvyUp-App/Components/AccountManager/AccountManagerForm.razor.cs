@@ -12,7 +12,7 @@ namespace DivvyUp_App.Components.AccountManager
     partial class AccountManagerForm
     {
         [Inject]
-        private IAuthService AuthService { get; set; }
+        private IUserService UserService { get; set; }
         [Inject]
         private UserAppService UserAppService { get; set; }
         [Inject]
@@ -39,12 +39,12 @@ namespace DivvyUp_App.Components.AccountManager
         {
             try
             {
-                var token = await AuthService.EditUser(User);
+                var token = await UserService.EditUser(User);
                 DHttpClient.setToken(token);
                 UserAppService.SetUser(User.username, User.email, token, true);
                 AlertService.ShowAlert("Zapisano zmiany", AlertStyle.Success);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)
@@ -58,7 +58,7 @@ namespace DivvyUp_App.Components.AccountManager
             {
                 await DDialogService.OpenResetPasswordDialog();
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)
@@ -73,14 +73,14 @@ namespace DivvyUp_App.Components.AccountManager
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie konta", "Czy potwierdzasz usunięcie konta?");
                 if (result)
                 {
-                    await AuthService.RemoveUser();
+                    await UserService.RemoveUser();
                     UserAppService.ClearUser();
                     DHttpClient.setToken(string.Empty);
                     StateHasChanged();
                     Navigation.NavigateTo("/");
                 }
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)

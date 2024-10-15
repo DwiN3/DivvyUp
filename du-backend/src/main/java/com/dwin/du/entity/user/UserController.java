@@ -59,7 +59,7 @@ public class UserController {
     public ResponseEntity<?> removeUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return userService.remove(currentUsername);
+        return userService.removeUser(currentUsername);
     }
 
     @GetMapping("/user")

@@ -3,6 +3,7 @@ using DivvyUp_Impl_Maui.Api.CodeReader;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -12,7 +13,7 @@ namespace DivvyUp_App.Components.Login
     partial class LoginForm
     {
         [Inject]
-        private IAuthService AuthService { get; set; }
+        private IUserService UserService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
@@ -28,20 +29,20 @@ namespace DivvyUp_App.Components.Login
         {
             try
             {
-                var token = await AuthService.Login(User);
-                UserDto user = await AuthService.GetUser(token);
+                var token = await UserService.Login(User);
+                UserDto user = await UserService.GetUser(token);
                 UserAppService.SetUser(user.username, user.email, token, true);
                 DHttpClient.setToken(token);
                 Navigation.NavigateTo("/receipt");
             }
-            catch (HttpResponseException ex)
+            catch (DuException ex)
             {
-                var message = RCR.ReadLogin(ex.StatusCode);
+                var message = RCR.ReadLogin(ex.ErrorCode);
                 AlertService.ShowAlert(message, AlertStyle.Danger);
             }
-            catch (HttpRequestException)
+            catch (TimeoutException)
             {
-                AlertService.ShowAlert("Błąd połączenia z serwerem", AlertStyle.Warning);
+                AlertService.ShowAlert("Błąd połączenia z serwerem.", AlertStyle.Warning);
             }
             catch (Exception)
             {

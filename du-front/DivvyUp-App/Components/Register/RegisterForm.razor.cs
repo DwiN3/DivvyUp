@@ -5,13 +5,14 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Impl_Maui.Api.CodeReader;
+using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp_App.Components.Register
 {
     partial class RegisterForm
     {
         [Inject]
-        private IAuthService AuthService { get; set; }
+        private IUserService UserService { get; set; }
         [Inject]
         private DAlertService AlertService { get; set; }
 
@@ -29,18 +30,18 @@ namespace DivvyUp_App.Components.Register
             {
                 try
                 {
-                    await AuthService.Register(User);
+                    await UserService.Register(User);
                     AlertService.ShowAlert("Pomyślnie utworzono użytkownika", AlertStyle.Success);
                     Navigation.NavigateTo("/login");
                 }
-                catch (HttpResponseException ex)
+                catch (DuException ex)
                 {
-                    var message = RCR.ReadRegister(ex.StatusCode);
+                    var message = RCR.ReadLogin(ex.ErrorCode);
                     AlertService.ShowAlert(message, AlertStyle.Danger);
                 }
-                catch (HttpRequestException)
+                catch (TimeoutException)
                 {
-                    AlertService.ShowAlert("Błąd połączenia z serwerem", AlertStyle.Warning);
+                    AlertService.ShowAlert("Błąd połączenia z serwerem.", AlertStyle.Warning);
                 }
                 catch (Exception)
                 {

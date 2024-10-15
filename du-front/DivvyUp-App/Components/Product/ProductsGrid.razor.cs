@@ -97,8 +97,9 @@ namespace DivvyUp_App.Components.Product
                     await PersonProductService.AddPersonProduct(personProduct, newProduct.id);
                 }
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
+                AlertService.ShowAlert(ex.Message, AlertStyle.Danger);
             }
             catch (Exception)
             {
@@ -116,7 +117,7 @@ namespace DivvyUp_App.Components.Product
                 await ProductService.RemoveProduct(productId);
                 AlertService.ShowAlert("Usunięto produkt", AlertStyle.Success);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)
@@ -134,7 +135,7 @@ namespace DivvyUp_App.Components.Product
             {
                 await ProductService.SetSettledProduct(productId, isChecked);
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)
@@ -164,7 +165,7 @@ namespace DivvyUp_App.Components.Product
                 await PersonProductService.ChangePersonPersonProduct(personProduct.id, person.id);
                 
             }
-            catch (ValidException ex)
+            catch (DuException ex)
             {
             }
             catch (Exception)
