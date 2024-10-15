@@ -1,14 +1,13 @@
 ﻿@using DivvyUp_App.Components.PersonProduct
 @inject DialogService DialogService
 
-<div class="card-dialog">
-    <div class="content-dialog">
-        <PersonProductGrid ProductId="@ProductId" />
-    </div>
-    <footer class="footer">
-        <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Info" Click="@(() => DialogService.Close())" />
-    </footer>
+<div class="content-dialog">
+    <PersonProductGrid ProductId="@ProductId" />
 </div>
+<footer class="footer">
+    <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Info" Click="@(() => DialogService.Close())" />
+</footer>
+
 
 @code {
     [Parameter] 
@@ -18,7 +17,7 @@
 }
 
 <style>
-    .card-dialog {
+    .rz-dialog-content{
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -43,5 +42,11 @@
 
     .rz-dialog-content {
         padding: 2px;
+    }
+
+
+    .rz-dialog-wrapper {
+        width: calc(100% - 56px);
+        height: calc(100% - 56px);
     }
 </style>

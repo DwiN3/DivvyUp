@@ -1,13 +1,11 @@
 ﻿@inject DialogService DialogService
 
-<div class="card-dialog">
-    <div class="content-dialog">
-        @Content
-    </div>
-    <footer class="footer">
-        <RadzenButton Text="Okej" ButtonStyle="ButtonStyle.Info" Click="@(() => DialogService.Close())"/>
-    </footer>
+<div class="content-dialog">
+    @Content
 </div>
+<footer class="footer">
+    <RadzenButton Text="Okej" ButtonStyle="ButtonStyle.Info" Click="@(() => DialogService.Close())"/>
+</footer>
 
 @code {
     [Parameter] 
@@ -15,12 +13,11 @@
 }
 
 <style>
-    .card-dialog {
+    .rz-dialog-content {
         display: flex;
         flex-direction: column;
         min-height: 120px;
         width: 596px;
-        position: relative;
     }
 
     .content-dialog {
@@ -41,4 +38,5 @@
     .rz-dialog-content{
         padding: 2px;
     }
+
 </style>
