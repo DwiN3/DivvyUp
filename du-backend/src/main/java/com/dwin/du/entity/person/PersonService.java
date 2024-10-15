@@ -1,6 +1,5 @@
 package com.dwin.du.entity.person;
 
-import com.dwin.du.entity.person.Request.AddEditPersonRequest;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;
@@ -22,14 +21,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PersonService {
 
-    private final UserRepository userRepository;
     private final PersonRepository personRepository;
     private final PersonProductRepository personProductRepository;
     private final ProductRepository productRepository;
-    private final ReceiptRepository receiptRepository;
     private final ValidService valid;
 
-    public ResponseEntity<?> addPerson(AddEditPersonRequest request, String username) {
+    public ResponseEntity<?> addPerson(PersonDto request, String username) {
         User user = valid.validateUser(username);
 
         Person person = Person.builder()
@@ -44,7 +41,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editPerson(int personId, AddEditPersonRequest request, String username) {
+    public ResponseEntity<?> editPerson(int personId, PersonDto request, String username) {
         valid.validateUser(username);
         Person person = valid.validatePerson(username, personId);
 

@@ -1,6 +1,5 @@
 package com.dwin.du.entity.receipt;
 
-import com.dwin.du.entity.receipt.Request.AddEditReceiptRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,50 +18,50 @@ public class ReceiptController {
 
     @PostMapping("/add")
     @Operation(summary = "Add a new receipt", description = "Adds a new receipt.")
-    public ResponseEntity<?> addReceipt(@RequestBody AddEditReceiptRequest request){
+    public ResponseEntity<?> addReceipt(@RequestBody ReceiptDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return receiptService.addReceipt(request, currentUsername);
     }
 
-    @PutMapping("/{id}/edit")
+    @PutMapping("/{receiptId}/edit")
     @Operation(summary = "Edit a receipt", description = "Edits an existing receipt by ID.")
-    public ResponseEntity<?> editReceipt(@PathVariable int id, @RequestBody AddEditReceiptRequest request) {
+    public ResponseEntity<?> editReceipt(@PathVariable int receiptId, @RequestBody ReceiptDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.editReceipt(id, request, currentUsername);
+        return receiptService.editReceipt(receiptId, request, currentUsername);
     }
 
-    @DeleteMapping("/{id}/remove")
+    @DeleteMapping("/{receiptId}/remove")
     @Operation(summary = "Remove a receipt", description = "Removes a receipt by ID.")
-    public ResponseEntity<?> removeReceipt(@PathVariable int id){
+    public ResponseEntity<?> removeReceipt(@PathVariable int receiptId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.removeReceipt(id, currentUsername);
+        return receiptService.removeReceipt(receiptId, currentUsername);
     }
 
-    @PutMapping("/{id}/set-total-price")
+    @PutMapping("/{receiptId}/set-total-price")
     @Operation(summary = "Set total price of a receipt", description = "Sets the total price for a specific receipt.")
-    public ResponseEntity<?> setTotalPrice(@PathVariable int id, @RequestParam Double totalPrice){
+    public ResponseEntity<?> setTotalPrice(@PathVariable int receiptId, @RequestParam Double totalPrice){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.setTotalPrice(id, totalPrice, currentUsername);
+        return receiptService.setTotalPrice(receiptId, totalPrice, currentUsername);
     }
 
-    @PutMapping("/{id}/set-settled")
+    @PutMapping("/{receiptId}/set-settled")
     @Operation(summary = "Set receipt as settled", description = "Marks a receipt as settled by its ID.")
-    public ResponseEntity<?> setIsSettled(@PathVariable int id, @RequestParam boolean settled) {
+    public ResponseEntity<?> setIsSettled(@PathVariable int receiptId, @RequestParam boolean settled) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.setIsSettled(id, settled, currentUsername);
+        return receiptService.setIsSettled(receiptId, settled, currentUsername);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{receiptId}")
     @Operation(summary = "Get a receipt", description = "Retrieves a receipt by ID.")
-    public ResponseEntity<?> getReceipt(@PathVariable int id) {
+    public ResponseEntity<?> getReceipt(@PathVariable int receiptId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return receiptService.getReceiptById(id, currentUsername);
+        return receiptService.getReceiptById(receiptId, currentUsername);
     }
 
     @GetMapping("")

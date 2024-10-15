@@ -9,10 +9,7 @@ import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
-import com.dwin.du.entity.user.Request.LoginRequest;
 import com.dwin.du.entity.user.Request.PasswordChangeRequest;
-import com.dwin.du.entity.user.Request.RegisterRequest;
-import com.dwin.du.entity.user.Request.RemoveRequest;
 import com.dwin.du.valid.ValidException;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +42,7 @@ public class UserService {
     private final PersonProductRepository personProductRepository;
     private final PersonRepository personRepository;
 
-    public ResponseEntity<?> register(RegisterRequest request) {
+    public ResponseEntity<?> register(UserDto request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else if (userRepository.findByUsername(request.getUsername()).isPresent()) {
@@ -64,7 +61,7 @@ public class UserService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<String> auth(LoginRequest request) {
+    public ResponseEntity<String> auth(UserDto request) {
         try {
             Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
             if(!optionalUser.isPresent()){

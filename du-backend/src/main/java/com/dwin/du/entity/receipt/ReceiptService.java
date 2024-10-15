@@ -6,7 +6,6 @@ import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
-import com.dwin.du.entity.receipt.Request.AddEditReceiptRequest;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class ReceiptService {
     private final ValidService valid;
     private final PersonUpdateService updatePerson;
 
-    public ResponseEntity<?> addReceipt(AddEditReceiptRequest request, String username) {
+    public ResponseEntity<?> addReceipt(ReceiptDto request, String username) {
         User user = valid.validateUser(username);
 
         Receipt receipt = Receipt.builder()
@@ -42,7 +41,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editReceipt(int receiptId, AddEditReceiptRequest request, String username) {
+    public ResponseEntity<?> editReceipt(int receiptId, ReceiptDto request, String username) {
         valid.validateUser(username);
         Receipt receipt = valid.validateReceipt(username, receiptId);
 

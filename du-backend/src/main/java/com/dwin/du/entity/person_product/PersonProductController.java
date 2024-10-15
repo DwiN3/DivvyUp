@@ -1,7 +1,5 @@
 package com.dwin.du.entity.person_product;
 
-import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
-import com.dwin.du.entity.product.Request.EditProductRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,58 +19,58 @@ public class PersonProductController {
 
     @PostMapping("/product/{productId}/person-product/add")
     @Operation(summary = "Add person to product", description = "Associates a person with a specific product.")
-    public ResponseEntity<?> addPersonProduct(@PathVariable int productId, @RequestBody AddPersonProductRequest request){
+    public ResponseEntity<?> addPersonProduct(@PathVariable int productId, @RequestBody PersonProductDto request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         return personProductService.addPersonProduct(request, productId, currentUsername);
     }
 
-    @PutMapping("/person-product/{id}/edit")
+    @PutMapping("/person-product/{personProductId}/edit")
     @Operation(summary = "Edit a person prodcut", description = "Edits an existing person product by ID.")
-    public ResponseEntity<?> editPersonProduct(@PathVariable int id, @RequestBody AddPersonProductRequest request) {
+    public ResponseEntity<?> editPersonProduct(@PathVariable int personProductId, @RequestBody PersonProductDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personProductService.editPersonProduct(id, request, currentUsername);
+        return personProductService.editPersonProduct(personProductId, request, currentUsername);
     }
 
-    @DeleteMapping("/person-product/{id}/remove")
+    @DeleteMapping("/person-product/{personProductId}/remove")
     @Operation(summary = "Remove person-product association", description = "Removes an association between a person and a product.")
-    public ResponseEntity<?> removePersonProduct(@PathVariable int id) {
+    public ResponseEntity<?> removePersonProduct(@PathVariable int personProductId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personProductService.removePersonProduct(id, currentUsername);
+        return personProductService.removePersonProduct(personProductId, currentUsername);
     }
 
-    @PutMapping("/person-product/{id}/change-person")
+    @PutMapping("/person-product/{personProductId}/change-person")
     @Operation(summary = "Set person in person-product", description = "Set person in person-product.")
-    public ResponseEntity<?> changePerson(@PathVariable int id, @RequestParam int personId){
+    public ResponseEntity<?> changePerson(@PathVariable int personProductId, @RequestParam int personId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personProductService.changePerson(id, personId, currentUsername);
+        return personProductService.changePerson(personProductId, personId, currentUsername);
     }
 
-    @PutMapping("/person-product/{id}/set-settled")
+    @PutMapping("/person-product/{personProductId}/set-settled")
     @Operation(summary = "Set person-product as settled", description = "Marks a person-product association as settled.")
-    public ResponseEntity<?> setIsSettled(@PathVariable int id, @RequestParam boolean settled){
+    public ResponseEntity<?> setIsSettled(@PathVariable int personProductId, @RequestParam boolean settled){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personProductService.setIsSettled(id, settled, currentUsername);
+        return personProductService.setIsSettled(personProductId, settled, currentUsername);
     }
 
-    @PutMapping("/person-product/{id}/set-compensation")
+    @PutMapping("/person-product/{personProductId}/set-compensation")
     @Operation(summary = "Set person-product as compensation", description = "Marks a person-product association as a compensation.")
-    public ResponseEntity<?> setIsCompensation(@PathVariable int id){
+    public ResponseEntity<?> setIsCompensation(@PathVariable int personProductId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personProductService.setIsCompensation(id, currentUsername);
+        return personProductService.setIsCompensation(personProductId, currentUsername);
     }
 
-    @GetMapping("/person-product/{id}")
+    @GetMapping("/person-product/{personProductId}")
     @Operation(summary = "Get person-product association", description = "Retrieves a person-product association by ID.")
-    public ResponseEntity<?> getPersonProduct(@PathVariable int id) {
+    public ResponseEntity<?> getPersonProduct(@PathVariable int personProductId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        return personProductService.getPersonProductById(id, currentUsername);
+        return personProductService.getPersonProductById(personProductId, currentUsername);
     }
 
     @GetMapping("/product/{productId}/person-product")

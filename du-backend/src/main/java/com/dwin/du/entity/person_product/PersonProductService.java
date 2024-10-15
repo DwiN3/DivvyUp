@@ -2,7 +2,6 @@ package com.dwin.du.entity.person_product;
 
 import com.dwin.du.entity.person.Person;
 import com.dwin.du.service.PersonUpdateService;
-import com.dwin.du.entity.person_product.Request.AddPersonProductRequest;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Receipt;
@@ -28,7 +27,7 @@ public class PersonProductService {
     private final PersonUpdateService updatePerson;
     private final DataUpdateService operation;
 
-    public ResponseEntity<?> addPersonProduct(AddPersonProductRequest request, int productId, String username) {
+    public ResponseEntity<?> addPersonProduct(PersonProductDto request, int productId, String username) {
         User user = valid.validateUser(username);
         Product product = valid.validateProduct(username, productId);
         Person person = valid.validatePerson(username, request.getPersonId());
@@ -73,7 +72,7 @@ public class PersonProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editPersonProduct(int id, AddPersonProductRequest request, String username) {
+    public ResponseEntity<?> editPersonProduct(int id, PersonProductDto request, String username) {
         valid.validateUser(username);
         PersonProduct personProduct = valid.validatePersonProduct(username, id);
         Product product = valid.validateProduct(username, personProduct.getProduct().getId());
