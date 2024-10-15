@@ -46,7 +46,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.EditPerson.Replace(ApiRoute.ID, person.id.ToString());
+                var url = _url.EditPerson.Replace(ApiRoute.arg_ID, person.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
@@ -66,7 +66,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.RemovePerson.Replace(ApiRoute.ID, personId.ToString());
+                var url = _url.RemovePerson.Replace(ApiRoute.arg_ID, personId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
@@ -87,8 +87,8 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.SetReceiptsCountsPerson
-                    .Replace(ApiRoute.ID, personId.ToString())
-                    .Replace(ApiRoute.ReceiptsCount, receiptsCounts.ToString());
+                    .Replace(ApiRoute.arg_ID, personId.ToString())
+                    .Replace(ApiRoute.arg_ReceiptsCount, receiptsCounts.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji ilości rachunków");
             }
@@ -112,8 +112,8 @@ namespace DivvyUp_Impl_Maui.Service
                     throw new InvalidOperationException("Nie mozna ustawić bilansu nie posiadającego id");
 
                 var url = _url.SetTotalAmountPerson
-                    .Replace(ApiRoute.ID, personId.ToString())
-                    .Replace(ApiRoute.TotalAmount, totalAmount.ToString());
+                    .Replace(ApiRoute.arg_ID, personId.ToString())
+                    .Replace(ApiRoute.arg_TotalAmount, totalAmount.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji bilansu");
             }
@@ -133,7 +133,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPerson.Replace(ApiRoute.ID, personId.ToString());
+                var url = _url.GetPerson.Replace(ApiRoute.arg_ID, personId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<PersonDto>(jsonResponse);
@@ -179,7 +179,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonsFromReceipt.Replace(ApiRoute.ID, receiptId.ToString());
+                var url = _url.GetPersonsFromReceipt.Replace(ApiRoute.arg_ID, receiptId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
@@ -202,7 +202,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonsFromProduct.Replace(ApiRoute.ID, productId.ToString());
+                var url = _url.GetPersonsFromProduct.Replace(ApiRoute.arg_ID, productId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);

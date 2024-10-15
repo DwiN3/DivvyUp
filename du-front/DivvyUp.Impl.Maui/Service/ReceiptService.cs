@@ -48,7 +48,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.EditReceipt.Replace(ApiRoute.ID, receipt.id.ToString());
+                var url = _url.EditReceipt.Replace(ApiRoute.arg_ID, receipt.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
@@ -68,7 +68,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.RemoveReceipt.Replace(ApiRoute.ID, receiptId.ToString());
+                var url = _url.RemoveReceipt.Replace(ApiRoute.arg_ID, receiptId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
@@ -89,8 +89,8 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.SetSettledReceipt
-                    .Replace(ApiRoute.ID, receiptId.ToString())
-                    .Replace(ApiRoute.Settled, settled.ToString());
+                    .Replace(ApiRoute.arg_ID, receiptId.ToString())
+                    .Replace(ApiRoute.arg_Settled, settled.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
@@ -111,8 +111,8 @@ namespace DivvyUp_Impl_Maui.Service
             try
             { 
                 var url = _url.SetTotalPriceReceipt
-                    .Replace(ApiRoute.ID, receiptId.ToString())
-                    .Replace(ApiRoute.TotalPrice, totalPrice.ToString());
+                    .Replace(ApiRoute.arg_ID, receiptId.ToString())
+                    .Replace(ApiRoute.arg_TotalPrice, totalPrice.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
@@ -132,7 +132,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetReceipt.Replace(ApiRoute.ID, receiptId.ToString());
+                var url = _url.GetReceipt.Replace(ApiRoute.arg_ID, receiptId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<ReceiptDto>(jsonResponse);

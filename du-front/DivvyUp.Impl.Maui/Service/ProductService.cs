@@ -27,7 +27,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.AddProduct.Replace(ApiRoute.ID, product.receiptId.ToString());
+                var url = _url.AddProduct.Replace(ApiRoute.arg_ID, product.receiptId.ToString());
                 var response = await _dHttpClient.PostAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
                 var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -50,7 +50,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.EditProduct.Replace(ApiRoute.ID, product.id.ToString());
+                var url = _url.EditProduct.Replace(ApiRoute.arg_ID, product.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
                 var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -73,7 +73,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.RemoveProduct.Replace(ApiRoute.ID, productId.ToString());
+                var url = _url.RemoveProduct.Replace(ApiRoute.arg_ID, productId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
@@ -94,8 +94,8 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.SetSettledProduct
-                    .Replace(ApiRoute.ID, productId.ToString())
-                    .Replace(ApiRoute.Settled, settled.ToString());
+                    .Replace(ApiRoute.arg_ID, productId.ToString())
+                    .Replace(ApiRoute.arg_Settled, settled.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
@@ -116,8 +116,8 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.SetCompensationPriceProduct
-                    .Replace(ApiRoute.ID, productId.ToString())
-                    .Replace(ApiRoute.CompensationPrice, compensationPrice.ToString());
+                    .Replace(ApiRoute.arg_ID, productId.ToString())
+                    .Replace(ApiRoute.arg_CompensationPrice, compensationPrice.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
@@ -137,7 +137,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetProduct.Replace(ApiRoute.ID, productId.ToString());
+                var url = _url.GetProduct.Replace(ApiRoute.arg_ID, productId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<ProductDto>(jsonResponse);
@@ -160,7 +160,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetProducts.Replace(ApiRoute.ID, receiptId.ToString());
+                var url = _url.GetProducts.Replace(ApiRoute.arg_ID, receiptId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ProductDto>>(jsonResponse);

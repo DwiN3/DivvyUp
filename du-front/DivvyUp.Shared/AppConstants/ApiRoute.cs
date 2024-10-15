@@ -2,11 +2,18 @@
 {
     public class ApiRoute
     {
-        public const string ID = "{id}";
         private const string BaseUrl = "http://localhost:8080/rm";
-        public const string Settled = "{settled}";
 
-        /// Auth
+        // Arguments
+        public const string arg_ID = "{id}";
+        public const string arg_Settled = "{settled}";
+        public const string arg_ReceiptsCount = "{receiptsCount}";
+        public const string arg_TotalAmount = "{totalAmount}";
+        public const string arg_TotalPrice = "{totalPrice}";
+        public const string arg_CompensationPrice = "{compensationPrice}";
+        public const string arg_PersonId = "{personId}";
+
+        // User
         public readonly string Login = $"{BaseUrl}/auth";
         public readonly string Register = $"{BaseUrl}/register";
         public readonly string EditUser = $"{BaseUrl}/user/edit";
@@ -16,49 +23,43 @@
         public readonly string IsValid = $"{BaseUrl}/validate-token";
 
         // Person
-        public const string ReceiptsCount = "{receiptsCount}";
-        public const string TotalAmount = "{totalAmount}";
         public readonly string AddPerson = $"{BaseUrl}/person/add";
-        public readonly string EditPerson = $"{BaseUrl}/person/{ID}/edit";
-        public readonly string RemovePerson = $"{BaseUrl}/person/{ID}/remove";
-        public readonly string SetReceiptsCountsPerson = $"{BaseUrl}/person/{ID}/set-receipts-counts?receiptsCount={ReceiptsCount}";
-        public readonly string SetTotalAmountPerson = $"{BaseUrl}/person/{ID}/set-total-purchase-amount?totalAmount={TotalAmount}";
-        public readonly string GetPerson = $"{BaseUrl}/person/{ID}";
+        public readonly string EditPerson = $"{BaseUrl}/person/{arg_ID}/edit";
+        public readonly string RemovePerson = $"{BaseUrl}/person/{arg_ID}/remove";
+        public readonly string SetReceiptsCountsPerson = $"{BaseUrl}/person/{arg_ID}/set-receipts-counts?receiptsCount={arg_ReceiptsCount}";
+        public readonly string SetTotalAmountPerson = $"{BaseUrl}/person/{arg_ID}/set-total-purchase-amount?totalAmount={arg_TotalAmount}";
+        public readonly string GetPerson = $"{BaseUrl}/person/{arg_ID}";
         public readonly string GetPersons = $"{BaseUrl}/person";
-        public readonly string GetPersonsFromReceipt = $"{BaseUrl}/person/{ID}/from-receipt";
-        public readonly string GetPersonsFromProduct = $"{BaseUrl}/person/{ID}/from-product";
+        public readonly string GetPersonsFromReceipt = $"{BaseUrl}/person/{arg_ID}/from-receipt";
+        public readonly string GetPersonsFromProduct = $"{BaseUrl}/person/{arg_ID}/from-product";
 
         // Receipt
-        public const string TotalPrice = "{totalPrice}";
         public readonly string AddReceipt = $"{BaseUrl}/receipt/add";
-        public readonly string EditReceipt = $"{BaseUrl}/receipt/{ID}/edit";
-        public readonly string RemoveReceipt = $"{BaseUrl}/receipt/{ID}/remove";
-        public readonly string SetSettledReceipt = $"{BaseUrl}/receipt/{ID}/set-settled?settled={Settled}";
-        public readonly string SetTotalPriceReceipt = $"{BaseUrl}/receipt/{ID}/set-total-price?totalPrice={TotalPrice}";
-        public readonly string GetReceipt = $"{BaseUrl}/receipt/{ID}";
+        public readonly string EditReceipt = $"{BaseUrl}/receipt/{arg_ID}/edit";
+        public readonly string RemoveReceipt = $"{BaseUrl}/receipt/{arg_ID}/remove";
+        public readonly string SetSettledReceipt = $"{BaseUrl}/receipt/{arg_ID}/set-settled?settled={arg_Settled}";
+        public readonly string SetTotalPriceReceipt = $"{BaseUrl}/receipt/{arg_ID}/set-total-price?totalPrice={arg_TotalPrice}";
+        public readonly string GetReceipt = $"{BaseUrl}/receipt/{arg_ID}";
         public readonly string GetReceipts = $"{BaseUrl}/receipt";
 
         // Product
-        public const string CompensationPrice = "{compensationPrice}";
-        public readonly string AddProduct = $"{BaseUrl}/receipt/{ID}/product/add";
-        public readonly string EditProduct = $"{BaseUrl}/product/{ID}/edit";
-        public readonly string RemoveProduct = $"{BaseUrl}/product/{ID}/remove";
-        public readonly string SetSettledProduct = $"{BaseUrl}/product/{ID}/set-settled?settled={Settled}";
-        public readonly string SetCompensationPriceProduct = $"{BaseUrl}/product/{ID}/set-compensation-price?compensationPrice={CompensationPrice}";
-        public readonly string GetProduct = $"{BaseUrl}/product/{ID}";
-        public readonly string GetProducts = $"{BaseUrl}/receipt/{ID}/product";
+        public readonly string AddProduct = $"{BaseUrl}/receipt/{arg_ID}/product/add";
+        public readonly string EditProduct = $"{BaseUrl}/product/{arg_ID}/edit";
+        public readonly string RemoveProduct = $"{BaseUrl}/product/{arg_ID}/remove";
+        public readonly string SetSettledProduct = $"{BaseUrl}/product/{arg_ID}/set-settled?settled={arg_Settled}";
+        public readonly string SetCompensationPriceProduct = $"{BaseUrl}/product/{arg_ID}/set-compensation-price?compensationPrice={arg_CompensationPrice}";
+        public readonly string GetProduct = $"{BaseUrl}/product/{arg_ID}";
+        public readonly string GetProducts = $"{BaseUrl}/receipt/{arg_ID}/product";
 
         // Person Product
-        public const string PersonId = "{personId}";
-        public const string Compensation = "{compensation}";
-        public readonly string AddPersonProduct = $"{BaseUrl}/product/{ID}/person-product/add";
-        public readonly string EditPersonProduct = $"{BaseUrl}/person-product/{ID}/edit";
-        public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/{ID}/remove";
-        public readonly string ChangePersonPersonProduct = $"{BaseUrl}/person-product/{ID}/change-person?personId={PersonId}";
-        public readonly string SetSettledPersonProduct = $"{BaseUrl}/person-product/{ID}/set-settled?settled={Settled}";
-        public readonly string SetCompensationPersonProduct = $"{BaseUrl}/person-product/{ID}/set-compensation?compensation={Compensation}";
-        public readonly string GetPersonProduct = $"{BaseUrl}/person-product/{ID}";
-        public readonly string GetPersonProductsForProduct = $"{BaseUrl}/product/{ID}/person-product";
+        public readonly string AddPersonProduct = $"{BaseUrl}/product/{arg_ID}/person-product/add";
+        public readonly string EditPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/edit";
+        public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/{arg_ID}/remove";
+        public readonly string ChangePersonPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/change-person?personId={arg_PersonId}";
+        public readonly string SetSettledPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-settled?settled={arg_Settled}";
+        public readonly string SetCompensationPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-compensation";
+        public readonly string GetPersonProduct = $"{BaseUrl}/person-product/{arg_ID}";
+        public readonly string GetPersonProductsForProduct = $"{BaseUrl}/product/{arg_ID}/person-product";
         public readonly string GetPersonProducts= $"{BaseUrl}/person-product";
     }
 }

@@ -27,7 +27,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.AddPersonProduct.Replace(ApiRoute.ID, productId.ToString()); ;
+                var url = _url.AddPersonProduct.Replace(ApiRoute.arg_ID, productId.ToString()); ;
                 var response = await _dHttpClient.PostAsync(url, personProduct);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania produktu osób");
             }
@@ -47,7 +47,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.EditPersonProduct.Replace(ApiRoute.ID, personProduct.id.ToString());
+                var url = _url.EditPersonProduct.Replace(ApiRoute.arg_ID, personProduct.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, personProduct);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
@@ -67,7 +67,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.RemovePersonProduct.Replace(ApiRoute.ID, personProductId.ToString());
+                var url = _url.RemovePersonProduct.Replace(ApiRoute.arg_ID, personProductId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie usuwania produktu osób");
             }
@@ -88,8 +88,8 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.ChangePersonPersonProduct
-                    .Replace(ApiRoute.ID, personProductId.ToString())
-                    .Replace(ApiRoute.PersonId, personId.ToString());
+                    .Replace(ApiRoute.arg_ID, personProductId.ToString())
+                    .Replace(ApiRoute.arg_PersonId, personId.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
             }
@@ -110,8 +110,8 @@ namespace DivvyUp_Impl_Maui.Service
             try
             {
                 var url = _url.SetSettledPersonProduct
-                    .Replace(ApiRoute.ID, personProductId.ToString())
-                    .Replace(ApiRoute.Settled, settled.ToString());
+                    .Replace(ApiRoute.arg_ID, personProductId.ToString())
+                    .Replace(ApiRoute.arg_Settled, settled.ToString());
 
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu osoby");
@@ -132,13 +132,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var data = new
-                {
-                    compensation = true
-                };
-
-                var url = _url.SetCompensationPersonProduct.Replace(ApiRoute.ID, personProductId.ToString());
-                var response = await _dHttpClient.PutAsync(url, data);
+                var url = _url.SetCompensationPersonProduct.Replace(ApiRoute.arg_ID, personProductId.ToString());
+                var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (DuException ex)
@@ -157,7 +152,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonProduct.Replace(ApiRoute.ID, personProductId.ToString());
+                var url = _url.GetPersonProduct.Replace(ApiRoute.arg_ID, personProductId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<PersonProductDto>(jsonResponse);
@@ -180,7 +175,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonProductsForProduct.Replace(ApiRoute.ID, productId.ToString());
+                var url = _url.GetPersonProductsForProduct.Replace(ApiRoute.arg_ID, productId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);
