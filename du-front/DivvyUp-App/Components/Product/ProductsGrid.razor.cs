@@ -21,11 +21,11 @@ namespace DivvyUp_App.Components.Product
         [Inject]
         private IPersonProductService PersonProductService { get; set; }
         [Inject]
-        private DAlertService AlertService { get; set; }
-        [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
         private DDialogService DDialogService { get; set; }
+        [Inject]
+        private DNotificationService DNotificationService { get; set; }
 
         private List<ProductDto> Products { get; set; }
         private List<PersonDto> Persons { get; set; }
@@ -99,7 +99,7 @@ namespace DivvyUp_App.Components.Product
             }
             catch (DuException ex)
             {
-                AlertService.ShowAlert(ex.Message, AlertStyle.Danger);
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {
@@ -115,7 +115,7 @@ namespace DivvyUp_App.Components.Product
             try
             {
                 await ProductService.RemoveProduct(productId);
-                AlertService.ShowAlert("Usunięto produkt", AlertStyle.Success);
+                DNotificationService.ShowNotification("Usunięto produkt", NotificationSeverity.Success);
             }
             catch (DuException ex)
             {

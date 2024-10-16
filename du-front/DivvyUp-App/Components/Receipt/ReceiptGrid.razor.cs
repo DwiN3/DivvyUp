@@ -13,7 +13,7 @@ namespace DivvyUp_App.Components.Receipt
         [Inject]
         private IReceiptService ReceiptService { get; set; }
         [Inject]
-        private DAlertService AlertService { get; set; }
+        private DNotificationService DNotificationService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
 
@@ -75,7 +75,7 @@ namespace DivvyUp_App.Components.Receipt
             try
             {
                 await ReceiptService.RemoveReceipt(receiptId);
-                AlertService.ShowAlert("Usunięto rachunek", AlertStyle.Success);
+                DNotificationService.ShowNotification("Usunięto rachunek", NotificationSeverity.Success);
             }
             catch (DuException ex)
             {

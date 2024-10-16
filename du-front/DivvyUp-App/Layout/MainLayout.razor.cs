@@ -1,9 +1,7 @@
-﻿using DivvyUp_App.BaseComponents.DAlert;
-using DivvyUp_App.GuiService;
+﻿using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
-using Radzen;
 
 namespace DivvyUp_App.Layout
 {
@@ -16,12 +14,9 @@ namespace DivvyUp_App.Layout
         [Inject]
         private DHttpClient DHttpClient { get; set; }
         [Inject]
-        private DAlertService AlertService { get; set; }
-        [Inject]
         private UserAppService UserAppService { get; set; }
         [Inject]
         private HeaderService HeaderService { get; set; } 
-        private DAlert Alert { get; set; }
 
         private bool SidebarExpanded { get; set; } = false;
         private string Header { get; set; } = string.Empty;
@@ -29,8 +24,6 @@ namespace DivvyUp_App.Layout
         protected override async void OnInitialized()
         {
             Navigation.LocationChanged += OnLocationChanged;
-            AlertService.OnAlert += ShowAlert;
-            AlertService.OnCloseAlert += HideAlert;
             await SetUser();
             SetHeader(Navigation.Uri);
             StateHasChanged();
@@ -50,7 +43,8 @@ namespace DivvyUp_App.Layout
                     {
                         UserAppService.SetLoggedIn(true);
                         DHttpClient.setToken(user.token);
-                        Navigation.NavigateTo("/receipt");
+                        StateHasChanged();
+                        Navigation.NavigateTo("/");
                     }
                 }
                 catch (HttpRequestException)
@@ -62,6 +56,7 @@ namespace DivvyUp_App.Layout
                 {
                     UserAppService.ClearUser();
                     DHttpClient.setToken(string.Empty);
+                    StateHasChanged();
                     Navigation.NavigateTo("/");
                 }
             }
@@ -78,16 +73,6 @@ namespace DivvyUp_App.Layout
             Header = HeaderService.GetHeader(url);
         }
 
-        private async void ShowAlert(string message, AlertStyle style)
-        {
-            await Alert.OpenAlert(style, message);
-        }
-
-        private async void HideAlert()
-        {
-            await Alert.CloseAlert();
-        }
-
         private async Task Logout()
         {
             UserAppService.ClearUser();
@@ -98,8 +83,6 @@ namespace DivvyUp_App.Layout
         public void Dispose()
         {
             Navigation.LocationChanged -= OnLocationChanged;
-            AlertService.OnAlert -= ShowAlert;
-            AlertService.OnCloseAlert -= HideAlert;
         }
     }
 }

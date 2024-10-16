@@ -17,7 +17,7 @@ namespace DivvyUp_App.Components.PersonProduct
         [Inject]
         private IProductService ProductService { get; set; }
         [Inject]
-        private DAlertService AlertService { get; set; }
+        private DNotificationService DNotificationService { get; set; }
 
         [Parameter]
         public int ProductId { get; set; }
@@ -53,7 +53,7 @@ namespace DivvyUp_App.Components.PersonProduct
             }
             else
             {
-                AlertService.ShowAlert("Nie można przypisać więcej osób", AlertStyle.Danger);
+                DNotificationService.ShowNotification("Nie można przypisać więcej osób", NotificationSeverity.Error);
             }
         }
 
@@ -93,11 +93,11 @@ namespace DivvyUp_App.Components.PersonProduct
             try
             {
                 await PersonProductService.RemovePersonProduct(personProductId);
-                AlertService.ShowAlert("Usunięto przypisaną osobę", AlertStyle.Success);
+                DNotificationService.ShowNotification("Usunięto przypisaną osobę", NotificationSeverity.Success);
             }
             catch (DuException ex)
             {
-                AlertService.ShowAlert(ex.Message, AlertStyle.Danger);
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {

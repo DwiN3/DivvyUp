@@ -1,12 +1,11 @@
 ﻿@inherits LayoutComponentBase
 @using Radzen
 @using Radzen.Blazor
-@using DivvyUp_App.BaseComponents.DAlert
 
 <RadzenLayout>
-    <DAlert @ref="@Alert" />
     <RadzenDialog />
-    <RadzenHeader>
+    <RadzenNotification Style="position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 90%; border-radius: 25px;"  />
+    <RadzenHeader Style="background-image: linear-gradient(to right, #6a11cb, #2575fc);">
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
             <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)"/>
             <RadzenLabel Text="@Header"/>

@@ -39,6 +39,8 @@ namespace DivvyUp_App
             builder.Services.AddSingleton<UserAppService>();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<DDialogService>();
+            builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<DNotificationService>();
             builder.Services.AddSingleton<DAlertService>();
             builder.Services.AddScoped<HeaderService>();
             builder.Services.AddTransient<IUserService, UserService>();

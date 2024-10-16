@@ -1,4 +1,4 @@
-﻿@if (UserAppService.IsLoggedIn())
+﻿@if (UserView)
 {
     <div class="w-100 h-100 d-flex justify-content-center align-items-center">
         <RadzenStack Orientation="Orientation.Vertical"
@@ -35,8 +35,8 @@ else
                      Wrap="FlexWrap.NoWrap"
                      Style="width: 97%; height: 94%;">
 
-            <RadzenCard Variant="@Variant.Filled" class="grid-item small-tile">
-                <div>Zaloguj się lub załóż konto :)</div>
+            <RadzenCard Variant="@Variant.Filled" style="width:100%; height: 100%;">
+                <h1>Zaloguj się lub załóż konto :)</h1>
             </RadzenCard>
         </RadzenStack>
     </div>

@@ -1,9 +1,8 @@
-﻿<div style="height: 100%; width: 100%; display:flex; justify-content: center; align-items: center;">
-    <div style="width: 65%">
-        <RadzenFieldset Text="Zdjęcie profilu" class="form">
+﻿<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" class="w-100 h-100">
+    <RadzenCard Variant="Variant.Filled" Style="width: 65%;">
+        <RadzenFieldset Text="Zdjęcie profilu" class="form" Style="max-height: 300px;">
             <RadzenFileInput @bind-Value="@Avatar" TValue="string" Style="width: 100%" InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "Wybierz obraz" } })" ChooseText="Wybierz obraz"/>
         </RadzenFieldset>
-
         <RadzenFieldset Text="Informacje o koncie" class="form">
             <div class="section">
                 <b class="name-section">Nazwa</b>
@@ -21,8 +20,8 @@
                 <RadzenButton Style="margin-top: 20px; width: 87%;" Text="Zapisz" ButtonStyle="ButtonStyle.Success" Click="SaveChanges"/>
             </div>
         </RadzenFieldset>
-    </div>
-</div>
+    </RadzenCard>
+</RadzenStack>
 
 <style>
     .form {
@@ -48,4 +47,4 @@
     .section-input {
         width: 75%;
     }
-</style>>
+</style>

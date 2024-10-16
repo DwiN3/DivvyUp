@@ -13,7 +13,7 @@ namespace DivvyUp_App.Components.Person
         [Inject]
         private IPersonService PersonService { get; set; }
         [Inject]
-        private DAlertService AlertService { get; set; }
+        private DNotificationService DNotificationService { get; set; }
 
         private List<PersonDto> Persons { get; set; }
         private RadzenDataGrid<PersonDto> Grid { get; set; }
@@ -58,7 +58,7 @@ namespace DivvyUp_App.Components.Person
             }
             catch (DuException ex)
             {
-                AlertService.ShowAlert(ex.Message, AlertStyle.Danger);
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {
@@ -74,7 +74,7 @@ namespace DivvyUp_App.Components.Person
             try
             {
                 await PersonService.RemovePerson(personId);
-                AlertService.ShowAlert("Usunięto osobę", AlertStyle.Success);
+                DNotificationService.ShowNotification("Usunięto osobę", NotificationSeverity.Success);
             }
             catch (DuException ex)
             {

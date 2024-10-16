@@ -7,5 +7,17 @@ namespace DivvyUp_App.Components.Dashboard
     {
         [Inject]
         private UserAppService UserAppService { get; set; }
+
+        private bool UserView { get; set; }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            base.OnAfterRender(firstRender);
+            if (UserAppService != null)
+            {
+                UserView = UserAppService.IsLoggedIn();
+                StateHasChanged();
+            }
+        }
     }
 }

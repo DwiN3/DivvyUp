@@ -3,7 +3,6 @@ using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;
-using DivvyUp_Impl_Maui.Api.HttpResponseException;
 using DivvyUp_Impl_Maui.Api.CodeReader;
 using DivvyUp_Shared.Exceptions;
 
@@ -14,8 +13,7 @@ namespace DivvyUp_App.Components.Register
         [Inject]
         private IUserService UserService { get; set; }
         [Inject]
-        private DAlertService AlertService { get; set; }
-
+        private DNotificationService DNotificationService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
         private CodeReaderResponse RCR { get; set; } = new();
@@ -31,17 +29,17 @@ namespace DivvyUp_App.Components.Register
                 try
                 {
                     await UserService.Register(User);
-                    AlertService.ShowAlert("Pomyślnie utworzono użytkownika", AlertStyle.Success);
+                    DNotificationService.ShowNotification("Pomyślnie utworzono użytkownika", NotificationSeverity.Success);
                     Navigation.NavigateTo("/login");
                 }
                 catch (DuException ex)
                 {
                     var message = RCR.ReadLogin(ex.ErrorCode);
-                    AlertService.ShowAlert(message, AlertStyle.Danger);
+                    DNotificationService.ShowNotification(message, NotificationSeverity.Error);
                 }
                 catch (TimeoutException)
                 {
-                    AlertService.ShowAlert("Błąd połączenia z serwerem.", AlertStyle.Warning);
+                    DNotificationService.ShowNotification("Błąd połączenia z serwerem", NotificationSeverity.Warning);
                 }
                 catch (Exception)
                 {
@@ -49,7 +47,7 @@ namespace DivvyUp_App.Components.Register
             }
             else
             {
-                AlertService.ShowAlert("Hasła są różne", AlertStyle.Danger);
+                DNotificationService.ShowNotification("Hasła są różne", NotificationSeverity.Error);
             }
         }
     }
