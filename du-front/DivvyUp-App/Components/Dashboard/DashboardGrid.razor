@@ -1,0 +1,100 @@
+﻿@if (UserAppService.IsLoggedIn())
+{
+    <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+        <RadzenStack Orientation="Orientation.Vertical"
+                     JustifyContent="JustifyContent.Start"
+                     AlignItems="AlignItems.Stretch"
+                     Wrap="FlexWrap.NoWrap"
+                     Style="width: 97%; height: 94%;">
+
+            <div class="dashboard-grid">
+                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x2 highlight-tile">
+                    <RadzenStack Style="margin-left: 6%; margin-top: 4%;">
+                        <h1 class="tile-title">Witaj, <b>@UserAppService.GetUser().username</b></h1>
+                        <h3>Ilość rachunków: <b>0</b></h3>
+                        <h3>Ilość produktów: <b>0</b></h3>
+                        <h3>Ostatni rachunek: <b>00.00.0000</b></h3>
+                    </RadzenStack>
+                </RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item small-tile"></RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item small-tile"></RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item small-tile"></RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item small-tile"></RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1 large-tile"></RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1 large-tile"></RadzenCard>
+            </div>
+        </RadzenStack>
+    </div>
+}
+else
+{
+    <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+        <RadzenStack Orientation="Orientation.Vertical"
+                     JustifyContent="JustifyContent.Start"
+                     AlignItems="AlignItems.Stretch"
+                     Wrap="FlexWrap.NoWrap"
+                     Style="width: 97%; height: 94%;">
+
+            <RadzenCard Variant="@Variant.Filled" class="grid-item small-tile">
+                <div>Zaloguj się lub załóż konto :)</div>
+            </RadzenCard>
+        </RadzenStack>
+    </div>
+}
+
+
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: minmax(150px, auto);
+        gap: 20px;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+    }
+
+    .grid-item {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        overflow: hidden;
+    }
+
+    .grid-item:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .grid-item-2x2 {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .grid-item-2x1 {
+        grid-column: span 2;
+    }
+
+    .small-tile {
+        background-color: #f0f0f5;
+    }
+
+    .large-tile {
+    @*background-color: #e8f4ff;*@ 
+        background-color: #f0f0f5;
+    }
+
+    .highlight-tile {
+        background-image: linear-gradient(to right, #6a11cb, #2575fc);
+        background-color: #f0f0f5;
+        color: white;
+    }
+
+    .tile-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+</style>

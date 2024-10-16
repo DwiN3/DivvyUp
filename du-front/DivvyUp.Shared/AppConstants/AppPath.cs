@@ -2,7 +2,7 @@
 {
     public class AppPath
     {
-        public const string Home = "/";
+        public const string Dashboard = "/";
         public const string AccontManager = "/accountManager";
         public const string Login = "/login";
         public const string Register = "/register";
