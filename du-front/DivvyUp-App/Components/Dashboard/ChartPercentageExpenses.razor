@@ -1,25 +1,19 @@
-﻿@using DivvyUp_Shared.Dto
+﻿@using System.Globalization
 @using DivvyUp_Shared.Interface
 @using DivvyUp_Shared.Model
 
 <RadzenStack Style="width: 100%; height: 100%;">
-    <RadzenRow>
-        <RadzenColumn Size="4">
-            <RadzenChart Style="height: 130%">
-                <RadzenPieSeries Data="@ChartUnpaidAmount" Title="Aktualny bilans" CategoryProperty="Name" ValueProperty="Value">
-                    <RadzenSeriesDataLabels Visible="false" />
-                    <RadzenLegend Visible="false" />
-                </RadzenPieSeries>
-            </RadzenChart>
-        </RadzenColumn>
-        <RadzenColumn Size="8">
-            <RadzenChart Style="height: 130%">
-                <RadzenPieSeries Data="@ChartTotalAmount" Title="Łączny wydatek" CategoryProperty="Name" ValueProperty="Value">
-                    <RadzenLegend Visible="true" />
-                </RadzenPieSeries>
-            </RadzenChart>
-        </RadzenColumn>
-    </RadzenRow>
+    <RadzenChart>
+        <RadzenColumnSeries Data="@PercantageExpenses" Title="Procent rzetelności" FillRange="@ColorRanges" LineType="LineType.Dashed" CategoryProperty="@nameof(ChartData.Name)" ValueProperty="@nameof(ChartData.Value)">
+            <RadzenSeriesDataLabels Visible="false" />
+            <RadzenColumnOptions Radius="5" />
+            <RadzenLegend Visible="false" />
+            <RadzenValueAxis Formatter="@Format">
+                <RadzenGridLines Visible="true" />
+                @* <RadzenAxisTitle Text="Procent rozliczenia" /> *@
+            </RadzenValueAxis>
+        </RadzenColumnSeries>
+    </RadzenChart>
 </RadzenStack>
 
 <style>
@@ -30,25 +24,23 @@
 
 @code {
     [Inject]
-    private IPersonService PersonService { get; set; }
+    private IChartService ChartService { get; set; }
 
-    private List<PersonDto> Persons { get; set; }
-    private List<PersonChartData> ChartTotalAmount { get; set; }
-    private List<PersonChartData> ChartUnpaidAmount { get; set; }
+    private List<ChartData> PercantageExpenses { get; set; }
+    private List<SeriesColorRange> ColorRanges = new List<SeriesColorRange>()
+    {
+        new SeriesColorRange() {Min = 0, Max = 30, Color = "red"},
+        new SeriesColorRange() {Min = 30.01, Max = 89.99, Color = "orange"},
+        new SeriesColorRange() {Min = 90, Max = 100, Color = "#06cd06"},
+    };
 
     protected override async Task OnInitializedAsync()
     {
-        Persons = await PersonService.GetPersons();
-        ChartTotalAmount = Persons.Select(p => new PersonChartData
-            {
-                Name = p.fullName,
-                Value = Math.Round(p.totalAmount, 2)
-            }).ToList();
+        PercantageExpenses = await ChartService.GetPercantageExpenses();
+    }
 
-        ChartUnpaidAmount = Persons.Select(p => new PersonChartData
-        {
-            Name = p.fullName,
-            Value = Math.Round(p.unpaidAmount, 2)
-        }).ToList();
+    string Format(object value)
+    {
+        return $"{((double)value):N0}%";
     }
 }

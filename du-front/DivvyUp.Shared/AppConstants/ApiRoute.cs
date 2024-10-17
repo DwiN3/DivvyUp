@@ -61,5 +61,10 @@
         public readonly string GetPersonProduct = $"{BaseUrl}/person-product/{arg_ID}";
         public readonly string GetPersonProductsForProduct = $"{BaseUrl}/product/{arg_ID}/person-product";
         public readonly string GetPersonProducts= $"{BaseUrl}/person-product";
+
+        // Chart
+        public readonly string GetTotalAmountsChart = $"{BaseUrl}/chart/total-amounts";
+        public readonly string GetUnpaidAmountsChart = $"{BaseUrl}/chart/unpaid-amounts";
+        public readonly string GetPercentageExpensesChart = $"{BaseUrl}/chart/percentage-expenses";
     }
 }

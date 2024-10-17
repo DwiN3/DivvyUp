@@ -1,15 +1,13 @@
 package com.dwin.du.entity.person;
 
 import com.dwin.du.entity.person.Request.AddEditPersonRequest;
+import com.dwin.du.entity.chart.Response.ChartDto;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Receipt;
-import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.user.User;
-import com.dwin.du.entity.user.UserRepository;
-import com.dwin.du.valid.ValidException;
 import com.dwin.du.valid.ValidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

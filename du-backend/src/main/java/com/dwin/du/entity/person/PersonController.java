@@ -92,5 +92,4 @@ public class PersonController {
         String currentUsername = authentication.getName();
         return personService.getPersonsFromProduct(currentUsername, productId);
     }
-
 }
