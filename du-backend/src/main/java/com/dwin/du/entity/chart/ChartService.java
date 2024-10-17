@@ -26,7 +26,7 @@ public class ChartService {
         List<ChartDto> responseList = new ArrayList<>();
         for (Person person : persons) {
             double amount = isTotalAmounts ? person.getTotalAmount() : person.getUnpaidAmount();
-            amount = Math.round(amount * 100.0) / 100.0;
+            //amount = Math.round(amount * 100.0) / 100.0;
 
             ChartDto response = ChartDto.builder()
                     .Name(person.getName()+" "+person.getSurname())
@@ -57,6 +57,7 @@ public class ChartService {
     private double calculatePaidPercentage(double totalAmount, double unpaidAmount) {
         if (totalAmount == 0) return 0;
         double percentage = (1 - (unpaidAmount / totalAmount)) * 100;
-        return Math.round(percentage * 100.0) / 100.0;
+        return percentage;
+        //return Math.round(percentage * 100.0) / 100.0;
     }
 }

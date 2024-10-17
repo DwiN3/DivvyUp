@@ -77,6 +77,15 @@ public class PersonController {
         return personService.getPersons(currentUsername);
     }
 
+
+    @GetMapping("/user-person")
+    @Operation(summary = "Get person user", description = "Retrieves a person user.")
+    public ResponseEntity<?> getUserPerson() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        return personService.getUserPerson(currentUsername);
+    }
+
     @GetMapping("/{receiptId}/from-receipt")
     @Operation(summary = "Get all persons from receipt", description = "Retrieves all persons associated with a specific receipt.")
     public ResponseEntity<?> getPersonsReceipt(@PathVariable int receiptId){

@@ -7,7 +7,7 @@
             <RadzenSeriesDataLabels Visible="false" />
             <RadzenColumnOptions Radius="5" />
             <RadzenLegend Visible="false" />
-            <RadzenValueAxis Formatter="@Format">
+            <RadzenValueAxis Formatter="@Format" Min="0" Max="100">
                 <RadzenGridLines Visible="true" />
                 @* <RadzenAxisTitle Text="Procent rozliczenia" /> *@
             </RadzenValueAxis>
@@ -16,8 +16,8 @@
 </RadzenStack>
 
 <style>
-    .rz-chart-tooltip{
-        z-index: 999 !important;
+    .rz-chart-tooltip {
+        z-index: 1000;
     }
  </style>
 

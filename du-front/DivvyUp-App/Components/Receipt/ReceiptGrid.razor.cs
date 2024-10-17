@@ -15,6 +15,8 @@ namespace DivvyUp_App.Components.Receipt
         [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]
+        private DDialogService DDialogService { get; set; }
+        [Inject]
         private NavigationManager Navigation { get; set; }
 
         private List<ReceiptDto> Receipts { get; set; }
@@ -70,12 +72,13 @@ namespace DivvyUp_App.Components.Receipt
             }
         }
 
-        private async Task RemoveRow(int receiptId)
+        private async Task RemoveRow(ReceiptDto receipt)
         {
             try
             {
-                await ReceiptService.RemoveReceipt(receiptId);
-                DNotificationService.ShowNotification("Usunięto rachunek", NotificationSeverity.Success);
+                var result = await DDialogService.OpenYesNoDialog("Usuwanie rachunku", $"Czy potwierdzasz usunięcie rachunku: {receipt.name}?");
+                if (result)
+                    await ReceiptService.RemoveReceipt(receipt.id);
             }
             catch (DuException ex)
             {

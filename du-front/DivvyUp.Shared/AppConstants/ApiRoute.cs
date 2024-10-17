@@ -30,6 +30,7 @@
         public readonly string SetTotalAmountPerson = $"{BaseUrl}/person/{arg_ID}/set-total-purchase-amount?totalAmount={arg_TotalAmount}";
         public readonly string GetPerson = $"{BaseUrl}/person/{arg_ID}";
         public readonly string GetPersons = $"{BaseUrl}/person";
+        public readonly string GetUserPerson = $"{BaseUrl}/person/user-person";
         public readonly string GetPersonsFromReceipt = $"{BaseUrl}/person/{arg_ID}/from-receipt";
         public readonly string GetPersonsFromProduct = $"{BaseUrl}/person/{arg_ID}/from-product";
 

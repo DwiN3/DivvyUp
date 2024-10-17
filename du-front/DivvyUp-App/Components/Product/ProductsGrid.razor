@@ -26,7 +26,7 @@
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
                 <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />
-                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(product.id))" />
+                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(product))" />
             </Template>
             <EditTemplate Context="product">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(product))" />
@@ -67,7 +67,7 @@
                 <RadzenNumeric @bind-Value="@product.price" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.maxQuantity)" Title="Ilość osób" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.maxQuantity)" Title="Ilość częsci" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
                 @if (product.divisible)
                 {

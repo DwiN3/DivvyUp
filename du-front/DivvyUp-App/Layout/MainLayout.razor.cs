@@ -43,8 +43,6 @@ namespace DivvyUp_App.Layout
                     {
                         UserAppService.SetLoggedIn(true);
                         DHttpClient.setToken(user.token);
-                        StateHasChanged();
-                        Navigation.NavigateTo("/");
                     }
                 }
                 catch (HttpRequestException)

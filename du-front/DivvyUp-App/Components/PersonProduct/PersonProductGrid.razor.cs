@@ -88,16 +88,14 @@ namespace DivvyUp_App.Components.PersonProduct
             }
         }
 
-        private async Task RemoveRow(int personProductId)
+        private async Task RemoveRow(PersonProductDto personProduct)
         {
             try
             {
-                await PersonProductService.RemovePersonProduct(personProductId);
-                DNotificationService.ShowNotification("Usunięto przypisaną osobę", NotificationSeverity.Success);
+                await PersonProductService.RemovePersonProduct(personProduct.id);
             }
             catch (DuException ex)
             {
-                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {

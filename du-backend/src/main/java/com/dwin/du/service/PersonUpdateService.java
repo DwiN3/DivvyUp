@@ -8,9 +8,8 @@ import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.user.User;
 import com.dwin.du.valid.ValidService;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 @Service
 public class PersonUpdateService {
@@ -24,68 +23,37 @@ public class PersonUpdateService {
         this.valid = valid;
     }
 
-    public void updateReceiptsCount(String username) {
+    public void updateAllData(String username) {
         User user = valid.validateUser(username);
         List<Person> persons = personRepository.findByUser(user);
 
         for (Person person : persons) {
-            int receiptsCount = 0;
             List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
 
-            Set<Integer> receiptIds = new HashSet<>();
-            for (PersonProduct personProduct : personProducts) {
-                Product product = personProduct.getProduct();
+            long receiptsCount = personProducts.stream()
+                    .map(personProduct -> personProduct.getProduct())
+                    .filter(product -> product.getReceipt() != null)
+                    .map(product -> product.getReceipt().getId())
+                    .distinct()
+                    .count();
 
-                if (product.getReceipt() != null) {
-                    receiptIds.add(product.getReceipt().getId());
-                }
-            }
+            person.setReceiptsCount((int) receiptsCount);
 
-            receiptsCount = receiptIds.size();
-            person.setReceiptsCount(receiptsCount);
-            personRepository.save(person);
-        }
-    }
+            person.setProductsCount(personProducts.size());
 
-
-    public void updateTotalAmount(String username){
-        User user = valid.validateUser(username);
-        List<Person> persons = personRepository.findByUser(user);
-
-        for (Person person : persons) {
-            double totalAmount = personProductRepository.findByPerson(person)
-                    .stream()
+            double totalAmount = personProducts.stream()
                     .mapToDouble(PersonProduct::getPartOfPrice)
                     .sum();
             person.setTotalAmount(totalAmount);
-            personRepository.save(person);
-        }
-    }
 
-    public void updateUnpaidAmount(String username){
-        User user = valid.validateUser(username);
-        List<Person> persons = personRepository.findByUser(user);
-
-        for (Person person : persons) {
-            double unpaidAmount = personProductRepository.findByPerson(person)
-                    .stream()
+            double unpaidAmount = personProducts.stream()
                     .filter(personProduct -> !personProduct.isSettled())
                     .mapToDouble(PersonProduct::getPartOfPrice)
                     .sum();
             person.setUnpaidAmount(unpaidAmount);
-            personRepository.save(person);
         }
-    }
 
-    public void updateAmounts(String username){
-        updateTotalAmount(username);
-        updateUnpaidAmount(username);
-    }
-
-    public void updateAllData(String username){
-        updateReceiptsCount(username);
-        updateTotalAmount(username);
-        updateUnpaidAmount(username);
+        personRepository.saveAll(persons);
     }
 }
 

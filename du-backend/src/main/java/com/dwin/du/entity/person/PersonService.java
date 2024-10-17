@@ -1,7 +1,6 @@
 package com.dwin.du.entity.person;
 
 import com.dwin.du.entity.person.Request.AddEditPersonRequest;
-import com.dwin.du.entity.chart.Response.ChartDto;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;
@@ -36,8 +35,10 @@ public class PersonService {
                 .name(request.getName())
                 .surname(request.getSurname())
                 .receiptsCount(0)
+                .productsCount(0)
                 .totalAmount(0.0)
                 .unpaidAmount(0.0)
+                .userAccount(false)
                 .build();
         personRepository.save(person);
         return ResponseEntity.ok().build();
@@ -100,8 +101,10 @@ public class PersonService {
                 .name(person.getName())
                 .surname(person.getSurname())
                 .receiptsCount(person.getReceiptsCount())
+                .productsCount(person.getProductsCount())
                 .totalAmount(person.getTotalAmount())
                 .unpaidAmount(person.getUnpaidAmount())
+                .userAccount(person.isUserAccount())
                 .build();
 
         return ResponseEntity.ok(response);
@@ -118,14 +121,41 @@ public class PersonService {
                     .name(person.getName())
                     .surname(person.getSurname())
                     .receiptsCount(person.getReceiptsCount())
+                    .productsCount(person.getProductsCount())
                     .totalAmount(person.getTotalAmount())
                     .unpaidAmount(person.getUnpaidAmount())
+                    .userAccount(person.isUserAccount())
                     .build();
             responseList.add(response);
 
         }
         return ResponseEntity.ok(responseList);
     }
+
+    public ResponseEntity<?> getUserPerson(String username) {
+        User user = valid.validateUser(username);
+        List<Person> persons = personRepository.findByUser(user);
+
+        for (Person person : persons) {
+            if (person.isUserAccount()) {
+                PersonDto response = PersonDto.builder()
+                        .id(person.getId())
+                        .name(person.getName())
+                        .surname(person.getSurname())
+                        .receiptsCount(person.getReceiptsCount())
+                        .productsCount(person.getProductsCount())
+                        .totalAmount(person.getTotalAmount())
+                        .unpaidAmount(person.getUnpaidAmount())
+                        .userAccount(person.isUserAccount())
+                        .build();
+
+                return ResponseEntity.ok(response);
+            }
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
 
     public ResponseEntity<List<PersonDto>> getPersonsFromReceipt(String username, int receiptId) {
         valid.validateUser(username);
@@ -147,8 +177,10 @@ public class PersonService {
                     .name(person.getName())
                     .surname(person.getSurname())
                     .receiptsCount(person.getReceiptsCount())
+                    .productsCount(person.getProductsCount())
                     .totalAmount(person.getTotalAmount())
                     .unpaidAmount(person.getUnpaidAmount())
+                    .userAccount(person.isUserAccount())
                     .build();
             personsSet.add(personDto);
         }
@@ -171,8 +203,10 @@ public class PersonService {
                             .name(person.getName())
                             .surname(person.getSurname())
                             .receiptsCount(person.getReceiptsCount())
+                            .productsCount(person.getProductsCount())
                             .totalAmount(person.getTotalAmount())
                             .unpaidAmount(person.getUnpaidAmount())
+                            .userAccount(person.isUserAccount())
                             .build();
                 })
                 .collect(Collectors.toList());

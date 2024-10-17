@@ -39,7 +39,7 @@ public class ReceiptService {
                 .build();
 
         receiptRepository.save(receipt);
-        updatePerson.updateReceiptsCount(username);
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }
@@ -76,7 +76,6 @@ public class ReceiptService {
 
         productRepository.deleteAll(products);
         receiptRepository.delete(receipt);
-
         updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
@@ -90,8 +89,7 @@ public class ReceiptService {
 
         receipt.setTotalPrice(totalPrice);
         receiptRepository.save(receipt);
-
-        updatePerson.updateAmounts(username);
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }
@@ -116,7 +114,7 @@ public class ReceiptService {
             }
         }
 
-        updatePerson.updateUnpaidAmount(username);
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }

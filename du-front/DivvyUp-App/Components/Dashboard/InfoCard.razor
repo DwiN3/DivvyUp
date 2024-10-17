@@ -1,0 +1,29 @@
+﻿@using DivvyUp_App.GuiService
+@using DivvyUp_Shared.Dto
+@using DivvyUp_Shared.Interface
+
+<RadzenStack Style="margin-left: 6%; margin-top: 4%;">
+    <h1 class="tile-title">Witaj, <b>@PersonUser.name</b></h1>
+    <h3>Liczba rachunków: <b>@PersonUser.receiptsCount.ToString()</b></h3>
+    <h3>Liczba produktów: <b>@PersonUser.productsCount.ToString()</b></h3>
+    <h3>Ostatni rachunek utworzono: <b>00.00.0000</b></h3>
+</RadzenStack>
+
+@code {
+    [Inject] 
+    private IPersonService PersonService { get; set; } = null!;
+
+    [Parameter] 
+    public UserAppService UserAppService { get; set; } = null!;
+    
+    private PersonDto PersonUser { get; set; } = new();
+
+    public async Task SetInfo()
+    {
+        if (UserAppService != null)
+        {
+            PersonUser = await PersonService.GetUserPerson();
+            StateHasChanged();
+        }
+    }
+}

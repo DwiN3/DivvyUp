@@ -11,6 +11,7 @@ namespace DivvyUp_Shared.Interface
         Task SetTotalAmountPerson(int personId, double totalAmount);
         Task<PersonDto> GetPerson(int personId);
         Task<List<PersonDto>> GetPersons();
+        Task<PersonDto> GetUserPerson();
         Task<List<PersonDto>> GetPersonFromReceipt(int receiptId);
         Task<List<PersonDto>> GetPersonFromProduct(int productId);
     }

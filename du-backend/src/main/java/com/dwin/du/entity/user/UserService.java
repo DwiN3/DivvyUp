@@ -94,6 +94,8 @@ public class UserService {
 
         userRepository.save(user);
 
+        AddPersonForUser(user);
+
         return ResponseEntity.ok().build();
     }
 
@@ -184,5 +186,20 @@ public class UserService {
         userRepository.save(user);
 
         return ResponseEntity.ok("Password changed successfully.");
+    }
+
+    private void AddPersonForUser(User user){
+        Person person = Person.builder()
+                .user(user)
+                .name(user.getUsername())
+                .surname("")
+                .receiptsCount(0)
+                .productsCount(0)
+                .totalAmount(0.0)
+                .unpaidAmount(0.0)
+                .userAccount(true)
+                .build();
+
+        personRepository.save(person);
     }
 }

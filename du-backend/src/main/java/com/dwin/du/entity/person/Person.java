@@ -28,9 +28,15 @@ public class Person {
     @Column(name = "receipts_count")
     private int receiptsCount;
 
+    @Column(name = "product_count")
+    private int productsCount;
+
     @Column(name = "total_amount")
     private Double totalAmount;
 
     @Column(name = "unpaid_amount")
     private Double unpaidAmount;
+
+    @Column(name = "is_user_account")
+    private boolean userAccount;
 }

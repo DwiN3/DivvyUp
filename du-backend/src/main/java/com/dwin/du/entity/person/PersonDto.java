@@ -10,6 +10,8 @@ public class PersonDto {
     public String name;
     public String surname;
     public int receiptsCount;
+    public int productsCount;
     public Double totalAmount;
     public Double unpaidAmount;
+    public boolean userAccount;
 }

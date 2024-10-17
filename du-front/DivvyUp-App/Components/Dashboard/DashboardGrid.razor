@@ -9,12 +9,7 @@
 
             <div class="dashboard-grid">
                 <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x2 highlight-tile">
-                    <RadzenStack Style="margin-left: 6%; margin-top: 4%;">
-                        <h1 class="tile-title">Witaj, <b>@UserAppService.GetUser().username</b></h1>
-                        <h3>Ilość rachunków: <b>0</b></h3>
-                        <h3>Ilość produktów: <b>0</b></h3>
-                        <h3>Ostatni rachunek: <b>00.00.0000</b></h3>
-                    </RadzenStack>
+                    <InfoCard @ref="@Info" UserAppService="@UserAppService" />
                 </RadzenCard>
                 <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
                     <ChartAmounts />

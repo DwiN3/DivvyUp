@@ -175,6 +175,29 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
+        public async Task<PersonDto> GetUserPerson()
+        {
+            try
+            {
+                var url = _url.GetUserPerson;
+                var response = await _dHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<PersonDto>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osoby");
+                return result;
+            }
+            catch (DuException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie pobierania osoby: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task<List<PersonDto>> GetPersonFromReceipt(int receiptId)
         {
             try

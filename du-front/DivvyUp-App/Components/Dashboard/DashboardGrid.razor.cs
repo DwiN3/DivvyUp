@@ -8,15 +8,22 @@ namespace DivvyUp_App.Components.Dashboard
         [Inject]
         private UserAppService UserAppService { get; set; }
 
-        private bool UserView { get; set; }
+        private InfoCard Info { get; set; }
+        private bool UserView { get; set; } = false;
+        private bool DataAlreadySet { get; set; } = false;
 
-        protected override void OnAfterRender(bool firstRender)
+        protected async override void OnAfterRender(bool firstRender)
         {
-            base.OnAfterRender(firstRender);
-            if (UserAppService != null)
+            if ((UserAppService != null) && !DataAlreadySet)
             {
                 UserView = UserAppService.IsLoggedIn();
                 StateHasChanged();
+
+                if (Info != null && UserView)
+                {
+                    DataAlreadySet = true;
+                    await Info.SetInfo();
+                }
             }
         }
     }

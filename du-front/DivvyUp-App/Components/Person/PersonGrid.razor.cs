@@ -14,6 +14,8 @@ namespace DivvyUp_App.Components.Person
         private IPersonService PersonService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
+        [Inject]
+        private DDialogService DDialogService { get; set; }
 
         private List<PersonDto> Persons { get; set; }
         private RadzenDataGrid<PersonDto> Grid { get; set; }
@@ -69,12 +71,13 @@ namespace DivvyUp_App.Components.Person
             }
         }
 
-        private async Task RemoveRow(int personId)
+        private async Task RemoveRow(PersonDto person)
         {
             try
             {
-                await PersonService.RemovePerson(personId);
-                DNotificationService.ShowNotification("Usunięto osobę", NotificationSeverity.Success);
+                var result = await DDialogService.OpenYesNoDialog("Usuwanie Osoby", $"Czy potwierdzasz usunięcie osoby: {person.fullName}?");
+                if (result)
+                    await PersonService.RemovePerson(person.id);
             }
             catch (DuException ex)
             {

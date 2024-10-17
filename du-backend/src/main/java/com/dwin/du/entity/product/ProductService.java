@@ -90,9 +90,10 @@ public class ProductService {
         }
 
         productRepository.save(product);
-        updatePerson.updateAllData(username);
         operation.updatePartPricesPersonProduct(product);
         operation.updateCompensationPrice(product);
+        operation.updateTotalPriceReceipt(product.getReceipt());
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok(product);
     }
@@ -108,7 +109,7 @@ public class ProductService {
         productRepository.delete(product);
 
         operation.updateTotalPriceReceipt(receipt);
-        updatePerson.updateAmounts(username);
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }
@@ -132,7 +133,7 @@ public class ProductService {
         boolean allSettled = operation.areAllProductsSettled(receipt);
         receipt.setSettled(allSettled);
         receiptRepository.save(receipt);
-        updatePerson.updateUnpaidAmount(username);
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }

@@ -23,9 +23,9 @@ namespace DivvyUp_App.Components.Product
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
-        private DDialogService DDialogService { get; set; }
-        [Inject]
         private DNotificationService DNotificationService { get; set; }
+        [Inject]
+        private DDialogService DDialogService { get; set; }
 
         private List<ProductDto> Products { get; set; }
         private List<PersonDto> Persons { get; set; }
@@ -99,7 +99,6 @@ namespace DivvyUp_App.Components.Product
             }
             catch (DuException ex)
             {
-                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {
@@ -110,12 +109,13 @@ namespace DivvyUp_App.Components.Product
             }
         }
 
-        private async Task RemoveRow(int productId)
+        private async Task RemoveRow(ProductDto product)
         {
             try
             {
-                await ProductService.RemoveProduct(productId);
-                DNotificationService.ShowNotification("Usunięto produkt", NotificationSeverity.Success);
+                var result = await DDialogService.OpenYesNoDialog("Usuwanie produktu", $"Czy potwierdzasz usunięcie produktu: {product.name}?");
+                if (result)
+                    await ProductService.RemoveProduct(product.id);
             }
             catch (DuException ex)
             {

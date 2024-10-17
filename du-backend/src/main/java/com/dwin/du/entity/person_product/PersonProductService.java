@@ -138,7 +138,7 @@ public class PersonProductService {
         receipt.setSettled(allProductsSettled);
         receiptRepository.save(receipt);
 
-        updatePerson.updateUnpaidAmount(username);
+        updatePerson.updateAllData(username);
 
         return ResponseEntity.ok().build();
     }
