@@ -1,14 +1,13 @@
 package com.dwin.du.entity.receipt;
-
 import com.dwin.du.entity.person.Person;
 import com.dwin.du.entity.receipt.Request.AddEditReceiptRequest;
-import com.dwin.du.service.PersonUpdateService;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.user.User;
-import com.dwin.du.valid.ValidService;
+import com.dwin.du.service.EntityUpdateService;
+import com.dwin.du.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,13 +21,13 @@ public class ReceiptService {
     private final ReceiptRepository receiptRepository;
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
-    private final ValidService valid;
-    private final PersonUpdateService updatePerson;
+    private final EntityUpdateService updater;
+    private final ValidationService validator;
 
     public ResponseEntity<?> addReceipt(String username, AddEditReceiptRequest request) {
-        User user = valid.validateUser(username);
-        valid.isNull(request);
-        valid.isEmpty(request.getName());
+        User user = validator.validateUser(username);
+        validator.isNull(request);
+        validator.isEmpty(request.getName());
 
         Receipt receipt = Receipt.builder()
                 .user(user)
@@ -39,28 +38,27 @@ public class ReceiptService {
                 .build();
 
         receiptRepository.save(receipt);
-        updatePerson.updateAllData(username);
-
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> editReceipt(String username, int receiptId, AddEditReceiptRequest request) {
-        valid.validateUser(username);
-        valid.isNull(request);
-        valid.isEmpty(request.getName());
-        Receipt receipt = valid.validateReceipt(username, receiptId);
+        validator.validateUser(username);
+        validator.isNull(request);
+        validator.isEmpty(request.getName());
+        Receipt receipt = validator.validateReceipt(username, receiptId);
 
         receipt.setName(request.getName());
         receipt.setDate(request.getDate());
-        receiptRepository.save(receipt);
 
+        receiptRepository.save(receipt);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> removeReceipt(String username, int receiptId) {
-        valid.validateUser(username);
-        valid.isNull(receiptId);
-        Receipt receipt = valid.validateReceipt(username, receiptId);
+        validator.validateUser(username);
+        validator.isNull(receiptId);
+        Receipt receipt = validator.validateReceipt(username, receiptId);
 
         List<Product> products = productRepository.findByReceipt(receipt);
 
@@ -70,34 +68,32 @@ public class ReceiptService {
             involvedPersons.addAll(
                     personProducts.stream().map(PersonProduct::getPerson).collect(Collectors.toSet())
             );
-
             personProductRepository.deleteAll(personProducts);
         }
 
         productRepository.deleteAll(products);
         receiptRepository.delete(receipt);
-        updatePerson.updateAllData(username);
-
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> setTotalPrice(String username, int receiptId, Double totalPrice) {
-        valid.validateUser(username);
-        valid.isNull(receiptId);
-        valid.isNull(totalPrice);
-        Receipt receipt = valid.validateReceipt(username, receiptId);
+        validator.validateUser(username);
+        validator.isNull(receiptId);
+        validator.isNull(totalPrice);
+        Receipt receipt = validator.validateReceipt(username, receiptId);
 
         receipt.setTotalPrice(totalPrice);
-        receiptRepository.save(receipt);
-        updatePerson.updateAllData(username);
 
+        receiptRepository.save(receipt);
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> setIsSettled(String username, int receiptId, boolean settled) {
-        valid.validateUser(username);
-        valid.isNull(receiptId);
-        Receipt receipt = valid.validateReceipt(username, receiptId);
+        validator.validateUser(username);
+        validator.isNull(receiptId);
+        Receipt receipt = validator.validateReceipt(username, receiptId);
 
         receipt.setSettled(settled);
         receiptRepository.save(receipt);
@@ -114,15 +110,14 @@ public class ReceiptService {
             }
         }
 
-        updatePerson.updateAllData(username);
-
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> getReceipt(String username, int receiptId) {
-        valid.validateUser(username);
-        valid.isNull(receiptId);
-        Receipt receipt = valid.validateReceipt(username, receiptId);
+        validator.validateUser(username);
+        validator.isNull(receiptId);
+        Receipt receipt = validator.validateReceipt(username, receiptId);
 
         Receipt response = Receipt.builder()
                 .id(receipt.getId())
@@ -132,11 +127,12 @@ public class ReceiptService {
                 .settled(receipt.isSettled())
                 .user(receipt.getUser())
                 .build();
+
         return ResponseEntity.ok(response);
     }
 
     public ResponseEntity<?> getReceipts(String username) {
-        User user = valid.validateUser(username);
+        User user = validator.validateUser(username);
 
         List<Receipt> receipts = receiptRepository.findByUser(user);
         List<ReceiptDto> responseList = new ArrayList<>();

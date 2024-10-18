@@ -1,5 +1,4 @@
 package com.dwin.du.entity.receipt;
-
 import com.dwin.du.entity.receipt.Request.AddEditReceiptRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

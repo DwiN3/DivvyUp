@@ -1,5 +1,4 @@
 package com.dwin.du.entity.user;
-
 import com.dwin.du.entity.user.Request.EditUserRequest;
 import com.dwin.du.entity.user.Request.LoginRequest;
 import com.dwin.du.entity.user.Request.PasswordChangeRequest;
@@ -23,30 +22,25 @@ public class UserController {
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user account in the system.")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request){
-        ResponseEntity<?> response = userService.register(request);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        return userService.register(request);
     }
 
     @PostMapping("/auth")
     @Operation(summary = "Authenticate user", description = "Authenticates a user and returns an authentication token.")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest request){
-        ResponseEntity<String> response = userService.authenticate(request);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        return userService.authenticate(request);
     }
 
     @GetMapping("/validate-token")
     @Operation(summary = "Validate token", description = "Checks the validity of a given authentication token")
     public ResponseEntity<?> validateToken(@RequestParam String token) {
-        ResponseEntity<?> response = userService.validateToken(token);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        return userService.validateToken(token);
     }
 
-    @PutMapping("/user/change-password")
-    @Operation(summary = "Change user password", description = "Changes the password for the currently authenticated user.")
-    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return userService.changePassword(username, request);
+    @GetMapping("/user")
+    @Operation(summary = "Retrieve user by token", description = "Retrieves the user information associated with the provided token.")
+    public ResponseEntity<?> getUser(@RequestParam String token){
+        return userService.getUser(token);
     }
 
     @PutMapping("/user/edit")
@@ -57,17 +51,19 @@ public class UserController {
         return userService.editUser(username, request);
     }
 
+    @PutMapping("/user/change-password")
+    @Operation(summary = "Change user password", description = "Changes the password for the currently authenticated user.")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userService.changePassword(username, request);
+    }
+
     @DeleteMapping("/user/remove")
     @Operation(summary = "Remove user account", description = "Removes the currently authenticated user's account.")
     public ResponseEntity<?> removeUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return userService.removeUser(username);
-    }
-
-    @GetMapping("/user")
-    @Operation(summary = "Retrieve user by token", description = "Retrieves the user information associated with the provided token.")
-    public ResponseEntity<?> getUser(@RequestParam String token){
-        return userService.getUser(token);
     }
 }

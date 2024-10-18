@@ -1,8 +1,6 @@
 package com.dwin.du.entity.person_product;
-
 import com.dwin.du.entity.person.Person;
 import com.dwin.du.entity.product.Product;
-import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

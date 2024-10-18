@@ -1,14 +1,12 @@
 package com.dwin.du.entity.chart;
-
 import com.dwin.du.entity.chart.Response.ChartDto;
 import com.dwin.du.entity.person.Person;
 import com.dwin.du.entity.person.PersonRepository;
 import com.dwin.du.entity.user.User;
-import com.dwin.du.valid.ValidService;
+import com.dwin.du.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +15,10 @@ import java.util.List;
 public class ChartService {
 
     private final PersonRepository personRepository;
-    private final ValidService valid;
+    private final ValidationService validator;
 
     public ResponseEntity<?> getChartAmounts(String username, boolean isTotalAmounts) {
-        User user = valid.validateUser(username);
+        User user = validator.validateUser(username);
         List<Person> persons = personRepository.findByUser(user);
 
         List<ChartDto> responseList = new ArrayList<>();
@@ -38,7 +36,7 @@ public class ChartService {
     }
 
     public ResponseEntity<?> getPercentageExpanses(String username) {
-        User user = valid.validateUser(username);
+        User user = validator.validateUser(username);
         List<Person> persons = personRepository.findByUser(user);
 
         List<ChartDto> responseList = new ArrayList<>();

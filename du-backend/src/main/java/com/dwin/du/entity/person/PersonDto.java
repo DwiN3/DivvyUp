@@ -1,5 +1,4 @@
 package com.dwin.du.entity.person;
-
 import lombok.Builder;
 import lombok.Data;
 

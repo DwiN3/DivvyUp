@@ -1,10 +1,10 @@
-package com.dwin.du.valid;
+package com.dwin.du.validation;
 
-public class ValidException extends RuntimeException {
+public class ValidationException extends RuntimeException {
     private final int errorCode;
     private final String message;
 
-    public ValidException(int errorCode, String message) {
+    public ValidationException(int errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
         this.message = message;

@@ -2,7 +2,6 @@ package com.dwin.du.entity.receipt;
 import com.dwin.du.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.Date;
 
 @Data

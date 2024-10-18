@@ -1,5 +1,4 @@
 package com.dwin.du.entity.product.Request;
-
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,5 +1,4 @@
 package com.dwin.du.entity.chart.Response;
-
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,15 +1,13 @@
 package com.dwin.du.entity.person_product;
-
 import com.dwin.du.entity.person.Person;
 import com.dwin.du.entity.person_product.Request.AddEditPersonProductRequest;
-import com.dwin.du.service.PersonUpdateService;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
 import com.dwin.du.entity.user.User;
-import com.dwin.du.service.DataUpdateService;
-import com.dwin.du.valid.ValidService;
+import com.dwin.du.service.EntityUpdateService;
+import com.dwin.du.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +22,17 @@ public class PersonProductService {
     private final PersonProductRepository personProductRepository;
     private final ProductRepository productRepository;
     private final ReceiptRepository receiptRepository;
-    private final ValidService valid;
-    private final PersonUpdateService updatePerson;
-    private final DataUpdateService operation;
+    private final ValidationService validator;
+    private final EntityUpdateService updater;
 
     public ResponseEntity<?> addPersonProduct(String username, int productId, AddEditPersonProductRequest request) {
-        User user = valid.validateUser(username);
-        valid.isNull(request);
-        valid.isNull(request.getPersonId());
-        valid.isNull(request.getQuantity());
-        valid.isNull(productId);
-        Product product = valid.validateProduct(username, productId);
-        Person person = valid.validatePerson(username, request.getPersonId());
+        User user = validator.validateUser(username);
+        validator.isNull(request);
+        validator.isNull(request.getPersonId());
+        validator.isNull(request.getQuantity());
+        validator.isNull(productId);
+        Product product = validator.validateProduct(username, productId);
+        Person person = validator.validatePerson(username, request.getPersonId());
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         int currentTotalQuantity = personProducts.stream()
@@ -61,7 +58,7 @@ public class PersonProductService {
 
         if (product.isDivisible()) {
             personProduct.setQuantity(request.getQuantity());
-            double partPrice = operation.calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
+            double partPrice = updater.calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
             personProduct.setPartOfPrice(partPrice);
         } else {
             personProduct.setQuantity(1);
@@ -69,29 +66,27 @@ public class PersonProductService {
         }
 
         personProduct.setCompensation(isCompensation);
+
         personProductRepository.save(personProduct);
-
-        operation.updateCompensationPrice(product);
-        updatePerson.updateAllData(username);
-
+        updater.updateCompensationPrice(product);
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> editPersonProduct(String username, int personProductId, AddEditPersonProductRequest request) {
-        valid.validateUser(username);
-        valid.isNull(request);
-        valid.isNull(request.getPersonId());
-        valid.isNull(request.getQuantity());
-        valid.isNull(personProductId);
-        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
-        Product product = valid.validateProduct(username, personProduct.getProduct().getId());
-        Person person = valid.validatePerson(username, request.getPersonId());
+        validator.validateUser(username);
+        validator.isNull(request);
+        validator.isNull(request.getPersonId());
+        validator.isNull(request.getQuantity());
+        validator.isNull(personProductId);
+        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
+        Product product = validator.validateProduct(username, personProduct.getProduct().getId());
+        Person person = validator.validatePerson(username, request.getPersonId());
 
         personProduct.setPerson(person);
-
         if (product.isDivisible()) {
             personProduct.setQuantity(request.getQuantity());
-            double partPrice = operation.calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
+            double partPrice = updater.calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
             personProduct.setPartOfPrice(partPrice);
         } else {
             personProduct.setQuantity(1);
@@ -99,95 +94,88 @@ public class PersonProductService {
         }
 
         personProductRepository.save(personProduct);
-        operation.updateCompensationPrice(product);
-        updatePerson.updateAllData(username);
-
+        updater.updateCompensationPrice(product);
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
 
     public ResponseEntity<?> removePersonProduct(String username, int personProductId) {
-        valid.validateUser(username);
-        valid.isNull(personProductId);
-        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
+        validator.validateUser(username);
+        validator.isNull(personProductId);
+        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
         personProductRepository.delete(personProduct);
 
-        Product product = valid.validateProduct(username, personProduct.getProduct().getId());
-        operation.updateCompensationPrice(product);
-        updatePerson.updateAllData(username);
-
+        Product product = validator.validateProduct(username, personProduct.getProduct().getId());
+        updater.updateCompensationPrice(product);
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> setIsSettled(String username, int personProductId, boolean settled) {
-        valid.validateUser(username);
-        valid.isNull(personProductId);
-        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
+        validator.validateUser(username);
+        validator.isNull(personProductId);
+        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
         personProduct.setSettled(settled);
         personProductRepository.save(personProduct);
 
         Product product = personProduct.getProduct();
-        boolean allPersonProductsSettled = operation.areAllPersonProductsSettled(product);
+        boolean allPersonProductsSettled = updater.areAllPersonProductsSettled(product);
         product.setSettled(allPersonProductsSettled);
         productRepository.save(product);
 
         Receipt receipt = product.getReceipt();
-        boolean allProductsSettled = operation.areAllProductsSettled(receipt);
+        boolean allProductsSettled = updater.areAllProductsSettled(receipt);
         receipt.setSettled(allProductsSettled);
+
         receiptRepository.save(receipt);
-
-        updatePerson.updateAllData(username);
-
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> setPerson(String username, int personProductId, int personId) {
-        valid.validateUser(username);
-        valid.isNull(personProductId);
-        valid.isNull(personId);
-        Person person = valid.validatePerson(username, personId);
-        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
+        validator.validateUser(username);
+        validator.isNull(personProductId);
+        validator.isNull(personId);
+        Person person = validator.validatePerson(username, personId);
+        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
         var personProductExists = personProductRepository.findByProductAndPerson(personProduct.getProduct(), person);
         if (!personProductExists.isEmpty())
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
         personProduct.setPerson(person);
+
         personProductRepository.save(personProduct);
-
-        updatePerson.updateAllData(username);
-
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> setIsCompensation(String username, int personProductId) {
-        valid.validateUser(username);
-        valid.isNull(personProductId);
-        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
+        validator.validateUser(username);
+        validator.isNull(personProductId);
+        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(personProduct.getProduct());
-
         for (PersonProduct pp : personProducts) {
             if (pp.getId() != personProductId && pp.isCompensation()) {
                 pp.setCompensation(false);
                 personProductRepository.save(pp);
             }
         }
-
-        updatePerson.updateAllData(username);
-
         personProduct.setCompensation(true);
-        personProductRepository.save(personProduct);
 
+        personProductRepository.save(personProduct);
+        updater.updatePerson(username);
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> getPersonProduct(String username, int personProductId) {
-        valid.validateUser(username);
-        valid.isNull(personProductId);
-        PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
+        validator.validateUser(username);
+        validator.isNull(personProductId);
+        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
         PersonProductDto response = PersonProductDto.builder()
                 .id(personProduct.getId())
@@ -203,9 +191,9 @@ public class PersonProductService {
     }
 
     public ResponseEntity<?> getPersonProductsFromProduct(String username, int productId) {
-        valid.validateUser(username);
-        valid.isNull(productId);
-        Product product = valid.validateProduct(username, productId);
+        validator.validateUser(username);
+        validator.isNull(productId);
+        Product product = validator.validateProduct(username, productId);
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
         List<PersonProductDto> responseList = new ArrayList<>();
@@ -226,11 +214,10 @@ public class PersonProductService {
     }
 
     public ResponseEntity<?> getAllPersonProducts(String username) {
-        User user = valid.validateUser(username);
+        User user = validator.validateUser(username);
 
         List<PersonProduct> personProducts = personProductRepository.findByUser(user);
         List<PersonProductDto> responseList = new ArrayList<>();
-
         for (PersonProduct personProduct : personProducts) {
             PersonProductDto response = PersonProductDto.builder()
                     .id(personProduct.getId())

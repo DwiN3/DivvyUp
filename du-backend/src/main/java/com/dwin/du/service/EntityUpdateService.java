@@ -1,25 +1,66 @@
 package com.dwin.du.service;
-
+import com.dwin.du.entity.person.Person;
+import com.dwin.du.entity.person.PersonRepository;
 import com.dwin.du.entity.person_product.PersonProduct;
 import com.dwin.du.entity.person_product.PersonProductRepository;
 import com.dwin.du.entity.product.Product;
 import com.dwin.du.entity.product.ProductRepository;
 import com.dwin.du.entity.receipt.Receipt;
 import com.dwin.du.entity.receipt.ReceiptRepository;
+import com.dwin.du.entity.user.User;
+import com.dwin.du.validation.ValidationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class DataUpdateService {
+public class EntityUpdateService {
+    private final PersonRepository personRepository;
     private final ReceiptRepository receiptRepository;
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
+    private final ValidationService validator;
 
-    public DataUpdateService(ReceiptRepository receiptRepository, ProductRepository productRepository, PersonProductRepository personProductRepository) {
+    public EntityUpdateService(PersonRepository personRepository, ReceiptRepository receiptRepository, ProductRepository productRepository, PersonProductRepository personProductRepository, ValidationService validator) {
+        this.personRepository = personRepository;
         this.receiptRepository = receiptRepository;
         this.productRepository = productRepository;
         this.personProductRepository = personProductRepository;
+        this.validator = validator;
+    }
+
+    // Person
+    public void updatePerson(String username) {
+        User user = validator.validateUser(username);
+        List<Person> persons = personRepository.findByUser(user);
+
+        for (Person person : persons) {
+            List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
+
+            long receiptsCount = personProducts.stream()
+                    .map(personProduct -> personProduct.getProduct())
+                    .filter(product -> product.getReceipt() != null)
+                    .map(product -> product.getReceipt().getId())
+                    .distinct()
+                    .count();
+
+            person.setReceiptsCount((int) receiptsCount);
+
+            person.setProductsCount(personProducts.size());
+
+            double totalAmount = personProducts.stream()
+                    .mapToDouble(PersonProduct::getPartOfPrice)
+                    .sum();
+            person.setTotalAmount(totalAmount);
+
+            double unpaidAmount = personProducts.stream()
+                    .filter(personProduct -> !personProduct.isSettled())
+                    .mapToDouble(PersonProduct::getPartOfPrice)
+                    .sum();
+            person.setUnpaidAmount(unpaidAmount);
+        }
+
+        personRepository.saveAll(persons);
     }
 
     // Receipt

@@ -1,5 +1,4 @@
 package com.dwin.du.entity.user;
-
 import com.dwin.du.config.JwtService;
 import com.dwin.du.entity.person.Person;
 import com.dwin.du.entity.person.PersonRepository;
@@ -13,8 +12,8 @@ import com.dwin.du.entity.user.Request.EditUserRequest;
 import com.dwin.du.entity.user.Request.LoginRequest;
 import com.dwin.du.entity.user.Request.PasswordChangeRequest;
 import com.dwin.du.entity.user.Request.RegisterRequest;
-import com.dwin.du.valid.ValidException;
-import com.dwin.du.valid.ValidService;
+import com.dwin.du.validation.ValidationException;
+import com.dwin.du.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,26 +36,20 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final ValidService valid;
     private final ReceiptRepository receiptRepository;
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
     private final PersonRepository personRepository;
-
+    private final ValidationService validator;
 
     public ResponseEntity<String> authenticate(LoginRequest request) {
-        valid.isNull(request);
-        valid.isEmpty(request.getUsername());
-        valid.isEmpty(request.getPassword());
-        Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
-        if(!optionalUser.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        validator.isNull(request);
+        validator.isEmpty(request.getUsername());
+        validator.isEmpty(request.getPassword());
+        User user = validator.validateUser(request.getUsername());
 
-        User userExits = optionalUser.get();
-        if (!passwordEncoder.matches(request.getPassword(), userExits.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -67,23 +59,22 @@ public class UserService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         var jwtToken = jwtService.generateTokem(user);
+
         return ResponseEntity.ok(jwtToken);
     }
 
     public ResponseEntity<?> register(RegisterRequest request) {
-        valid.isNull(request);
-        valid.isEmpty(request.getUsername());
-        valid.isEmpty(request.getEmail());
-        valid.isEmpty(request.getPassword());
+        validator.isNull(request);
+        validator.isEmpty(request.getUsername());
+        validator.isEmpty(request.getEmail());
+        validator.isEmpty(request.getPassword());
 
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent())
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } else if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+
+        else if (userRepository.findByUsername(request.getUsername()).isPresent())
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
 
         var user = User.builder()
                 .username(request.getUsername())
@@ -93,29 +84,27 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-
         AddPersonForUser(user);
 
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> editUser(String username, EditUserRequest request) {
-        valid.isNull(request);
-        valid.isEmpty(request.getUsername());
-        valid.isEmpty(request.getEmail());
-        User user = valid.validateUser(username);
+        validator.isNull(request);
+        validator.isEmpty(request.getUsername());
+        validator.isEmpty(request.getEmail());
+        User user = validator.validateUser(username);
 
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         userRepository.save(user);
-
         String newToken = jwtService.generateTokem(user);
 
         return ResponseEntity.ok(newToken);
     }
 
     public ResponseEntity<?> removeUser(String username) {
-        User user = valid.validateUser(username);
+        User user = validator.validateUser(username);
 
         List<PersonProduct> personProducts = personProductRepository.findByUser(user);
         personProductRepository.deleteInBatch(personProducts);
@@ -127,14 +116,13 @@ public class UserService {
         personRepository.deleteInBatch(persons);
 
         userRepository.delete(user);
-
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> validateToken(String token) {
         try {
-            valid.isEmpty(token);
+            validator.isEmpty(token);
             String username = jwtService.extractUsername(token);
             UserDetails userDetails = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             boolean isValid = jwtService.isTokenValid(token, userDetails);
@@ -150,42 +138,39 @@ public class UserService {
     }
 
     public ResponseEntity<?> getUser(String token) {
-        try {
-            valid.isEmpty(token);
-            String username = jwtService.extractUsername(token);
-            User user = userRepository.findByUsername(username).orElseThrow(() -> new ValidException(404, "Nie znaleziono użytkownika: " + username));
-            boolean isValid = jwtService.isTokenValid(token, user);
-            if(isValid){
-                UserDto response = UserDto.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .email(user.getEmail())
-                        .password(user.getPassword())
-                        .build();
-                return ResponseEntity.ok(response);
-            } else{
-                throw new ValidException(401, "Brak dostępu do użytkownika: " + username);
-            }
-        } catch (Exception e) {
-            throw new ValidException(401, "Brak dostępu do użytkownika");
+        validator.isEmpty(token);
+        String username = jwtService.extractUsername(token);
+        User user = validator.validateUser(username);
+        boolean isValid = jwtService.isTokenValid(token, user);
+
+        if(isValid){
+            UserDto response = UserDto.builder()
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .email(user.getEmail())
+                    .password(user.getPassword())
+                    .build();
+            return ResponseEntity.ok(response);
         }
+        else
+            throw new ValidationException(401, "Brak dostępu do użytkownika");
     }
 
     public ResponseEntity<?> changePassword(String username, PasswordChangeRequest request) {
-        User user = valid.validateUser(username);
-        valid.isNull(request);
-        valid.isEmpty(request.getPassword());
-        valid.isEmpty(request.getNewPassword());
+        User user = validator.validateUser(username);
+        validator.isNull(request);
+        validator.isEmpty(request.getPassword());
+        validator.isEmpty(request.getNewPassword());
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Old password is incorrect.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Aktualne hasło jest błędne");
 
         String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
 
         user.setPassword(newPasswordEncoded);
-        userRepository.save(user);
 
-        return ResponseEntity.ok("Password changed successfully.");
+        userRepository.save(user);
+        return ResponseEntity.ok("Hasło zostało zmienione");
     }
 
     private void AddPersonForUser(User user){

@@ -1,5 +1,4 @@
 package com.dwin.du.entity.product;
-
 import com.dwin.du.entity.product.Request.AddEditProductRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
