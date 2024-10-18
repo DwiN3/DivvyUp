@@ -1,6 +1,4 @@
-﻿using DivvyUp_Shared.Model;
-
-namespace DivvyUp_Shared.Dto
+﻿namespace DivvyUp_Shared.Dto
 {
     public class PersonDto
     {

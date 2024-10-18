@@ -1,7 +1,7 @@
 ﻿using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -22,8 +22,8 @@ namespace DivvyUp_App.Components.AccountManager
         private DDialogService DDialogService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
-        private UserDto User { get; set; } = new();
 
+        private UserDto User { get; set; } = new();
         private string FileName { get; set; }
         private long? FileSize { get; set; }
         private string Avatar;
@@ -43,7 +43,7 @@ namespace DivvyUp_App.Components.AccountManager
                 UserAppService.SetUser(User.username, User.email, token, true);
                 DNotificationService.ShowNotification("Zapisano zmiany", NotificationSeverity.Success);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -57,7 +57,7 @@ namespace DivvyUp_App.Components.AccountManager
             {
                 await DDialogService.OpenResetPasswordDialog();
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -79,7 +79,7 @@ namespace DivvyUp_App.Components.AccountManager
                     Navigation.NavigateTo("/");
                 }
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)

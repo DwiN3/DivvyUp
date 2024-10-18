@@ -3,8 +3,8 @@ using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using DivvyUp_App.GuiService;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using Radzen;
-using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp_App.Components.PersonProduct
 {
@@ -25,7 +25,6 @@ namespace DivvyUp_App.Components.PersonProduct
         private List<PersonDto> Persons { get; set; }
         private List<PersonProductDto> PersonProducts { get; set; }
         private ProductDto Product { get; set; }
-
         private RadzenDataGrid<PersonProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
 
@@ -76,7 +75,7 @@ namespace DivvyUp_App.Components.PersonProduct
                 else
                     await PersonProductService.Edit(personProduct);
             }
-            catch (DuException)
+            catch (DException)
             {
             }
             catch (Exception)
@@ -94,7 +93,7 @@ namespace DivvyUp_App.Components.PersonProduct
             {
                 await PersonProductService.Remove(personProduct.id);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -112,7 +111,7 @@ namespace DivvyUp_App.Components.PersonProduct
             {
                 await PersonProductService.SetSettled(personProductId, isChecked);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -126,7 +125,7 @@ namespace DivvyUp_App.Components.PersonProduct
             {
                 await PersonProductService.SetCompensation(personProductId);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -145,7 +144,7 @@ namespace DivvyUp_App.Components.PersonProduct
                 personProduct.personId = personId;
                 await PersonProductService.SetPerson(personProduct.id, personId);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)

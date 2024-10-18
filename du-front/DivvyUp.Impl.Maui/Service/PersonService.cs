@@ -1,8 +1,7 @@
 ﻿using DivvyUp_Impl_Maui.Api.DHttpClient;
-using DivvyUp_Impl_Maui.Api.HttpResponseException;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
@@ -30,7 +29,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PostAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania osoby");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -50,7 +49,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -70,7 +69,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -92,7 +91,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji ilości rachunków");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -117,7 +116,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji bilansu");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -140,7 +139,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osoby");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -163,7 +162,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -186,7 +185,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osoby");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -209,7 +208,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -232,7 +231,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie osób");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -250,7 +249,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new DuException(response.StatusCode, content);
+                throw new DException(response.StatusCode, content);
             }
         }
     }

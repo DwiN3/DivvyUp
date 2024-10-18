@@ -1,10 +1,9 @@
 ﻿using DivvyUp_App.GuiService;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
-using Radzen;
-using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp_App.Components.Person
 {
@@ -58,7 +57,7 @@ namespace DivvyUp_App.Components.Person
                 else
                     await PersonService.Edit(person);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -78,7 +77,7 @@ namespace DivvyUp_App.Components.Person
                 if (result)
                     await PersonService.Remove(person.id);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)

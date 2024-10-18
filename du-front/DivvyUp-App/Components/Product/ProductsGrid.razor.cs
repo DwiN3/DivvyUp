@@ -1,19 +1,14 @@
-﻿using System.Text;
-using DivvyUp_App.GuiService;
-using DivvyUp_Impl_Maui.Service;
+﻿using DivvyUp_App.GuiService;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
-using Radzen;
-using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp_App.Components.Product
 {
     partial class ProductsGrid
     {
-        [Parameter]
-        public int ReceiptId { get; set; }
         [Inject]
         private IProductService ProductService { get; set; }
         [Inject]
@@ -26,6 +21,9 @@ namespace DivvyUp_App.Components.Product
         private DNotificationService DNotificationService { get; set; }
         [Inject]
         private DDialogService DDialogService { get; set; }
+
+        [Parameter]
+        public int ReceiptId { get; set; }
 
         private List<ProductDto> Products { get; set; }
         private List<PersonDto> Persons { get; set; }
@@ -97,7 +95,7 @@ namespace DivvyUp_App.Components.Product
                     await PersonProductService.Add(personProduct, newProduct.id);
                 }
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -117,7 +115,7 @@ namespace DivvyUp_App.Components.Product
                 if (result)
                     await ProductService.Remove(product.id);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -135,7 +133,7 @@ namespace DivvyUp_App.Components.Product
             {
                 await ProductService.SetSettled(productId, isChecked);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -165,7 +163,7 @@ namespace DivvyUp_App.Components.Product
                 await PersonProductService.SetPerson(personProduct.id, person.id);
                 
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)

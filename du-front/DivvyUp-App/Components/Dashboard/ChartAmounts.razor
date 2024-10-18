@@ -1,12 +1,12 @@
 ﻿@using System.Globalization
+@using DivvyUp_Shared.Dto
 @using DivvyUp_Shared.Interface
-@using DivvyUp_Shared.Model
 
 <RadzenStack Style="width: 100%; height: 100%;">
     <RadzenRow>
         <RadzenColumn Size="4">
             <RadzenChart Style="height: 130%">
-                <RadzenPieSeries Data="@ChartUnpaidAmount" Title="Aktualny bilans" CategoryProperty="@nameof(ChartData.Name)" ValueProperty="@nameof(ChartData.Value)">
+                <RadzenPieSeries Data="@ChartUnpaidAmount" Title="Aktualny bilans" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
                     <RadzenSeriesDataLabels Visible="false" />
                     <RadzenLegend Visible="false" />
                     <RadzenValueAxis Formatter="@Format">
@@ -17,7 +17,7 @@
         </RadzenColumn>
         <RadzenColumn Size="8">
             <RadzenChart Style="height: 130%">
-                <RadzenPieSeries Data="@ChartTotalAmount" Title="Łączny wydatek" CategoryProperty="@nameof(ChartData.Name)" ValueProperty="@nameof(ChartData.Value)">
+                <RadzenPieSeries Data="@ChartTotalAmount" Title="Łączny wydatek" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
                     <RadzenSeriesDataLabels Visible="false" />
                     <RadzenLegend Visible="true"/>
                     <RadzenValueAxis Formatter="@Format">
@@ -39,8 +39,8 @@
     [Inject]
     private IChartService ChartService { get; set; }
 
-    private List<ChartData> ChartUnpaidAmount { get; set; }
-    private List<ChartData> ChartTotalAmount { get; set; }
+    private List<ChartDto> ChartUnpaidAmount { get; set; }
+    private List<ChartDto> ChartTotalAmount { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,9 +1,8 @@
 ﻿using DivvyUp_Impl_Maui.Api.DHttpClient;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -22,18 +21,18 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task<List<ChartData>> GetTotalAmounts()
+        public async Task<List<ChartDto>> GetTotalAmounts()
         {
             try
             {
                 var url = _url.GetTotalAmountsChart;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<List<ChartData>>(jsonResponse);
+                var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie wykresów wszystkich kosztów");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -45,18 +44,18 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<ChartData>> GetUnpaindAmounts()
+        public async Task<List<ChartDto>> GetUnpaindAmounts()
         {
             try
             {
                 var url = _url.GetUnpaidAmountsChart;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<List<ChartData>>(jsonResponse);
+                var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie wykresów nie opłaconych kosztów");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -68,18 +67,18 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<ChartData>> GetPercantageExpenses()
+        public async Task<List<ChartDto>> GetPercantageExpenses()
         {
             try
             {
                 var url = _url.GetPercentageExpensesChart;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<List<ChartData>>(jsonResponse);
+                var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie procent opłaconych wydatków");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -97,7 +96,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new DuException(response.StatusCode, content);
+                throw new DException(response.StatusCode, content);
             }
         }
     }

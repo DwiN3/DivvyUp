@@ -1,5 +1,4 @@
-﻿using DivvyUp_Shared.Interface;
-using Radzen;
+﻿using Radzen;
 
 namespace DivvyUp_App.GuiService
 {

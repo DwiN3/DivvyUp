@@ -35,6 +35,7 @@ namespace DivvyUp_App
             builder.Services.AddBlazorBootstrap();
             builder.Services.AddRadzenComponents();
             builder.Services.AddBlazoredLocalStorage();
+
             builder.Services.AddSingleton<CodeReaderResponse>();
             builder.Services.AddSingleton<UserAppService>();
             builder.Services.AddScoped<DialogService>();
@@ -43,6 +44,7 @@ namespace DivvyUp_App
             builder.Services.AddScoped<DNotificationService>();
             builder.Services.AddSingleton<DAlertService>();
             builder.Services.AddScoped<HeaderService>();
+
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IPersonService, PersonService>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();

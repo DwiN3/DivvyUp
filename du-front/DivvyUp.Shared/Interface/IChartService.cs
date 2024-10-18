@@ -1,11 +1,11 @@
-﻿using DivvyUp_Shared.Model;
+﻿using DivvyUp_Shared.Dto;
 
 namespace DivvyUp_Shared.Interface
 {
     public interface IChartService
     {
-        Task<List<ChartData>> GetTotalAmounts();
-        Task<List<ChartData>> GetUnpaindAmounts();
-        Task<List<ChartData>> GetPercantageExpenses();
+        Task<List<ChartDto>> GetTotalAmounts();
+        Task<List<ChartDto>> GetUnpaindAmounts();
+        Task<List<ChartDto>> GetPercantageExpenses();
     }
 }

@@ -1,9 +1,8 @@
 ﻿using DivvyUp_App.GuiService;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
-using Radzen;
 using Radzen.Blazor;
 
 namespace DivvyUp_App.Components.Receipt
@@ -60,7 +59,7 @@ namespace DivvyUp_App.Components.Receipt
                 else
                     await ReceiptService.Edit(receipt);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -80,7 +79,7 @@ namespace DivvyUp_App.Components.Receipt
                 if (result)
                     await ReceiptService.Remove(receipt.id);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)
@@ -106,7 +105,7 @@ namespace DivvyUp_App.Components.Receipt
             {
                 await ReceiptService.SetSettled(receiptId, isChecked);
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
             }
             catch (Exception)

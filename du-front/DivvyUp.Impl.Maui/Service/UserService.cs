@@ -1,13 +1,11 @@
-﻿using DivvyUp_Impl_Maui.Api.HttpResponseException;
-using DivvyUp_Shared.Dto;
+﻿using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Exceptions;
-using System.Net;
 
 namespace DivvyUp_Impl_Maui.Service
 {
@@ -34,7 +32,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie logowania");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -59,7 +57,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PostAsync(url, user);
                 await EnsureCorrectResponse(response, "Błąd w czasie rejestracji");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -86,7 +84,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var result = await response.Content.ReadAsStringAsync();
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -117,7 +115,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie zmieniania hasła");
             }
-            catch(DuException ex)
+            catch(DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -142,7 +140,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie usuwania użytkownika");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -171,7 +169,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie walidacji");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -199,7 +197,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie użytkownika");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -222,7 +220,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new DuException(response.StatusCode, content);
+                throw new DException(response.StatusCode, content);
             }
         }
     }

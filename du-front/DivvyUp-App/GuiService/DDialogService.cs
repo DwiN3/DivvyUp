@@ -46,7 +46,7 @@ namespace DivvyUp_App.GuiService
         {
             var result = await _dialogService.OpenAsync<DDialogProductPersonCard>(
                 "Osoby przypisane do produktu",
-                new Dictionary<string, object> { { "ProductId", productId } },
+                new Dictionary<string, object> { { "PersonProductId", productId } },
                 new DialogOptions()
                 {
                     Width = "80%",

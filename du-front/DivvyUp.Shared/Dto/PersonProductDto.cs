@@ -1,7 +1,4 @@
-﻿using DivvyUp_Shared.Model;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace DivvyUp_Shared.Dto
+﻿namespace DivvyUp_Shared.Dto
 {
     public class PersonProductDto
     {

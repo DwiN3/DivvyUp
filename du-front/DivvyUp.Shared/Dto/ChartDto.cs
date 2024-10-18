@@ -1,6 +1,6 @@
-﻿namespace DivvyUp_Shared.Model
+﻿namespace DivvyUp_Shared.Dto
 {
-    public class ChartData
+    public class ChartDto
     {
         public string Name { get; set; }
         public double Value { get; set; }

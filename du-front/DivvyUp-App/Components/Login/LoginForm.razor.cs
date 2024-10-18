@@ -1,8 +1,8 @@
 ﻿using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Api.CodeReader;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -21,6 +21,7 @@ namespace DivvyUp_App.Components.Login
         private UserAppService UserAppService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
+
         private CodeReaderResponse RCR { get; set; } = new();
         private UserDto User { get; set; } = new();
 
@@ -34,9 +35,9 @@ namespace DivvyUp_App.Components.Login
                 DHttpClient.setToken(token);
                 Navigation.NavigateTo("/");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
-                var message = RCR.ReadLogin(ex.ErrorCode);
+                var message = RCR.ReadLogin(ex.StatusCode);
                 DNotificationService.ShowNotification(message, NotificationSeverity.Error);
             }
             catch (TimeoutException)

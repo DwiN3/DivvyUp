@@ -3,11 +3,9 @@ using Microsoft.Extensions.Logging;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Newtonsoft.Json;
-using DivvyUp_Impl_Maui.Api.HttpResponseException;
-using DivvyUp_Impl_Maui.Api;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp_Impl_Maui.Service
 {
@@ -32,7 +30,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PostAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania rachunku");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -52,7 +50,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -72,7 +70,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -94,7 +92,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -116,7 +114,7 @@ namespace DivvyUp_Impl_Maui.Service
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -139,7 +137,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunku");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -162,7 +160,7 @@ namespace DivvyUp_Impl_Maui.Service
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie rachunków");
                 return result;
             }
-            catch (DuException ex)
+            catch (DException ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw;
@@ -180,7 +178,7 @@ namespace DivvyUp_Impl_Maui.Service
             {
                 var content = await response.Content.ReadAsStringAsync();
                 _logger.LogError("{ErrorMessage} Kod '{StatusCode}'. Response: '{Response}'", errorMessage, response.StatusCode, content);
-                throw new DuException(response.StatusCode, content);
+                throw new DException(response.StatusCode, content);
             }
         }
     }

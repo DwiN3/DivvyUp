@@ -1,9 +1,9 @@
-﻿@using DivvyUp_Shared.Interface
-@using DivvyUp_Shared.Model
+﻿@using DivvyUp_Shared.Dto
+@using DivvyUp_Shared.Interface
 
 <RadzenStack Style="width: 100%; height: 100%;">
     <RadzenChart Style="height: 130%">
-        <RadzenColumnSeries Data="@PercantageExpenses" Title="Procent rzetelności" FillRange="@ColorRanges" LineType="LineType.Dashed" CategoryProperty="@nameof(ChartData.Name)" ValueProperty="@nameof(ChartData.Value)">
+        <RadzenColumnSeries Data="@PercantageExpenses" Title="Procent rzetelności" FillRange="@ColorRanges" LineType="LineType.Dashed" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
             <RadzenSeriesDataLabels Visible="false" />
             <RadzenColumnOptions Radius="5" />
             <RadzenLegend Visible="false" />
@@ -25,7 +25,7 @@
     [Inject]
     private IChartService ChartService { get; set; }
 
-    private List<ChartData> PercantageExpenses { get; set; }
+    private List<ChartDto> PercantageExpenses { get; set; }
     private List<SeriesColorRange> ColorRanges = new List<SeriesColorRange>()
     {
         new SeriesColorRange() {Min = 0, Max = 30, Color = "red"},
