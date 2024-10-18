@@ -33,9 +33,8 @@ public class ValidService {
 
     public User validateUser(String username) throws ValidException {
         Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (!optionalUser.isPresent()) {
+        if (!optionalUser.isPresent())
             throw new ValidException(401, "Brak dostępu do użytkownika: " + username);
-        }
 
         return optionalUser.get();
     }

@@ -72,9 +72,9 @@ namespace DivvyUp_App.Components.PersonProduct
             try
             {
                 if (personProduct.id == 0)
-                    await PersonProductService.AddPersonProduct(personProduct, ProductId);
+                    await PersonProductService.Add(personProduct, ProductId);
                 else
-                    await PersonProductService.EditPersonProduct(personProduct);
+                    await PersonProductService.Edit(personProduct);
             }
             catch (DuException)
             {
@@ -92,7 +92,7 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                await PersonProductService.RemovePersonProduct(personProduct.id);
+                await PersonProductService.Remove(personProduct.id);
             }
             catch (DuException ex)
             {
@@ -110,7 +110,7 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                await PersonProductService.SetSettledPersonProduct(personProductId, isChecked);
+                await PersonProductService.SetSettled(personProductId, isChecked);
             }
             catch (DuException ex)
             {
@@ -124,7 +124,7 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                await PersonProductService.SetCompensationPersonProduct(personProductId);
+                await PersonProductService.SetCompensation(personProductId);
             }
             catch (DuException ex)
             {
@@ -143,7 +143,7 @@ namespace DivvyUp_App.Components.PersonProduct
             try
             {
                 personProduct.personId = personId;
-                await PersonProductService.ChangePersonPersonProduct(personProduct.id, personId);
+                await PersonProductService.SetPerson(personProduct.id, personId);
             }
             catch (DuException ex)
             {

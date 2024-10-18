@@ -76,7 +76,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<string> EditUser(UserDto user)
+        public async Task<string> Edit(UserDto user)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemoveUser()
+        public async Task Remove()
         {
             try
             {

@@ -23,7 +23,7 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task<ProductDto> AddProduct(ProductDto product)
+        public async Task<ProductDto> Add(ProductDto product)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<ProductDto> EditProduct(ProductDto product)
+        public async Task<ProductDto> Edit(ProductDto product)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemoveProduct(int productId)
+        public async Task Remove(int productId)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetSettledProduct(int productId, bool settled)
+        public async Task SetSettled(int productId, bool settled)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetCompensationPriceProduct(int productId, double compensationPrice)
+        public async Task SetCompensationPrice(int productId, double compensationPrice)
         {
             try
             {

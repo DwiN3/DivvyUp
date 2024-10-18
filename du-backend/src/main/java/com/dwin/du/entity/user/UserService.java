@@ -45,7 +45,7 @@ public class UserService {
     private final PersonRepository personRepository;
 
 
-    public ResponseEntity<String> auth(LoginRequest request) {
+    public ResponseEntity<String> authenticate(LoginRequest request) {
         valid.isNull(request);
         valid.isEmpty(request.getUsername());
         valid.isEmpty(request.getPassword());

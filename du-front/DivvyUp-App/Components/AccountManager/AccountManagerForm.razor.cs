@@ -38,7 +38,7 @@ namespace DivvyUp_App.Components.AccountManager
         {
             try
             {
-                var token = await UserService.EditUser(User);
+                var token = await UserService.Edit(User);
                 DHttpClient.setToken(token);
                 UserAppService.SetUser(User.username, User.email, token, true);
                 DNotificationService.ShowNotification("Zapisano zmiany", NotificationSeverity.Success);
@@ -72,7 +72,7 @@ namespace DivvyUp_App.Components.AccountManager
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie konta", "Czy potwierdzasz usunięcie konta?");
                 if (result)
                 {
-                    await UserService.RemoveUser();
+                    await UserService.Remove();
                     UserAppService.ClearUser();
                     DHttpClient.setToken(string.Empty);
                     StateHasChanged();

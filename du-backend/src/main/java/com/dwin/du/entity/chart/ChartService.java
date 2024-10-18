@@ -29,8 +29,8 @@ public class ChartService {
             //amount = Math.round(amount * 100.0) / 100.0;
 
             ChartDto response = ChartDto.builder()
-                    .Name(person.getName()+" "+person.getSurname())
-                    .Value(amount)
+                    .name(person.getName()+" "+person.getSurname())
+                    .value(amount)
                     .build();
             responseList.add(response);
         }
@@ -46,8 +46,8 @@ public class ChartService {
             double amount = calculatePaidPercentage(person.getTotalAmount(),person.getUnpaidAmount());
 
             ChartDto response = ChartDto.builder()
-                    .Name(person.getName()+" "+person.getSurname())
-                    .Value(amount)
+                    .name(person.getName()+" "+person.getSurname())
+                    .value(amount)
                     .build();
             responseList.add(response);
         }

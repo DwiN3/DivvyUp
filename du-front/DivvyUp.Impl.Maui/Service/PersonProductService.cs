@@ -23,7 +23,7 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task AddPersonProduct(PersonProductDto personProduct, int productId)
+        public async Task Add(PersonProductDto personProduct, int productId)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task EditPersonProduct(PersonProductDto personProduct)
+        public async Task Edit(PersonProductDto personProduct)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemovePersonProduct(int personProductId)
+        public async Task Remove(int personProductId)
         {
             try
             {
@@ -83,11 +83,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task ChangePersonPersonProduct(int personProductId, int personId)
+        public async Task SetPerson(int personProductId, int personId)
         {
             try
             {
-                var url = _url.ChangePersonPersonProduct
+                var url = _url.SetPersonPersonProduct
                     .Replace(ApiRoute.arg_ID, personProductId.ToString())
                     .Replace(ApiRoute.arg_PersonId, personId.ToString());
                 var response = await _dHttpClient.PutAsync(url);
@@ -105,7 +105,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetSettledPersonProduct(int personProductId, bool settled)
+        public async Task SetSettled(int personProductId, bool settled)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetCompensationPersonProduct(int personProductId)
+        public async Task SetCompensation(int personProductId)
         {
             try
             {

@@ -79,10 +79,10 @@ namespace DivvyUp_App.Components.Product
                 var newProduct = new ProductDto();
 
                 if (product.id == 0) 
-                    newProduct = await ProductService.AddProduct(product);
+                    newProduct = await ProductService.Add(product);
                 
                 else
-                    newProduct = await ProductService.EditProduct(product);
+                    newProduct = await ProductService.Edit(product);
                 
                 if (!product.divisible && Persons.Count > 0)
                 {
@@ -94,7 +94,7 @@ namespace DivvyUp_App.Components.Product
                         partOfPrice = product.price,
                         quantity = 1
                     };
-                    await PersonProductService.AddPersonProduct(personProduct, newProduct.id);
+                    await PersonProductService.Add(personProduct, newProduct.id);
                 }
             }
             catch (DuException ex)
@@ -115,7 +115,7 @@ namespace DivvyUp_App.Components.Product
             {
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie produktu", $"Czy potwierdzasz usunięcie produktu: {product.name}?");
                 if (result)
-                    await ProductService.RemoveProduct(product.id);
+                    await ProductService.Remove(product.id);
             }
             catch (DuException ex)
             {
@@ -133,7 +133,7 @@ namespace DivvyUp_App.Components.Product
         {
             try
             {
-                await ProductService.SetSettledProduct(productId, isChecked);
+                await ProductService.SetSettled(productId, isChecked);
             }
             catch (DuException ex)
             {
@@ -162,7 +162,7 @@ namespace DivvyUp_App.Components.Product
             var personProduct = personProductList.First();
             try
             {
-                await PersonProductService.ChangePersonPersonProduct(personProduct.id, person.id);
+                await PersonProductService.SetPerson(personProduct.id, person.id);
                 
             }
             catch (DuException ex)

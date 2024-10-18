@@ -22,7 +22,7 @@ namespace DivvyUp_Impl_Maui.Service
             _dHttpClient = dHttpClient;
             _logger = logger;
         }
-        public async Task AddPerson(PersonDto person)
+        public async Task Add(PersonDto person)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task EditPerson(PersonDto person)
+        public async Task Edit(PersonDto person)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemovePerson(int personId)
+        public async Task Remove(int personId)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetReceiptsCountsPerson(int personId, int receiptsCounts)
+        public async Task SetReceiptsCounts(int personId, int receiptsCounts)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetTotalAmountPerson(int personId, double totalAmount)
+        public async Task SetTotalAmount(int personId, double totalAmount)
         {
             try
             {

@@ -25,7 +25,7 @@ public class PersonService {
     private final ProductRepository productRepository;
     private final ValidService valid;
 
-    public ResponseEntity<?> addPerson(AddEditPersonRequest request, String username) {
+    public ResponseEntity<?> addPerson(String username, AddEditPersonRequest request) {
         User user = valid.validateUser(username);
         valid.isNull(request);
         valid.isEmpty(request.getName());
@@ -44,7 +44,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editPerson(int personId, AddEditPersonRequest request, String username) {
+    public ResponseEntity<?> editPerson(String username, int personId, AddEditPersonRequest request) {
         valid.validateUser(username);
         Person person = valid.validatePerson(username, personId);
         valid.isNull(request);
@@ -56,7 +56,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> removePerson(int personId, String username) {
+    public ResponseEntity<?> removePerson(String username, int personId) {
         valid.validateUser(username);
         valid.isNull(personId);
         Person person = valid.validatePerson(username, personId);
@@ -70,7 +70,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setReceiptsCounts(int personId, int receiptsCount, String username) {
+    public ResponseEntity<?> setReceiptsCounts(String username, int personId, int receiptsCount) {
         valid.validateUser(username);
         valid.isNull(personId);
         Person person = valid.validatePerson(username, personId);
@@ -81,7 +81,7 @@ public class PersonService {
     }
 
 
-    public ResponseEntity<?> setTotalAmount(int personId, Double totalAmount, String username) {
+    public ResponseEntity<?> setTotalAmount(String username, int personId, Double totalAmount) {
         valid.validateUser(username);
         valid.isNull(personId);
         Person person = valid.validatePerson(username, personId);
@@ -91,7 +91,7 @@ public class PersonService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> getPersonById(int personId, String username) {
+    public ResponseEntity<?> getPerson(String username, int personId) {
         valid.validateUser(username);
         valid.isNull(personId);
         Person person = valid.validatePerson(username, personId);

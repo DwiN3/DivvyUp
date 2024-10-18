@@ -18,58 +18,58 @@ public class ReceiptController {
     private final ReceiptService receiptService;
 
     @PostMapping("/add")
-    @Operation(summary = "Add a new receipt", description = "Adds a new receipt.")
+    @Operation(summary = "Add a new receipt", description = "Adds a new receipt to the system.")
     public ResponseEntity<?> addReceipt(@RequestBody AddEditReceiptRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.addReceipt(request, currentUsername);
+        String username = authentication.getName();
+        return receiptService.addReceipt(username, request);
     }
 
     @PutMapping("/{receiptId}/edit")
-    @Operation(summary = "Edit a receipt", description = "Edits an existing receipt by ID.")
+    @Operation(summary = "Edit a receipt", description = "Edits the details of an existing receipt by its ID..")
     public ResponseEntity<?> editReceipt(@PathVariable int receiptId, @RequestBody AddEditReceiptRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.editReceipt(receiptId, request, currentUsername);
+        String username = authentication.getName();
+        return receiptService.editReceipt(username, receiptId, request);
     }
 
     @DeleteMapping("/{receiptId}/remove")
-    @Operation(summary = "Remove a receipt", description = "Removes a receipt by ID.")
+    @Operation(summary = "Remove a receipt", description = "Removes a receipt from the system by its ID.")
     public ResponseEntity<?> removeReceipt(@PathVariable int receiptId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.removeReceipt(receiptId, currentUsername);
+        String username = authentication.getName();
+        return receiptService.removeReceipt(username, receiptId);
     }
 
     @PutMapping("/{receiptId}/set-total-price")
-    @Operation(summary = "Set total price of a receipt", description = "Sets the total price for a specific receipt.")
+    @Operation(summary = "Set total price of a receipt", description = "Sets the total price for a specific receipt by its ID.")
     public ResponseEntity<?> setTotalPrice(@PathVariable int receiptId, @RequestParam Double totalPrice){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.setTotalPrice(receiptId, totalPrice, currentUsername);
+        String username = authentication.getName();
+        return receiptService.setTotalPrice(username, receiptId, totalPrice);
     }
 
     @PutMapping("/{receiptId}/set-settled")
     @Operation(summary = "Set receipt as settled", description = "Marks a receipt as settled by its ID.")
     public ResponseEntity<?> setIsSettled(@PathVariable int receiptId, @RequestParam boolean settled) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.setIsSettled(receiptId, settled, currentUsername);
+        String username = authentication.getName();
+        return receiptService.setIsSettled(username, receiptId, settled);
     }
 
     @GetMapping("/{receiptId}")
-    @Operation(summary = "Get a receipt", description = "Retrieves a receipt by ID.")
+    @Operation(summary = "Retrieve a receipt", description = "Retrieves the details of a receipt by its ID.")
     public ResponseEntity<?> getReceipt(@PathVariable int receiptId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.getReceiptById(receiptId, currentUsername);
+        String username = authentication.getName();
+        return receiptService.getReceipt(username, receiptId);
     }
 
     @GetMapping("")
-    @Operation(summary = "Get all receipts", description = "Retrieves all receipts for the current user.")
+    @Operation(summary = "Retrieve all receipts", description = "Retrieves all receipts associated with the current user.")
     public ResponseEntity<?> getReceipts(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return receiptService.getReceipts(currentUsername);
+        String username = authentication.getName();
+        return receiptService.getReceipts(username);
     }
 }

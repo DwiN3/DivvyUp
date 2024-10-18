@@ -56,7 +56,7 @@
         public readonly string AddPersonProduct = $"{BaseUrl}/product/{arg_ID}/person-product/add";
         public readonly string EditPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/edit";
         public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/{arg_ID}/remove";
-        public readonly string ChangePersonPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/change-person?personId={arg_PersonId}";
+        public readonly string SetPersonPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-person?personId={arg_PersonId}";
         public readonly string SetSettledPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-settled?settled={arg_Settled}";
         public readonly string SetCompensationPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-compensation";
         public readonly string GetPersonProduct = $"{BaseUrl}/person-product/{arg_ID}";

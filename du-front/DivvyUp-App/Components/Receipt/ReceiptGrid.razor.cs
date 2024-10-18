@@ -56,9 +56,9 @@ namespace DivvyUp_App.Components.Receipt
             try
             {
                 if (receipt.id == 0)
-                    await ReceiptService.AddReceipt(receipt);
+                    await ReceiptService.Add(receipt);
                 else
-                    await ReceiptService.EditReceipt(receipt);
+                    await ReceiptService.Edit(receipt);
             }
             catch (DuException ex)
             {
@@ -78,7 +78,7 @@ namespace DivvyUp_App.Components.Receipt
             {
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie rachunku", $"Czy potwierdzasz usunięcie rachunku: {receipt.name}?");
                 if (result)
-                    await ReceiptService.RemoveReceipt(receipt.id);
+                    await ReceiptService.Remove(receipt.id);
             }
             catch (DuException ex)
             {
@@ -104,7 +104,7 @@ namespace DivvyUp_App.Components.Receipt
         {
             try
             {
-                await ReceiptService.SetSettledReceipt(receiptId, isChecked);
+                await ReceiptService.SetSettled(receiptId, isChecked);
             }
             catch (DuException ex)
             {

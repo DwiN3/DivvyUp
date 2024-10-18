@@ -28,7 +28,7 @@ public class PersonProductService {
     private final PersonUpdateService updatePerson;
     private final DataUpdateService operation;
 
-    public ResponseEntity<?> addPersonProduct(AddEditPersonProductRequest request, int productId, String username) {
+    public ResponseEntity<?> addPersonProduct(String username, int productId, AddEditPersonProductRequest request) {
         User user = valid.validateUser(username);
         valid.isNull(request);
         valid.isNull(request.getPersonId());
@@ -77,7 +77,7 @@ public class PersonProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editPersonProduct(int personProductId, AddEditPersonProductRequest request, String username) {
+    public ResponseEntity<?> editPersonProduct(String username, int personProductId, AddEditPersonProductRequest request) {
         valid.validateUser(username);
         valid.isNull(request);
         valid.isNull(request.getPersonId());
@@ -106,7 +106,7 @@ public class PersonProductService {
     }
 
 
-    public ResponseEntity<?> removePersonProduct(int personProductId, String username) {
+    public ResponseEntity<?> removePersonProduct(String username, int personProductId) {
         valid.validateUser(username);
         valid.isNull(personProductId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
@@ -120,7 +120,7 @@ public class PersonProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setIsSettled(int personProductId, boolean settled, String username) {
+    public ResponseEntity<?> setIsSettled(String username, int personProductId, boolean settled) {
         valid.validateUser(username);
         valid.isNull(personProductId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
@@ -143,7 +143,7 @@ public class PersonProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> changePerson(int personProductId, int personId, String username) {
+    public ResponseEntity<?> setPerson(String username, int personProductId, int personId) {
         valid.validateUser(username);
         valid.isNull(personProductId);
         valid.isNull(personId);
@@ -162,7 +162,7 @@ public class PersonProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setIsCompensation(int personProductId, String username) {
+    public ResponseEntity<?> setIsCompensation(String username, int personProductId) {
         valid.validateUser(username);
         valid.isNull(personProductId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
@@ -184,7 +184,7 @@ public class PersonProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> getPersonProductById(int personProductId, String username) {
+    public ResponseEntity<?> getPersonProduct(String username, int personProductId) {
         valid.validateUser(username);
         valid.isNull(personProductId);
         PersonProduct personProduct = valid.validatePersonProduct(username, personProductId);
@@ -202,7 +202,7 @@ public class PersonProductService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<?> getProductPersonProductsFromProduct(int productId, String username) {
+    public ResponseEntity<?> getPersonProductsFromProduct(String username, int productId) {
         valid.validateUser(username);
         valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
@@ -225,7 +225,7 @@ public class PersonProductService {
         return ResponseEntity.ok(responseList);
     }
 
-    public ResponseEntity<?> getAllProductPersonProductsFromProduct(String username) {
+    public ResponseEntity<?> getAllPersonProducts(String username) {
         User user = valid.validateUser(username);
 
         List<PersonProduct> personProducts = personProductRepository.findByUser(user);

@@ -26,7 +26,7 @@ public class ProductService {
     private final PersonUpdateService updatePerson;
     private final DataUpdateService operation;
 
-    public ResponseEntity<?> addProductToReceipt(AddEditProductRequest request, int receiptId, String username) {
+    public ResponseEntity<?> addProduct(String username, int receiptId, AddEditProductRequest request) {
         User user = valid.validateUser(username);
         valid.isNull(request);
         valid.isEmpty(request.getName());
@@ -61,7 +61,7 @@ public class ProductService {
         return ResponseEntity.ok(product);
     }
 
-    public ResponseEntity<?> editProduct(int productId, AddEditProductRequest request, String username) {
+    public ResponseEntity<?> editProduct(String username, int productId, AddEditProductRequest request) {
         valid.validateUser(username);
         valid.isNull(request);
         valid.isEmpty(request.getName());
@@ -98,7 +98,7 @@ public class ProductService {
         return ResponseEntity.ok(product);
     }
 
-    public ResponseEntity<?> removeProduct(int productId, String username) {
+    public ResponseEntity<?> removeProduct(String username, int productId) {
         valid.validateUser(username);
         valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
@@ -115,7 +115,7 @@ public class ProductService {
     }
 
 
-    public ResponseEntity<?> setIsSettled(int productId, boolean settled, String username) {
+    public ResponseEntity<?> setIsSettled(String username, int productId, boolean settled) {
         valid.validateUser(username);
         valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
@@ -138,7 +138,7 @@ public class ProductService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> getProductById(int productId, String username) {
+    public ResponseEntity<?> getProduct(String username, int productId) {
         valid.validateUser(username);
         valid.isNull(productId);
         Product product = valid.validateProduct(username, productId);
@@ -157,7 +157,7 @@ public class ProductService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<?> getProductsFromReceipt(int receiptId, String username) {
+    public ResponseEntity<?> getProductsFromReceipt(String username, int receiptId) {
         valid.validateUser(username);
         valid.isNull(receiptId);
         Receipt receipt = valid.validateReceipt(username, receiptId);

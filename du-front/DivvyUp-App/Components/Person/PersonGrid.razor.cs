@@ -54,13 +54,12 @@ namespace DivvyUp_App.Components.Person
             try
             {
                 if (person.id == 0)
-                    await PersonService.AddPerson(person);
+                    await PersonService.Add(person);
                 else
-                    await PersonService.EditPerson(person);
+                    await PersonService.Edit(person);
             }
             catch (DuException ex)
             {
-                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {
@@ -75,9 +74,9 @@ namespace DivvyUp_App.Components.Person
         {
             try
             {
-                var result = await DDialogService.OpenYesNoDialog("Usuwanie Osoby", $"Czy potwierdzasz usunięcie osoby: {person.fullName}?");
+                var result = await DDialogService.OpenYesNoDialog("Usuwanie osoby", $"Czy potwierdzasz usunięcie osoby: {person.fullName}?");
                 if (result)
-                    await PersonService.RemovePerson(person.id);
+                    await PersonService.Remove(person.id);
             }
             catch (DuException ex)
             {

@@ -75,7 +75,7 @@ namespace DivvyUp_App.Layout
         {
             UserAppService.ClearUser();
             StateHasChanged();
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("/", true);
         }
 
         public void Dispose()

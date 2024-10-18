@@ -6,6 +6,6 @@ import lombok.Data;
 @Builder
 @Data
 public class ChartDto {
-    public String Name;
-    public double Value;
+    public String name;
+    public double value;
 }

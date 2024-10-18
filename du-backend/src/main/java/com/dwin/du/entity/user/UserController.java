@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rm")
-@Tag(name = "Authentication Management", description = "APIs for user authentication and account management")
+@Tag(name = "User Management", description = "APIs for user authentication and account management")
 public class UserController {
 
     private final UserService userService;
@@ -28,45 +28,45 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    @Operation(summary = "Authenticate user", description = "Authenticates a user and provides a token.")
+    @Operation(summary = "Authenticate user", description = "Authenticates a user and returns an authentication token.")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest request){
-        ResponseEntity<String> response = userService.auth(request);
+        ResponseEntity<String> response = userService.authenticate(request);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
     @GetMapping("/validate-token")
-    @Operation(summary = "Validate token", description = "Checks the validity of the token")
+    @Operation(summary = "Validate token", description = "Checks the validity of a given authentication token")
     public ResponseEntity<?> validateToken(@RequestParam String token) {
         ResponseEntity<?> response = userService.validateToken(token);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
     @PutMapping("/user/change-password")
-    @Operation(summary = "Change password in user", description = "Change password in user.")
+    @Operation(summary = "Change user password", description = "Changes the password for the currently authenticated user.")
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return userService.changePassword(currentUsername, request);
+        String username = authentication.getName();
+        return userService.changePassword(username, request);
     }
 
     @PutMapping("/user/edit")
-    @Operation(summary = "Edit a user", description = "Edits an existing user.")
+    @Operation(summary = "Edit user account", description = "Edits the details of the currently authenticated user.")
     public ResponseEntity<?> editUser(@RequestBody EditUserRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return userService.editUser(currentUsername, request);
+        String username = authentication.getName();
+        return userService.editUser(username, request);
     }
 
     @DeleteMapping("/user/remove")
-    @Operation(summary = "Remove user account", description = "Removes a user account from the system.")
+    @Operation(summary = "Remove user account", description = "Removes the currently authenticated user's account.")
     public ResponseEntity<?> removeUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        return userService.removeUser(currentUsername);
+        String username = authentication.getName();
+        return userService.removeUser(username);
     }
 
     @GetMapping("/user")
-    @Operation(summary = "Return user", description = "Get user using token.")
+    @Operation(summary = "Retrieve user by token", description = "Retrieves the user information associated with the provided token.")
     public ResponseEntity<?> getUser(@RequestParam String token){
         return userService.getUser(token);
     }

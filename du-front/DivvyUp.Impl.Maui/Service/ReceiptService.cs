@@ -24,7 +24,7 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task AddReceipt(ReceiptDto receipt)
+        public async Task Add(ReceiptDto receipt)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task EditReceipt(ReceiptDto receipt)
+        public async Task Edit(ReceiptDto receipt)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task RemoveReceipt(int receiptId)
+        public async Task Remove(int receiptId)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetSettledReceipt(int receiptId, bool settled)
+        public async Task SetSettled(int receiptId, bool settled)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetTotalPriceReceipt(int receiptId, double totalPrice)
+        public async Task SetTotalPrice(int receiptId, double totalPrice)
         {
             try
             { 

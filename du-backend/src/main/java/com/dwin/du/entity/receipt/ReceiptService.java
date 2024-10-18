@@ -25,7 +25,7 @@ public class ReceiptService {
     private final ValidService valid;
     private final PersonUpdateService updatePerson;
 
-    public ResponseEntity<?> addReceipt(AddEditReceiptRequest request, String username) {
+    public ResponseEntity<?> addReceipt(String username, AddEditReceiptRequest request) {
         User user = valid.validateUser(username);
         valid.isNull(request);
         valid.isEmpty(request.getName());
@@ -44,7 +44,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> editReceipt(int receiptId, AddEditReceiptRequest request, String username) {
+    public ResponseEntity<?> editReceipt(String username, int receiptId, AddEditReceiptRequest request) {
         valid.validateUser(username);
         valid.isNull(request);
         valid.isEmpty(request.getName());
@@ -57,7 +57,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> removeReceipt(int receiptId, String username) {
+    public ResponseEntity<?> removeReceipt(String username, int receiptId) {
         valid.validateUser(username);
         valid.isNull(receiptId);
         Receipt receipt = valid.validateReceipt(username, receiptId);
@@ -81,7 +81,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setTotalPrice(int receiptId, Double totalPrice, String username) {
+    public ResponseEntity<?> setTotalPrice(String username, int receiptId, Double totalPrice) {
         valid.validateUser(username);
         valid.isNull(receiptId);
         valid.isNull(totalPrice);
@@ -94,7 +94,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> setIsSettled(int receiptId, boolean settled, String username) {
+    public ResponseEntity<?> setIsSettled(String username, int receiptId, boolean settled) {
         valid.validateUser(username);
         valid.isNull(receiptId);
         Receipt receipt = valid.validateReceipt(username, receiptId);
@@ -119,7 +119,7 @@ public class ReceiptService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> getReceiptById(int receiptId, String username) {
+    public ResponseEntity<?> getReceipt(String username, int receiptId) {
         valid.validateUser(username);
         valid.isNull(receiptId);
         Receipt receipt = valid.validateReceipt(username, receiptId);
