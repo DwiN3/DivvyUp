@@ -1,14 +1,14 @@
 package com.dwin.du.validation;
-import com.dwin.du.entity.person.Person;
-import com.dwin.du.entity.person.PersonRepository;
-import com.dwin.du.entity.person_product.PersonProduct;
-import com.dwin.du.entity.person_product.PersonProductRepository;
-import com.dwin.du.entity.product.Product;
-import com.dwin.du.entity.product.ProductRepository;
-import com.dwin.du.entity.receipt.Receipt;
-import com.dwin.du.entity.receipt.ReceiptRepository;
-import com.dwin.du.entity.user.User;
-import com.dwin.du.entity.user.UserRepository;
+import com.dwin.du.api.entity.Person;
+import com.dwin.du.api.repository.PersonRepository;
+import com.dwin.du.api.entity.PersonProduct;
+import com.dwin.du.api.repository.PersonProductRepository;
+import com.dwin.du.api.entity.Product;
+import com.dwin.du.api.repository.ProductRepository;
+import com.dwin.du.api.entity.Receipt;
+import com.dwin.du.api.repository.ReceiptRepository;
+import com.dwin.du.api.entity.User;
+import com.dwin.du.api.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

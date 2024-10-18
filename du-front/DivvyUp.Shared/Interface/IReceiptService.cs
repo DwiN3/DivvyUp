@@ -4,11 +4,11 @@ namespace DivvyUp_Shared.Interface
 {
     public interface IReceiptService
     {
-        Task AddReceipt(ReceiptDto receipt);
-        Task EditReceipt(ReceiptDto receipt);
-        Task RemoveReceipt(int receiptId);
-        Task SetSettledReceipt(int receiptId, bool isSettled);
-        Task SetTotalPriceReceipt(int receiptId, double totalPrice);
+        Task Add(ReceiptDto receipt);
+        Task Edit(ReceiptDto receipt);
+        Task Remove(int receiptId);
+        Task SetSettled(int receiptId, bool isSettled);
+        Task SetTotalPrice(int receiptId, double totalPrice);
         Task<ReceiptDto> GetReceipt(int receiptId);
         Task<List<ReceiptDto>> GetReceipts();
     }

@@ -7,8 +7,8 @@ namespace DivvyUp_Shared.Interface
     {
         Task<string> Login(UserDto user);
         Task Register(UserDto user);
-        Task<string> EditUser(UserDto user);
-        Task RemoveUser();
+        Task<string> Edit(UserDto user);
+        Task Remove();
         Task ChangePassword(string password, string newPassword);
         Task<bool> IsValid(string token);
         Task<UserDto> GetUser(string token);
