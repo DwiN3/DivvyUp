@@ -39,9 +39,9 @@ public class UserService {
     private final ValidationService validator;
 
     public ResponseEntity<String> authenticate(LoginRequest request) {
-        validator.isNull(request);
-        validator.isEmpty(request.getUsername());
-        validator.isEmpty(request.getPassword());
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getUsername(), "Nazwa użytkownika jest wymagana");
+        validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
         User user = validator.validateUser(request.getUsername());
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
@@ -61,10 +61,10 @@ public class UserService {
     }
 
     public ResponseEntity<?> register(RegisterRequest request) {
-        validator.isNull(request);
-        validator.isEmpty(request.getUsername());
-        validator.isEmpty(request.getEmail());
-        validator.isEmpty(request.getPassword());
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getUsername(), "Nazwa użytkownika jest wymagana");
+        validator.isEmpty(request.getEmail(), "Mail użytkownika jest wymagany");
+        validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
 
         if (userRepository.findByEmail(request.getEmail()).isPresent())
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -86,9 +86,9 @@ public class UserService {
     }
 
     public ResponseEntity<?> editUser(String username, EditUserRequest request) {
-        validator.isNull(request);
-        validator.isEmpty(request.getUsername());
-        validator.isEmpty(request.getEmail());
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getUsername(), "Nazwa użytkownika jest wymagana");
+        validator.isEmpty(request.getEmail(), "Mail użytkownika jest wymagany");
         User user = validator.validateUser(username);
 
         user.setUsername(request.getUsername());
@@ -118,7 +118,7 @@ public class UserService {
 
     public ResponseEntity<?> validateToken(String token) {
         try {
-            validator.isEmpty(token);
+            validator.isEmpty(token, "Nie przekazano tokena");
             String username = jwtService.extractUsername(token);
             UserDetails userDetails = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             boolean isValid = jwtService.isTokenValid(token, userDetails);
@@ -134,7 +134,7 @@ public class UserService {
     }
 
     public ResponseEntity<?> getUser(String token) {
-        validator.isEmpty(token);
+        validator.isEmpty(token, "Nie przekazano tokena");
         String username = jwtService.extractUsername(token);
         User user = validator.validateUser(username);
         boolean isValid = jwtService.isTokenValid(token, user);
@@ -154,9 +154,9 @@ public class UserService {
 
     public ResponseEntity<?> changePassword(String username, PasswordChangeRequest request) {
         User user = validator.validateUser(username);
-        validator.isNull(request);
-        validator.isEmpty(request.getPassword());
-        validator.isEmpty(request.getNewPassword());
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
+        validator.isEmpty(request.getNewPassword(), "Nowe hasło jest wymagane");
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Aktualne hasło jest błędne");

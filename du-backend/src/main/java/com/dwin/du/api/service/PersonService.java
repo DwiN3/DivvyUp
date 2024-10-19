@@ -28,8 +28,8 @@ public class PersonService {
 
     public ResponseEntity<?> addPerson(String username, AddEditPersonRequest request) {
         User user = validator.validateUser(username);
-        validator.isNull(request);
-        validator.isEmpty(request.getName());
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getName(), "Nazwa osoby jest wymagana");
 
         Person person = Person.builder()
                 .user(user)
@@ -49,8 +49,8 @@ public class PersonService {
     public ResponseEntity<?> editPerson(String username, int personId, AddEditPersonRequest request) {
         validator.validateUser(username);
         Person person = validator.validatePerson(username, personId);
-        validator.isNull(request);
-        validator.isEmpty(request.getName());
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getName(), "Nazwa osoby jest wymagana");
 
         person.setName(request.getName());
         person.setSurname(request.getSurname());
@@ -61,7 +61,7 @@ public class PersonService {
 
     public ResponseEntity<?> removePerson(String username, int personId) {
         validator.validateUser(username);
-        validator.isNull(personId);
+        validator.isNull(personId, "Brak identyfikatora osoby");
         Person person = validator.validatePerson(username, personId);
 
         List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
@@ -74,7 +74,7 @@ public class PersonService {
 
     public ResponseEntity<?> setReceiptsCounts(String username, int personId, int receiptsCount) {
         validator.validateUser(username);
-        validator.isNull(personId);
+        validator.isNull(personId, "Brak identyfikatora osoby");
 
         Person person = validator.validatePerson(username, personId);
         person.setReceiptsCount(receiptsCount);
@@ -86,7 +86,7 @@ public class PersonService {
 
     public ResponseEntity<?> setTotalAmount(String username, int personId, Double totalAmount) {
         validator.validateUser(username);
-        validator.isNull(personId);
+        validator.isNull(personId, "Brak identyfikatora osoby");
         Person person = validator.validatePerson(username, personId);
 
         person.setTotalAmount(totalAmount);
@@ -97,7 +97,7 @@ public class PersonService {
 
     public ResponseEntity<?> getPerson(String username, int personId) {
         validator.validateUser(username);
-        validator.isNull(personId);
+        validator.isNull(personId, "Brak identyfikatora osoby");
         Person person = validator.validatePerson(username, personId);
 
         PersonDto response = PersonDto.builder()

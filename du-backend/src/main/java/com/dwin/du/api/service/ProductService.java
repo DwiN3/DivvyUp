@@ -27,12 +27,12 @@ public class ProductService {
 
     public ResponseEntity<?> addProduct(String username, int receiptId, AddEditProductRequest request) {
         User user = validator.validateUser(username);
-        validator.isNull(request);
-        validator.isEmpty(request.getName());
-        validator.isNull(request.getPrice());
-        validator.isNull(request.getMaxQuantity());
-        validator.isNull(request.isDivisible());
-        validator.isNull(receiptId);
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getName(), "Nazwa produktu jest wymagana");
+        validator.isNull(request.getPrice(), "Cena jest wymagana");
+        validator.isNull(request.getMaxQuantity(), "Maksymalna ilość jest wymagana");
+        validator.isNull(request.isDivisible(), "Informacja o podzielności jest wymagana");
+        validator.isNull(receiptId, "Brak identyfikatora rachunku");
         Receipt receipt = validator.validateReceipt(username, receiptId);
 
         Product product = Product.builder()
@@ -61,12 +61,12 @@ public class ProductService {
 
     public ResponseEntity<?> editProduct(String username, int productId, AddEditProductRequest request) {
         validator.validateUser(username);
-        validator.isNull(request);
-        validator.isEmpty(request.getName());
-        validator.isNull(request.getPrice());
-        validator.isNull(request.getMaxQuantity());
-        validator.isNull(request.isDivisible());
-        validator.isNull(productId);
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getName(), "Nazwa produktu jest wymagana");
+        validator.isNull(request.getPrice(), "Cena jest wymagana");
+        validator.isNull(request.getMaxQuantity(), "Maksymalna ilość jest wymagana");
+        validator.isNull(request.isDivisible(), "Informacja o podzielności jest wymagana");
+        validator.isNull(productId, "Brak identyfikatora produktu");
         Product product = validator.validateProduct(username, productId);
 
         if(product.isDivisible() && !request.isDivisible()){
@@ -97,7 +97,7 @@ public class ProductService {
 
     public ResponseEntity<?> removeProduct(String username, int productId) {
         validator.validateUser(username);
-        validator.isNull(productId);
+        validator.isNull(productId, "Brak identyfikatora produktu");
         Product product = validator.validateProduct(username, productId);
         Receipt receipt = validator.validateReceipt(username, product.getReceipt().getId());
 
@@ -113,7 +113,7 @@ public class ProductService {
 
     public ResponseEntity<?> setIsSettled(String username, int productId, boolean settled) {
         validator.validateUser(username);
-        validator.isNull(productId);
+        validator.isNull(productId, "Brak identyfikatora produktu");
         Product product = validator.validateProduct(username, productId);
 
         product.setSettled(settled);
@@ -136,7 +136,7 @@ public class ProductService {
 
     public ResponseEntity<?> getProduct(String username, int productId) {
         validator.validateUser(username);
-        validator.isNull(productId);
+        validator.isNull(productId, "Brak identyfikatora produktu");
         Product product = validator.validateProduct(username, productId);
 
         ProductDto response = ProductDto.builder()
@@ -155,7 +155,7 @@ public class ProductService {
 
     public ResponseEntity<?> getProductsFromReceipt(String username, int receiptId) {
         validator.validateUser(username);
-        validator.isNull(receiptId);
+        validator.isNull(receiptId, "Brak identyfikatora rachunku");
         Receipt receipt = validator.validateReceipt(username, receiptId);
 
         List<Product> products = productRepository.findByReceipt(receipt);

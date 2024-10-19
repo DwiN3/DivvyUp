@@ -26,10 +26,10 @@ public class PersonProductService {
 
     public ResponseEntity<?> addPersonProduct(String username, int productId, AddEditPersonProductRequest request) {
         User user = validator.validateUser(username);
-        validator.isNull(request);
-        validator.isNull(request.getPersonId());
-        validator.isNull(request.getQuantity());
-        validator.isNull(productId);
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isNull(request.getPersonId(), "Brak identyfikatora osoby");
+        validator.isNull(request.getQuantity(), "Ilość jest wymagana");
+        validator.isNull(productId, "Brak identyfikatora produktu");
         Product product = validator.validateProduct(username, productId);
         Person person = validator.validatePerson(username, request.getPersonId());
 
@@ -74,10 +74,10 @@ public class PersonProductService {
 
     public ResponseEntity<?> editPersonProduct(String username, int personProductId, AddEditPersonProductRequest request) {
         validator.validateUser(username);
-        validator.isNull(request);
-        validator.isNull(request.getPersonId());
-        validator.isNull(request.getQuantity());
-        validator.isNull(personProductId);
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isNull(request.getPersonId(),"Brak identyfikatora osoby");
+        validator.isNull(request.getQuantity(), "Ilość jest wymagana");
+        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
         PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
         Product product = validator.validateProduct(username, personProduct.getProduct().getId());
         Person person = validator.validatePerson(username, request.getPersonId());
@@ -101,7 +101,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> removePersonProduct(String username, int personProductId) {
         validator.validateUser(username);
-        validator.isNull(personProductId);
+        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
         PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
         personProductRepository.delete(personProduct);
@@ -114,7 +114,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> setIsSettled(String username, int personProductId, boolean settled) {
         validator.validateUser(username);
-        validator.isNull(personProductId);
+        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
         PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
         personProduct.setSettled(settled);
@@ -136,8 +136,8 @@ public class PersonProductService {
 
     public ResponseEntity<?> setPerson(String username, int personProductId, int personId) {
         validator.validateUser(username);
-        validator.isNull(personProductId);
-        validator.isNull(personId);
+        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
+        validator.isNull(personId, "Brak identyfikatora osoby");
         Person person = validator.validatePerson(username, personId);
         PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
@@ -154,7 +154,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> setIsCompensation(String username, int personProductId) {
         validator.validateUser(username);
-        validator.isNull(personProductId);
+        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
         PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(personProduct.getProduct());
@@ -173,7 +173,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> getPersonProduct(String username, int personProductId) {
         validator.validateUser(username);
-        validator.isNull(personProductId);
+        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
         PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
         PersonProductDto response = PersonProductDto.builder()
@@ -191,7 +191,7 @@ public class PersonProductService {
 
     public ResponseEntity<?> getPersonProductsFromProduct(String username, int productId) {
         validator.validateUser(username);
-        validator.isNull(productId);
+        validator.isNull(productId, "Brak identyfikatora produktu");
         Product product = validator.validateProduct(username, productId);
 
         List<PersonProduct> personProducts = personProductRepository.findByProduct(product);

@@ -25,8 +25,8 @@ public class ReceiptService {
 
     public ResponseEntity<?> addReceipt(String username, AddEditReceiptRequest request) {
         User user = validator.validateUser(username);
-        validator.isNull(request);
-        validator.isEmpty(request.getName());
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getName(), "Nazwa rachunku jest wymagana");
 
         Receipt receipt = Receipt.builder()
                 .user(user)
@@ -43,8 +43,8 @@ public class ReceiptService {
 
     public ResponseEntity<?> editReceipt(String username, int receiptId, AddEditReceiptRequest request) {
         validator.validateUser(username);
-        validator.isNull(request);
-        validator.isEmpty(request.getName());
+        validator.isNull(request, "Nie przekazano danych");
+        validator.isEmpty(request.getName(), "Nazwa rachunku jest wymagana");
         Receipt receipt = validator.validateReceipt(username, receiptId);
 
         receipt.setName(request.getName());
@@ -56,7 +56,7 @@ public class ReceiptService {
 
     public ResponseEntity<?> removeReceipt(String username, int receiptId) {
         validator.validateUser(username);
-        validator.isNull(receiptId);
+        validator.isNull(receiptId, "Brak identyfikatora rachunku");
         Receipt receipt = validator.validateReceipt(username, receiptId);
 
         List<Product> products = productRepository.findByReceipt(receipt);
@@ -78,8 +78,8 @@ public class ReceiptService {
 
     public ResponseEntity<?> setTotalPrice(String username, int receiptId, Double totalPrice) {
         validator.validateUser(username);
-        validator.isNull(receiptId);
-        validator.isNull(totalPrice);
+        validator.isNull(receiptId, "Brak identyfikatora rachunku");
+        validator.isNull(totalPrice, "Kwota łączna jest wymagana");
         Receipt receipt = validator.validateReceipt(username, receiptId);
 
         receipt.setTotalPrice(totalPrice);
@@ -91,7 +91,7 @@ public class ReceiptService {
 
     public ResponseEntity<?> setIsSettled(String username, int receiptId, boolean settled) {
         validator.validateUser(username);
-        validator.isNull(receiptId);
+        validator.isNull(receiptId, "Brak identyfikatora rachunku");
         Receipt receipt = validator.validateReceipt(username, receiptId);
 
         receipt.setSettled(settled);
@@ -115,7 +115,7 @@ public class ReceiptService {
 
     public ResponseEntity<?> getReceipt(String username, int receiptId) {
         validator.validateUser(username);
-        validator.isNull(receiptId);
+        validator.isNull(receiptId, "Brak identyfikatora rachunku");
         Receipt receipt = validator.validateReceipt(username, receiptId);
 
         Receipt response = Receipt.builder()

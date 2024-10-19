@@ -86,13 +86,13 @@ public class ValidationService {
         return personProduct;
     }
 
-    public void isNull(Object object){
+    public void isNull(Object object, String message){
         if(object == null)
-            throw new ValidationException(400, "Brak danych");
+            throw new ValidationException(400, message);
     }
 
-    public void isEmpty(String string){
+    public void isEmpty(String string, String message){
         if(string.isEmpty())
-            throw new ValidationException(400, "Brak danych");
+            throw new ValidationException(400, message);
     }
 }
