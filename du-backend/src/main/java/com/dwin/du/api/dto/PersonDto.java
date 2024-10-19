@@ -13,4 +13,5 @@ public class PersonDto {
     public Double totalAmount;
     public Double unpaidAmount;
     public boolean userAccount;
+
 }

@@ -9,6 +9,7 @@ import com.dwin.du.api.entity.Product;
 import com.dwin.du.api.repository.ProductRepository;
 import com.dwin.du.api.entity.Receipt;
 import com.dwin.du.api.entity.User;
+import com.dwin.du.validation.ValidationException;
 import com.dwin.du.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -96,22 +97,28 @@ public class PersonService {
     }
 
     public ResponseEntity<?> getPerson(String username, int personId) {
-        validator.validateUser(username);
-        validator.isNull(personId, "Brak identyfikatora osoby");
-        Person person = validator.validatePerson(username, personId);
+        try {
+            validator.validateUser(username);
+            Person person = validator.validatePerson(username, personId);
 
-        PersonDto response = PersonDto.builder()
-                .id(person.getId())
-                .name(person.getName())
-                .surname(person.getSurname())
-                .receiptsCount(person.getReceiptsCount())
-                .productsCount(person.getProductsCount())
-                .totalAmount(person.getTotalAmount())
-                .unpaidAmount(person.getUnpaidAmount())
-                .userAccount(person.isUserAccount())
-                .build();
+            PersonDto response = PersonDto.builder()
+                    .id(person.getId())
+                    .name(person.getName())
+                    .surname(person.getSurname())
+                    .receiptsCount(person.getReceiptsCount())
+                    .productsCount(person.getProductsCount())
+                    .totalAmount(person.getTotalAmount())
+                    .unpaidAmount(person.getUnpaidAmount())
+                    .userAccount(person.isUserAccount())
+                    .build();
 
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
+        } catch (ValidationException e) {
+            HttpStatus status = HttpStatus.valueOf(e.getErrorCode());
+            return ResponseEntity.status(status).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił nieoczekiwany błąd.");
+        }
     }
 
     public ResponseEntity<?> getPersons(String username) {

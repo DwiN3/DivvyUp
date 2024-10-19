@@ -7,4 +7,9 @@ import lombok.Data;
 public class AddEditPersonRequest {
     public String name;
     public String surname;
+
+    public AddEditPersonRequest(String name, String surname) {
+        this.name = name;
+        this.surname = surname;
+    }
 }

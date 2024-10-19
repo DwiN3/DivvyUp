@@ -42,7 +42,6 @@ public class ValidationService {
         if (!optionalPerson.isPresent())
             throw new ValidationException(404, "Nie znaleziono osobę o id: " + personId);
 
-
         Person person = optionalPerson.get();
         if (!person.getUser().getUsername().equals(userId))
             throw new ValidationException(401, "Brak dostępu do osoby o id: " + personId);
