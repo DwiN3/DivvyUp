@@ -138,6 +138,7 @@ public class PersonService {
                     .build();
 
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             return handleException(e);
         }
@@ -267,7 +268,7 @@ public class PersonService {
 
     private ResponseEntity<?> handleException(Exception e) {
         if (e instanceof ValidationException) {
-            HttpStatus status = HttpStatus.valueOf(((ValidationException) e).getErrorCode());
+            HttpStatus status = ((ValidationException) e).getStatus();
             return ResponseEntity.status(status).body(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił nieoczekiwany błąd.");

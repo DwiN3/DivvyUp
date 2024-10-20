@@ -43,11 +43,12 @@ public class PersonServiceSpec {
         given(userRepository.findByUsername("testuser")).willReturn(Optional.of(mockUser));
     }
 
+
     @Test
     void shouldAddPersonSuccessfully() {
         // Given
         given(validator.validateUser("testuser")).willReturn(mockUser);
-        AddEditPersonRequest request = new AddEditPersonRequest("Robert Lewandowski", "Robert Lewandowski");
+        AddEditPersonRequest request = new AddEditPersonRequest("Robert", "Lewandowski");
 
         // When
         ResponseEntity<?> response = personService.addPerson("testuser", request);
@@ -55,6 +56,20 @@ public class PersonServiceSpec {
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(personRepository).should(times(1)).save(any(Person.class));
+    }
+
+    @Test
+    void shouldAddPersonReturnBadRequestEmptyName() {
+        // Given
+        given(validator.validateUser("testuser")).willReturn(mockUser);
+        AddEditPersonRequest request = new AddEditPersonRequest("", "Lewandowski");
+
+        // When
+        ResponseEntity<?> response = personService.addPerson("testuser", request);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isEqualTo("Nazwa osoby jest wymagana");
     }
 
     @Test
@@ -101,7 +116,7 @@ public class PersonServiceSpec {
         int personId = 0;
 
         given(validator.validateUser(username)).willReturn(mockUser);
-        given(validator.validatePerson(username, personId)).willThrow(new ValidationException(404, "Nie znaleziono osobę o id: " + personId));
+        given(validator.validatePerson(username, personId)).willThrow(new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono osobę o id: " + personId));
 
         // When
         ResponseEntity<?> response = personService.getPerson(username, personId);

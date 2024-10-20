@@ -1,17 +1,19 @@
 package com.dwin.du.validation;
 
+import org.springframework.http.HttpStatus;
+
 public class ValidationException extends RuntimeException {
-    private final int errorCode;
+    private final HttpStatus status;
     private final String message;
 
-    public ValidationException(int errorCode, String message) {
+    public ValidationException(HttpStatus status, String message) {
         super(message);
-        this.errorCode = errorCode;
+        this.status = status;
         this.message = message;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    public HttpStatus getStatus() {
+        return status;
     }
 
     public String getMessage() {

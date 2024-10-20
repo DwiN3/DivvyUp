@@ -6,6 +6,7 @@ import com.dwin.du.api.request.AddEditPersonProductRequest;
 import com.dwin.du.api.repository.ProductRepository;
 import com.dwin.du.api.repository.ReceiptRepository;
 import com.dwin.du.update.EntityUpdateService;
+import com.dwin.du.validation.ValidationException;
 import com.dwin.du.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,211 +26,264 @@ public class PersonProductService {
     private final EntityUpdateService updater;
 
     public ResponseEntity<?> addPersonProduct(String username, int productId, AddEditPersonProductRequest request) {
-        User user = validator.validateUser(username);
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isNull(request.getPersonId(), "Brak identyfikatora osoby");
-        validator.isNull(request.getQuantity(), "Ilość jest wymagana");
-        validator.isNull(productId, "Brak identyfikatora produktu");
-        Product product = validator.validateProduct(username, productId);
-        Person person = validator.validatePerson(username, request.getPersonId());
+        try {
+            User user = validator.validateUser(username);
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isNull(request.getPersonId(), "Brak identyfikatora osoby");
+            validator.isNull(request.getQuantity(), "Ilość jest wymagana");
+            validator.isNull(productId, "Brak identyfikatora produktu");
+            Product product = validator.validateProduct(username, productId);
+            Person person = validator.validatePerson(username, request.getPersonId());
 
-        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-        int currentTotalQuantity = personProducts.stream()
-                .mapToInt(PersonProduct::getQuantity)
-                .sum();
+            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+            int currentTotalQuantity = personProducts.stream()
+                    .mapToInt(PersonProduct::getQuantity)
+                    .sum();
 
-        var personProductExists = personProductRepository.findByProductAndPerson(product, person);
-        if (!personProductExists.isEmpty())
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            var personProductExists = personProductRepository.findByProductAndPerson(product, person);
+            if (!personProductExists.isEmpty())
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
-        if (currentTotalQuantity + request.getQuantity() > product.getMaxQuantity()) {
-            return ResponseEntity.badRequest().build();
+            if (currentTotalQuantity + request.getQuantity() > product.getMaxQuantity()) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            boolean isCompensation = personProducts.isEmpty();
+
+            PersonProduct personProduct = PersonProduct.builder()
+                    .user(user)
+                    .product(product)
+                    .person(person)
+                    .settled(product.isSettled())
+                    .build();
+
+            if (product.isDivisible()) {
+                personProduct.setQuantity(request.getQuantity());
+                double partPrice = updater.calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
+                personProduct.setPartOfPrice(partPrice);
+            } else {
+                personProduct.setQuantity(1);
+                personProduct.setPartOfPrice(product.getPrice());
+            }
+
+            personProduct.setCompensation(isCompensation);
+
+            personProductRepository.save(personProduct);
+            updater.updateCompensationPrice(product);
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
         }
-
-        boolean isCompensation = personProducts.isEmpty();
-
-        PersonProduct personProduct = PersonProduct.builder()
-                .user(user)
-                .product(product)
-                .person(person)
-                .settled(product.isSettled())
-                .build();
-
-        if (product.isDivisible()) {
-            personProduct.setQuantity(request.getQuantity());
-            double partPrice = updater.calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
-            personProduct.setPartOfPrice(partPrice);
-        } else {
-            personProduct.setQuantity(1);
-            personProduct.setPartOfPrice(product.getPrice());
-        }
-
-        personProduct.setCompensation(isCompensation);
-
-        personProductRepository.save(personProduct);
-        updater.updateCompensationPrice(product);
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> editPersonProduct(String username, int personProductId, AddEditPersonProductRequest request) {
-        validator.validateUser(username);
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isNull(request.getPersonId(),"Brak identyfikatora osoby");
-        validator.isNull(request.getQuantity(), "Ilość jest wymagana");
-        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
-        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
-        Product product = validator.validateProduct(username, personProduct.getProduct().getId());
-        Person person = validator.validatePerson(username, request.getPersonId());
+        try {
+            validator.validateUser(username);
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isNull(request.getPersonId(),"Brak identyfikatora osoby");
+            validator.isNull(request.getQuantity(), "Ilość jest wymagana");
+            validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
+            PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
+            Product product = validator.validateProduct(username, personProduct.getProduct().getId());
+            Person person = validator.validatePerson(username, request.getPersonId());
 
-        personProduct.setPerson(person);
-        if (product.isDivisible()) {
-            personProduct.setQuantity(request.getQuantity());
-            double partPrice = updater.calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
-            personProduct.setPartOfPrice(partPrice);
-        } else {
-            personProduct.setQuantity(1);
-            personProduct.setPartOfPrice(product.getPrice());
+            personProduct.setPerson(person);
+            if (product.isDivisible()) {
+                personProduct.setQuantity(request.getQuantity());
+                double partPrice = updater.calculatePartPrice(request.getQuantity(), product.getMaxQuantity(), product.getPrice());
+                personProduct.setPartOfPrice(partPrice);
+            } else {
+                personProduct.setQuantity(1);
+                personProduct.setPartOfPrice(product.getPrice());
+            }
+
+            personProductRepository.save(personProduct);
+            updater.updateCompensationPrice(product);
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
         }
-
-        personProductRepository.save(personProduct);
-        updater.updateCompensationPrice(product);
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
     }
 
 
     public ResponseEntity<?> removePersonProduct(String username, int personProductId) {
-        validator.validateUser(username);
-        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
-        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
+            PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
-        personProductRepository.delete(personProduct);
+            personProductRepository.delete(personProduct);
 
-        Product product = validator.validateProduct(username, personProduct.getProduct().getId());
-        updater.updateCompensationPrice(product);
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
+            Product product = validator.validateProduct(username, personProduct.getProduct().getId());
+            updater.updateCompensationPrice(product);
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> setIsSettled(String username, int personProductId, boolean settled) {
-        validator.validateUser(username);
-        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
-        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
+            PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
-        personProduct.setSettled(settled);
-        personProductRepository.save(personProduct);
+            personProduct.setSettled(settled);
+            personProductRepository.save(personProduct);
 
-        Product product = personProduct.getProduct();
-        boolean allPersonProductsSettled = updater.areAllPersonProductsSettled(product);
-        product.setSettled(allPersonProductsSettled);
-        productRepository.save(product);
+            Product product = personProduct.getProduct();
+            boolean allPersonProductsSettled = updater.areAllPersonProductsSettled(product);
+            product.setSettled(allPersonProductsSettled);
+            productRepository.save(product);
 
-        Receipt receipt = product.getReceipt();
-        boolean allProductsSettled = updater.areAllProductsSettled(receipt);
-        receipt.setSettled(allProductsSettled);
+            Receipt receipt = product.getReceipt();
+            boolean allProductsSettled = updater.areAllProductsSettled(receipt);
+            receipt.setSettled(allProductsSettled);
 
-        receiptRepository.save(receipt);
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
+            receiptRepository.save(receipt);
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> setPerson(String username, int personProductId, int personId) {
-        validator.validateUser(username);
-        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
-        validator.isNull(personId, "Brak identyfikatora osoby");
-        Person person = validator.validatePerson(username, personId);
-        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
+            validator.isNull(personId, "Brak identyfikatora osoby");
+            Person person = validator.validatePerson(username, personId);
+            PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
-        var personProductExists = personProductRepository.findByProductAndPerson(personProduct.getProduct(), person);
-        if (!personProductExists.isEmpty())
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            var personProductExists = personProductRepository.findByProductAndPerson(personProduct.getProduct(), person);
+            if (!personProductExists.isEmpty())
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
-        personProduct.setPerson(person);
+            personProduct.setPerson(person);
 
-        personProductRepository.save(personProduct);
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
+            personProductRepository.save(personProduct);
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> setIsCompensation(String username, int personProductId) {
-        validator.validateUser(username);
-        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
-        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
+            PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
-        List<PersonProduct> personProducts = personProductRepository.findByProduct(personProduct.getProduct());
-        for (PersonProduct pp : personProducts) {
-            if (pp.getId() != personProductId && pp.isCompensation()) {
-                pp.setCompensation(false);
-                personProductRepository.save(pp);
+            List<PersonProduct> personProducts = personProductRepository.findByProduct(personProduct.getProduct());
+            for (PersonProduct pp : personProducts) {
+                if (pp.getId() != personProductId && pp.isCompensation()) {
+                    pp.setCompensation(false);
+                    personProductRepository.save(pp);
+                }
             }
-        }
-        personProduct.setCompensation(true);
+            personProduct.setCompensation(true);
 
-        personProductRepository.save(personProduct);
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
+            personProductRepository.save(personProduct);
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> getPersonProduct(String username, int personProductId) {
-        validator.validateUser(username);
-        validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
-        PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(personProductId, "Brak identyfikatora powiązania osoby z produktem");
+            PersonProduct personProduct = validator.validatePersonProduct(username, personProductId);
 
-        PersonProductDto response = PersonProductDto.builder()
-                .id(personProduct.getId())
-                .productId(personProduct.getProduct().getId())
-                .personId(personProduct.getPerson().getId())
-                .partOfPrice(personProduct.getPartOfPrice())
-                .quantity(personProduct.getQuantity())
-                .compensation(personProduct.isCompensation())
-                .settled(personProduct.isSettled())
-                .build();
+            PersonProductDto response = PersonProductDto.builder()
+                    .id(personProduct.getId())
+                    .productId(personProduct.getProduct().getId())
+                    .personId(personProduct.getPerson().getId())
+                    .partOfPrice(personProduct.getPartOfPrice())
+                    .quantity(personProduct.getQuantity())
+                    .compensation(personProduct.isCompensation())
+                    .settled(personProduct.isSettled())
+                    .build();
 
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> getPersonProductsFromProduct(String username, int productId) {
-        validator.validateUser(username);
-        validator.isNull(productId, "Brak identyfikatora produktu");
-        Product product = validator.validateProduct(username, productId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(productId, "Brak identyfikatora produktu");
+            Product product = validator.validateProduct(username, productId);
 
-        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-        List<PersonProductDto> responseList = new ArrayList<>();
-        for (PersonProduct personProduct : personProducts) {
-            PersonProductDto response = PersonProductDto.builder()
-                    .id(personProduct.getId())
-                    .productId(personProduct.getProduct().getId())
-                    .personId(personProduct.getPerson().getId())
-                    .partOfPrice(personProduct.getPartOfPrice())
-                    .quantity(personProduct.getQuantity())
-                    .compensation(personProduct.isCompensation())
-                    .settled(personProduct.isSettled())
-                    .build();
-            responseList.add(response);
+            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+            List<PersonProductDto> responseList = new ArrayList<>();
+            for (PersonProduct personProduct : personProducts) {
+                PersonProductDto response = PersonProductDto.builder()
+                        .id(personProduct.getId())
+                        .productId(personProduct.getProduct().getId())
+                        .personId(personProduct.getPerson().getId())
+                        .partOfPrice(personProduct.getPartOfPrice())
+                        .quantity(personProduct.getQuantity())
+                        .compensation(personProduct.isCompensation())
+                        .settled(personProduct.isSettled())
+                        .build();
+                responseList.add(response);
+            }
+
+            return ResponseEntity.ok(responseList);
+
+        } catch (Exception e) {
+            return handleException(e);
         }
-
-        return ResponseEntity.ok(responseList);
     }
 
     public ResponseEntity<?> getAllPersonProducts(String username) {
-        User user = validator.validateUser(username);
+        try {
+            User user = validator.validateUser(username);
 
-        List<PersonProduct> personProducts = personProductRepository.findByUser(user);
-        List<PersonProductDto> responseList = new ArrayList<>();
-        for (PersonProduct personProduct : personProducts) {
-            PersonProductDto response = PersonProductDto.builder()
-                    .id(personProduct.getId())
-                    .productId(personProduct.getProduct().getId())
-                    .personId(personProduct.getPerson().getId())
-                    .partOfPrice(personProduct.getPartOfPrice())
-                    .quantity(personProduct.getQuantity())
-                    .compensation(personProduct.isCompensation())
-                    .settled(personProduct.isSettled())
-                    .build();
-            responseList.add(response);
+            List<PersonProduct> personProducts = personProductRepository.findByUser(user);
+            List<PersonProductDto> responseList = new ArrayList<>();
+            for (PersonProduct personProduct : personProducts) {
+                PersonProductDto response = PersonProductDto.builder()
+                        .id(personProduct.getId())
+                        .productId(personProduct.getProduct().getId())
+                        .personId(personProduct.getPerson().getId())
+                        .partOfPrice(personProduct.getPartOfPrice())
+                        .quantity(personProduct.getQuantity())
+                        .compensation(personProduct.isCompensation())
+                        .settled(personProduct.isSettled())
+                        .build();
+                responseList.add(response);
+            }
+
+            return ResponseEntity.ok(responseList);
+
+        } catch (Exception e) {
+            return handleException(e);
         }
+    }
 
-        return ResponseEntity.ok(responseList);
+    private ResponseEntity<?> handleException(Exception e) {
+        if (e instanceof ValidationException) {
+            HttpStatus status = ((ValidationException) e).getStatus();
+            return ResponseEntity.status(status).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił nieoczekiwany błąd.");
     }
 }

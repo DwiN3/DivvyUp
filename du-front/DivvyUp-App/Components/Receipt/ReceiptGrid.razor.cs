@@ -3,6 +3,7 @@ using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
+using Radzen;
 using Radzen.Blazor;
 
 namespace DivvyUp_App.Components.Receipt
@@ -61,6 +62,7 @@ namespace DivvyUp_App.Components.Receipt
             }
             catch (DException ex)
             {
+                 DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {

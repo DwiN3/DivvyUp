@@ -9,6 +9,7 @@ import com.dwin.du.api.entity.Receipt;
 import com.dwin.du.api.repository.ReceiptRepository;
 import com.dwin.du.api.entity.User;
 import com.dwin.du.api.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class ValidationService {
     public User validateUser(String username) throws ValidationException {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent())
-            throw new ValidationException(404, "Nie znaleziono użytkownika: " + username);
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono użytkownika: " + username);
 
         return optionalUser.get();
     }
@@ -40,11 +41,11 @@ public class ValidationService {
     public Person validatePerson(String userId, int personId) throws ValidationException {
         Optional<Person> optionalPerson = personRepository.findById(personId);
         if (!optionalPerson.isPresent())
-            throw new ValidationException(404, "Nie znaleziono osobę o id: " + personId);
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono osobę o id: " + personId);
 
         Person person = optionalPerson.get();
         if (!person.getUser().getUsername().equals(userId))
-            throw new ValidationException(401, "Brak dostępu do osoby o id: " + personId);
+            throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do osoby o id: " + personId);
 
         return person;
     }
@@ -52,11 +53,11 @@ public class ValidationService {
     public Receipt validateReceipt(String userId, int receiptId) throws ValidationException {
         Optional<Receipt> optionalReceipt = receiptRepository.findById(receiptId);
         if (!optionalReceipt.isPresent())
-            throw new ValidationException(404, "Nie znaleziono rachunku o id: " + receiptId);
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono rachunku o id: " + receiptId);
 
         Receipt receipt = optionalReceipt.get();
         if (!receipt.getUser().getUsername().equals(userId))
-            throw new ValidationException(401, "Brak dostępu do rachunku o id: " + receiptId);
+            throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do rachunku o id: " + receiptId);
 
         return receipt;
     }
@@ -64,11 +65,11 @@ public class ValidationService {
     public Product validateProduct(String userId, int productId) throws ValidationException {
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (!optionalProduct.isPresent())
-            throw new ValidationException(404, "Nie znaleziono produktu o id: " + productId);
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono produktu o id: " + productId);
 
         Product product = optionalProduct.get();
         if (!product.getUser().getUsername().equals(userId))
-            throw new ValidationException(401, "Brak dostępu do produktu o id: " + productId);
+            throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do produktu o id: " + productId);
 
         return product;
     }
@@ -76,22 +77,22 @@ public class ValidationService {
     public PersonProduct validatePersonProduct(String userId, int personProductId) throws ValidationException {
         Optional<PersonProduct> optionalPersonProduct = personProductRepository.findById(personProductId);
         if (!optionalPersonProduct.isPresent())
-            throw new ValidationException(404, "Nie znaleziono przypisu osoby do produktu o id: " + personProductId);
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono przypisu osoby do produktu o id: " + personProductId);
 
         PersonProduct personProduct = optionalPersonProduct.get();
         if (!personProduct.getUser().getUsername().equals(userId))
-            throw new ValidationException(401, "Brak dostępu do przypisu osoby do produktu o id: " + personProductId);
+            throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do przypisu osoby do produktu o id: " + personProductId);
 
         return personProduct;
     }
 
     public void isNull(Object object, String message){
         if(object == null)
-            throw new ValidationException(400, message);
+            throw new ValidationException(HttpStatus.BAD_REQUEST, message);
     }
 
     public void isEmpty(String string, String message){
-        if(string.isEmpty())
-            throw new ValidationException(400, message);
+        if(string == null || string.isEmpty())
+            throw new ValidationException(HttpStatus.BAD_REQUEST, message);
     }
 }

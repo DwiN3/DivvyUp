@@ -38,82 +38,102 @@ public class UserService {
     private final PersonRepository personRepository;
     private final ValidationService validator;
 
-    public ResponseEntity<String> authenticate(LoginRequest request) {
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isEmpty(request.getUsername(), "Nazwa użytkownika jest wymagana");
-        validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
-        User user = validator.validateUser(request.getUsername());
+    public ResponseEntity<?> authenticate(LoginRequest request) {
+        try {
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isEmpty(request.getUsername(), "Nazwa użytkownika jest wymagana");
+            validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
+            User user = validator.validateUser(request.getUsername());
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        var jwtToken = jwtService.generateTokem(user);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            var jwtToken = jwtService.generateTokem(user);
 
-        return ResponseEntity.ok(jwtToken);
+            return ResponseEntity.ok(jwtToken);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> register(RegisterRequest request) {
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isEmpty(request.getUsername(), "Nazwa użytkownika jest wymagana");
-        validator.isEmpty(request.getEmail(), "Mail użytkownika jest wymagany");
-        validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
+        try {
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isEmpty(request.getUsername(), "Nazwa użytkownika jest wymagana");
+            validator.isEmpty(request.getEmail(), "Mail użytkownika jest wymagany");
+            validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
 
-        if (userRepository.findByEmail(request.getEmail()).isPresent())
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            if (userRepository.findByEmail(request.getEmail()).isPresent())
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
-        else if (userRepository.findByUsername(request.getUsername()).isPresent())
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            else if (userRepository.findByUsername(request.getUsername()).isPresent())
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
-        var user = User.builder()
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
-                .build();
+            var user = User.builder()
+                    .username(request.getUsername())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(Role.USER)
+                    .build();
 
-        userRepository.save(user);
-        AddPersonForUser(user);
+            userRepository.save(user);
+            AddPersonForUser(user);
 
-        return ResponseEntity.ok().build();
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> editUser(String username, EditUserRequest request) {
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isEmpty(request.getUsername(), "Nazwa użytkownika jest wymagana");
-        validator.isEmpty(request.getEmail(), "Mail użytkownika jest wymagany");
-        User user = validator.validateUser(username);
+        try {
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isEmpty(request.getUsername(), "Nazwa użytkownika jest wymagana");
+            validator.isEmpty(request.getEmail(), "Mail użytkownika jest wymagany");
+            User user = validator.validateUser(username);
 
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        userRepository.save(user);
-        String newToken = jwtService.generateTokem(user);
+            user.setUsername(request.getUsername());
+            user.setEmail(request.getEmail());
+            userRepository.save(user);
+            String newToken = jwtService.generateTokem(user);
 
-        return ResponseEntity.ok(newToken);
+            return ResponseEntity.ok(newToken);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> removeUser(String username) {
-        User user = validator.validateUser(username);
+        try {
+            User user = validator.validateUser(username);
 
-        List<PersonProduct> personProducts = personProductRepository.findByUser(user);
-        personProductRepository.deleteInBatch(personProducts);
-        List<Product> products = productRepository.findByUser(user);
-        productRepository.deleteInBatch(products);
-        List<Receipt> receipts = receiptRepository.findByUser(user);
-        receiptRepository.deleteInBatch(receipts);
-        List<Person> persons = personRepository.findByUser(user);
-        personRepository.deleteInBatch(persons);
+            List<PersonProduct> personProducts = personProductRepository.findByUser(user);
+            personProductRepository.deleteInBatch(personProducts);
+            List<Product> products = productRepository.findByUser(user);
+            productRepository.deleteInBatch(products);
+            List<Receipt> receipts = receiptRepository.findByUser(user);
+            receiptRepository.deleteInBatch(receipts);
+            List<Person> persons = personRepository.findByUser(user);
+            personRepository.deleteInBatch(persons);
 
-        userRepository.delete(user);
-        SecurityContextHolder.clearContext();
-        return ResponseEntity.ok().build();
+            userRepository.delete(user);
+            SecurityContextHolder.clearContext();
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> validateToken(String token) {
@@ -123,50 +143,60 @@ public class UserService {
             UserDetails userDetails = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             boolean isValid = jwtService.isTokenValid(token, userDetails);
 
-            if (isValid) {
+            if (isValid)
                 return ResponseEntity.ok(true);
-            } else {
+            else
                 return ResponseEntity.ok(false);
-            }
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return handleException(e);
         }
     }
 
     public ResponseEntity<?> getUser(String token) {
-        validator.isEmpty(token, "Nie przekazano tokena");
-        String username = jwtService.extractUsername(token);
-        User user = validator.validateUser(username);
-        boolean isValid = jwtService.isTokenValid(token, user);
+        try {
+            validator.isEmpty(token, "Nie przekazano tokena");
+            String username = jwtService.extractUsername(token);
+            User user = validator.validateUser(username);
+            boolean isValid = jwtService.isTokenValid(token, user);
 
-        if(isValid){
-            UserDto response = UserDto.builder()
-                    .id(user.getId())
-                    .username(user.getUsername())
-                    .email(user.getEmail())
-                    .password(user.getPassword())
-                    .build();
-            return ResponseEntity.ok(response);
+            if(isValid){
+                UserDto response = UserDto.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .email(user.getEmail())
+                        .password(user.getPassword())
+                        .build();
+                return ResponseEntity.ok(response);
+            }
+            else
+                throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do użytkownika");
+
+        } catch (Exception e) {
+            return handleException(e);
         }
-        else
-            throw new ValidationException(401, "Brak dostępu do użytkownika");
     }
 
     public ResponseEntity<?> changePassword(String username, PasswordChangeRequest request) {
-        User user = validator.validateUser(username);
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
-        validator.isEmpty(request.getNewPassword(), "Nowe hasło jest wymagane");
+        try {
+            User user = validator.validateUser(username);
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
+            validator.isEmpty(request.getNewPassword(), "Nowe hasło jest wymagane");
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Aktualne hasło jest błędne");
+            if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Aktualne hasło jest błędne");
 
-        String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
+            String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
 
-        user.setPassword(newPasswordEncoded);
+            user.setPassword(newPasswordEncoded);
 
-        userRepository.save(user);
-        return ResponseEntity.ok("Hasło zostało zmienione");
+            userRepository.save(user);
+            return ResponseEntity.ok("Hasło zostało zmienione");
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     private void AddPersonForUser(User user){
@@ -182,5 +212,13 @@ public class UserService {
                 .build();
 
         personRepository.save(person);
+    }
+
+    private ResponseEntity<?> handleException(Exception e) {
+        if (e instanceof ValidationException) {
+            HttpStatus status = ((ValidationException) e).getStatus();
+            return ResponseEntity.status(status).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił nieoczekiwany błąd.");
     }
 }

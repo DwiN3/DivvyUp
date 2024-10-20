@@ -6,8 +6,10 @@ import com.dwin.du.api.request.AddEditReceiptRequest;
 import com.dwin.du.api.repository.PersonProductRepository;
 import com.dwin.du.api.repository.ProductRepository;
 import com.dwin.du.update.EntityUpdateService;
+import com.dwin.du.validation.ValidationException;
 import com.dwin.du.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -24,128 +26,171 @@ public class ReceiptService {
     private final ValidationService validator;
 
     public ResponseEntity<?> addReceipt(String username, AddEditReceiptRequest request) {
-        User user = validator.validateUser(username);
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isEmpty(request.getName(), "Nazwa rachunku jest wymagana");
+        try {
+            User user = validator.validateUser(username);
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isEmpty(request.getName(), "Nazwa rachunku jest wymagana");
 
-        Receipt receipt = Receipt.builder()
-                .user(user)
-                .name(request.getName())
-                .date(request.getDate())
-                .totalPrice(0.0)
-                .settled(false)
-                .build();
+            Receipt receipt = Receipt.builder()
+                    .user(user)
+                    .name(request.getName())
+                    .date(request.getDate())
+                    .totalPrice(0.0)
+                    .settled(false)
+                    .build();
 
-        receiptRepository.save(receipt);
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
+            receiptRepository.save(receipt);
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> editReceipt(String username, int receiptId, AddEditReceiptRequest request) {
-        validator.validateUser(username);
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isEmpty(request.getName(), "Nazwa rachunku jest wymagana");
-        Receipt receipt = validator.validateReceipt(username, receiptId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isEmpty(request.getName(), "Nazwa rachunku jest wymagana");
+            Receipt receipt = validator.validateReceipt(username, receiptId);
 
-        receipt.setName(request.getName());
-        receipt.setDate(request.getDate());
+            receipt.setName(request.getName());
+            receipt.setDate(request.getDate());
 
-        receiptRepository.save(receipt);
-        return ResponseEntity.ok().build();
+            receiptRepository.save(receipt);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> removeReceipt(String username, int receiptId) {
-        validator.validateUser(username);
-        validator.isNull(receiptId, "Brak identyfikatora rachunku");
-        Receipt receipt = validator.validateReceipt(username, receiptId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(receiptId, "Brak identyfikatora rachunku");
+            Receipt receipt = validator.validateReceipt(username, receiptId);
 
-        List<Product> products = productRepository.findByReceipt(receipt);
+            List<Product> products = productRepository.findByReceipt(receipt);
 
-        Set<Person> involvedPersons = new HashSet<>();
-        for (Product product : products) {
-            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-            involvedPersons.addAll(
-                    personProducts.stream().map(PersonProduct::getPerson).collect(Collectors.toSet())
-            );
-            personProductRepository.deleteAll(personProducts);
+            Set<Person> involvedPersons = new HashSet<>();
+            for (Product product : products) {
+                List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+                involvedPersons.addAll(
+                        personProducts.stream().map(PersonProduct::getPerson).collect(Collectors.toSet())
+                );
+                personProductRepository.deleteAll(personProducts);
+            }
+
+            productRepository.deleteAll(products);
+            receiptRepository.delete(receipt);
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
         }
-
-        productRepository.deleteAll(products);
-        receiptRepository.delete(receipt);
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> setTotalPrice(String username, int receiptId, Double totalPrice) {
-        validator.validateUser(username);
-        validator.isNull(receiptId, "Brak identyfikatora rachunku");
-        validator.isNull(totalPrice, "Kwota łączna jest wymagana");
-        Receipt receipt = validator.validateReceipt(username, receiptId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(receiptId, "Brak identyfikatora rachunku");
+            validator.isNull(totalPrice, "Kwota łączna jest wymagana");
+            Receipt receipt = validator.validateReceipt(username, receiptId);
 
-        receipt.setTotalPrice(totalPrice);
+            receipt.setTotalPrice(totalPrice);
 
-        receiptRepository.save(receipt);
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
+            receiptRepository.save(receipt);
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> setIsSettled(String username, int receiptId, boolean settled) {
-        validator.validateUser(username);
-        validator.isNull(receiptId, "Brak identyfikatora rachunku");
-        Receipt receipt = validator.validateReceipt(username, receiptId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(receiptId, "Brak identyfikatora rachunku");
+            Receipt receipt = validator.validateReceipt(username, receiptId);
 
-        receipt.setSettled(settled);
-        receiptRepository.save(receipt);
+            receipt.setSettled(settled);
+            receiptRepository.save(receipt);
 
-        List<Product> products = productRepository.findByReceipt(receipt);
-        for (Product product : products) {
-            product.setSettled(settled);
-            productRepository.save(product);
+            List<Product> products = productRepository.findByReceipt(receipt);
+            for (Product product : products) {
+                product.setSettled(settled);
+                productRepository.save(product);
 
-            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-            for (PersonProduct personProduct : personProducts) {
-                personProduct.setSettled(settled);
-                personProductRepository.save(personProduct);
+                List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+                for (PersonProduct personProduct : personProducts) {
+                    personProduct.setSettled(settled);
+                    personProductRepository.save(personProduct);
+                }
             }
-        }
 
-        updater.updatePerson(username);
-        return ResponseEntity.ok().build();
+            updater.updatePerson(username);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> getReceipt(String username, int receiptId) {
-        validator.validateUser(username);
-        validator.isNull(receiptId, "Brak identyfikatora rachunku");
-        Receipt receipt = validator.validateReceipt(username, receiptId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(receiptId, "Brak identyfikatora rachunku");
+            Receipt receipt = validator.validateReceipt(username, receiptId);
 
-        Receipt response = Receipt.builder()
-                .id(receipt.getId())
-                .name(receipt.getName())
-                .date(receipt.getDate())
-                .totalPrice(receipt.getTotalPrice())
-                .settled(receipt.isSettled())
-                .user(receipt.getUser())
-                .build();
-
-        return ResponseEntity.ok(response);
-    }
-
-    public ResponseEntity<?> getReceipts(String username) {
-        User user = validator.validateUser(username);
-
-        List<Receipt> receipts = receiptRepository.findByUser(user);
-        List<ReceiptDto> responseList = new ArrayList<>();
-        for (Receipt receipt : receipts) {
-            ReceiptDto response = ReceiptDto.builder()
+            Receipt response = Receipt.builder()
                     .id(receipt.getId())
                     .name(receipt.getName())
                     .date(receipt.getDate())
                     .totalPrice(receipt.getTotalPrice())
-                    .isSettled(receipt.isSettled())
+                    .settled(receipt.isSettled())
+                    .user(receipt.getUser())
                     .build();
-            responseList.add(response);
-        }
 
-        return ResponseEntity.ok(responseList);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    public ResponseEntity<?> getReceipts(String username) {
+        try {
+            User user = validator.validateUser(username);
+
+            List<Receipt> receipts = receiptRepository.findByUser(user);
+            List<ReceiptDto> responseList = new ArrayList<>();
+            for (Receipt receipt : receipts) {
+                ReceiptDto response = ReceiptDto.builder()
+                        .id(receipt.getId())
+                        .name(receipt.getName())
+                        .date(receipt.getDate())
+                        .totalPrice(receipt.getTotalPrice())
+                        .isSettled(receipt.isSettled())
+                        .build();
+                responseList.add(response);
+            }
+
+            return ResponseEntity.ok(responseList);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    private ResponseEntity<?> handleException(Exception e) {
+        if (e instanceof ValidationException) {
+            HttpStatus status = ((ValidationException) e).getStatus();
+            return ResponseEntity.status(status).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił nieoczekiwany błąd.");
     }
 }
