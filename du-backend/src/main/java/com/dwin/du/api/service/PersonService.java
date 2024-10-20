@@ -28,72 +28,97 @@ public class PersonService {
     private final ValidationService validator;
 
     public ResponseEntity<?> addPerson(String username, AddEditPersonRequest request) {
-        User user = validator.validateUser(username);
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isEmpty(request.getName(), "Nazwa osoby jest wymagana");
+        try {
+            User user = validator.validateUser(username);
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isEmpty(request.getName(), "Nazwa osoby jest wymagana");
 
-        Person person = Person.builder()
-                .user(user)
-                .name(request.getName())
-                .surname(request.getSurname())
-                .receiptsCount(0)
-                .productsCount(0)
-                .totalAmount(0.0)
-                .unpaidAmount(0.0)
-                .userAccount(false)
-                .build();
+            Person person = Person.builder()
+                    .user(user)
+                    .name(request.getName())
+                    .surname(request.getSurname())
+                    .receiptsCount(0)
+                    .productsCount(0)
+                    .totalAmount(0.0)
+                    .unpaidAmount(0.0)
+                    .userAccount(false)
+                    .build();
 
-        personRepository.save(person);
-        return ResponseEntity.ok().build();
+            personRepository.save(person);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> editPerson(String username, int personId, AddEditPersonRequest request) {
-        validator.validateUser(username);
-        Person person = validator.validatePerson(username, personId);
-        validator.isNull(request, "Nie przekazano danych");
-        validator.isEmpty(request.getName(), "Nazwa osoby jest wymagana");
+        try {
+            validator.validateUser(username);
+            Person person = validator.validatePerson(username, personId);
+            validator.isNull(request, "Nie przekazano danych");
+            validator.isEmpty(request.getName(), "Nazwa osoby jest wymagana");
 
-        person.setName(request.getName());
-        person.setSurname(request.getSurname());
+            person.setName(request.getName());
+            person.setSurname(request.getSurname());
 
-        personRepository.save(person);
-        return ResponseEntity.ok().build();
+            personRepository.save(person);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> removePerson(String username, int personId) {
-        validator.validateUser(username);
-        validator.isNull(personId, "Brak identyfikatora osoby");
-        Person person = validator.validatePerson(username, personId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(personId, "Brak identyfikatora osoby");
+            Person person = validator.validatePerson(username, personId);
 
-        List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
-        if (!personProducts.isEmpty())
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
+            if (!personProducts.isEmpty())
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
-        personRepository.delete(person);
-        return ResponseEntity.ok().build();
+            personRepository.delete(person);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> setReceiptsCounts(String username, int personId, int receiptsCount) {
-        validator.validateUser(username);
-        validator.isNull(personId, "Brak identyfikatora osoby");
+        try {
+            validator.validateUser(username);
+            validator.isNull(personId, "Brak identyfikatora osoby");
 
-        Person person = validator.validatePerson(username, personId);
-        person.setReceiptsCount(receiptsCount);
+            Person person = validator.validatePerson(username, personId);
+            person.setReceiptsCount(receiptsCount);
 
-        personRepository.save(person);
-        return ResponseEntity.ok().build();
+            personRepository.save(person);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
 
     public ResponseEntity<?> setTotalAmount(String username, int personId, Double totalAmount) {
-        validator.validateUser(username);
-        validator.isNull(personId, "Brak identyfikatora osoby");
-        Person person = validator.validatePerson(username, personId);
+        try {
+            validator.validateUser(username);
+            validator.isNull(personId, "Brak identyfikatora osoby");
+            Person person = validator.validatePerson(username, personId);
 
-        person.setTotalAmount(totalAmount);
+            person.setTotalAmount(totalAmount);
 
-        personRepository.save(person);
-        return ResponseEntity.ok().build();
+            personRepository.save(person);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
     public ResponseEntity<?> getPerson(String username, int personId) {
@@ -113,42 +138,18 @@ public class PersonService {
                     .build();
 
             return ResponseEntity.ok(response);
-        } catch (ValidationException e) {
-            HttpStatus status = HttpStatus.valueOf(e.getErrorCode());
-            return ResponseEntity.status(status).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił nieoczekiwany błąd.");
+            return handleException(e);
         }
     }
 
     public ResponseEntity<?> getPersons(String username) {
-        User user = validator.validateUser(username);
+        try {
+            User user = validator.validateUser(username);
 
-        List<Person> persons = personRepository.findByUser(user);
-        List<PersonDto> responseList = new ArrayList<>();
-        for (Person person : persons) {
-            PersonDto response = PersonDto.builder()
-                    .id(person.getId())
-                    .name(person.getName())
-                    .surname(person.getSurname())
-                    .receiptsCount(person.getReceiptsCount())
-                    .productsCount(person.getProductsCount())
-                    .totalAmount(person.getTotalAmount())
-                    .unpaidAmount(person.getUnpaidAmount())
-                    .userAccount(person.isUserAccount())
-                    .build();
-            responseList.add(response);
-        }
-
-        return ResponseEntity.ok(responseList);
-    }
-
-    public ResponseEntity<?> getUserPerson(String username) {
-        User user = validator.validateUser(username);
-        List<Person> persons = personRepository.findByUser(user);
-
-        for (Person person : persons) {
-            if (person.isUserAccount()) {
+            List<Person> persons = personRepository.findByUser(user);
+            List<PersonDto> responseList = new ArrayList<>();
+            for (Person person : persons) {
                 PersonDto response = PersonDto.builder()
                         .id(person.getId())
                         .name(person.getName())
@@ -159,55 +160,24 @@ public class PersonService {
                         .unpaidAmount(person.getUnpaidAmount())
                         .userAccount(person.isUserAccount())
                         .build();
-
-                return ResponseEntity.ok(response);
+                responseList.add(response);
             }
-        }
 
-        return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(responseList);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
     }
 
+    public ResponseEntity<?> getUserPerson(String username) {
+        try {
+            User user = validator.validateUser(username);
+            List<Person> persons = personRepository.findByUser(user);
 
-    public ResponseEntity<List<PersonDto>> getPersonsFromReceipt(String username, int receiptId) {
-        validator.validateUser(username);
-        Receipt receipt = validator.validateReceipt(username, receiptId);
-
-        List<Product> products = productRepository.findByReceipt(receipt);
-        List<PersonProduct> personProducts = new ArrayList<>();
-        for (Product product : products) {
-            List<PersonProduct> ppList = personProductRepository.findByProduct(product);
-            personProducts.addAll(ppList);
-        }
-
-        Set<PersonDto> personsSet = new HashSet<>();
-        for (PersonProduct pp : personProducts) {
-            Person person = pp.getPerson();
-            PersonDto personDto = PersonDto.builder()
-                    .id(person.getId())
-                    .name(person.getName())
-                    .surname(person.getSurname())
-                    .receiptsCount(person.getReceiptsCount())
-                    .productsCount(person.getProductsCount())
-                    .totalAmount(person.getTotalAmount())
-                    .unpaidAmount(person.getUnpaidAmount())
-                    .userAccount(person.isUserAccount())
-                    .build();
-            personsSet.add(personDto);
-        }
-        List<PersonDto> persons = new ArrayList<>(personsSet);
-
-        return ResponseEntity.ok(persons);
-    }
-
-    public ResponseEntity<?> getPersonsFromProduct(String username, int productId) {
-        validator.validateUser(username);
-        Product product = validator.validateProduct(username, productId);
-
-        List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
-        List<PersonDto> persons = personProducts.stream()
-                .map(pp -> {
-                    Person person = pp.getPerson();
-                    return PersonDto.builder()
+            for (Person person : persons) {
+                if (person.isUserAccount()) {
+                    PersonDto response = PersonDto.builder()
                             .id(person.getId())
                             .name(person.getName())
                             .surname(person.getSurname())
@@ -217,9 +187,89 @@ public class PersonService {
                             .unpaidAmount(person.getUnpaidAmount())
                             .userAccount(person.isUserAccount())
                             .build();
-                })
-                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(persons);
+                    return ResponseEntity.ok(response);
+                }
+            }
+
+            return ResponseEntity.notFound().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+
+    public ResponseEntity<?> getPersonsFromReceipt(String username, int receiptId) {
+        try {
+            validator.validateUser(username);
+            Receipt receipt = validator.validateReceipt(username, receiptId);
+
+            List<Product> products = productRepository.findByReceipt(receipt);
+            List<PersonProduct> personProducts = new ArrayList<>();
+            for (Product product : products) {
+                List<PersonProduct> ppList = personProductRepository.findByProduct(product);
+                personProducts.addAll(ppList);
+            }
+
+            Set<PersonDto> personsSet = new HashSet<>();
+            for (PersonProduct pp : personProducts) {
+                Person person = pp.getPerson();
+                PersonDto personDto = PersonDto.builder()
+                        .id(person.getId())
+                        .name(person.getName())
+                        .surname(person.getSurname())
+                        .receiptsCount(person.getReceiptsCount())
+                        .productsCount(person.getProductsCount())
+                        .totalAmount(person.getTotalAmount())
+                        .unpaidAmount(person.getUnpaidAmount())
+                        .userAccount(person.isUserAccount())
+                        .build();
+                personsSet.add(personDto);
+            }
+            List<PersonDto> persons = new ArrayList<>(personsSet);
+
+            return ResponseEntity.ok(persons);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    public ResponseEntity<?> getPersonsFromProduct(String username, int productId) {
+        try {
+            validator.validateUser(username);
+            Product product = validator.validateProduct(username, productId);
+
+            List<PersonProduct> personProducts = personProductRepository.findByProduct(product);
+            List<PersonDto> persons = personProducts.stream()
+                    .map(pp -> {
+                        Person person = pp.getPerson();
+                        return PersonDto.builder()
+                                .id(person.getId())
+                                .name(person.getName())
+                                .surname(person.getSurname())
+                                .receiptsCount(person.getReceiptsCount())
+                                .productsCount(person.getProductsCount())
+                                .totalAmount(person.getTotalAmount())
+                                .unpaidAmount(person.getUnpaidAmount())
+                                .userAccount(person.isUserAccount())
+                                .build();
+                    })
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(persons);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    private ResponseEntity<?> handleException(Exception e) {
+        if (e instanceof ValidationException) {
+            HttpStatus status = HttpStatus.valueOf(((ValidationException) e).getErrorCode());
+            return ResponseEntity.status(status).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił nieoczekiwany błąd.");
     }
 }
