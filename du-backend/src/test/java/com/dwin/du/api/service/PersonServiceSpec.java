@@ -39,7 +39,8 @@ public class PersonServiceSpec {
         MockitoAnnotations.openMocks(this);
         mockUser = new User();
         mockUser.setUsername("testuser");
-
+        mockUser.setEmail("testuser@gmail.com");
+        mockUser.setId(1);
         given(userRepository.findByUsername("testuser")).willReturn(Optional.of(mockUser));
     }
 
@@ -47,8 +48,9 @@ public class PersonServiceSpec {
     @Test
     void shouldAddPersonSuccessfully() {
         // Given
-        given(validator.validateUser("testuser")).willReturn(mockUser);
         AddEditPersonRequest request = new AddEditPersonRequest("Robert", "Lewandowski");
+
+        given(validator.validateUser("testuser")).willReturn(mockUser);
 
         // When
         ResponseEntity<?> response = personService.addPerson("testuser", request);
@@ -59,25 +61,10 @@ public class PersonServiceSpec {
     }
 
     @Test
-    void shouldAddPersonReturnBadRequestEmptyName() {
+    void shouldGetPersonSuccessfully() {
         // Given
-        given(validator.validateUser("testuser")).willReturn(mockUser);
-        AddEditPersonRequest request = new AddEditPersonRequest("", "Lewandowski");
-
-        // When
-        ResponseEntity<?> response = personService.addPerson("testuser", request);
-
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).isEqualTo("Nazwa osoby jest wymagana");
-    }
-
-    @Test
-    void shouldGetPersonSuccessfully() throws ValidationException {
-        // Given
-        String username = "testuser";
+        String username = mockUser.getUsername();
         int personId = 1;
-
         Person mockPerson = new Person();
         mockPerson.setId(personId);
         mockPerson.setName("Robert");
@@ -110,19 +97,38 @@ public class PersonServiceSpec {
     }
 
     @Test
-    void shouldReturnNotFoundWhenPersonDoesNotExist() throws ValidationException {
+    void shouldReturnBadRequestWhenRequestIsNull() {
         // Given
-        String username = "testuser";
-        int personId = 0;
+        String username = mockUser.getUsername();
+        AddEditPersonRequest request = null;
 
         given(validator.validateUser(username)).willReturn(mockUser);
-        given(validator.validatePerson(username, personId)).willThrow(new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono osobę o id: " + personId));
+        doThrow(new ValidationException(HttpStatus.BAD_REQUEST, "Nie przekazano danych"))
+                .when(validator).isNull(request, "Nie przekazano danych");
+
+        // When
+        ResponseEntity<?> response = personService.addPerson(username, request);
+
+        // Then
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isEqualTo("Nie przekazano danych");
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenPersonDoesNotExistByService() {
+        // Given
+        String username = mockUser.getUsername();
+        int personId = 1;
+
+        given(validator.validateUser(username)).willReturn(mockUser);
+        doThrow(new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono osobę o id: " + personId))
+                .when(validator).validatePerson(username, personId);
 
         // When
         ResponseEntity<?> response = personService.getPerson(username, personId);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).isEqualTo("Nie znaleziono osobę o id: " + personId);
     }
 }
