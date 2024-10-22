@@ -7,5 +7,6 @@ namespace DivvyUp_Shared.Interface
         Task<List<ChartDto>> GetTotalAmounts();
         Task<List<ChartDto>> GetUnpaindAmounts();
         Task<List<ChartDto>> GetPercantageExpenses();
+        Task<List<ChartDto>> GetMonthlyTotalExpenses(int year);
     }
 }

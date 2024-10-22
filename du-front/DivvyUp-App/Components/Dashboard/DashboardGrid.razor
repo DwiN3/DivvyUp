@@ -17,9 +17,15 @@
                 <RadzenCard Variant="@Variant.Filled" class="grid-item">
                     <ChartPercentageExpenses />
                 </RadzenCard>
-                <RadzenCard Variant="@Variant.Filled" class="grid-item"></RadzenCard>
-                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1 large-tile"></RadzenCard>
-                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1 large-tile"></RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item">
+
+                </RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
+                    <ChartMonthlyTotalExpenses />
+                </RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
+
+                </RadzenCard>
             </div>
         </RadzenStack>
     </div>
@@ -53,14 +59,14 @@ else
     }
 
     .grid-item {
-        background-color: #ffffff;
+        background-color: #f0f0f5;
         padding: 20px;
         border-radius: 12px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-        overflow: hidden;
-        width: 100%;
+        overflow: visible;
         height: 100%;
+        width: 100%;
     }
 
     .grid-item:hover {

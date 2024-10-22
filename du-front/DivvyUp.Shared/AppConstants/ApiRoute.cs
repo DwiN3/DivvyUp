@@ -12,6 +12,7 @@
         public const string arg_TotalPrice = "{totalPrice}";
         public const string arg_CompensationPrice = "{compensationPrice}";
         public const string arg_PersonId = "{personId}";
+        public const string arg_Year = "{year}";
 
         // User
         public readonly string Login = $"{BaseUrl}/auth";
@@ -67,5 +68,6 @@
         public readonly string GetTotalAmountsChart = $"{BaseUrl}/chart/total-amounts";
         public readonly string GetUnpaidAmountsChart = $"{BaseUrl}/chart/unpaid-amounts";
         public readonly string GetPercentageExpensesChart = $"{BaseUrl}/chart/percentage-expenses";
+        public readonly string GetMonthlyTotalExpensesChart = $"{BaseUrl}/chart/monthly-total-expenses/{arg_Year}";
     }
 }

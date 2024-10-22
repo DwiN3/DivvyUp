@@ -6,6 +6,7 @@ using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 namespace DivvyUp_Impl_Maui.Service
 {
     public class ChartService : IChartService
@@ -86,6 +87,29 @@ namespace DivvyUp_Impl_Maui.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "\"Błąd w czasie pobieranie procent opłaconych wydatków: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<ChartDto>> GetMonthlyTotalExpenses(int year)
+        {
+            try
+            {
+                var url = _url.GetMonthlyTotalExpensesChart.Replace(ApiRoute.arg_Year, year.ToString());
+                var response = await _dHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobierania miesięcznych wydatków");
+                return result;
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "\"Błąd w czasie pobierania miesięcznych wydatków: {Message}", ex.Message);
                 throw;
             }
         }

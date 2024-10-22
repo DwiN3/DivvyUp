@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,5 +41,13 @@ public class ChartController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return personService.getPercentageExpanses(username);
+    }
+
+    @GetMapping("/monthly-total-expenses/{year}")
+    @Operation(summary = "Retrieve total expenses by month", description = "Fetches chart data showing the total expenses incurred by the user, grouped by each month. This data helps visualize monthly spending trends across all receipts and associated purchases")
+    public ResponseEntity<?> getMonthlyTotalExpenses(@PathVariable int year) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return personService.getMonthlyTotalExpenses(username, year);
     }
 }
