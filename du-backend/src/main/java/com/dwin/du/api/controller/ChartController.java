@@ -50,4 +50,12 @@ public class ChartController {
         String username = authentication.getName();
         return personService.getMonthlyTotalExpenses(username, year);
     }
+
+    @GetMapping("/monthly-user-expenses/{year}")
+    @Operation(summary = "Retrieve total expenses for user by month", description = "Fetches chart data showing the total expenses incurred by the user, grouped by each month. This data helps visualize monthly spending trends across all receipts and associated purchases")
+    public ResponseEntity<?> getMonthlyUserExpenses(@PathVariable int year) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return personService.getMonthlyUserExpenses(username, year);
+    }
 }

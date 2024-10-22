@@ -27,8 +27,8 @@
     protected override async Task OnInitializedAsync()
     {
         int year = DateTime.Now.Year;
-        TitleChart = $"Łączne koszta w roku {year}";
-        Data = await ChartService.GetMonthlyTotalExpenses(year);
+        TitleChart = $"Koszta właściciela w roku {year}";
+        Data = await ChartService.getMonthlyUserExpenses(year);
     }
 
     string Format(object value)

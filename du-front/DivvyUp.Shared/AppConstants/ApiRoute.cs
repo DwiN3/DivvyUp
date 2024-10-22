@@ -69,5 +69,6 @@
         public readonly string GetUnpaidAmountsChart = $"{BaseUrl}/chart/unpaid-amounts";
         public readonly string GetPercentageExpensesChart = $"{BaseUrl}/chart/percentage-expenses";
         public readonly string GetMonthlyTotalExpensesChart = $"{BaseUrl}/chart/monthly-total-expenses/{arg_Year}";
+        public readonly string GetMonthlyUserExpenses = $"{BaseUrl}/chart/monthly-user-expenses/{arg_Year}";
     }
 }

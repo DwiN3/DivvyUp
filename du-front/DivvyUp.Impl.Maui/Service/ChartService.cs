@@ -114,6 +114,29 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
+        public async Task<List<ChartDto>> getMonthlyUserExpenses(int year)
+        {
+            try
+            {
+                var url = _url.GetMonthlyUserExpenses.Replace(ApiRoute.arg_Year, year.ToString());
+                var response = await _dHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobierania miesięcznych wydatków właściciela konta");
+                return result;
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "\"Błąd w czasie pobierania miesięcznych wydatków właściciela konta: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         private async Task EnsureCorrectResponse(HttpResponseMessage response, string errorMessage)
         {
             if (!response.IsSuccessStatusCode)

@@ -1,7 +1,9 @@
 package com.dwin.du.api.service;
 import com.dwin.du.api.dto.ChartDto;
 import com.dwin.du.api.entity.Person;
+import com.dwin.du.api.entity.PersonProduct;
 import com.dwin.du.api.entity.Receipt;
+import com.dwin.du.api.repository.PersonProductRepository;
 import com.dwin.du.api.repository.PersonRepository;
 import com.dwin.du.api.entity.User;
 import com.dwin.du.api.repository.ReceiptRepository;
@@ -24,6 +26,7 @@ public class ChartService {
 
     private final PersonRepository personRepository;
     private final ReceiptRepository receiptRepository;
+    private final PersonProductRepository personProductRepository;
     private final ValidationService validator;
 
     private static final String[] MONTH_NAMES = {"Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"};
@@ -86,6 +89,46 @@ public class ChartService {
                 if (date.getYear() == year) {
                     int month = date.getMonthValue();
                     monthlyTotals.put(month, monthlyTotals.getOrDefault(month, 0.0) + receipt.getTotalPrice());
+                }
+            }
+
+            List<ChartDto> responseList = new ArrayList<>();
+            for (int month = 1; month <= 12; month++) {
+                double total = monthlyTotals.getOrDefault(month, 0.0);
+                responseList.add(ChartDto.builder()
+                        .name(MONTH_NAMES[month - 1])
+                        .value(total)
+                        .build());
+            }
+
+            return ResponseEntity.ok(responseList);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    public ResponseEntity<?> getMonthlyUserExpenses(String username, int year) {
+        try {
+            User user = validator.validateUser(username);
+
+            List<Person> persons = personRepository.findByUser(user);
+            List<Person> userAccountPersons = persons.stream()
+                    .filter(Person::isUserAccount)
+                    .toList();
+
+            Map<Integer, Double> monthlyTotals = new HashMap<>();
+
+            for (Person person : userAccountPersons) {
+                List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
+
+                for (PersonProduct personProduct : personProducts) {
+                    LocalDate date = personProduct.getProduct().getReceipt().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Użycie daty z recepty powiązanej z produktem
+
+                    if (date.getYear() == year) {
+                        int month = date.getMonthValue();
+                        monthlyTotals.put(month, monthlyTotals.getOrDefault(month, 0.0) + personProduct.getPartOfPrice());
+                    }
                 }
             }
 
