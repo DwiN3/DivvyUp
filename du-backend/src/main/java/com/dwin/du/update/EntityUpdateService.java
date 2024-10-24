@@ -1,36 +1,23 @@
 package com.dwin.du.update;
-import com.dwin.du.api.entity.Person;
-import com.dwin.du.api.repository.PersonRepository;
-import com.dwin.du.api.entity.PersonProduct;
-import com.dwin.du.api.repository.PersonProductRepository;
-import com.dwin.du.api.entity.Product;
-import com.dwin.du.api.repository.ProductRepository;
-import com.dwin.du.api.entity.Receipt;
-import com.dwin.du.api.repository.ReceiptRepository;
-import com.dwin.du.api.entity.User;
+import com.dwin.du.api.entity.*;
+import com.dwin.du.api.repository.*;
 import com.dwin.du.validation.ValidationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EntityUpdateService {
     private final PersonRepository personRepository;
     private final ReceiptRepository receiptRepository;
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
+    private final LoanRepository loanRepository;
     private final ValidationService validator;
 
-    public EntityUpdateService(PersonRepository personRepository, ReceiptRepository receiptRepository, ProductRepository productRepository, PersonProductRepository personProductRepository, ValidationService validator) {
-        this.personRepository = personRepository;
-        this.receiptRepository = receiptRepository;
-        this.productRepository = productRepository;
-        this.personProductRepository = personProductRepository;
-        this.validator = validator;
-    }
-
     // Person
-    public void updatePerson(String username) {
+    public void updatePerson(String username, Boolean updateBalance) {
         User user = validator.validateUser(username);
         List<Person> persons = personRepository.findByUser(user);
 
@@ -58,9 +45,30 @@ public class EntityUpdateService {
                     .mapToDouble(PersonProduct::getPartOfPrice)
                     .sum();
             person.setUnpaidAmount(unpaidAmount);
+
+            if(updateBalance){
+                double balance = calculateBalance(person);
+                person.setLoanBalance(balance);
+            }
         }
 
         personRepository.saveAll(persons);
+    }
+
+    private double calculateBalance(Person person) {
+        List<Loan> loans = loanRepository.findByPerson(person);
+        double balance = 0.0;
+
+        for (Loan loan : loans) {
+            if(!loan.isSettled()){
+                if (loan.isLent())
+                    balance += loan.getAmount();
+                else
+                    balance -= loan.getAmount();
+            }
+        }
+
+        return balance;
     }
 
     // Receipt

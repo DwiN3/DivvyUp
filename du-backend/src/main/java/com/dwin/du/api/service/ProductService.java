@@ -99,7 +99,7 @@ public class ProductService {
             updater.updatePartPricesPersonProduct(product);
             updater.updateCompensationPrice(product);
             updater.updateTotalPriceReceipt(product.getReceipt());
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok(product);
 
         } catch (Exception e) {
@@ -119,7 +119,7 @@ public class ProductService {
             personProductRepository.deleteAll(personProducts);
             productRepository.delete(product);
             updater.updateTotalPriceReceipt(receipt);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
@@ -148,7 +148,7 @@ public class ProductService {
             receipt.setSettled(allSettled);
 
             receiptRepository.save(receipt);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {

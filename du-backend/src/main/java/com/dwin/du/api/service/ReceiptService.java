@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,7 +41,7 @@ public class ReceiptService {
                     .build();
 
             receiptRepository.save(receipt);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
@@ -88,7 +86,7 @@ public class ReceiptService {
 
             productRepository.deleteAll(products);
             receiptRepository.delete(receipt);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
@@ -106,7 +104,7 @@ public class ReceiptService {
             receipt.setTotalPrice(totalPrice);
 
             receiptRepository.save(receipt);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
@@ -135,7 +133,7 @@ public class ReceiptService {
                 }
             }
 
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {

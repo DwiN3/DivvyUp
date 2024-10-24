@@ -1,18 +1,9 @@
 package com.dwin.du.validation;
-import com.dwin.du.api.entity.Person;
-import com.dwin.du.api.repository.PersonRepository;
-import com.dwin.du.api.entity.PersonProduct;
-import com.dwin.du.api.repository.PersonProductRepository;
-import com.dwin.du.api.entity.Product;
-import com.dwin.du.api.repository.ProductRepository;
-import com.dwin.du.api.entity.Receipt;
-import com.dwin.du.api.repository.ReceiptRepository;
-import com.dwin.du.api.entity.User;
-import com.dwin.du.api.repository.UserRepository;
+import com.dwin.du.api.entity.*;
+import com.dwin.du.api.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -23,6 +14,7 @@ public class ValidationService {
     private final ReceiptRepository receiptRepository;
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
+    private final LoanRepository loanRepository;
 
     public User validateUser(String username) throws ValidationException {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -78,6 +70,18 @@ public class ValidationService {
             throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do przypisu osoby do produktu o id: " + personProductId);
 
         return personProduct;
+    }
+
+    public Loan validateLoan(String username, int loanId) throws ValidationException {
+        Optional<Loan> optionalLoan = loanRepository.findById(loanId);
+        if (!optionalLoan.isPresent())
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono pożyczki o id: " + loanId);
+
+        Loan loan = optionalLoan.get();
+        if (!loan.getUser().getUsername().equals(username))
+            throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do pożyczki o id: " + loanId);
+
+        return loan;
     }
 
     public void isNull(Object object, String message){

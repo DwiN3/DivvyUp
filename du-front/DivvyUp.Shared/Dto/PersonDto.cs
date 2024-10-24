@@ -9,6 +9,7 @@
         public int productsCount { get; set; }
         public double totalAmount { get; set; }
         public double unpaidAmount { get; set; }
+        public double loanBalance { get; set; }
         public bool userAccount { get; set; }
 
         public string fullName => $"{name} {surname}";
@@ -22,10 +23,11 @@
             productsCount = 0;
             totalAmount = 0;
             unpaidAmount = 0;
+            loanBalance = 0;
             userAccount = false;
         }
 
-        public PersonDto(int id, string name, string surname, int receiptsCount, int productsCount, double totalAmount, double unpaidAmount, bool userAccount)
+        public PersonDto(int id, string name, string surname, int receiptsCount, int productsCount, double totalAmount, double unpaidAmount, double loanBalance, bool userAccount)
         {
             this.id = id;
             this.name = name;
@@ -34,6 +36,7 @@
             this.productsCount = productsCount;
             this.totalAmount = totalAmount;
             this.unpaidAmount = unpaidAmount;
+            this.loanBalance = loanBalance;
             this.userAccount = userAccount;
         }
     }

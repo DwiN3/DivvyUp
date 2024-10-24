@@ -70,7 +70,7 @@ public class PersonProductService {
 
             personProductRepository.save(personProduct);
             updater.updateCompensationPrice(product);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
@@ -101,7 +101,7 @@ public class PersonProductService {
 
             personProductRepository.save(personProduct);
             updater.updateCompensationPrice(product);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
@@ -120,7 +120,7 @@ public class PersonProductService {
 
             Product product = validator.validateProduct(username, personProduct.getProduct().getId());
             updater.updateCompensationPrice(product);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
@@ -147,7 +147,7 @@ public class PersonProductService {
             receipt.setSettled(allProductsSettled);
 
             receiptRepository.save(receipt);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
@@ -170,7 +170,7 @@ public class PersonProductService {
             personProduct.setPerson(person);
 
             personProductRepository.save(personProduct);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
@@ -194,7 +194,7 @@ public class PersonProductService {
             personProduct.setCompensation(true);
 
             personProductRepository.save(personProduct);
-            updater.updatePerson(username);
+            updater.updatePerson(username, false);
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {

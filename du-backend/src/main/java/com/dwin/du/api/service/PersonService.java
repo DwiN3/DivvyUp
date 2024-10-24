@@ -41,6 +41,7 @@ public class PersonService {
                     .productsCount(0)
                     .totalAmount(0.0)
                     .unpaidAmount(0.0)
+                    .loanBalance(0.0)
                     .userAccount(false)
                     .build();
 
@@ -134,6 +135,7 @@ public class PersonService {
                     .productsCount(person.getProductsCount())
                     .totalAmount(person.getTotalAmount())
                     .unpaidAmount(person.getUnpaidAmount())
+                    .loanBalance(person.getLoanBalance())
                     .userAccount(person.isUserAccount())
                     .build();
 
@@ -159,6 +161,7 @@ public class PersonService {
                         .productsCount(person.getProductsCount())
                         .totalAmount(person.getTotalAmount())
                         .unpaidAmount(person.getUnpaidAmount())
+                        .loanBalance(person.getLoanBalance())
                         .userAccount(person.isUserAccount())
                         .build();
                 responseList.add(response);
@@ -186,6 +189,7 @@ public class PersonService {
                             .productsCount(person.getProductsCount())
                             .totalAmount(person.getTotalAmount())
                             .unpaidAmount(person.getUnpaidAmount())
+                            .loanBalance(person.getLoanBalance())
                             .userAccount(person.isUserAccount())
                             .build();
 
@@ -224,6 +228,7 @@ public class PersonService {
                         .productsCount(person.getProductsCount())
                         .totalAmount(person.getTotalAmount())
                         .unpaidAmount(person.getUnpaidAmount())
+                        .loanBalance(person.getLoanBalance())
                         .userAccount(person.isUserAccount())
                         .build();
                 personsSet.add(personDto);
@@ -254,6 +259,7 @@ public class PersonService {
                                 .productsCount(person.getProductsCount())
                                 .totalAmount(person.getTotalAmount())
                                 .unpaidAmount(person.getUnpaidAmount())
+                                .loanBalance(person.getLoanBalance())
                                 .userAccount(person.isUserAccount())
                                 .build();
                     })

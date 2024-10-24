@@ -47,9 +47,9 @@
                 <RadzenTextBox @bind-value="@person.surname" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.receiptsCount)" Title="Ilość rachunków" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.loanBalance)" Title="Balans pożyczek" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b>@(person.receiptsCount)</b>
+                <b style="color: @(person.loanBalance > 0 ? "red" : "green")"> @person.loanBalance.ToString(Format.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -
@@ -57,7 +57,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonDto.unpaidAmount)" Title="Kwota aktualna" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b style="color: @(person.unpaidAmount > 0 ? "red" : "green")">@person.unpaidAmount.ToString(Format.PriceFormat)</b>
+                <b style="color: @(person.unpaidAmount > 0 ? "red" : "green")"> @person.unpaidAmount.ToString(Format.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -

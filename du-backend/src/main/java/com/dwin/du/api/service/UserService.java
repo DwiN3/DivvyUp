@@ -208,6 +208,7 @@ public class UserService {
                 .productsCount(0)
                 .totalAmount(0.0)
                 .unpaidAmount(0.0)
+                .loanBalance(0.0)
                 .userAccount(true)
                 .build();
 

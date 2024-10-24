@@ -12,6 +12,6 @@ public class PersonDto {
     public int productsCount;
     public Double totalAmount;
     public Double unpaidAmount;
+    public Double loanBalance;
     public boolean userAccount;
-
 }

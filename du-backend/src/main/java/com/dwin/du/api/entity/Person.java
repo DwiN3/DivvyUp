@@ -36,6 +36,9 @@ public class Person {
     @Column(name = "unpaid_amount")
     private Double unpaidAmount;
 
+    @Column(name = "loan_balance")
+    private Double loanBalance;
+
     @Column(name = "is_user_account")
     private boolean userAccount;
 }
