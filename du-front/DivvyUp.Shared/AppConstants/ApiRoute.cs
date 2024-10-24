@@ -70,5 +70,8 @@
         public readonly string GetPercentageExpensesChart = $"{BaseUrl}/chart/percentage-expenses";
         public readonly string GetMonthlyTotalExpensesChart = $"{BaseUrl}/chart/monthly-total-expenses/{arg_Year}";
         public readonly string GetMonthlyUserExpenses = $"{BaseUrl}/chart/monthly-user-expenses/{arg_Year}";
+        public readonly string GetWeeklyTotalExpenses = $"{BaseUrl}/chart/weekly-total-expenses";
+        public readonly string GetWeeklyUserExpenses = $"{BaseUrl}/chart/weekly-user-expenses";
+        public readonly string GetMonthlyTopProducts = $"{BaseUrl}/chart/monthly-top-products";
     }
 }

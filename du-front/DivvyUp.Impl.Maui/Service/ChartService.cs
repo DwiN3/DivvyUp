@@ -114,7 +114,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<ChartDto>> getMonthlyUserExpenses(int year)
+        public async Task<List<ChartDto>> GetMonthlyUserExpenses(int year)
         {
             try
             {
@@ -133,6 +133,75 @@ namespace DivvyUp_Impl_Maui.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "\"Błąd w czasie pobierania miesięcznych wydatków właściciela konta: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<ChartDto>> GetWeeklyTotalExpenses()
+        {
+            try
+            {
+                var url = _url.GetWeeklyTotalExpenses;
+                var response = await _dHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobierania tygoniowych wydatków osób");
+                return result;
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "\"Błąd w czasie pobierania tygoniowych wydatków osób: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<ChartDto>> GetWeeklyUserExpenses()
+        {
+            try
+            {
+                var url = _url.GetWeeklyUserExpenses;
+                var response = await _dHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobierania tygoniowych wydatków właściciela konta");
+                return result;
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "\"Błąd w czasie pobierania tygoniowych wydatków właściciela konta: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<ChartDto>> GetMonthlyTopProducts()
+        {
+            try
+            {
+                var url = _url.GetMonthlyTopProducts;
+                var response = await _dHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobierania największych wydatków na miesiąc");
+                return result;
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "\"Błąd w czasie pobierania największych wydatków na miesiąc: {Message}", ex.Message);
                 throw;
             }
         }

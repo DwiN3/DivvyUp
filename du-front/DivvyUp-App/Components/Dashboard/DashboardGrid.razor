@@ -9,7 +9,7 @@
 
             <div class="dashboard-grid">
                 <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x2 highlight-tile">
-                    <InfoCard @ref="@Info" UserAppService="@UserAppService" />
+                    <InfoCard @ref="@Info" UserAppService="@UserApp" />
                 </RadzenCard>
                 <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
                     <ChartAmounts />
@@ -18,13 +18,13 @@
                     <ChartPercentageExpenses />
                 </RadzenCard>
                 <RadzenCard Variant="@Variant.Filled" class="grid-item">
-
+                    <ChartMonthlyTopProducts />
                 </RadzenCard>
                 <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
-                    <ChartMonthlyUserExpenses />
+                    <ChartWeeklyExpenses />
                 </RadzenCard>
                 <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
-                    <ChartMonthlyTotalExpenses />
+                    <ChartMonthlyExpenses />
                 </RadzenCard>
             </div>
         </RadzenStack>

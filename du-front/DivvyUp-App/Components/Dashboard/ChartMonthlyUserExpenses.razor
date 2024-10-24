@@ -5,7 +5,7 @@
 <RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
     <RadzenChart Style="min-height: 100%; width: 100%;">
         <RadzenChartTooltipOptions Shared="true" />
-        <RadzenLineSeries Smooth="false" Data="@Data" Title="Łączny Koszt" CategoryProperty="Name" ValueProperty="Value">
+        <RadzenLineSeries Smooth="false" Data="@Data" Title="Łączny Koszt" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
             <RadzenMarkers Visible="false" MarkerType="MarkerType.Circle" />
             <RadzenSeriesDataLabels Visible="false" />
         </RadzenLineSeries>
@@ -28,7 +28,7 @@
     {
         int year = DateTime.Now.Year;
         TitleChart = $"Koszta właściciela w roku {year}";
-        Data = await ChartService.getMonthlyUserExpenses(year);
+        Data = await ChartService.GetMonthlyUserExpenses(year);
     }
 
     string Format(object value)

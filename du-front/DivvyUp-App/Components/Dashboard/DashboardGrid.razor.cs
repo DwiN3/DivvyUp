@@ -6,7 +6,7 @@ namespace DivvyUp_App.Components.Dashboard
     partial class DashboardGrid
     {
         [Inject]
-        private UserAppService UserAppService { get; set; }
+        private UserAppService UserApp { get; set; }
 
         private InfoCard Info { get; set; }
         private bool UserView { get; set; } = false;
@@ -14,9 +14,9 @@ namespace DivvyUp_App.Components.Dashboard
 
         protected async override void OnAfterRender(bool firstRender)
         {
-            if ((UserAppService != null) && !DataAlreadySet)
+            if ((UserApp != null) && !DataAlreadySet)
             {
-                UserView = UserAppService.IsLoggedIn();
+                UserView = UserApp.IsLoggedIn();
                 StateHasChanged();
 
                 if (Info != null && UserView)

@@ -1,0 +1,44 @@
+﻿@using System.Globalization
+@using DivvyUp_Shared.Dto
+@using DivvyUp_Shared.Interface
+
+<RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+    <RadzenChart Style="min-height: 100%; width: 100%;">
+        <RadzenLegend Visible="false" />
+        <RadzenChartTooltipOptions Shared="true"/>
+        <RadzenLineSeries Smooth="false" Data="@WeeklyTotalExpenses" Title="Koszt wszystkich osób" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+            <RadzenMarkers Visible="false" MarkerType="MarkerType.Circle"/>
+            <RadzenSeriesDataLabels Visible="false"/>
+        </RadzenLineSeries>
+        <RadzenLineSeries Smooth="false" Data="@WeeklyUserExpenses" Title="Koszt właściciela" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+            <RadzenMarkers Visible="false" MarkerType="MarkerType.Circle"/>
+            <RadzenSeriesDataLabels Visible="false"/>
+        </RadzenLineSeries>
+        <RadzenCategoryAxis Padding="20"/>
+        <RadzenValueAxis Formatter="@Format">
+            <RadzenGridLines Visible="true"/>
+            <RadzenAxisTitle Text="@TitleChart"/>
+        </RadzenValueAxis>
+    </RadzenChart>
+</RadzenStack>
+
+@code {
+    [Inject]
+    private IChartService ChartService { get; set; }
+
+    private List<ChartDto> WeeklyTotalExpenses { get; set; } = new();
+    private List<ChartDto> WeeklyUserExpenses { get; set; } = new();
+    private string TitleChart { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        TitleChart = "Koszta na bieżący tydzień";
+        WeeklyTotalExpenses = await ChartService.GetWeeklyTotalExpenses();
+        WeeklyUserExpenses = await ChartService.GetWeeklyUserExpenses();
+    }
+
+    string Format(object value)
+    {
+        return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("pl-PL"));
+    }
+}

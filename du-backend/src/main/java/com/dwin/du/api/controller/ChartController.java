@@ -3,6 +3,7 @@ import com.dwin.du.api.service.ChartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,5 +60,29 @@ public class ChartController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return personService.getMonthlyUserExpenses(username, year);
+    }
+
+    @GetMapping("/weekly-total-expenses")
+    @Operation(summary = "Retrieve total expenses by week", description = "Fetches chart data showing the total expenses incurred by the user, grouped by each week. This data helps visualize weekly spending trends across all receipts and associated purchases.")
+    public ResponseEntity<?> getWeeklyTotalExpenses() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return personService.getWeeklyTotalExpenses(username);
+    }
+
+    @GetMapping("/weekly-user-expenses")
+    @Operation(summary = "Retrieve user expenses by week", description = "Fetches chart data showing the user's expenses incurred by week. This data helps visualize the user's spending trends across all receipts and purchases.")
+    public ResponseEntity<?> getWeeklyUserExpenses() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return personService.getWeeklyUserExpenses(username);
+    }
+
+    @GetMapping("/monthly-top-products")
+    @Operation(summary = "Retrieve top 3 most expensive products for the current month", description = "Fetches the three most expensive products purchased by the user in the current month.")
+    public ResponseEntity<?> getMonthlyTopProducts() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return personService.getMonthlyTopProducts(username);
     }
 }

@@ -3,6 +3,8 @@ import com.dwin.du.api.entity.Receipt;
 import com.dwin.du.api.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Date;
 import java.util.List;
 
 @Repository

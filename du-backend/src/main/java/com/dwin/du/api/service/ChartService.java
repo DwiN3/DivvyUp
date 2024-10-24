@@ -13,12 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +29,7 @@ public class ChartService {
     private final ValidationService validator;
 
     private static final String[] MONTH_NAMES = {"Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"};
+    private static final String[] WEEK_NAMES = {"Pon", "Wt", "Śr", "Czw", "Pt", "Sb", "Ndz"};
 
     public ResponseEntity<?> getChartAmounts(String username, boolean isTotalAmounts) {
         try {
@@ -123,7 +123,7 @@ public class ChartService {
                 List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
 
                 for (PersonProduct personProduct : personProducts) {
-                    LocalDate date = personProduct.getProduct().getReceipt().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Użycie daty z recepty powiązanej z produktem
+                    LocalDate date = personProduct.getProduct().getReceipt().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
                     if (date.getYear() == year) {
                         int month = date.getMonthValue();
@@ -155,6 +155,129 @@ public class ChartService {
         return percentage;
         //return Math.round(percentage * 100.0) / 100.0;
     }
+
+    public ResponseEntity<?> getWeeklyTotalExpenses(String username) {
+        try {
+            User user = validator.validateUser(username);
+            List<Receipt> receipts = receiptRepository.findByUser(user);
+
+            Map<DayOfWeek, Double> dailyTotals = new HashMap<>();
+            for (DayOfWeek day : DayOfWeek.values())
+                dailyTotals.put(day, 0.0);
+
+            LocalDate today = LocalDate.now();
+            LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+            LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
+
+            for (Receipt receipt : receipts) {
+                LocalDate date = receipt.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                if (!date.isBefore(startOfWeek) && !date.isAfter(endOfWeek)) {
+                    DayOfWeek dayOfWeek = date.getDayOfWeek();
+                    dailyTotals.put(dayOfWeek, dailyTotals.get(dayOfWeek) + receipt.getTotalPrice());
+                }
+            }
+
+            List<ChartDto> responseList = new ArrayList<>();
+            for (DayOfWeek day : DayOfWeek.values()) {
+                double total = dailyTotals.getOrDefault(day, 0.0);
+                responseList.add(ChartDto.builder()
+                        .name(WEEK_NAMES[day.getValue() - 1])
+                        .value(total)
+                        .build());
+            }
+
+            return ResponseEntity.ok(responseList);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    public ResponseEntity<?> getWeeklyUserExpenses(String username) {
+        try {
+            User user = validator.validateUser(username);
+            List<Person> persons = personRepository.findByUser(user);
+            List<Person> userAccountPersons = persons.stream()
+                    .filter(Person::isUserAccount)
+                    .toList();
+
+            Map<DayOfWeek, Double> dailyTotals = new HashMap<>();
+            for (DayOfWeek day : DayOfWeek.values())
+                dailyTotals.put(day, 0.0);
+
+            LocalDate today = LocalDate.now();
+            LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+            LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
+
+            for (Person person : userAccountPersons) {
+                List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
+
+                for (PersonProduct personProduct : personProducts) {
+                    LocalDate date = personProduct.getProduct().getReceipt().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                    if (!date.isBefore(startOfWeek) && !date.isAfter(endOfWeek)) {
+                        DayOfWeek dayOfWeek = date.getDayOfWeek();
+                        dailyTotals.put(dayOfWeek, dailyTotals.get(dayOfWeek) + personProduct.getPartOfPrice());
+                    }
+                }
+            }
+
+            List<ChartDto> responseList = new ArrayList<>();
+            for (DayOfWeek day : DayOfWeek.values()) {
+                double total = dailyTotals.getOrDefault(day, 0.0);
+                responseList.add(ChartDto.builder()
+                        .name(WEEK_NAMES[day.getValue() - 1])
+                        .value(total)
+                        .build());
+            }
+
+            return ResponseEntity.ok(responseList);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    public ResponseEntity<?> getMonthlyTopProducts(String username) {
+        try {
+            User user = validator.validateUser(username);
+            List<Person> persons = personRepository.findByUser(user);
+
+            List<PersonProduct> allPersonProducts = new ArrayList<>();
+            for (Person person : persons) {
+                allPersonProducts.addAll(personProductRepository.findByPerson(person));
+            }
+
+            LocalDate now = LocalDate.now();
+            int currentMonth = now.getMonthValue();
+            int currentYear = now.getYear();
+
+            Map<String, Double> productValues = new HashMap<>();
+
+            for (PersonProduct personProduct : allPersonProducts) {
+                LocalDate productDate = personProduct.getProduct().getReceipt().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                if (productDate.getMonthValue() == currentMonth && productDate.getYear() == currentYear) {
+                    productValues.merge(personProduct.getProduct().getName(), personProduct.getPartOfPrice(), Double::sum);
+                }
+            }
+
+            List<ChartDto> topProducts = productValues.entrySet().stream()
+                    .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                    .limit(3)
+                    .map(entry -> ChartDto.builder()
+                            .name(entry.getKey())
+                            .value(entry.getValue())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(topProducts);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
 
     private ResponseEntity<?> handleException(Exception e) {
         if (e instanceof ValidationException) {

@@ -1,0 +1,45 @@
+﻿@using System.Globalization
+@using DivvyUp_Shared.Dto
+@using DivvyUp_Shared.Interface
+
+<RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+    <RadzenChart Style="min-height: 100%; width: 100%;">
+        <RadzenLegend Visible="false" />
+        <RadzenChartTooltipOptions Shared="true"/>
+        <RadzenLineSeries Smooth="false" Data="@MonthlyTotalExpenses" Title="Koszt wszystkich osób" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+            <RadzenMarkers Visible="false" MarkerType="MarkerType.Circle"/>
+            <RadzenSeriesDataLabels Visible="false"/>
+        </RadzenLineSeries>
+        <RadzenLineSeries Smooth="false" Data="@MonthlyUserExpenses" Title="Koszt właściciela" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+            <RadzenMarkers Visible="false" MarkerType="MarkerType.Circle"/>
+            <RadzenSeriesDataLabels Visible="false"/>
+        </RadzenLineSeries>
+        <RadzenCategoryAxis Padding="20"/>
+        <RadzenValueAxis Formatter="@Format">
+            <RadzenGridLines Visible="true"/>
+            <RadzenAxisTitle Text="@TitleChart"/>
+        </RadzenValueAxis>
+    </RadzenChart>
+</RadzenStack>
+
+@code {
+    [Inject]
+    private IChartService ChartService { get; set; }
+
+    private List<ChartDto> MonthlyTotalExpenses { get; set; } = new();
+    private List<ChartDto> MonthlyUserExpenses { get; set; } = new();
+    private string TitleChart { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        int year = DateTime.Now.Year;
+        TitleChart = $"Koszta na rok {year}";
+        MonthlyTotalExpenses = await ChartService.GetMonthlyTotalExpenses(year);
+        MonthlyUserExpenses = await ChartService.GetMonthlyUserExpenses(year);
+    }
+
+    string Format(object value)
+    {
+        return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("pl-PL"));
+    }
+}

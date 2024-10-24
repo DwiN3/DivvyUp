@@ -1,0 +1,32 @@
+﻿@using System.Globalization
+@using DivvyUp_Shared.Dto
+@using DivvyUp_Shared.Interface
+
+<RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+    <RadzenChart Style="min-height: 100%; width: 100%;">
+        <RadzenColumnSeries Data="@MonthlyTopProductList" Title="Koszt" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)" />
+        <RadzenValueAxis Formatter="@Format">
+            <RadzenGridLines Visible="true" />
+            <RadzenLegend Visible="false" />
+            <RadzenColumnOptions Radius="5" />
+            @* <RadzenAxisTitle Text="Największe wydatki w miesiącu" /> *@
+        </RadzenValueAxis>
+    </RadzenChart>
+</RadzenStack>
+
+@code {
+    [Inject]
+    private IChartService ChartService { get; set; }
+
+    private List<ChartDto> MonthlyTopProductList { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        MonthlyTopProductList = await ChartService.GetMonthlyTopProducts();
+    }
+
+    string Format(object value)
+    {
+        return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("pl-PL"));
+    }
+}
