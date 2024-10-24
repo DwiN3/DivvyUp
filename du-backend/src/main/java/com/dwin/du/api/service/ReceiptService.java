@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -185,6 +188,36 @@ public class ReceiptService {
             return handleException(e);
         }
     }
+
+    public ResponseEntity<?> getReceiptsByDataRange(String username, String fromDate, String toDate) throws ValidationException {
+        try {
+            User user = validator.validateUser(username);
+            validator.isEmpty(fromDate, "Data początkowa jest wymagana");
+            validator.isEmpty(toDate, "Data końcowa jest wymagana");
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date dateFrom = dateFormat.parse(fromDate);
+            Date dateTo = dateFormat.parse(toDate);
+            List<Receipt> receipts = receiptRepository.findByUserAndDateBetween(user, dateFrom, dateTo);
+
+            List<ReceiptDto> responseList = receipts.stream()
+                    .map(receipt -> ReceiptDto.builder()
+                            .id(receipt.getId())
+                            .name(receipt.getName())
+                            .date(receipt.getDate())
+                            .totalPrice(receipt.getTotalPrice())
+                            .isSettled(receipt.isSettled())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(responseList);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+
 
     private ResponseEntity<?> handleException(Exception e) {
         if (e instanceof ValidationException) {

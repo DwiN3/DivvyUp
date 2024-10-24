@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rm/receipt")
@@ -71,5 +73,13 @@ public class ReceiptController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return receiptService.getReceipts(username);
+    }
+
+    @GetMapping("/date-range")
+    @Operation(summary = "Retrieve all receipts in date range", description = "Retrieves all receipts in date range associated with the current user.")
+    public ResponseEntity<?> getReceiptsByDataRange(@RequestParam("from") String fromDate, @RequestParam("to") String toDate) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return receiptService.getReceiptsByDataRange(username, fromDate, toDate);
     }
 }

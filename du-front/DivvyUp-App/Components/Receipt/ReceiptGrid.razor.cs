@@ -3,6 +3,7 @@ using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
+using Microsoft.VisualBasic;
 using Radzen;
 using Radzen.Blazor;
 
@@ -22,15 +23,22 @@ namespace DivvyUp_App.Components.Receipt
         private List<ReceiptDto> Receipts { get; set; }
         private RadzenDataGrid<ReceiptDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
+        private DateTime? DateFrom = new DateTime();
+        private DateTime? DateTo = new DateTime();
+        private bool ShowAllReceipts = false;
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadGrid();
+            await SetCurrentMonth();
         }
 
         private async Task LoadGrid()
         {
-            Receipts = await ReceiptService.GetReceipts();
+            if(ShowAllReceipts)
+                Receipts = await ReceiptService.GetReceipts();
+            else 
+                Receipts = await ReceiptService.GetReceiptsByDataRange(DateFrom, DateTo);
+
             StateHasChanged();
         }
 
@@ -113,6 +121,14 @@ namespace DivvyUp_App.Components.Receipt
             catch (Exception)
             {
             }
+        }
+
+        private async Task SetCurrentMonth()
+        {
+            DateFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            int dayInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            DateTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, dayInMonth);
+            await LoadGrid();
         }
     }
 }

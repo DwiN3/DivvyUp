@@ -13,6 +13,8 @@
         public const string arg_CompensationPrice = "{compensationPrice}";
         public const string arg_PersonId = "{personId}";
         public const string arg_Year = "{year}";
+        public const string arg_From = "{from}";
+        public const string arg_To = "{to}";
 
         // User
         public readonly string Login = $"{BaseUrl}/auth";
@@ -43,6 +45,7 @@
         public readonly string SetTotalPriceReceipt = $"{BaseUrl}/receipt/{arg_ID}/set-total-price?totalPrice={arg_TotalPrice}";
         public readonly string GetReceipt = $"{BaseUrl}/receipt/{arg_ID}";
         public readonly string GetReceipts = $"{BaseUrl}/receipt";
+        public readonly string GetReceiptsByDataRange = $"{BaseUrl}/receipt/date-range?from={arg_From}&to={arg_To}";
 
         // Product
         public readonly string AddProduct = $"{BaseUrl}/receipt/{arg_ID}/product/add";

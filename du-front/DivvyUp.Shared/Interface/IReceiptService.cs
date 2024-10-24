@@ -11,5 +11,6 @@ namespace DivvyUp_Shared.Interface
         Task SetTotalPrice(int receiptId, double totalPrice);
         Task<ReceiptDto> GetReceipt(int receiptId);
         Task<List<ReceiptDto>> GetReceipts();
+        Task<List<ReceiptDto>> GetReceiptsByDataRange(DateTime? from, DateTime? to);
     }
 }

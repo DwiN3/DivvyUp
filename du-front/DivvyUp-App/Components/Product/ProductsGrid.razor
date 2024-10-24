@@ -19,7 +19,7 @@
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
         <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj produkt" Click="InsertRow" />
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="add_circle" Text="Odśwież" Click="LoadGrid" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="LoadGrid" />
         <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="receipt_long" Text="Powrót do rachunków" Click="@(() => { Navigation.NavigateTo("/receipt"); } )" />
     </HeaderTemplate>
     <Columns>

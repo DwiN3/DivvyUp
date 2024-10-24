@@ -172,7 +172,39 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        private async Task EnsureCorrectResponse(HttpResponseMessage response, string errorMessage)
+        public async Task<List<ReceiptDto>> GetReceiptsByDataRange(DateTime? from, DateTime? to)
+        {
+            try
+            {
+                if (!from.HasValue || !to.HasValue)
+                    throw new ArgumentException("Obie daty muszą być podane");
+
+                string fromFormatted = from.Value.ToString("dd-MM-yyyy");
+                string toFormatted = to.Value.ToString("dd-MM-yyyy");
+
+                var url = _url.GetReceiptsByDataRange
+                    .Replace(ApiRoute.arg_From, fromFormatted)
+                    .Replace(ApiRoute.arg_To, toFormatted);
+                var response = await _dHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<ReceiptDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobierania rachunków w zakresie dat");
+                return result;
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie pobierania rachunków w zakresie dat: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+
+    private async Task EnsureCorrectResponse(HttpResponseMessage response, string errorMessage)
         {
             if (!response.IsSuccessStatusCode)
             {
