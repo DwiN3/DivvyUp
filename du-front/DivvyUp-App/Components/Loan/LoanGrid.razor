@@ -1,0 +1,125 @@
+﻿@using DivvyUp_Shared.AppConstants
+@using DivvyUp_Shared.Dto
+
+<RadzenDataGrid @ref="@Grid"
+                Data="@Loans"
+                TItem="LoanDto"
+                AllowSorting="true"
+                AllowAlternatingRows="true"
+                FilterMode="FilterMode.Simple"
+                AllowFiltering="true"
+                LogicalFilterOperator="LogicalFilterOperator.Or"
+                AllowPaging="true"
+                PagerAlwaysVisible="true"
+                PageSize="5"
+                PageSizeOptions="@PageSizeOptions"
+                PagerHorizontalAlign="HorizontalAlign.Center"
+                ShowPagingSummary="true"
+                EditMode="DataGridEditMode.Single"
+                GridLines="DataGridGridLines.Both">
+    <HeaderTemplate>
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
+    </HeaderTemplate>
+    <Columns>
+        <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="loan">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(loan))" />
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(loan))" />
+            </Template>
+            <EditTemplate Context="loan">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(loan))" />
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(loan))" />
+            </EditTemplate>
+            <FilterTemplate>
+                <div class="rz-cell-data">
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow"/>
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })"/>
+                </div>
+            </FilterTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(LoanDto.settled)" Title="Rozliczono" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="loan">
+                <RadzenCheckBox class="button" @bind-Value="@loan.settled" Change="@(async (bool Check) => await ChangeSettled(loan.id, loan.settled))" />
+            </Template>
+            <EditTemplate Context="receipt">
+                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@receipt.settled" ReadOnly="true" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(LoanDto.date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
+            <Template Context="loan">
+                @loan.date.ToString("dd.MM.yyyy")
+            </Template>
+            <EditTemplate Context="loan">
+                <RadzenDatePicker @bind-Value="@loan.date" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="width: 100%;" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(LoanDto.lent)" Title="Pożyczka" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="loan">
+                <RadzenCheckBox class="button" @bind-Value="@loan.lent" Change="@(async (bool Check) => await ChangeLent(loan.id, loan.lent))" />
+            </Template>
+            <EditTemplate Context="loan">
+                <RadzenCheckBox class="button" @bind-Value="@loan.lent" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(LoanDto.amount)" Title="Kwota" Width="12%" TextAlign="TextAlign.Start" Frozen="true">
+            <Template Context="loan">
+                <div style="color: @(loan.settled ? "green" : "red")">
+                    <b>@loan.amount.ToString((Format.PriceFormat))</b>
+                </div>
+            </Template>
+            <EditTemplate Context="product">
+                <RadzenNumeric @bind-Value="@product.amount" Style="width: 100%;" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(LoanDto.person)" Title="Osoby" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+            <Template Context="loan">
+                @if (loan.person != null)
+                {
+                    PersonDto person = loan.person;
+
+                    <RadzenDropDownDataGrid TValue="PersonDto"
+                                            Value="person"
+                                            ValueChanged="async(PersonDto person) => await OnPersonChange(loan, person.id)"
+                                            Data="@Persons"
+                                            TextProperty="@nameof(PersonDto.fullName)" />
+                }
+            </Template>
+            <EditTemplate Context="loan">
+                @if (loan.id != 0 && loan.person != null)
+                {
+                    PersonDto person = loan.person;
+
+                    <RadzenDropDownDataGrid TValue="PersonDto"
+                                            Value="person"
+                                            ValueChanged="async(PersonDto person) => await OnPersonChange(loan, person.id)"
+                                            Data="@Persons"
+                                            TextProperty="@nameof(PersonDto.fullName)" />
+                }
+                else
+                {
+                    <RadzenDropDownDataGrid TValue="PersonDto"
+                                            Value="SelectedPerson"
+                                            ValueChanged="OnPersonSet"
+                                            Data="@Persons"
+                                            TextProperty="@nameof(PersonDto.fullName)" />
+                }
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+<style>
+    .button {
+        width: 36px;
+        height: 36px;
+    }
+
+    .rz-cell-filter-content {
+        display: flex;
+        justify-content: center;
+    }
+
+    .rz-data-grid {
+        height: 100%;
+    }
+</style>

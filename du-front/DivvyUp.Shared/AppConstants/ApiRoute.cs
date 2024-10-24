@@ -15,6 +15,7 @@
         public const string arg_Year = "{year}";
         public const string arg_From = "{from}";
         public const string arg_To = "{to}";
+        public const string arg_Lent = "{lent}";
 
         // User
         public readonly string Login = $"{BaseUrl}/auth";
@@ -36,6 +37,16 @@
         public readonly string GetUserPerson = $"{BaseUrl}/person/user-person";
         public readonly string GetPersonsFromReceipt = $"{BaseUrl}/person/{arg_ID}/from-receipt";
         public readonly string GetPersonsFromProduct = $"{BaseUrl}/person/{arg_ID}/from-product";
+
+        // Loan
+        public readonly string AddLoan = $"{BaseUrl}/loan/add";
+        public readonly string EditLoan = $"{BaseUrl}/loan/{arg_ID}/edit";
+        public readonly string RemoveLoan = $"{BaseUrl}/loan/{arg_ID}/remove";
+        public readonly string SetSettledLoan = $"{BaseUrl}/loan/{arg_ID}/set-settled?settled={arg_Settled}";
+        public readonly string SetLentLoan = $"{BaseUrl}/loan/{arg_ID}/set-lent?lent={arg_Lent}";
+        public readonly string GetLoan = $"{BaseUrl}/loan/{arg_ID}";
+        public readonly string GetLoans = $"{BaseUrl}/loan";
+        public readonly string GetLoanPerson = $"{BaseUrl}/loan/person/{arg_PersonId}";
 
         // Receipt
         public readonly string AddReceipt = $"{BaseUrl}/receipt/add";

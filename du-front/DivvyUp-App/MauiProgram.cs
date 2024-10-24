@@ -47,6 +47,7 @@ namespace DivvyUp_App
 
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IPersonService, PersonService>();
+            builder.Services.AddTransient<ILoanService, LoanSevice>();
             builder.Services.AddTransient<IReceiptService, ReceiptService>();
             builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<IPersonProductService, PersonProductService>();

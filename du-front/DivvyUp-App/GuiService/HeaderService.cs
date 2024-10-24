@@ -7,6 +7,7 @@
             { "/", "Główny panel" },
             { "/receipt", "Rachunki" },
             { "/person", "Osoby" },
+            { "/loan", "Pożyczki" },
             { "/accountManager", "Zarządzaj kontem" },
             { "/login", "Logowanie" },
             { "/register", "Rejestracja" },

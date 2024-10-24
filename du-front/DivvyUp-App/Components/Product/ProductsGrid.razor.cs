@@ -37,9 +37,8 @@ namespace DivvyUp_App.Components.Product
             await LoadGrid();
             Persons = await PersonService.GetPersons();
             if (Persons != null && Persons.Count > 0)
-            {
                 SelectedPerson = Persons.First();
-            }
+            
             PersonProducts = await PersonProductService.GetPersonProducts();
         }
 
