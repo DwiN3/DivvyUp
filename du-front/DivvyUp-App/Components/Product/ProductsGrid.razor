@@ -26,6 +26,7 @@
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
                 <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />
+                <RadzenButton class="button" Icon="content_copy" ButtonStyle="ButtonStyle.Dark" Click="@((args) => Duplicate(product))" />
                 <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(product))" />
             </Template>
             <EditTemplate Context="product">

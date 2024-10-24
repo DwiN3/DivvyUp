@@ -127,6 +127,20 @@ namespace DivvyUp_App.Components.Product
             }
         }
 
+        private async Task Duplicate(ProductDto product)
+        {
+            var newProduct = new ProductDto
+            {
+                name = product.name,
+                price = product.price,
+                receiptId = product.receiptId,
+                divisible = product.divisible,
+                maxQuantity = product.maxQuantity
+            };
+            Products.Add(newProduct);
+            await Grid.InsertRow(newProduct);
+        }
+
         private async Task ChangeSettled(int productId, bool isChecked)
         {
             try
