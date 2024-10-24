@@ -4,7 +4,7 @@
     {
         private Dictionary<string, string> MenuItems = new Dictionary<string, string>
         {
-            { "/", "Strona Główna" },
+            { "/", "Główny panel" },
             { "/receipt", "Rachunki" },
             { "/person", "Osoby" },
             { "/accountManager", "Zarządzaj kontem" },

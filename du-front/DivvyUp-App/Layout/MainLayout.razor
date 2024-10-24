@@ -13,7 +13,7 @@
     </RadzenHeader>
     <RadzenSidebar Responsive="true" Style="width: max-content">
         <RadzenPanelMenu DisplayStyle="@(SidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
-            <RadzenPanelMenuItem Text="Panel" Path="/" Icon="dashboard" />
+            <RadzenPanelMenuItem Text="Główny panel" Path="/" Icon="dashboard" />
             <RadzenPanelMenuItem Text="Rachunki" Path="/receipt" Icon="receipt_long" Visible="@(UserAppService.IsLoggedIn())"/>
             <RadzenPanelMenuItem Text="Osoby" Path="/person" Icon="diversity_3" Visible="@(UserAppService.IsLoggedIn())"/>
             <RadzenPanelMenuItem Text="Konto" Path="/accountManager" Icon="manage_accounts" Visible="@(UserAppService.IsLoggedIn())" />

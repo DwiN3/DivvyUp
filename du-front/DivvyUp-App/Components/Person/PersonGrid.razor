@@ -18,21 +18,23 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj osobę" Click="@InsertRow" />
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
     </HeaderTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="person">
-                <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(person))" />
-                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(person))" Visible="@(!person.userAccount)" />
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(person))" />
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(person))" Visible="@(!person.userAccount)" />
             </Template>
             <EditTemplate Context="person">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(person))" />
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(person))" />
             </EditTemplate>
             <FilterTemplate>
-                <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                <div class="rz-cell-data">
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow"/>
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })"/>
+                </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonDto.name)" Title="Imie" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
@@ -80,7 +82,7 @@
 
     .rz-cell-filter-content {
         display: flex;
-        justify-content: center
+        justify-content: center;
     }
 
     .rz-data-grid {

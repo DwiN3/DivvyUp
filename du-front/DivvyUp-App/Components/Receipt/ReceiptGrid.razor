@@ -18,26 +18,31 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj rachunek" Click="@InsertRow"  />
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
-        <RadzenButton ButtonStyle="@(ShowAllReceipts ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="receipt" Text="Pokaż wszystkie rachunki" Click="@(async() => { ShowAllReceipts = !ShowAllReceipts; await LoadGrid();})" />
-        <RadzenDatePicker TValue="DateTime?" Value="@DateFrom" Change="@(args => DateFrom = args)" Name="Data od" DateFormat="dd-MM-yyyy" />
-        <RadzenDatePicker TValue="DateTime?" Value="@DateTo" Change="@(args => DateTo = args)" Name="Data do" DateFormat="dd-MM-yyyy" />
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" />
+        @if (!ShowAllReceipts)
+        {
+            <RadzenDatePicker TValue="DateTime?" Value="@DateFrom" Change="@(args => DateFrom = args)" Name="Data od" DateFormat="dd-MM-yyyy" />
+            <RadzenDatePicker TValue="DateTime?" Value="@DateTo" Change="@(args => DateTo = args)" Name="Data do" DateFormat="dd-MM-yyyy" />
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" />
+        }
+        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllReceipts ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="receipt" Text="Pokaż wszystkie rachunki" Click="@(async() => { ShowAllReceipts = !ShowAllReceipts; await LoadGrid();})" />
     </HeaderTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="receipt">
-                <RadzenButton class="button" Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Click="@((args) => OpenProductsList(receipt.id))" />
-                <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(receipt))" />
-                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(receipt))" />
+                <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Click="@((args) => OpenProductsList(receipt.id))" />
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(receipt))" />
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(receipt))" />
             </Template>
             <EditTemplate Context="receipt">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(receipt))"/>
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(receipt))"/>
             </EditTemplate>
             <FilterTemplate>
-                <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                <div class="rz-cell-data">
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.settled)" Title="Rozliczono" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
@@ -75,6 +80,7 @@
 </RadzenDataGrid>
 
 <style>
+
     .button {
         width: 36px;
         height: 36px;
@@ -87,5 +93,9 @@
 
     .rz-data-grid {
         height: 100%;
+    }
+    
+    .rz-inputtext{
+        height: 36px !important;
     }
 </style>

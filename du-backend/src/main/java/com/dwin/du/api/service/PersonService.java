@@ -70,7 +70,7 @@ public class PersonService {
         }
     }
 
-    public ResponseEntity<?> removePerson(String username, int personId) {
+    public ResponseEntity<?> removePerson(String username, int personId) throws ValidationException {
         try {
             validator.validateUser(username);
             validator.isNull(personId, "Brak identyfikatora osoby");
@@ -78,7 +78,7 @@ public class PersonService {
 
             List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
             if (!personProducts.isEmpty())
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                throw new ValidationException(HttpStatus.CONFLICT, "Nie można usunąć osoby która posiada przypisane produkty");
 
             personRepository.delete(person);
             return ResponseEntity.ok().build();

@@ -198,8 +198,18 @@ public class ReceiptService {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             Date dateFrom = dateFormat.parse(fromDate);
             Date dateTo = dateFormat.parse(toDate);
-            List<Receipt> receipts = receiptRepository.findByUserAndDateBetween(user, dateFrom, dateTo);
 
+            dateFrom = new Date(dateFrom.getTime());
+            dateFrom.setHours(0);
+            dateFrom.setMinutes(0);
+            dateFrom.setSeconds(0);
+
+            dateTo = new Date(dateTo.getTime());
+            dateTo.setHours(23);
+            dateTo.setMinutes(59);
+            dateTo.setSeconds(59);
+
+            List<Receipt> receipts = receiptRepository.findByUserAndDateBetween(user, dateFrom, dateTo);
             List<ReceiptDto> responseList = receipts.stream()
                     .map(receipt -> ReceiptDto.builder()
                             .id(receipt.getId())
@@ -216,7 +226,6 @@ public class ReceiptService {
             return handleException(e);
         }
     }
-
 
 
     private ResponseEntity<?> handleException(Exception e) {

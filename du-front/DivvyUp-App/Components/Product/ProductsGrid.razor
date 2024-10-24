@@ -18,23 +18,25 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Dodaj produkt" Click="InsertRow" />
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="LoadGrid" />
         <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="receipt_long" Text="Powrót do rachunków" Click="@(() => { Navigation.NavigateTo("/receipt"); } )" />
     </HeaderTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />
-                <RadzenButton class="button" Icon="content_copy" ButtonStyle="ButtonStyle.Dark" Click="@((args) => Duplicate(product))" />
-                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(product))" />
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(product))" />
+                <RadzenButton Icon="content_copy" ButtonStyle="ButtonStyle.Info" Click="@((args) => Duplicate(product))" />
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(product))" />
             </Template>
             <EditTemplate Context="product">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(product))" />
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(product))" />
             </EditTemplate>
             <FilterTemplate>
-                <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                <div class="rz-cell-data">
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ProductDto.settled)" Title="Rozliczono" Width="7%" TextAlign="TextAlign.Center" Frozen="true">

@@ -81,6 +81,7 @@ namespace DivvyUp_App.Components.Person
             }
             catch (DException ex)
             {
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {

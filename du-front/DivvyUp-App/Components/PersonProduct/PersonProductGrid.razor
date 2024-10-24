@@ -18,21 +18,23 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Przypisz osobę" Click="@InsertRow" />
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
     </HeaderTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                <RadzenButton class="button" Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(personProduct))" />
-                <RadzenButton class="button" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct))" />
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(personProduct))" />
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct))" />
             </Template>
             <EditTemplate Context="personProduct">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(personProduct))" />
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(personProduct))" />
             </EditTemplate>
             <FilterTemplate>
-                <RadzenButton class="button" Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                <div class="rz-cell-data">
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.settled)" Title="Rozliczono" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
@@ -51,7 +53,7 @@
                 <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.compensation" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonProductDto.quantity)" Title="Ilośc" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonProductDto.quantity)" Title="Ilość" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
                 @($"{personProduct.quantity}/{Product.maxQuantity}")
             </Template>

@@ -1,5 +1,6 @@
 ﻿using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Api.Exceptions;
+using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
@@ -33,11 +34,21 @@ namespace DivvyUp_App.Components.Receipt
         }
 
         private async Task LoadGrid()
-        {
-            if(ShowAllReceipts)
-                Receipts = await ReceiptService.GetReceipts();
-            else 
-                Receipts = await ReceiptService.GetReceiptsByDataRange(DateFrom, DateTo);
+        { 
+            try
+            {
+                if (ShowAllReceipts)
+                    Receipts = await ReceiptService.GetReceipts();
+                else
+                    Receipts = await ReceiptService.GetReceiptsByDataRange(DateFrom, DateTo);
+            }
+            catch (DException ex)
+            {
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
+            }
+            catch (Exception)
+            {
+            }
 
             StateHasChanged();
         }
