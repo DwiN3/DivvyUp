@@ -142,7 +142,7 @@ namespace DivvyUp_App.Components.Loan
             try
             {
                 loan.personId = personId;
-                //await LoanService.SetPerson(loan.id, personId);
+                await LoanService.SetPerson(loan.id, personId);
             }
             catch (DException ex)
             {

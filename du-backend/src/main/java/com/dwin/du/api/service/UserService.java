@@ -36,6 +36,7 @@ public class UserService {
     private final ProductRepository productRepository;
     private final PersonProductRepository personProductRepository;
     private final PersonRepository personRepository;
+    private final LoanRepository loanRepository;
     private final ValidationService validator;
 
     public ResponseEntity<?> authenticate(LoginRequest request) {
@@ -126,6 +127,8 @@ public class UserService {
             receiptRepository.deleteInBatch(receipts);
             List<Person> persons = personRepository.findByUser(user);
             personRepository.deleteInBatch(persons);
+            List<Loan> loans = loanRepository.findByUser(user);
+            loanRepository.deleteInBatch(loans);
 
             userRepository.delete(user);
             SecurityContextHolder.clearContext();

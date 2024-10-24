@@ -49,7 +49,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonDto.loanBalance)" Title="Balans pożyczek" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b style="color: @(person.loanBalance > 0 ? "red" : "green")"> @person.loanBalance.ToString(Format.PriceFormat)</b>
+                <b style="color: @(person.loanBalance == 0 ? "green" : "red")"> @person.loanBalance.ToString(Format.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -

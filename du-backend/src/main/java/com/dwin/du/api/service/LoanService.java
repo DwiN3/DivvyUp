@@ -83,6 +83,25 @@ public class LoanService {
         }
     }
 
+    public ResponseEntity<?> setPerson(String username, int loanId, int personId) {
+        try {
+            validator.validateUser(username);
+            validator.isNull(loanId, "Brak identyfikatora pożyczki");
+            validator.isNull(personId, "Brak identyfikatora osoby");
+            Person person = validator.validatePerson(username, personId);
+            Loan loan = validator.validateLoan(username, loanId);
+
+            loan.setPerson(person);
+
+            loanRepository.save(loan);
+            updater.updatePerson(username, true);
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
     public ResponseEntity<?> setIsSettled(String username, int loanId, boolean settled) {
         try {
             validator.validateUser(username);
@@ -198,5 +217,4 @@ public class LoanService {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Wystąpił nieoczekiwany błąd.");
     }
-
 }

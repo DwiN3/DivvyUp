@@ -1,14 +1,11 @@
 package com.dwin.du.api.service;
 import com.dwin.du.api.dto.PersonDto;
-import com.dwin.du.api.entity.Person;
+import com.dwin.du.api.entity.*;
+import com.dwin.du.api.repository.LoanRepository;
 import com.dwin.du.api.repository.PersonRepository;
 import com.dwin.du.api.request.AddEditPersonRequest;
-import com.dwin.du.api.entity.PersonProduct;
 import com.dwin.du.api.repository.PersonProductRepository;
-import com.dwin.du.api.entity.Product;
 import com.dwin.du.api.repository.ProductRepository;
-import com.dwin.du.api.entity.Receipt;
-import com.dwin.du.api.entity.User;
 import com.dwin.du.validation.ValidationException;
 import com.dwin.du.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +22,7 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final PersonProductRepository personProductRepository;
     private final ProductRepository productRepository;
+    private final LoanRepository loanRepository;
     private final ValidationService validator;
 
     public ResponseEntity<?> addPerson(String username, AddEditPersonRequest request) {
@@ -80,6 +78,10 @@ public class PersonService {
             List<PersonProduct> personProducts = personProductRepository.findByPerson(person);
             if (!personProducts.isEmpty())
                 throw new ValidationException(HttpStatus.CONFLICT, "Nie można usunąć osoby która posiada przypisane produkty");
+
+            List<Loan> loans = loanRepository.findByPerson(person);
+            if (!loans.isEmpty())
+                throw new ValidationException(HttpStatus.CONFLICT, "Nie można usunąć osoby która posiada pożyczki");
 
             personRepository.delete(person);
             return ResponseEntity.ok().build();

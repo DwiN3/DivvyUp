@@ -41,6 +41,14 @@ public class LoanController {
         return loanService.removeLoan(username, loanId);
     }
 
+    @PutMapping("/{loanId}/set-person")
+    @Operation(summary = "Set person in loan", description = "Changes the person in an existing loan.")
+    public ResponseEntity<?> setPerson(@PathVariable int loanId, @RequestParam int personId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return loanService.setPerson(username, loanId, personId);
+    }
+
     @PutMapping("/{loanId}/set-settled")
     @Operation(summary = "Set loan as settled", description = "Marks a loan as settled by its ID.")
     public ResponseEntity<?> setIsSettled(@PathVariable int loanId, @RequestParam boolean settled) {

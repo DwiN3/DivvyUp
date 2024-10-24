@@ -13,6 +13,7 @@ namespace DivvyUp_Shared.Interface
         Task Add(LoanDto loan);
         Task Edit(LoanDto loan);
         Task Remove(int loanId);
+        Task SetPerson(int loadId, int personId);
         Task SetLent(int loanId, bool lent);
         Task SetSettled(int loanId, bool isSettled);
         Task<LoanDto> GetLoan(int loanId);

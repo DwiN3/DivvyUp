@@ -42,6 +42,7 @@
         public readonly string AddLoan = $"{BaseUrl}/loan/add";
         public readonly string EditLoan = $"{BaseUrl}/loan/{arg_ID}/edit";
         public readonly string RemoveLoan = $"{BaseUrl}/loan/{arg_ID}/remove";
+        public readonly string SetPersonLoan = $"{BaseUrl}/loan/{arg_ID}/set-person?personId={arg_PersonId}";
         public readonly string SetSettledLoan = $"{BaseUrl}/loan/{arg_ID}/set-settled?settled={arg_Settled}";
         public readonly string SetLentLoan = $"{BaseUrl}/loan/{arg_ID}/set-lent?lent={arg_Lent}";
         public readonly string GetLoan = $"{BaseUrl}/loan/{arg_ID}";

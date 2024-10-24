@@ -55,54 +55,44 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.lent)" Title="Pożyczka" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="loan">
-                <RadzenCheckBox class="button" @bind-Value="@loan.lent" Change="@(async (bool Check) => await ChangeLent(loan.id, loan.lent))" />
+                <RadzenButton ButtonStyle="@(loan.lent ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="@(loan.lent ? "north_east" : "south_west")" Click="@(async() => { await ChangeLent(loan.id, !loan.lent); await LoadGrid(); })" />
             </Template>
             <EditTemplate Context="loan">
-                <RadzenCheckBox class="button" @bind-Value="@loan.lent" />
+                <RadzenButton ButtonStyle="@(loan.lent ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="@(loan.lent ? "north_east" : "south_west")" Click="@(() => { loan.lent = !loan.lent; })" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.amount)" Title="Kwota" Width="12%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="loan">
-                <div style="color: @(loan.settled ? "green" : "red")">
+                <div style="color: @(loan.lent ? "green" : "red"); text-decoration: @(loan.settled ? "line-through" : "none");">
                     <b>@loan.amount.ToString((Format.PriceFormat))</b>
                 </div>
             </Template>
-            <EditTemplate Context="product">
-                <RadzenNumeric @bind-Value="@product.amount" Style="width: 100%;" />
+            <EditTemplate Context="loan">
+                <RadzenNumeric @bind-Value="@loan.amount" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(LoanDto.person)" Title="Osoby" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(LoanDto.personId)" Title="Osoba" Width="25%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="loan">
-                @if (loan.person != null)
-                {
-                    PersonDto person = loan.person;
-
-                    <RadzenDropDownDataGrid TValue="PersonDto"
-                                            Value="person"
-                                            ValueChanged="async(PersonDto person) => await OnPersonChange(loan, person.id)"
-                                            Data="@Persons"
-                                            TextProperty="@nameof(PersonDto.fullName)" />
-                }
+                <RadzenDropDownDataGrid TValue="int"
+                                        Value="@loan.personId"
+                                        ValueChanged="async (int personId) => await OnPersonChange(loan, personId)"
+                                        Data="@Persons"
+                                        TextProperty="@nameof(PersonDto.fullName)"
+                                        ValueProperty="@nameof(PersonDto.id)" />
             </Template>
             <EditTemplate Context="loan">
-                @if (loan.id != 0 && loan.person != null)
-                {
-                    PersonDto person = loan.person;
-
-                    <RadzenDropDownDataGrid TValue="PersonDto"
-                                            Value="person"
-                                            ValueChanged="async(PersonDto person) => await OnPersonChange(loan, person.id)"
-                                            Data="@Persons"
-                                            TextProperty="@nameof(PersonDto.fullName)" />
+                @{
+                    if (Persons != null && Persons.Count > 0 && loan.personId == 0)
+                    {
+                        loan.personId = Persons.First().id;
+                    }
                 }
-                else
-                {
-                    <RadzenDropDownDataGrid TValue="PersonDto"
-                                            Value="SelectedPerson"
-                                            ValueChanged="OnPersonSet"
-                                            Data="@Persons"
-                                            TextProperty="@nameof(PersonDto.fullName)" />
-                }
+                <RadzenDropDownDataGrid
+                    TValue="int"
+                    @bind-Value="loan.personId"
+                    Data="@Persons"
+                    TextProperty="@nameof(PersonDto.fullName)"
+                    ValueProperty="@nameof(PersonDto.id)"/>
             </EditTemplate>
         </RadzenDataGridColumn>
     </Columns>

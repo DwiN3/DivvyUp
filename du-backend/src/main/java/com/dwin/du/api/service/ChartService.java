@@ -39,6 +39,8 @@ public class ChartService {
             List<ChartDto> responseList = new ArrayList<>();
             for (Person person : persons) {
                 double amount = isTotalAmounts ? person.getTotalAmount() : person.getUnpaidAmount();
+                if (Double.isNaN(amount))
+                    amount = 0.0;
                 //amount = Math.round(amount * 100.0) / 100.0;
 
                 ChartDto response = ChartDto.builder()
@@ -152,9 +154,13 @@ public class ChartService {
         if (totalAmount == 0) return 100;
         if (unpaidAmount == 0) return 100;
         double percentage = (1 - (unpaidAmount / totalAmount)) * 100;
+        if (Double.isNaN(percentage))
+            percentage = 0.0;
+
         return percentage;
         //return Math.round(percentage * 100.0) / 100.0;
     }
+
 
     public ResponseEntity<?> getWeeklyTotalExpenses(String username) {
         try {
@@ -181,11 +187,15 @@ public class ChartService {
             List<ChartDto> responseList = new ArrayList<>();
             for (DayOfWeek day : DayOfWeek.values()) {
                 double total = dailyTotals.getOrDefault(day, 0.0);
+                if (Double.isNaN(total))
+                    total = 0.0;
+
                 responseList.add(ChartDto.builder()
                         .name(WEEK_NAMES[day.getValue() - 1])
                         .value(total)
                         .build());
             }
+
 
             return ResponseEntity.ok(responseList);
 

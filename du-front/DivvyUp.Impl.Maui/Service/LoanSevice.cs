@@ -82,6 +82,28 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
+        public  async Task SetPerson(int loadId, int personId)
+        {
+            try
+            {
+                var url = _url.SetPersonLoan
+                    .Replace(ApiRoute.arg_ID, loadId.ToString())
+                    .Replace(ApiRoute.arg_PersonId, personId.ToString());
+                var response = await _dHttpClient.PutAsync(url);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji pożyczki");
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji pożyczki: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task SetLent(int loanId, bool lent)
         {
             try
