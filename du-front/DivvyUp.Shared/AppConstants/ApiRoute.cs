@@ -46,8 +46,9 @@
         public readonly string SetSettledLoan = $"{BaseUrl}/loan/{arg_ID}/set-settled?settled={arg_Settled}";
         public readonly string SetLentLoan = $"{BaseUrl}/loan/{arg_ID}/set-lent?lent={arg_Lent}";
         public readonly string GetLoan = $"{BaseUrl}/loan/{arg_ID}";
+        public readonly string GetLoanPerson = $"{BaseUrl}/loan/person/{arg_ID}";
         public readonly string GetLoans = $"{BaseUrl}/loan";
-        public readonly string GetLoanPerson = $"{BaseUrl}/loan/person/{arg_PersonId}";
+        public readonly string GetLoansByDataRange = $"{BaseUrl}/loan/date-range?from={arg_From}&to={arg_To}";
 
         // Receipt
         public readonly string AddReceipt = $"{BaseUrl}/receipt/add";

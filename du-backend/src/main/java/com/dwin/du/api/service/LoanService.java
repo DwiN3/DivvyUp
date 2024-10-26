@@ -10,8 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -202,6 +205,45 @@ public class LoanService {
                         .build();
                 responseList.add(response);
             }
+
+            return ResponseEntity.ok(responseList);
+
+        } catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    public ResponseEntity<?> getLoansByDataRange(String username, String fromDate, String toDate) {
+        try {
+            User user = validator.validateUser(username);
+            validator.isEmpty(fromDate, "Data początkowa jest wymagana");
+            validator.isEmpty(toDate, "Data końcowa jest wymagana");
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date dateFrom = dateFormat.parse(fromDate);
+            Date dateTo = dateFormat.parse(toDate);
+
+            dateFrom = new Date(dateFrom.getTime());
+            dateFrom.setHours(0);
+            dateFrom.setMinutes(0);
+            dateFrom.setSeconds(0);
+
+            dateTo = new Date(dateTo.getTime());
+            dateTo.setHours(23);
+            dateTo.setMinutes(59);
+            dateTo.setSeconds(59);
+
+            List<Loan> loans = loanRepository.findByUserAndDateBetween(user, dateFrom, dateTo);
+            List<LoanDto> responseList = loans.stream()
+                    .map(loan -> LoanDto.builder()
+                            .id(loan.getId())
+                            .personId(loan.getPerson().getId())
+                            .date(loan.getDate())
+                            .amount(loan.getAmount())
+                            .settled(loan.isSettled())
+                            .lent(loan.isLent())
+                            .build())
+                    .collect(Collectors.toList());
 
             return ResponseEntity.ok(responseList);
 

@@ -1,5 +1,6 @@
 ﻿@using DivvyUp_Shared.AppConstants
 @using DivvyUp_Shared.Dto
+@using DivvyUp_Shared.Enum
 
 <RadzenDataGrid @ref="@Grid"
                 Data="@Loans"
@@ -19,6 +20,13 @@
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
+        @if (!ShowAllLoans && GridMode == LoanGridMode.All)
+        {
+            <RadzenDatePicker TValue="DateTime?" Value="@DateFrom" Change="@(args => DateFrom = args)" Name="Data od" DateFormat="dd-MM-yyyy" />
+            <RadzenDatePicker TValue="DateTime?" Value="@DateTo" Change="@(args => DateTo = args)" Name="Data do" DateFormat="dd-MM-yyyy" />
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" />
+        }
+        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="receipt" Text="pokaż wszystkie pożyczki" Click="@(async() => { ShowAllLoans = !ShowAllLoans; await LoadGrid();})" />
     </HeaderTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
@@ -71,30 +79,33 @@
                 <RadzenNumeric @bind-Value="@loan.amount" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(LoanDto.personId)" Title="Osoba" Width="25%" TextAlign="TextAlign.Center" Frozen="true">
-            <Template Context="loan">
-                <RadzenDropDownDataGrid TValue="int"
-                                        Value="@loan.personId"
-                                        ValueChanged="async (int personId) => await OnPersonChange(loan, personId)"
-                                        Data="@Persons"
-                                        TextProperty="@nameof(PersonDto.fullName)"
-                                        ValueProperty="@nameof(PersonDto.id)" />
-            </Template>
-            <EditTemplate Context="loan">
-                @{
-                    if (Persons != null && Persons.Count > 0 && loan.personId == 0)
-                    {
-                        loan.personId = Persons.First().id;
+        @if (GridMode == LoanGridMode.All)
+        {
+            <RadzenDataGridColumn Property="@nameof(LoanDto.personId)" Title="Osoba" Width="25%" TextAlign="TextAlign.Center" Frozen="true">
+                <Template Context="loan">
+                    <RadzenDropDownDataGrid TValue="int"
+                                            Value="@loan.personId"
+                                            ValueChanged="async (int personId) => await OnPersonChange(loan, personId)"
+                                            Data="@Persons"
+                                            TextProperty="@nameof(PersonDto.fullName)"
+                                            ValueProperty="@nameof(PersonDto.id)" />
+                </Template>
+                <EditTemplate Context="loan">
+                    @{
+                        if (Persons != null && Persons.Count > 0 && loan.personId == 0)
+                        {
+                            loan.personId = Persons.First().id;
+                        }
                     }
-                }
-                <RadzenDropDownDataGrid
-                    TValue="int"
-                    @bind-Value="loan.personId"
-                    Data="@Persons"
-                    TextProperty="@nameof(PersonDto.fullName)"
-                    ValueProperty="@nameof(PersonDto.id)"/>
-            </EditTemplate>
-        </RadzenDataGridColumn>
+                    <RadzenDropDownDataGrid
+                        TValue="int"
+                        @bind-Value="loan.personId"
+                        Data="@Persons"
+                        TextProperty="@nameof(PersonDto.fullName)"
+                        ValueProperty="@nameof(PersonDto.id)"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>            
+        }
     </Columns>
 </RadzenDataGrid>
 
@@ -106,10 +117,14 @@
 
     .rz-cell-filter-content {
         display: flex;
-        justify-content: center;
+        justify-content: center
     }
 
     .rz-data-grid {
         height: 100%;
+    }
+
+    .rz-inputtext {
+        height: 36px !important;
     }
 </style>

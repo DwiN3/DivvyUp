@@ -91,5 +91,12 @@ namespace DivvyUp_App.Components.Person
                 await LoadGrid();
             }
         }
+
+        private async Task ManageLoanPerson(int personId)
+        {
+            var result = await DDialogService.OpenLoanDialog(personId);
+            if (!result)
+                await LoadGrid();
+        }
     }
 }

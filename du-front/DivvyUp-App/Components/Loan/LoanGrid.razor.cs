@@ -2,6 +2,7 @@
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Enum;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -20,23 +21,48 @@ namespace DivvyUp_App.Components.Loan
         [Inject]
         private DDialogService DDialogService { get; set; }
 
+        [Parameter]
+        public LoanGridMode GridMode { get; set; }
+        [Parameter]
+        public int PersonId { get; set; }
+
         private List<LoanDto> Loans { get; set; }
         private List<PersonDto> Persons { get; set; }
         private RadzenDataGrid<LoanDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private PersonDto SelectedPerson { get; set; } = new();
+        private DateTime? DateFrom = new DateTime();
+        private DateTime? DateTo = new DateTime();
+        private bool ShowAllLoans = false;
 
         protected override async Task OnInitializedAsync()
         {
-            Persons = await PersonService.GetPersons();
-            if (Persons != null && Persons.Count > 0)
-                SelectedPerson = Persons.First();
+            await SetCurrentMonth();
+            if (GridMode == LoanGridMode.All)
+            {
+                Persons = await PersonService.GetPersons();
+                var userAccount = Persons.Single(r => r.userAccount);
+                Persons.Remove(userAccount);
+                if (Persons != null && Persons.Count > 0)
+                    SelectedPerson = Persons.First();
+            }
             await LoadGrid();
         }
 
         private async Task LoadGrid()
         {
-            Loans = await LoanService.GetLoans();
+            if (GridMode == LoanGridMode.All)
+            {
+                if(ShowAllLoans)
+                    Loans = await LoanService.GetLoans();
+                else
+                    Loans = await LoanService.GetLoansByDataRange(DateFrom, DateTo);
+            }
+            else
+            {
+                Loans = await LoanService.GetLoansPerson(PersonId);
+            }
+
             StateHasChanged();
         }
 
@@ -63,7 +89,11 @@ namespace DivvyUp_App.Components.Loan
             {
                 if (loan.id == 0)
                 {
-                    loan.personId = SelectedPerson.id;
+                    if(GridMode == LoanGridMode.All)
+                        loan.personId = SelectedPerson.id;
+                    else
+                        loan.personId = PersonId;
+
                     await LoanService.Add(loan);
                 }
                 else
@@ -160,6 +190,14 @@ namespace DivvyUp_App.Components.Loan
         {
             if (personObject is PersonDto person)
                 SelectedPerson = person;
+        }
+
+        private async Task SetCurrentMonth()
+        {
+            DateFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            int dayInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            DateTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, dayInMonth);
+            await LoadGrid();
         }
     }
 }

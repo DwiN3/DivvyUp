@@ -19,5 +19,6 @@ namespace DivvyUp_Shared.Interface
         Task<LoanDto> GetLoan(int loanId);
         Task<List<LoanDto>> GetLoansPerson(int personId);
         Task<List<LoanDto>> GetLoans();
+        Task<List<LoanDto>> GetLoansByDataRange(DateTime? from, DateTime? to);
     }
 }

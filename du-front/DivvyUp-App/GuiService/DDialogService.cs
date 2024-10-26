@@ -56,5 +56,20 @@ namespace DivvyUp_App.GuiService
 
             return result != null && (bool)result;
         }
+
+        public async Task<bool> OpenLoanDialog(int personId)
+        {
+            var result = await _dialogService.OpenAsync<DDialogLoanCard>(
+                "Pożyczki osoby",
+                new Dictionary<string, object> { { "PersonId", personId } },
+                new DialogOptions()
+                {
+                    Width = "80%",
+                    Height = "75%"
+                }
+            );
+
+            return result != null && (bool)result;
+        }
     }
 }

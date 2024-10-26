@@ -47,9 +47,14 @@
                 <RadzenTextBox @bind-value="@person.surname" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.loanBalance)" Title="Balans pożyczek" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.loanBalance)" Title="Bilans pożyczek" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b style="color: @(person.loanBalance == 0 ? "green" : "red")"> @person.loanBalance.ToString(Format.PriceFormat)</b>
+                @if (!person.userAccount)
+                {
+                    <RadzenButton ButtonStyle="@(person.loanBalance >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" Click="async () => { await ManageLoanPerson(person.id); }">
+                        @person.loanBalance.ToString(Format.PriceFormat)
+                    </RadzenButton>
+                }
             </Template>
             <EditTemplate>
                 -

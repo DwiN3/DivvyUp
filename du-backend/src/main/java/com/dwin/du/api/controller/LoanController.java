@@ -88,4 +88,12 @@ public class LoanController {
         String username = authentication.getName();
         return loanService.getLoans(username);
     }
+
+    @GetMapping("/date-range")
+    @Operation(summary = "Retrieve all loans in date range", description = "Retrieves all loans in date range associated with the current user.")
+    public ResponseEntity<?> getLoansByDataRange(@RequestParam("from") String fromDate, @RequestParam("to") String toDate) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return loanService.getLoansByDataRange(username, fromDate, toDate);
+    }
 }
