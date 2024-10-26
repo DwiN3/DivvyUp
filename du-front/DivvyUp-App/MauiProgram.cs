@@ -4,7 +4,6 @@ using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Interface;
 using Radzen;
-using DivvyUp_Impl_Maui.Api.CodeReader;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 
 namespace DivvyUp_App
@@ -36,7 +35,6 @@ namespace DivvyUp_App
             builder.Services.AddRadzenComponents();
             builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services.AddSingleton<CodeReaderResponse>();
             builder.Services.AddSingleton<UserAppService>();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<DDialogService>();

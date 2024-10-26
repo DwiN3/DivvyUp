@@ -84,12 +84,12 @@ public class ValidationService {
         return loan;
     }
 
-    public void isNull(Object object, String message){
+    public void isNull(Object object, String message) throws ValidationException {
         if(object == null)
             throw new ValidationException(HttpStatus.BAD_REQUEST, message);
     }
 
-    public void isEmpty(String string, String message){
+    public void isEmpty(String string, String message) throws ValidationException {
         if(string == null || string.isEmpty())
             throw new ValidationException(HttpStatus.BAD_REQUEST, message);
     }

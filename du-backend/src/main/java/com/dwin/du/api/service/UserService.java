@@ -47,7 +47,7 @@ public class UserService {
             User user = validator.validateUser(request.getUsername());
 
             if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                throw new ValidationException(HttpStatus.UNAUTHORIZED, "Błędne hasło");
 
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -74,10 +74,10 @@ public class UserService {
             validator.isEmpty(request.getPassword(), "Hasło jest wymagane");
 
             if (userRepository.findByEmail(request.getEmail()).isPresent())
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                throw new ValidationException(HttpStatus.CONFLICT, "Taki email już istnieje");
 
             else if (userRepository.findByUsername(request.getUsername()).isPresent())
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                throw new ValidationException(HttpStatus.CONFLICT, "Taki nazwa już istnieje");
 
             var user = User.builder()
                     .username(request.getUsername())
@@ -188,10 +188,9 @@ public class UserService {
             validator.isEmpty(request.getNewPassword(), "Nowe hasło jest wymagane");
 
             if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Aktualne hasło jest błędne");
+                throw new ValidationException(HttpStatus.UNAUTHORIZED, "Aktualne hasło jest błędne");
 
             String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
-
             user.setPassword(newPasswordEncoded);
 
             userRepository.save(user);

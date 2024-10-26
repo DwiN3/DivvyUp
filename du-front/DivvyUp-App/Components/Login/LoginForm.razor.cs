@@ -1,5 +1,4 @@
 ﻿using DivvyUp_App.GuiService;
-using DivvyUp_Impl_Maui.Api.CodeReader;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
@@ -22,7 +21,6 @@ namespace DivvyUp_App.Components.Login
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 
-        private CodeReaderResponse RCR { get; set; } = new();
         private UserDto User { get; set; } = new();
 
         private async Task SignUp()
@@ -37,8 +35,7 @@ namespace DivvyUp_App.Components.Login
             }
             catch (DException ex)
             {
-                var message = RCR.ReadLogin(ex.StatusCode);
-                DNotificationService.ShowNotification(message, NotificationSeverity.Error);
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (TimeoutException)
             {
