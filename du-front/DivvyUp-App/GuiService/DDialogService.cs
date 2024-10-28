@@ -49,8 +49,8 @@ namespace DivvyUp_App.GuiService
                 new Dictionary<string, object> { { "ProductId", productId } },
                 new DialogOptions()
                 {
-                    Width = "80%",
-                    Height = "75%"
+                    Width = "85%",
+                    Height = "85%"
                 }
             );
 
@@ -64,8 +64,8 @@ namespace DivvyUp_App.GuiService
                 new Dictionary<string, object> { { "PersonId", personId } },
                 new DialogOptions()
                 {
-                    Width = "80%",
-                    Height = "75%"
+                    Width = "85%",
+                    Height = "85%"
                 }
             );
 
