@@ -43,14 +43,6 @@ public class ReceiptController {
         return receiptService.removeReceipt(username, receiptId);
     }
 
-    @PutMapping("/{receiptId}/set-total-price")
-    @Operation(summary = "Set total price of a receipt", description = "Sets the total price for a specific receipt by its ID.")
-    public ResponseEntity<?> setTotalPrice(@PathVariable int receiptId, @RequestParam Double totalPrice){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return receiptService.setTotalPrice(username, receiptId, totalPrice);
-    }
-
     @PutMapping("/{receiptId}/set-settled")
     @Operation(summary = "Set receipt as settled", description = "Marks a receipt as settled by its ID.")
     public ResponseEntity<?> setIsSettled(@PathVariable int receiptId, @RequestParam boolean settled) {

@@ -41,22 +41,6 @@ public class PersonController {
         return personService.removePerson(username, personId);
     }
 
-    @PutMapping("/{personId}/set-receipts-counts")
-    @Operation(summary = "Set receipts counts", description = "Updates the number of receipts associated with a person by their ID.")
-    public ResponseEntity<?> setReceiptsCounts(@PathVariable int personId, @RequestParam int receiptsCount) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return personService.setReceiptsCounts(username, personId, receiptsCount);
-    }
-
-    @PutMapping("/{personId}/set-total-amount")
-    @Operation(summary = "Set total amount", description = "Sets the total amount associated with a person by their ID.")
-    public ResponseEntity<?> setTotalAmount(@PathVariable int personId, @RequestParam Double totalAmount) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return personService.setTotalAmount(username, personId, totalAmount);
-    }
-
     @GetMapping("/{personId}")
     @Operation(summary = "Retrieve person by ID", description = "Retrieves the details of a person by their ID.")
     public ResponseEntity<?> getPerson(@PathVariable int personId) {

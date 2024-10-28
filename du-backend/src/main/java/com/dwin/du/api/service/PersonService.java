@@ -91,39 +91,6 @@ public class PersonService {
         }
     }
 
-    public ResponseEntity<?> setReceiptsCounts(String username, int personId, int receiptsCount) {
-        try {
-            validator.validateUser(username);
-            validator.isNull(personId, "Brak identyfikatora osoby");
-
-            Person person = validator.validatePerson(username, personId);
-            person.setReceiptsCount(receiptsCount);
-
-            personRepository.save(person);
-            return ResponseEntity.ok().build();
-
-        } catch (Exception e) {
-            return handleException(e);
-        }
-    }
-
-
-    public ResponseEntity<?> setTotalAmount(String username, int personId, Double totalAmount) {
-        try {
-            validator.validateUser(username);
-            validator.isNull(personId, "Brak identyfikatora osoby");
-            Person person = validator.validatePerson(username, personId);
-
-            person.setTotalAmount(totalAmount);
-
-            personRepository.save(person);
-            return ResponseEntity.ok().build();
-
-        } catch (Exception e) {
-            return handleException(e);
-        }
-    }
-
     public ResponseEntity<?> getPerson(String username, int personId) {
         try {
             validator.validateUser(username);

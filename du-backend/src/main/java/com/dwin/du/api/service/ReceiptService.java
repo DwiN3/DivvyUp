@@ -94,24 +94,6 @@ public class ReceiptService {
         }
     }
 
-    public ResponseEntity<?> setTotalPrice(String username, int receiptId, Double totalPrice) {
-        try {
-            validator.validateUser(username);
-            validator.isNull(receiptId, "Brak identyfikatora rachunku");
-            validator.isNull(totalPrice, "Kwota łączna jest wymagana");
-            Receipt receipt = validator.validateReceipt(username, receiptId);
-
-            receipt.setTotalPrice(totalPrice);
-
-            receiptRepository.save(receipt);
-            updater.updatePerson(username, false);
-            return ResponseEntity.ok().build();
-
-        } catch (Exception e) {
-            return handleException(e);
-        }
-    }
-
     public ResponseEntity<?> setIsSettled(String username, int receiptId, boolean settled) {
         try {
             validator.validateUser(username);
