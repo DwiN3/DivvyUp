@@ -2,6 +2,7 @@ package com.dwin.du.api.service;
 import com.dwin.du.api.dto.LoanDto;
 import com.dwin.du.api.entity.*;
 import com.dwin.du.api.repository.LoanRepository;
+import com.dwin.du.api.repository.PersonRepository;
 import com.dwin.du.api.request.AddEditLoanRequest;
 import com.dwin.du.update.EntityUpdateService;
 import com.dwin.du.validation.ValidationException;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LoanService {
     private final LoanRepository loanRepository;
+    private final PersonRepository personRepository;
     private final EntityUpdateService updater;
     private final ValidationService validator;
 
@@ -33,7 +35,6 @@ public class LoanService {
             Person person = validator.validatePerson(username, request.getPersonId());
 
             Loan loan = Loan.builder()
-                    .user(user)
                     .person(person)
                     .date(request.getDate())
                     .amount(request.getAmount())
@@ -192,7 +193,8 @@ public class LoanService {
         try {
             User user = validator.validateUser(username);
 
-            List<Loan> loans = loanRepository.findByUser(user);
+            List<Person> persons = personRepository.findByUser(user);
+            List<Loan> loans = loanRepository.findByPersonIn(persons);
             List<LoanDto> responseList = new ArrayList<>();
             for (Loan loan : loans) {
                 LoanDto response = LoanDto.builder()
@@ -222,18 +224,15 @@ public class LoanService {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             Date dateFrom = dateFormat.parse(fromDate);
             Date dateTo = dateFormat.parse(toDate);
-
-            dateFrom = new Date(dateFrom.getTime());
-            dateFrom.setHours(0);
-            dateFrom.setMinutes(0);
-            dateFrom.setSeconds(0);
-
+            
             dateTo = new Date(dateTo.getTime());
             dateTo.setHours(23);
             dateTo.setMinutes(59);
             dateTo.setSeconds(59);
 
-            List<Loan> loans = loanRepository.findByUserAndDateBetween(user, dateFrom, dateTo);
+            List<Person> persons = personRepository.findByUser(user);
+            List<Loan> loans = loanRepository.findByPersonInAndDateBetween(persons, dateFrom, dateTo);
+
             List<LoanDto> responseList = loans.stream()
                     .map(loan -> LoanDto.builder()
                             .id(loan.getId())

@@ -121,16 +121,10 @@ public class UserService {
             User user = validator.validateUser(username);
 
             List<Person> persons = personRepository.findByUser(user);
-            List<Loan> loans = loanRepository.findByUser(user);
+            List<Loan> loans = loanRepository.findByPersonIn(persons);
             List<Receipt> receipts = receiptRepository.findByUser(user);
-
-            List<Product> products = new ArrayList<>();
-            for (Receipt receipt : receipts)
-                products.addAll(productRepository.findByReceipt(receipt));
-
-            List<PersonProduct> personProducts = new ArrayList<>();
-            for (Person person : persons)
-                personProducts.addAll(personProductRepository.findByPerson(person));
+            List<Product> products = productRepository.findByReceiptIn(receipts);
+            List<PersonProduct> personProducts = personProductRepository.findByPersonIn(persons);
 
             personProductRepository.deleteInBatch(personProducts);
             productRepository.deleteInBatch(products);
@@ -139,8 +133,8 @@ public class UserService {
             personRepository.deleteInBatch(persons);
 
             userRepository.delete(user);
-
             SecurityContextHolder.clearContext();
+
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {

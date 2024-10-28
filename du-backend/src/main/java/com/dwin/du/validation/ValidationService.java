@@ -78,7 +78,7 @@ public class ValidationService {
             throw new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono pożyczki o id: " + loanId);
 
         Loan loan = optionalLoan.get();
-        if (!loan.getUser().getUsername().equals(username))
+        if (!loan.getPerson().getUser().getUsername().equals(username))
             throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do pożyczki o id: " + loanId);
 
         return loan;
