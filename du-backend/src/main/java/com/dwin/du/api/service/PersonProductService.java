@@ -2,6 +2,7 @@ package com.dwin.du.api.service;
 import com.dwin.du.api.dto.PersonProductDto;
 import com.dwin.du.api.entity.*;
 import com.dwin.du.api.repository.PersonProductRepository;
+import com.dwin.du.api.repository.PersonRepository;
 import com.dwin.du.api.request.AddEditPersonProductRequest;
 import com.dwin.du.api.repository.ProductRepository;
 import com.dwin.du.api.repository.ReceiptRepository;
@@ -22,6 +23,7 @@ public class PersonProductService {
     private final PersonProductRepository personProductRepository;
     private final ProductRepository productRepository;
     private final ReceiptRepository receiptRepository;
+    private final PersonRepository personRepository;
     private final ValidationService validator;
     private final EntityUpdateService updater;
 
@@ -51,7 +53,6 @@ public class PersonProductService {
             boolean isCompensation = personProducts.isEmpty();
 
             PersonProduct personProduct = PersonProduct.builder()
-                    .user(user)
                     .product(product)
                     .person(person)
                     .settled(product.isSettled())
@@ -257,7 +258,8 @@ public class PersonProductService {
         try {
             User user = validator.validateUser(username);
 
-            List<PersonProduct> personProducts = personProductRepository.findByUser(user);
+            List<Person> persons = personRepository.findByUser(user);
+            List<PersonProduct> personProducts = personProductRepository.findByPersonIn(persons);
             List<PersonProductDto> responseList = new ArrayList<>();
             for (PersonProduct personProduct : personProducts) {
                 PersonProductDto response = PersonProductDto.builder()

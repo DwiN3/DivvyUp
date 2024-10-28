@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -119,18 +120,26 @@ public class UserService {
         try {
             User user = validator.validateUser(username);
 
-            List<PersonProduct> personProducts = personProductRepository.findByUser(user);
-            personProductRepository.deleteInBatch(personProducts);
-            List<Product> products = productRepository.findByUser(user);
-            productRepository.deleteInBatch(products);
-            List<Receipt> receipts = receiptRepository.findByUser(user);
-            receiptRepository.deleteInBatch(receipts);
             List<Person> persons = personRepository.findByUser(user);
-            personRepository.deleteInBatch(persons);
             List<Loan> loans = loanRepository.findByUser(user);
+            List<Receipt> receipts = receiptRepository.findByUser(user);
+
+            List<Product> products = new ArrayList<>();
+            for (Receipt receipt : receipts)
+                products.addAll(productRepository.findByReceipt(receipt));
+
+            List<PersonProduct> personProducts = new ArrayList<>();
+            for (Person person : persons)
+                personProducts.addAll(personProductRepository.findByPerson(person));
+
+            personProductRepository.deleteInBatch(personProducts);
+            productRepository.deleteInBatch(products);
+            receiptRepository.deleteInBatch(receipts);
             loanRepository.deleteInBatch(loans);
+            personRepository.deleteInBatch(persons);
 
             userRepository.delete(user);
+
             SecurityContextHolder.clearContext();
             return ResponseEntity.ok().build();
 
@@ -138,6 +147,7 @@ public class UserService {
             return handleException(e);
         }
     }
+
 
     public ResponseEntity<?> validateToken(String token) {
         try {

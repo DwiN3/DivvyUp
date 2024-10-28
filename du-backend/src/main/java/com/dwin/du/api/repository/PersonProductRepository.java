@@ -11,8 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface PersonProductRepository extends JpaRepository<PersonProduct, Integer> {
-    List<PersonProduct> findByUser(User user);
     List<PersonProduct> findByProduct(Product product);
     List<PersonProduct> findByPerson(Person person);
     Optional<PersonProduct> findByProductAndPerson(Product product, Person person);
+    List<PersonProduct> findByPersonIn(List<Person> persons);
 }

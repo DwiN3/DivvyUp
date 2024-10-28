@@ -39,7 +39,6 @@ public class ProductService {
             Receipt receipt = validator.validateReceipt(username, receiptId);
 
             Product product = Product.builder()
-                    .user(user)
                     .receipt(receipt)
                     .name(request.getName())
                     .price(request.getPrice())

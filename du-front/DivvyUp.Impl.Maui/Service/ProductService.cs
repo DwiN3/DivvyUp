@@ -110,28 +110,6 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetCompensationPrice(int productId, double compensationPrice)
-        {
-            try
-            {
-                var url = _url.SetCompensationPriceProduct
-                    .Replace(ApiRoute.arg_ID, productId.ToString())
-                    .Replace(ApiRoute.arg_CompensationPrice, compensationPrice.ToString());
-                var response = await _dHttpClient.PutAsync(url);
-                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
-            }
-            catch (DException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
-                throw;
-            }
-        }
-
         public async Task<ProductDto> GetProduct(int productId)
         {
             try

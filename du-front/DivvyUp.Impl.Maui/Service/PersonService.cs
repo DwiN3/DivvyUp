@@ -81,53 +81,6 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetReceiptsCounts(int personId, int receiptsCounts)
-        {
-            try
-            {
-                var url = _url.SetReceiptsCountsPerson
-                    .Replace(ApiRoute.arg_ID, personId.ToString())
-                    .Replace(ApiRoute.arg_ReceiptsCount, receiptsCounts.ToString());
-                var response = await _dHttpClient.PutAsync(url);
-                await EnsureCorrectResponse(response, "Błąd w czasie edycji ilości rachunków");
-            }
-            catch (DException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Błąd w czasie edycji ilości rachunków: {Message}", ex.Message);
-                throw;
-            }
-        }
-
-        public async Task SetTotalAmount(int personId, double totalAmount)
-        {
-            try
-            {
-                if (personId == null)
-                    throw new InvalidOperationException("Nie mozna ustawić bilansu nie posiadającego id");
-
-                var url = _url.SetTotalAmountPerson
-                    .Replace(ApiRoute.arg_ID, personId.ToString())
-                    .Replace(ApiRoute.arg_TotalAmount, totalAmount.ToString());
-                var response = await _dHttpClient.PutAsync(url);
-                await EnsureCorrectResponse(response, "Błąd w czasie edycji bilansu");
-            }
-            catch (DException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Błąd w czasie edycji bilansu: {Message}", ex.Message);
-                throw;
-            }
-        }
-
         public async Task<PersonDto> GetPerson(int personId)
         {
             try

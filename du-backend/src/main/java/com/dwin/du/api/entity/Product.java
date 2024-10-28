@@ -15,10 +15,6 @@ public class Product {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
     @JoinColumn(name = "receipt_id")
     private Receipt receipt;
 

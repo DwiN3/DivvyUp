@@ -54,7 +54,7 @@ public class ValidationService {
             throw new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono produktu o id: " + productId);
 
         Product product = optionalProduct.get();
-        if (!product.getUser().getUsername().equals(username))
+        if (!product.getReceipt().getUser().getUsername().equals(username))
             throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do produktu o id: " + productId);
 
         return product;
@@ -66,7 +66,7 @@ public class ValidationService {
             throw new ValidationException(HttpStatus.NOT_FOUND, "Nie znaleziono przypisu osoby do produktu o id: " + personProductId);
 
         PersonProduct personProduct = optionalPersonProduct.get();
-        if (!personProduct.getUser().getUsername().equals(username))
+        if (!personProduct.getProduct().getReceipt().getUser().getUsername().equals(username))
             throw new ValidationException(HttpStatus.UNAUTHORIZED, "Brak dostępu do przypisu osoby do produktu o id: " + personProductId);
 
         return personProduct;

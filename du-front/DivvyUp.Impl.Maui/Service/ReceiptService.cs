@@ -104,28 +104,6 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task SetTotalPrice(int receiptId, double totalPrice)
-        {
-            try
-            { 
-                var url = _url.SetTotalPriceReceipt
-                    .Replace(ApiRoute.arg_ID, receiptId.ToString())
-                    .Replace(ApiRoute.arg_TotalPrice, totalPrice.ToString());
-                var response = await _dHttpClient.PutAsync(url);
-                await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
-            }
-            catch (DException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Błąd w czasie edycji ceny rachunku: {Message}", ex.Message);
-                throw;
-            }
-        }
-
         public async Task<ReceiptDto> GetReceipt(int receiptId)
         {
             try
