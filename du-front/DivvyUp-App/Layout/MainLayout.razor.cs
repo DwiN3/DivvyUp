@@ -55,7 +55,6 @@ namespace DivvyUp_App.Layout
                     UserAppService.ClearUser();
                     DHttpClient.setToken(string.Empty);
                     StateHasChanged();
-                    Navigation.NavigateTo("/");
                 }
             }
         }
