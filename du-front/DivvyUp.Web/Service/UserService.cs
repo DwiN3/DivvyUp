@@ -4,8 +4,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using DivvyUp.Web.Interface;
-using DivvyUp.Web.RequestDto;
 using Microsoft.AspNetCore.Mvc;
+using DivvyUp.Web.RequestDto;
 
 namespace DivvyUp.Web.Service
 {

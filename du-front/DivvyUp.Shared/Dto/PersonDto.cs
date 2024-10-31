@@ -7,9 +7,9 @@
         public string surname { get; set; }
         public int receiptsCount { get; set; }
         public int productsCount { get; set; }
-        public double totalAmount { get; set; }
-        public double unpaidAmount { get; set; }
-        public double loanBalance { get; set; }
+        public decimal totalAmount { get; set; }
+        public decimal unpaidAmount { get; set; }
+        public decimal loanBalance { get; set; }
         public bool userAccount { get; set; }
 
         public string fullName => $"{name} {surname}";
@@ -27,7 +27,7 @@
             userAccount = false;
         }
 
-        public PersonDto(int id, string name, string surname, int receiptsCount, int productsCount, double totalAmount, double unpaidAmount, double loanBalance, bool userAccount)
+        public PersonDto(int id, string name, string surname, int receiptsCount, int productsCount, decimal totalAmount, decimal unpaidAmount, decimal loanBalance, bool userAccount)
         {
             this.id = id;
             this.name = name;

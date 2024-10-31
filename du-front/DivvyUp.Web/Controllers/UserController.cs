@@ -1,7 +1,7 @@
 ﻿using DivvyUp.Web.Interface;
-using DivvyUp.Web.RequestDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using DivvyUp.Web.RequestDto;
 
 namespace DivvyUp.Web.Controllers
 {
@@ -34,7 +34,7 @@ namespace DivvyUp.Web.Controllers
         [HttpPut]
         [Route("edit")]
         [Authorize]
-        public async Task<IActionResult> Edit([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Edit([FromQuery]  [FromBody] RegisterRequest request)
         {
             return await _userServiceInternal.Edit(request, User);
         }
