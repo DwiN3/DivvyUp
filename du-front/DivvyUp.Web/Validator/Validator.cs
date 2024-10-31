@@ -16,7 +16,7 @@ namespace DivvyUp.Web.Validator
 
         public async Task<User> GetUser(ClaimsPrincipal claims)
         {
-            var userIdClaim = claims.FindFirst("UserId")?.Value;
+            var userIdClaim = claims.FindFirst("Id")?.Value;
             if (userIdClaim == null)
                 throw new ValidException(HttpStatusCode.Unauthorized,"Błędny token");
 
@@ -32,12 +32,12 @@ namespace DivvyUp.Web.Validator
         {
             var user = await GetUser(claims);
 
-            var person = await _dbContext.People
+            var person = await _dbContext.Persons
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.Id == personId);
             if (person == null)
                 throw new ValidException(HttpStatusCode.NotFound,"Osoba nie znaleziona");
-            if (person.User.UserId != user.UserId)
+            if (person.User.Id != user.Id)
                 throw new ValidException(HttpStatusCode.Unauthorized,"Brak dostępu do osoby: "+person.Id);
 
             return person;

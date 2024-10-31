@@ -2,11 +2,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using DivvyUp.Web.InterfaceWeb;
 using Microsoft.AspNetCore.Mvc;
-using DivvyUp.Web.RequestDto;
 using DivvyUp.Web.Validator;
-using DivvyUp_Shared.InterfaceWeb;
 using DivvyUp_Shared.Model;
+using DivvyUp_Shared.RequestDto;
 
 namespace DivvyUp.Web.Service
 {
@@ -189,7 +189,7 @@ namespace DivvyUp.Web.Service
                 UserAccount = true
             };
 
-            _dbContext.People.Add(newPerson);
+            _dbContext.Persons.Add(newPerson);
         }
 
         private string GenerateToken(User user)
@@ -198,7 +198,7 @@ namespace DivvyUp.Web.Service
             {
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("UserId", user.UserId.ToString()),
+                new Claim("Id", user.Id.ToString()),
                 new Claim("Email", user.Email)
             };
 

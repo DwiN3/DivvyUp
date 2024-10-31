@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using DivvyUp.Web.RequestDto;
+using DivvyUp_Shared.RequestDto;
 
-namespace DivvyUp_Shared.InterfaceWeb
+namespace DivvyUp.Web.InterfaceWeb
 {
     public interface IUserService
     {

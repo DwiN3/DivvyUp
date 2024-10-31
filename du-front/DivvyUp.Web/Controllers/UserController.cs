@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DivvyUp.Web.InterfaceWeb;
+using DivvyUp_Shared.RequestDto;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using DivvyUp.Web.RequestDto;
-using DivvyUp_Shared.InterfaceWeb;
 
 namespace DivvyUp.Web.Controllers
 {

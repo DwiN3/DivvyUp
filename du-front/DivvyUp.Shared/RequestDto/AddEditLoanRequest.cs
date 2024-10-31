@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace DivvyUp.Web.RequestDto
+﻿namespace DivvyUp_Shared.RequestDto
 {
     public class AddEditLoanRequest
     {

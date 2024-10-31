@@ -1,4 +1,4 @@
-﻿namespace DivvyUp.Web.RequestDto
+﻿namespace DivvyUp_Shared.RequestDto
 {
     public class RegisterRequest
     {

@@ -1,10 +1,9 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
-using DivvyUp.Web.Migrations;
-using DivvyUp.Web.RequestDto;
+using DivvyUp.Web.InterfaceWeb;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.InterfaceWeb;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Person = DivvyUp_Shared.Model.Person;
@@ -44,7 +43,7 @@ namespace DivvyUp.Web.Service
                     UserAccount = false
                 };
 
-                _dbContext.People.Add(newPerson);
+                _dbContext.Persons.Add(newPerson);
                 await _dbContext.SaveChangesAsync();
                 return new OkObjectResult("Pomyślnie dodano osobe");
             }
@@ -65,7 +64,7 @@ namespace DivvyUp.Web.Service
                 var person = await _validator.GetPerson(claims, personId);
                 person.Name = request.Name;
                 person.Surname = request.Surname;
-                _dbContext.People.Update(person);
+                _dbContext.Persons.Update(person);
                 await _dbContext.SaveChangesAsync();
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
@@ -85,7 +84,7 @@ namespace DivvyUp.Web.Service
             {
                 var person = await _validator.GetPerson(claims, personId);
 
-                _dbContext.People.Remove(person);
+                _dbContext.Persons.Remove(person);
                 await _dbContext.SaveChangesAsync();
                 return new OkObjectResult("Usunięto osobe");
             }
@@ -123,7 +122,7 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
-                var persons = await _dbContext.People
+                var persons = await _dbContext.Persons
                     .Where(p => p.User == user)
                     .ToListAsync();
                 var personListDto = _mapper.Map<List<PersonDto>>(persons);
@@ -144,7 +143,7 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
-                var person = await _dbContext.People
+                var person = await _dbContext.Persons
                     .FirstOrDefaultAsync(p => p.User == user && p.UserAccount);
                 var personDto = _mapper.Map<PersonDto>(person);
                 return new OkObjectResult(personDto);

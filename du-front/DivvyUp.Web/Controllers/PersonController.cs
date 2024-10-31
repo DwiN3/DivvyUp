@@ -1,5 +1,5 @@
-﻿using DivvyUp.Web.RequestDto;
-using DivvyUp_Shared.InterfaceWeb;
+﻿using DivvyUp.Web.InterfaceWeb;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +15,6 @@ namespace DivvyUp.Web.Controllers
         {
             _personService = personService;
         }
-
 
         [HttpPost]
         [Route("add")]
