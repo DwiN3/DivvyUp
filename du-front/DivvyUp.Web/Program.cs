@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using DivvyUp.Web.Service;
 using DivvyUp.Web.Middleware;
+using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserServiceB, UserService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using AutoMapper;
 using Azure.Core;
 using DivvyUp.Web.Interface;
 using DivvyUp.Web.Models;
@@ -11,10 +12,12 @@ namespace DivvyUp.Web.Service
     public class PersonService : IPersonService
     {
         private readonly MyDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public PersonService(MyDbContext dbContext)
+        public PersonService(MyDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Add(AddEditPersonRequest person, ClaimsPrincipal user)
@@ -73,22 +76,11 @@ namespace DivvyUp.Web.Service
             if (personEntity == null)
                 return new NotFoundObjectResult("Nie znaleziono osoby");
 
-            var personDto = new PersonDto()
-            {
-                id = personEntity.Id,
-                name = personEntity.Name,
-                surname = personEntity.Surname,
-                loanBalance = personEntity.LoanBalance,
-                productsCount = personEntity.ProductsCount,
-                receiptsCount = personEntity.ReceiptsCount,
-                totalAmount = personEntity.TotalAmount,
-                unpaidAmount = personEntity.UnpaidAmount,
-                userAccount = personEntity.UserAccount
-
-            };
+            var personDto = _mapper.Map<PersonDto>(personEntity);
 
             return new OkObjectResult(personDto);
         }
+
 
         public Task<IActionResult> GetPersons(ClaimsPrincipal user)
         {
