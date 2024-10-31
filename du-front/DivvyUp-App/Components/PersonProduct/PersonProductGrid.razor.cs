@@ -23,10 +23,12 @@ namespace DivvyUp_App.Components.PersonProduct
         public int ProductId { get; set; }
 
         private List<PersonDto> Persons { get; set; }
+        private List<PersonDto> PeopleAvailable { get; set; }
         private List<PersonProductDto> PersonProducts { get; set; }
         private ProductDto Product { get; set; }
         private RadzenDataGrid<PersonProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
+        private bool IsGridEdit { get; set; } = false;
 
 
         protected override async Task OnInitializedAsync()
@@ -38,14 +40,23 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task LoadGrid()
         {
+            IsGridEdit = false;
             PersonProducts = await PersonProductService.GetPersonProductsFromProduct(ProductId);
+            await LoadAvailablePersons();
             StateHasChanged();
+        }
+
+        private async Task LoadAvailablePersons()
+        {
+            var personProductIds = PersonProducts?.Select(pp => pp.personId).ToHashSet() ?? new HashSet<int>();
+            PeopleAvailable = Persons.Where(p => !personProductIds.Contains(p.id)).ToList();
         }
 
         private async Task InsertRow()
         {
             if (CountLastPart(0) > 0)
             {
+                IsGridEdit = true;
                 var personProduct = new PersonProductDto();
                 PersonProducts.Add(personProduct);
                 await Grid.InsertRow(personProduct);
@@ -58,16 +69,19 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task EditRow(PersonProductDto personProduct)
         {
+            IsGridEdit = true;
             await Grid.EditRow(personProduct);
         }
 
         private void CancelEdit(PersonProductDto personProduct)
         {
+            IsGridEdit = false;
             Grid.CancelEditRow(personProduct);
         }
 
         private async Task SaveRow(PersonProductDto personProduct)
         {
+            IsGridEdit = false;
             try
             {
                 if (personProduct.id == 0)
@@ -89,6 +103,7 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task RemoveRow(PersonProductDto personProduct)
         {
+            IsGridEdit = false;
             try
             {
                 await PersonProductService.Remove(personProduct.id);

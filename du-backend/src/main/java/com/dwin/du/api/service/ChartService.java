@@ -41,7 +41,7 @@ public class ChartService {
                 double amount = isTotalAmounts ? person.getTotalAmount() : person.getUnpaidAmount();
                 if (Double.isNaN(amount))
                     amount = 0.0;
-                //amount = Math.round(amount * 100.0) / 100.0;
+                amount = Math.round(amount * 100.0) / 100.0;
 
                 ChartDto response = ChartDto.builder()
                         .name(person.getName()+" "+person.getSurname())
@@ -157,8 +157,7 @@ public class ChartService {
         if (Double.isNaN(percentage))
             percentage = 0.0;
 
-        return percentage;
-        //return Math.round(percentage * 100.0) / 100.0;
+        return Math.round(percentage * 100.0) / 100.0;
     }
 
 

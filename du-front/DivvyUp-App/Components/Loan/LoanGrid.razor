@@ -19,14 +19,14 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" Disabled="@IsGridEdit" />
         @if (!ShowAllLoans && GridMode == LoanGridMode.All)
         {
             <RadzenDatePicker TValue="DateTime?" Value="@DateFrom" Change="@(args => DateFrom = args)" Name="Data od" DateFormat="dd-MM-yyyy" />
             <RadzenDatePicker TValue="DateTime?" Value="@DateTo" Change="@(args => DateTo = args)" Name="Data do" DateFormat="dd-MM-yyyy" />
-            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" />
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" Disabled="@IsGridEdit" />
         }
-        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="attach_money" Text="Pokaż wszystkie pożyczki" Click="@(async() => { ShowAllLoans = !ShowAllLoans; await LoadGrid();})" Visible="@(GridMode == LoanGridMode.All)" />
+        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="attach_money" Text="Pokaż wszystkie pożyczki" Click="@(async() => { ShowAllLoans = !ShowAllLoans; await LoadGrid();})" Visible="@(GridMode == LoanGridMode.All)" Disabled="@IsGridEdit" />
     </HeaderTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
@@ -40,7 +40,7 @@
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">
-                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow"/>
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" Disabled="@IsGridEdit" />
                     <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })"/>
                 </div>
             </FilterTemplate>

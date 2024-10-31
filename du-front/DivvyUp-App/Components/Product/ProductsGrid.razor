@@ -18,7 +18,7 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="LoadGrid" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="LoadGrid" Disabled="@IsGridEdit" />
         <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="receipt_long" Text="Powrót do rachunków" Click="@(() => { Navigation.NavigateTo("/receipt"); } )" />
     </HeaderTemplate>
     <Columns>
@@ -34,7 +34,7 @@
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">
-                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" Disabled="@IsGridEdit" />
                     <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
                 </div>
             </FilterTemplate>
@@ -64,10 +64,10 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ProductDto.divisible)" Title="Podzielność" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                <RadzenButton ButtonStyle="@(ButtonStyle.Base)" Icon="@(product.divisible ? "groups" : "person")" Click="@(() => { product.divisible = !product.divisible; })" />
+                <RadzenButton ButtonStyle="@(ButtonStyle.Base)" Icon="@(product.divisible ? "groups" : "person")" Click="@(() => { product.divisible = !product.divisible; })" Disabled="true" />
             </Template>
             <EditTemplate Context="product">
-                <RadzenButton ButtonStyle="@(ButtonStyle.Base)" Icon="@(product.divisible ? "groups" : "person")" Click="@(() => { product.divisible = !product.divisible; })" Disabled="true" />
+                <RadzenButton ButtonStyle="@(ButtonStyle.Base)" Icon="@(product.divisible ? "groups" : "person")" Click="@(() => { product.divisible = !product.divisible; })" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ProductDto.maxQuantity)" Title="Ilość częsci" Width="8%" TextAlign="TextAlign.Center" Frozen="true">

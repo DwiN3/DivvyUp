@@ -27,6 +27,7 @@ namespace DivvyUp_App.Components.Receipt
         private DateTime? DateFrom = new DateTime();
         private DateTime? DateTo = new DateTime();
         private bool ShowAllReceipts = false;
+        private bool IsGridEdit { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -34,7 +35,7 @@ namespace DivvyUp_App.Components.Receipt
         }
 
         private async Task LoadGrid()
-        { 
+        {
             try
             {
                 if (ShowAllReceipts)
@@ -49,39 +50,47 @@ namespace DivvyUp_App.Components.Receipt
             catch (Exception)
             {
             }
-
+            await Grid.Reload();
             StateHasChanged();
         }
 
+
         private async Task InsertRow()
         {
+            IsGridEdit = true;
             var receipt = new ReceiptDto();
-            Receipts.Add(receipt);
             await Grid.InsertRow(receipt);
         }
 
         private async Task EditRow(ReceiptDto receipt)
         {
+            IsGridEdit = true;
             await Grid.EditRow(receipt);
         }
 
         private void CancelEdit(ReceiptDto receipt)
         {
+            IsGridEdit = false;
             Grid.CancelEditRow(receipt);
         }
 
         private async Task SaveRow(ReceiptDto receipt)
         {
+            IsGridEdit = false;
             try
             {
                 if (receipt.id == 0)
+                {
                     await ReceiptService.Add(receipt);
+                }
                 else
+                {
                     await ReceiptService.Edit(receipt);
+                }
             }
             catch (DException ex)
             {
-                 DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {
@@ -89,11 +98,15 @@ namespace DivvyUp_App.Components.Receipt
             finally
             {
                 await LoadGrid();
+                StateHasChanged();
             }
         }
 
+
+
         private async Task RemoveRow(ReceiptDto receipt)
         {
+            IsGridEdit = false;
             try
             {
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie rachunku", $"Czy potwierdzasz usunięcie rachunku: {receipt.name}?");

@@ -20,6 +20,7 @@ namespace DivvyUp_App.Components.Person
         private List<PersonDto> Persons { get; set; }
         private RadzenDataGrid<PersonDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
+        private bool IsGridEdit { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -28,12 +29,14 @@ namespace DivvyUp_App.Components.Person
 
         private async Task LoadGrid()
         {
+            IsGridEdit = false;
             Persons = await PersonService.GetPersons();
             StateHasChanged();
         }
 
         private async Task InsertRow()
         {
+            IsGridEdit = true;
             var person = new PersonDto();
             Persons.Add(person);
             await Grid.InsertRow(person);
@@ -41,16 +44,19 @@ namespace DivvyUp_App.Components.Person
 
         private async Task EditRow(PersonDto person)
         {
+            IsGridEdit = true;
             await Grid.EditRow(person);
         }
 
         private void CancelEdit(PersonDto person)
         {
+            IsGridEdit = false;
             Grid.CancelEditRow(person);
         }
 
         private async Task SaveRow(PersonDto person)
         {
+            IsGridEdit = false;
             try
             {
                 if (person.id == 0)
@@ -73,6 +79,7 @@ namespace DivvyUp_App.Components.Person
 
         private async Task RemoveRow(PersonDto person)
         {
+            IsGridEdit = false;
             try
             {
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie osoby", $"Czy potwierdzasz usunięcie osoby: {person.fullName}?");

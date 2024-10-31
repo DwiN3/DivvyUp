@@ -34,6 +34,7 @@ namespace DivvyUp_App.Components.Loan
         private DateTime? DateFrom = new DateTime();
         private DateTime? DateTo = new DateTime();
         private bool ShowAllLoans = false;
+        private bool IsGridEdit { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -51,6 +52,7 @@ namespace DivvyUp_App.Components.Loan
 
         private async Task LoadGrid()
         {
+            IsGridEdit = false;
             if (GridMode == LoanGridMode.All)
             {
                 if(ShowAllLoans)
@@ -68,6 +70,7 @@ namespace DivvyUp_App.Components.Loan
 
         private async Task InsertRow()
         {
+            IsGridEdit = true;
             var loan = new LoanDto();
             Loans.Add(loan);
             await Grid.InsertRow(loan);
@@ -75,16 +78,19 @@ namespace DivvyUp_App.Components.Loan
 
         private async Task EditRow(LoanDto loan)
         {
+            IsGridEdit = true;
             await Grid.EditRow(loan);
         }
 
         private void CancelEdit(LoanDto loan)
         {
+            IsGridEdit = false;
             Grid.CancelEditRow(loan);
         }
 
         private async Task SaveRow(LoanDto loan)
         {
+            IsGridEdit = false;
             try
             {
                 if (loan.id == 0)
@@ -116,6 +122,7 @@ namespace DivvyUp_App.Components.Loan
 
         private async Task RemoveRow(LoanDto loan)
         {
+            IsGridEdit = false;
             try
             {
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie osoby", $"Czy potwierdzasz usunięcie pożyczki?");

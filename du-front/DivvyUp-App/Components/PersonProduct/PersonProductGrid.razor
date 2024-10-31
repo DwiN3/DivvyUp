@@ -18,7 +18,7 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" Disabled="@IsGridEdit" />
     </HeaderTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
@@ -32,7 +32,7 @@
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">
-                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" Disabled="@IsGridEdit" />
                     <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
                 </div>
             </FilterTemplate>
@@ -84,7 +84,7 @@
             </Template>
             <EditTemplate Context="personProduct">
                 @{
-                    if (Persons != null && Persons.Count > 0 && personProduct.personId == 0)
+                    if (PeopleAvailable != null && PeopleAvailable.Count > 0 && personProduct.personId == 0)
                     {
                         personProduct.personId = Persons.First().id;
                     }
@@ -92,7 +92,7 @@
                 <RadzenDropDownDataGrid
                     TValue="int"
                     @bind-Value="personProduct.personId"
-                    Data="@Persons"
+                    Data="@PeopleAvailable"
                     TextProperty="@nameof(PersonDto.fullName)"
                     ValueProperty="@nameof(PersonDto.id)"/>
             </EditTemplate>
