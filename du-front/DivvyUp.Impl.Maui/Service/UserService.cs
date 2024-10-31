@@ -186,11 +186,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<UserDto> GetUser(string token)
+        public async Task<UserDto> GetUser()
         {
             try
             {
-                var url = $"{_url.GetUser}?token={token}";
+                var url = _url.GetUser;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<UserDto>(jsonResponse);

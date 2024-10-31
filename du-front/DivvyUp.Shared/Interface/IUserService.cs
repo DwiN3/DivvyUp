@@ -11,6 +11,6 @@ namespace DivvyUp_Shared.Interface
         Task Remove();
         Task ChangePassword(string password, string newPassword);
         Task<bool> IsValid(string token);
-        Task<UserDto> GetUser(string token);
+        Task<UserDto> GetUser();
     }
 }

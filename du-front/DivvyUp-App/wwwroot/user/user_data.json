@@ -1,6 +1,6 @@
 {
-  "username": "Kamil",
-  "email": "dwinicht333@gmail.com",
-  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJLYW1pbCIsImlhdCI6MTcyOTkzMTI2MCwiZXhwIjoxNzMwMTA0MDYwfQ.3JcT-Vn2XbHiuQRiBfeXdh9Aw8DaLl2ndDStPAVelCg",
-  "isLogin": true
+  "username": "",
+  "email": "",
+  "token": "",
+  "isLogin": false
 }

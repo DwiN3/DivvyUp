@@ -28,9 +28,9 @@ namespace DivvyUp_App.Components.Login
             try
             {
                 var token = await UserService.Login(User);
-                UserDto user = await UserService.GetUser(token);
-                UserAppService.SetUser(user.username, user.email, token, true);
                 DHttpClient.setToken(token);
+                UserDto user = await UserService.GetUser();
+                UserAppService.SetUser(user.username, user.email, token, true);
                 Navigation.NavigateTo("/");
             }
             catch (DException ex)
