@@ -8,7 +8,7 @@ namespace DivvyUp.Web.Controllers
 {
     [Route("rm/person/")]
     [ApiController]
-    public class PersonController : ControllerBase
+    public class PersonController : ControllerBase, I
     {
         private readonly IPersonService _personService;
         private readonly IConfiguration _configuration;
@@ -40,7 +40,7 @@ namespace DivvyUp.Web.Controllers
         [HttpDelete]
         [Route("remove/{personId}")]
         [Authorize]
-        public async Task<IActionResult> Remove([FromQuery] int personId)
+        public async Task<IActionResult> Remove(int personId)
         {
             return await _personService.Remove(personId, User);
         }
@@ -84,7 +84,5 @@ namespace DivvyUp.Web.Controllers
         {
             return await _personService.GetPersonFromProduct(productId, User);
         }
-
-
     }
 }

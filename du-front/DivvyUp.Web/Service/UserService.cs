@@ -6,6 +6,9 @@ using System.Text;
 using DivvyUp.Web.Interface;
 using Microsoft.AspNetCore.Mvc;
 using DivvyUp.Web.RequestDto;
+using DivvyUp.Web.Validator;
+using DivvyUp.Web.Migrations;
+using Person = DivvyUp.Web.Models.Person;
 
 namespace DivvyUp.Web.Service
 {
@@ -13,11 +16,13 @@ namespace DivvyUp.Web.Service
     {
         private readonly MyDbContext _dbContext;
         private readonly IConfiguration _configuration;
+        private readonly IValidator _validator;
 
-        public UserService(MyDbContext dbContext, IConfiguration configuration)
+        public UserService(MyDbContext dbContext, IConfiguration configuration, IValidator validator)
         {
             _dbContext = dbContext;
             _configuration = configuration;
+            _validator = validator;
         }
 
         public async Task<IActionResult> Register(RegisterRequest request)
@@ -34,6 +39,8 @@ namespace DivvyUp.Web.Service
                 Password = hashedPassword
             };
             _dbContext.Users.Add(newUser);
+            await AddPersonUser(newUser);
+
             await _dbContext.SaveChangesAsync();
 
             return new OkObjectResult("Pomyślnie zarejstrowano");
@@ -41,50 +48,64 @@ namespace DivvyUp.Web.Service
 
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Username == request.Username);
-            if (user == null)
-                return new NotFoundObjectResult("Nie znaleziono użytkownika");
-            if(!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
-                return new UnauthorizedObjectResult("Błędne hasło");
+            try
+            {
+                var user = _dbContext.Users.FirstOrDefault(x => x.Username == request.Username);
+                if (user == null)
+                    return new NotFoundObjectResult("Nie znaleziono użytkownika");
+                if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+                    return new UnauthorizedObjectResult("Błędne hasło");
 
-            var token = GenerateToken(user);
-            return new OkObjectResult(token);
+                var token = GenerateToken(user);
+                return new OkObjectResult(token);
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
         }
 
-        public async Task<IActionResult> Edit(RegisterRequest request, ClaimsPrincipal user)
+        public async Task<IActionResult> Edit(RegisterRequest request, ClaimsPrincipal claims)
         {
-            var userIdClaim = user.FindFirst("UserId")?.Value;
-            if (userIdClaim == null)
-                return new UnauthorizedObjectResult("Błędny token");
+            try
+            {
+                var user = await _validator.GetUser(claims);
+                user.Username = request.Username;
+                user.Email = request.Email;
 
-            var userToUpdate = await _dbContext.Users.FindAsync(userIdClaim);
-            if (userToUpdate == null)
-                return new NotFoundObjectResult("Nie znaleziono użytkownika");
+                _dbContext.Users.Update(user);
+                await _dbContext.SaveChangesAsync();
 
-            userToUpdate.Username = request.Username;
-            userToUpdate.Email = request.Email;
-
-            _dbContext.Users.Update(userToUpdate);
-            await _dbContext.SaveChangesAsync();
-
-            return new OkObjectResult("Pomyślnie wprowadzono zmiany");
+                return new OkObjectResult("Pomyślnie wprowadzono zmiany");
+            }
+            catch (ValidException ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
         }
 
 
-        public async Task<IActionResult> Remove(string userId, ClaimsPrincipal user)
+        public async Task<IActionResult> Remove(string userId, ClaimsPrincipal claims)
         {
-            var userIdClaim = user.FindFirst("UserId")?.Value;
-            if (userIdClaim == null || userId != userIdClaim)
-                return new UnauthorizedObjectResult("Błędny token");
-
-            var userToRemove = await _dbContext.Users.FindAsync(userId);
-            if (userToRemove == null)
-                return new NotFoundObjectResult("Nie znaleziono użytkownika");
-
-            _dbContext.Users.Remove(userToRemove);
-            await _dbContext.SaveChangesAsync();
-
-            return new OkObjectResult("Usunięto użytkownika");
+            try
+            {
+                var user = await _validator.GetUser(claims);
+                _dbContext.Users.Remove(user);
+                await _dbContext.SaveChangesAsync();
+                return new OkObjectResult("Usunięto użytkownika");
+            }
+            catch (ValidException ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
         }
 
 
@@ -112,39 +133,64 @@ namespace DivvyUp.Web.Service
         }
 
 
-        public async Task<IActionResult> GetUser(ClaimsPrincipal user)
+        public async Task<IActionResult> GetUser(ClaimsPrincipal claims)
         {
-            var userIdClaim = user.FindFirst("UserId")?.Value;
-            if (userIdClaim == null)
-                return new UnauthorizedObjectResult("Błędny token");
-
-            var userId = int.Parse(userIdClaim);
-            var userEntity = await _dbContext.Users.FindAsync(userId);
-            if (userEntity == null)
-                return new NotFoundObjectResult("Nie znaleziono użytkownika");
-
-            return new OkObjectResult(userEntity);
+            try
+            {
+                var user = await _validator.GetUser(claims);
+                return new OkObjectResult(user);
+            }
+            catch (ValidException ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
         }
-        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request, ClaimsPrincipal user)
+
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request, ClaimsPrincipal claims)
         {
-            var userIdClaim = user.FindFirst("UserId")?.Value;
-            if (userIdClaim == null)
-                return new UnauthorizedObjectResult("Błędny token");
+            try
+            {
+                var user = await _validator.GetUser(claims);
 
-            var userId = int.Parse(userIdClaim);
-            var userEntity = await _dbContext.Users.FindAsync(userId);
-            if (userEntity == null)
-                return new NotFoundObjectResult("Nie znaleziono użytkownika");
+                if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+                    return new UnauthorizedObjectResult("Błędne hasło");
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, userEntity.Password))
-                return new UnauthorizedObjectResult("Błędne hasło");
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
 
-            userEntity.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+                _dbContext.Users.Update(user);
+                await _dbContext.SaveChangesAsync();
+                return new OkObjectResult("Pomyślnie zmieniono hasło");
+            }
+            catch (ValidException ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
+        }
 
-            _dbContext.Users.Update(userEntity);
-            await _dbContext.SaveChangesAsync();
+        private async Task AddPersonUser(User user)
+        {
+            var newPerson = new Person()
+            {
+                User = user,
+                Name = user.Username,
+                Surname = String.Empty,
+                ReceiptsCount = 0,
+                ProductsCount = 0,
+                TotalAmount = 0,
+                UnpaidAmount = 0,
+                LoanBalance = 0,
+                UserAccount = true
+            };
 
-            return new OkObjectResult("Pomyślnie zmieniono hasło");
+            _dbContext.People.Add(newPerson);
         }
 
         private string GenerateToken(User user)
