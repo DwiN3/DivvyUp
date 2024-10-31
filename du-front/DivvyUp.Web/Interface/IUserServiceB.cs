@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using DivvyUp.Web.RequestDto;
 
-namespace DivvyUp.Web.InterfaceBackend
+namespace DivvyUp.Web.Interface
 {
     public interface IUserServiceB
     {

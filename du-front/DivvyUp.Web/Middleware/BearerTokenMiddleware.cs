@@ -1,4 +1,4 @@
-﻿namespace DivvyUp.Web
+﻿namespace DivvyUp.Web.Middleware
 {
     public class BearerTokenMiddleware
     {

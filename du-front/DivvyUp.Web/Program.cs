@@ -1,11 +1,11 @@
 using System.Text;
-using DivvyUp.Web.InterfaceBackend;
+using DivvyUp.Web.Interface;
 using DivvyUp.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using DivvyUp.Web.Service;
-using DivvyUp.Web;
+using DivvyUp.Web.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 

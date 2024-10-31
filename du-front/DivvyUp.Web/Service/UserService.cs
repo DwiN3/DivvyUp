@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DivvyUp.Web.InterfaceBackend;
+using DivvyUp.Web.Interface;
 using DivvyUp.Web.RequestDto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -131,7 +131,8 @@ namespace DivvyUp.Web.Service
             if (userIdClaim == null)
                 return new UnauthorizedObjectResult("Błędny token");
 
-            var userEntity = await _dbContext.Users.FindAsync(userIdClaim);
+            var userId = int.Parse(userIdClaim);
+            var userEntity = await _dbContext.Users.FindAsync(userId);
             if (userEntity == null)
                 return new NotFoundObjectResult("Nie znaleziono użytkownika");
 
