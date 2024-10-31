@@ -1,4 +1,4 @@
-@DivvyUp.Web_HostAddress = http://localhost:8080
+@DivvyUp.Web_HostAddress = http://localhost:5185
 
 GET {{DivvyUp.Web_HostAddress}}/weatherforecast/
 Accept: application/json

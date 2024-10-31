@@ -2,7 +2,7 @@
 {
     public class ApiRoute
     {
-        private const string BaseUrl = "http://localhost:8080/rm";
+        private const string BaseUrl = "http://localhost:5185/rm";
 
         // Arguments
         public const string arg_ID = "{id}";
@@ -14,13 +14,13 @@
         public const string arg_Lent = "{lent}";
 
         // User
-        public readonly string Login = $"{BaseUrl}/User/auth";
-        public readonly string Register = $"{BaseUrl}/User/register";
-        public readonly string EditUser = $"{BaseUrl}/User/edit";
-        public readonly string ChangePasswordUser = $"{BaseUrl}/User/change-password";
-        public readonly string RemoveUser = $"{BaseUrl}/User/remove";
-        public readonly string GetUser = $"{BaseUrl}/User/get-user";
-        public readonly string IsValid = $"{BaseUrl}/User/validate-token";
+        public readonly string Login = $"{BaseUrl}/user/auth";
+        public readonly string Register = $"{BaseUrl}/user/register";
+        public readonly string EditUser = $"{BaseUrl}/user/edit";
+        public readonly string ChangePasswordUser = $"{BaseUrl}/user/change-password";
+        public readonly string RemoveUser = $"{BaseUrl}/user/remove";
+        public readonly string GetUser = $"{BaseUrl}/user/get-user";
+        public readonly string IsValid = $"{BaseUrl}/user/validate-token";
 
         // Person
         public readonly string AddPerson = $"{BaseUrl}/person/add";
