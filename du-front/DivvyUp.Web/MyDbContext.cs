@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DivvyUp_Shared.Model;
+using Microsoft.EntityFrameworkCore;
 
-namespace DivvyUp.Web.Models
+namespace DivvyUp.Web
 {
     public class MyDbContext : DbContext
     {

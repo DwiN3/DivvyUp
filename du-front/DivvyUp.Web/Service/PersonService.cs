@@ -1,13 +1,14 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
-using Azure.Core;
-using DivvyUp.Web.Interface;
-using DivvyUp.Web.Models;
+using DivvyUp.Web.Migrations;
 using DivvyUp.Web.RequestDto;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.InterfaceWeb;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Person = DivvyUp_Shared.Model.Person;
+
 
 namespace DivvyUp.Web.Service
 {

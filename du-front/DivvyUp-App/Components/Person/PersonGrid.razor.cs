@@ -11,7 +11,7 @@ namespace DivvyUp_App.Components.Person
     partial class PersonGrid : ComponentBase
     {
         [Inject]
-        private IPersonService PersonService { get; set; }
+        private IPersonHttpService PersonService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]

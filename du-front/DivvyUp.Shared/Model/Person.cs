@@ -1,4 +1,4 @@
-﻿namespace DivvyUp.Web.Models
+﻿namespace DivvyUp_Shared.Model
 {
     public class Person
     {

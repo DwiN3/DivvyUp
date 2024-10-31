@@ -1,9 +1,8 @@
-﻿using DivvyUp_Shared.Dto;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DivvyUp.Web.RequestDto;
 
-namespace DivvyUp.Web.Interface
+namespace DivvyUp_Shared.InterfaceWeb
 {
     public interface IPersonService
     {

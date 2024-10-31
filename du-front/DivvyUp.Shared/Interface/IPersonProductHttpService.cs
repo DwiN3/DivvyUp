@@ -2,7 +2,7 @@
 
 namespace DivvyUp_Shared.Interface
 {
-    public interface IPersonProductService
+    public interface IPersonProductHttpService
     {
         Task Add(PersonProductDto personProduct, int productId);
         Task Edit(PersonProductDto personProduct);

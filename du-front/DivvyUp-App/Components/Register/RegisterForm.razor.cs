@@ -10,7 +10,7 @@ namespace DivvyUp_App.Components.Register
     partial class RegisterForm
     {
         [Inject]
-        private IUserService UserService { get; set; }
+        private IUserHttpService UserService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]

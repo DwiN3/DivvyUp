@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using DivvyUp.Web.Models;
+using DivvyUp_Shared.Model;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 

@@ -3,7 +3,7 @@ using DivvyUp_Shared.Dto;
 
 namespace DivvyUp_Shared.Interface
 {
-    public interface IUserService
+    public interface IUserHttpService
     {
         Task<string> Login(UserDto user);
         Task Register(UserDto user);

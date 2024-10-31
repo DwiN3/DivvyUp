@@ -43,13 +43,13 @@ namespace DivvyUp_App
             builder.Services.AddSingleton<DAlertService>();
             builder.Services.AddScoped<HeaderService>();
 
-            builder.Services.AddTransient<IUserService, UserService>();
-            builder.Services.AddTransient<IPersonService, PersonService>();
-            builder.Services.AddTransient<ILoanService, LoanSevice>();
-            builder.Services.AddTransient<IReceiptService, ReceiptService>();
-            builder.Services.AddTransient<IProductService, ProductService>();
-            builder.Services.AddTransient<IPersonProductService, PersonProductService>();
-            builder.Services.AddTransient<IChartService, ChartService>();
+            builder.Services.AddTransient<IUserHttpService, UserHttpService>();
+            builder.Services.AddTransient<IPersonHttpService, PersonHttpService>();
+            builder.Services.AddTransient<ILoanHttpService, LoanHttpSevice>();
+            builder.Services.AddTransient<IReceiptHttpService, ReceiptHttpService>();
+            builder.Services.AddTransient<IProductHttpService, ProductHttpService>();
+            builder.Services.AddTransient<IPersonProductHttpService, PersonProductHttpService>();
+            builder.Services.AddTransient<IChartHttpService, ChartHttpService>();
             ;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

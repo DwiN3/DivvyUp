@@ -9,14 +9,14 @@ using Newtonsoft.Json;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class LoanSevice : ILoanService
+    public class LoanHttpSevice : ILoanHttpService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
         private ApiRoute _url { get; } = new();
-        private readonly ILogger<LoanSevice> _logger;
+        private readonly ILogger<LoanHttpSevice> _logger;
 
-        public LoanSevice(DHttpClient dHttpClient, ILogger<LoanSevice> logger)
+        public LoanHttpSevice(DHttpClient dHttpClient, ILogger<LoanHttpSevice> logger)
         {
             _dHttpClient = dHttpClient;
             _logger = logger;

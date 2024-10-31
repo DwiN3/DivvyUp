@@ -9,14 +9,14 @@ using Newtonsoft.Json;
 using System;
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class ChartService : IChartService
+    public class ChartHttpService : IChartHttpService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
         private ApiRoute _url { get; } = new();
-        private readonly ILogger<ChartService> _logger;
+        private readonly ILogger<ChartHttpService> _logger;
 
-        public ChartService(DHttpClient dHttpClient, ILogger<ChartService> logger)
+        public ChartHttpService(DHttpClient dHttpClient, ILogger<ChartHttpService> logger)
         {
             _dHttpClient = dHttpClient;
             _logger = logger;

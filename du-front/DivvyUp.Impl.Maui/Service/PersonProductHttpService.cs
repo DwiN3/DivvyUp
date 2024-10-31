@@ -9,14 +9,14 @@ using Newtonsoft.Json;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class PersonProductService : IPersonProductService
+    public class PersonProductHttpService : IPersonProductHttpService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
         private ApiRoute _url { get; } = new();
-        private readonly ILogger<PersonProductService> _logger;
+        private readonly ILogger<PersonProductHttpService> _logger;
 
-        public PersonProductService(DHttpClient dHttpClient, ILogger<PersonProductService> logger)
+        public PersonProductHttpService(DHttpClient dHttpClient, ILogger<PersonProductHttpService> logger)
         {
             _dHttpClient = dHttpClient;
             _logger = logger;

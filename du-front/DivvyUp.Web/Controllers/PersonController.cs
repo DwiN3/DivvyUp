@@ -1,5 +1,5 @@
-﻿using DivvyUp.Web.Interface;
-using DivvyUp.Web.RequestDto;
+﻿using DivvyUp.Web.RequestDto;
+using DivvyUp_Shared.InterfaceWeb;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

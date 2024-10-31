@@ -2,9 +2,9 @@
 {
     public class User
     {
-        public string username { get; set; } = string.Empty;
-        public string email { get; set; } = string.Empty;
-        public string token { get; set; } = string.Empty;
-        public bool isLogin { get; set; } = false;
+        public int UserId { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

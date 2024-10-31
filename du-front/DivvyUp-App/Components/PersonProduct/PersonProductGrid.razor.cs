@@ -11,11 +11,11 @@ namespace DivvyUp_App.Components.PersonProduct
     partial class PersonProductGrid
     {
         [Inject]
-        private IPersonService PersonService { get; set; }
+        private IPersonHttpService PersonService { get; set; }
         [Inject]
-        private IPersonProductService PersonProductService { get; set; }
+        private IPersonProductHttpService PersonProductService { get; set; }
         [Inject]
-        private IProductService ProductService { get; set; }
+        private IProductHttpService ProductService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 

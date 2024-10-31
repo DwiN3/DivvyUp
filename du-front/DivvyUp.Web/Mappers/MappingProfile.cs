@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using DivvyUp.Web.Models;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Model;
 
 namespace DivvyUp.Web.Mappers
 {

@@ -2,9 +2,9 @@
 using System.Security.Claims;
 using DivvyUp.Web.RequestDto;
 
-namespace DivvyUp.Web.Interface
+namespace DivvyUp_Shared.InterfaceWeb
 {
-    public interface IUserServiceB
+    public interface IUserService
     {
         Task<IActionResult> Register(RegisterRequest request);
         Task<IActionResult> Login(LoginRequest request);
@@ -13,6 +13,5 @@ namespace DivvyUp.Web.Interface
         Task<IActionResult> ValidToken(string token);
         Task<IActionResult> GetUser(ClaimsPrincipal user);
         Task<IActionResult> ChangePassword(ChangePasswordRequest request, ClaimsPrincipal user);
-
     }
 }

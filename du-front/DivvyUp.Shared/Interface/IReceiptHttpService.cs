@@ -2,7 +2,7 @@
 
 namespace DivvyUp_Shared.Interface
 {
-    public interface IReceiptService
+    public interface IReceiptHttpService
     {
         Task Add(ReceiptDto receipt);
         Task Edit(ReceiptDto receipt);

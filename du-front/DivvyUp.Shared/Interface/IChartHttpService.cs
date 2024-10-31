@@ -2,7 +2,7 @@
 
 namespace DivvyUp_Shared.Interface
 {
-    public interface IChartService
+    public interface IChartHttpService
     {
         Task<List<ChartDto>> GetTotalAmounts();
         Task<List<ChartDto>> GetUnpaindAmounts();

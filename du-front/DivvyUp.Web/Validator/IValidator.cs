@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using DivvyUp.Web.Models;
+using DivvyUp_Shared.Model;
 
 namespace DivvyUp.Web.Validator
 {

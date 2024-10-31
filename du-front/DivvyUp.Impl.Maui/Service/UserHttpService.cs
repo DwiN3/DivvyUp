@@ -9,14 +9,14 @@ using DivvyUp_Shared.AppConstants;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class UserService : IUserService
+    public class UserHttpService : IUserHttpService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
         private ApiRoute _url { get; } = new();
-        private readonly ILogger<ReceiptService> _logger;
+        private readonly ILogger<ReceiptHttpService> _logger;
 
-        public UserService(DHttpClient dHttpClient, ILogger<ReceiptService> logger)
+        public UserHttpService(DHttpClient dHttpClient, ILogger<ReceiptHttpService> logger)
         {
             _dHttpClient = dHttpClient;
             _logger = logger;

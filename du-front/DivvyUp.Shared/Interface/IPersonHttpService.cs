@@ -2,7 +2,7 @@
 
 namespace DivvyUp_Shared.Interface
 {
-    public interface IPersonService
+    public interface IPersonHttpService
     {
         Task Add(PersonDto person);
         Task Edit(PersonDto person);

@@ -1,7 +1,7 @@
-﻿using DivvyUp.Web.Interface;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using DivvyUp.Web.RequestDto;
+using DivvyUp_Shared.InterfaceWeb;
 
 namespace DivvyUp.Web.Controllers
 {
@@ -9,9 +9,9 @@ namespace DivvyUp.Web.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserServiceB _userServiceInternal;
+        private readonly IUserService _userServiceInternal;
 
-        public UserController(IUserServiceB userServiceInternal)
+        public UserController(IUserService userServiceInternal)
         {
             _userServiceInternal = userServiceInternal;
         }

@@ -13,9 +13,9 @@ namespace DivvyUp_App.Components.Loan
     partial class LoanGrid : ComponentBase
     {
         [Inject]
-        private ILoanService LoanService { get; set; }
+        private ILoanHttpService LoanService { get; set; }
         [Inject]
-        private IPersonService PersonService { get; set; }
+        private IPersonHttpService PersonService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]

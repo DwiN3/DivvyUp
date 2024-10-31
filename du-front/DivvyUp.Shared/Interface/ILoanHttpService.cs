@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DivvyUp_Shared.Interface
 {
-    public interface ILoanService
+    public interface ILoanHttpService
     {
         Task Add(LoanDto loan);
         Task Edit(LoanDto loan);

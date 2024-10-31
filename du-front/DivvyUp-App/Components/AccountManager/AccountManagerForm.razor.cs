@@ -11,7 +11,7 @@ namespace DivvyUp_App.Components.AccountManager
     partial class AccountManagerForm
     {
         [Inject]
-        private IUserService UserService { get; set; }
+        private IUserHttpService UserService { get; set; }
         [Inject]
         private UserAppService UserAppService { get; set; }
         [Inject]

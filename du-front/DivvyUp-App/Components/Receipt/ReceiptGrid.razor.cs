@@ -13,7 +13,7 @@ namespace DivvyUp_App.Components.Receipt
     partial class ReceiptGrid : ComponentBase
     {
         [Inject]
-        private IReceiptService ReceiptService { get; set; }
+        private IReceiptHttpService ReceiptService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]

@@ -6,7 +6,7 @@ namespace DivvyUp_App.GuiService
     public class UserAppService
     {
         private readonly string _userFileName;
-        private User _currentUser;
+        private UserApp _currentUser;
 
         public UserAppService()
         {
@@ -16,17 +16,17 @@ namespace DivvyUp_App.GuiService
             LoadUserData();
         }
 
-        public User GetUser() => _currentUser;
+        public UserApp GetUser() => _currentUser;
 
         public void SetUser(string username, string email, string token, bool isLogin)
         {
-            _currentUser = new User {username = username, email = email, token = token, isLogin = isLogin };
+            _currentUser = new UserApp {username = username, email = email, token = token, isLogin = isLogin };
             SaveUserData();
         }
 
         public void ClearUser()
         {
-            _currentUser = new User();
+            _currentUser = new UserApp();
             ClearUserData();
         }
 
@@ -43,7 +43,7 @@ namespace DivvyUp_App.GuiService
                     WriteIndented = true
                 };
 
-                string userData = JsonSerializer.Serialize(new User
+                string userData = JsonSerializer.Serialize(new UserApp
                 {
                     username = _currentUser.username,
                     email = _currentUser.email,
@@ -66,13 +66,13 @@ namespace DivvyUp_App.GuiService
                 if (File.Exists(_userFileName))
                 {
                     var userData = File.ReadAllText(_userFileName);
-                    _currentUser = JsonSerializer.Deserialize<User>(userData) ?? new User();
+                    _currentUser = JsonSerializer.Deserialize<UserApp>(userData) ?? new UserApp();
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Błąd podczas odczytu danych użytkownika: {ex.Message}");
-                _currentUser = new User();
+                _currentUser = new UserApp();
             }
         }
 
@@ -87,7 +87,7 @@ namespace DivvyUp_App.GuiService
                         WriteIndented = true
                     };
 
-                    string userData = JsonSerializer.Serialize(new User
+                    string userData = JsonSerializer.Serialize(new UserApp
                     {
                         username = string.Empty,
                         email = string.Empty,

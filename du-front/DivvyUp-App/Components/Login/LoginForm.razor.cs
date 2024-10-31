@@ -11,7 +11,7 @@ namespace DivvyUp_App.Components.Login
     partial class LoginForm
     {
         [Inject]
-        private IUserService UserService { get; set; }
+        private IUserHttpService UserService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]

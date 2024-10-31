@@ -1,18 +1,16 @@
-﻿using DivvyUp.Web.Models;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DivvyUp.Web.Interface;
 using Microsoft.AspNetCore.Mvc;
 using DivvyUp.Web.RequestDto;
 using DivvyUp.Web.Validator;
-using DivvyUp.Web.Migrations;
-using Person = DivvyUp.Web.Models.Person;
+using DivvyUp_Shared.InterfaceWeb;
+using DivvyUp_Shared.Model;
 
 namespace DivvyUp.Web.Service
 {
-    public class UserService : IUserServiceB
+    public class UserService : IUserService
     {
         private readonly MyDbContext _dbContext;
         private readonly IConfiguration _configuration;
