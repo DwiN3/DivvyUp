@@ -80,7 +80,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {
@@ -89,7 +89,7 @@ namespace DivvyUp.Web.Service
         }
 
 
-        public async Task<IActionResult> Remove(string userId, ClaimsPrincipal claims)
+        public async Task<IActionResult> Remove(ClaimsPrincipal claims)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {
@@ -142,7 +142,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {
@@ -167,7 +167,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {

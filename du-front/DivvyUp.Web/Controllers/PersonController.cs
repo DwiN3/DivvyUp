@@ -2,28 +2,25 @@
 using DivvyUp.Web.RequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace DivvyUp.Web.Controllers
 {
     [Route("rm/person/")]
     [ApiController]
-    public class PersonController : ControllerBase, I
+    public class PersonController : ControllerBase
     {
         private readonly IPersonService _personService;
-        private readonly IConfiguration _configuration;
 
-        public PersonController(IPersonService personService, IConfiguration configuration)
+        public PersonController(IPersonService personService)
         {
             _personService = personService;
-            _configuration = configuration;
         }
 
 
         [HttpPost]
         [Route("add")]
         [Authorize]
-        public async Task<IActionResult> Add(AddEditPersonRequest request)
+        public async Task<IActionResult> Add([FromBody] AddEditPersonRequest request)
         {
             return await _personService.Add(request, User);
         }
@@ -31,7 +28,7 @@ namespace DivvyUp.Web.Controllers
         [HttpPut]
         [Route("edit")]
         [Authorize]
-        public async Task<IActionResult> Edit(AddEditPersonRequest request, int personId)
+        public async Task<IActionResult> Edit([FromBody] AddEditPersonRequest request, int personId)
         {
             return await _personService.Edit(request, personId, User);
 
@@ -40,7 +37,7 @@ namespace DivvyUp.Web.Controllers
         [HttpDelete]
         [Route("remove/{personId}")]
         [Authorize]
-        public async Task<IActionResult> Remove(int personId)
+        public async Task<IActionResult> Remove([FromRoute] int personId)
         {
             return await _personService.Remove(personId, User);
         }
@@ -48,7 +45,7 @@ namespace DivvyUp.Web.Controllers
         [HttpGet]
         [Route("get/{personId}")]
         [Authorize]
-        public async Task<IActionResult> GetPerson(int personId)
+        public async Task<IActionResult> GetPerson([FromRoute] int personId)
         {
             return await _personService.GetPerson(personId, User);
         }
@@ -72,7 +69,7 @@ namespace DivvyUp.Web.Controllers
         [HttpPost]
         [Route("get/{receiptId}/from-receipt")]
         [Authorize]
-        public async Task<IActionResult> GetPersonFromReceipt([FromQuery] int receiptId)
+        public async Task<IActionResult> GetPersonFromReceipt([FromRoute] int receiptId)
         {
             return await _personService.GetPersonFromReceipt(receiptId, User);
         }
@@ -80,7 +77,7 @@ namespace DivvyUp.Web.Controllers
         [HttpPost]
         [Route("get/{productId}/from-product")]
         [Authorize]
-        public async Task<IActionResult> GetPersonFromProduct([FromQuery] int productId)
+        public async Task<IActionResult> GetPersonFromProduct([FromRoute] int productId)
         {
             return await _personService.GetPersonFromProduct(productId, User);
         }

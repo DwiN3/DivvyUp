@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using AutoMapper;
 using Azure.Core;
 using DivvyUp.Web.Interface;
@@ -7,7 +6,6 @@ using DivvyUp.Web.Models;
 using DivvyUp.Web.RequestDto;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,7 +49,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {
@@ -72,7 +70,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {
@@ -92,7 +90,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {
@@ -110,7 +108,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {
@@ -132,7 +130,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {
@@ -152,7 +150,7 @@ namespace DivvyUp.Web.Service
             }
             catch (ValidException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {

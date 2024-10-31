@@ -1,4 +1,5 @@
-﻿using DivvyUp.Web.Models;
+﻿using System.Net;
+using DivvyUp.Web.Models;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,12 +18,12 @@ namespace DivvyUp.Web.Validator
         {
             var userIdClaim = claims.FindFirst("UserId")?.Value;
             if (userIdClaim == null)
-                throw new ValidException("Błędny token");
+                throw new ValidException(HttpStatusCode.Unauthorized,"Błędny token");
 
             var userId = int.Parse(userIdClaim);
             var user = await _dbContext.Users.FindAsync(userId);
             if (user == null)
-                throw new ValidException("Nie znaleziono osoby");
+                throw new ValidException(HttpStatusCode.NotFound,"Nie znaleziono osoby");
 
             return user;
         }
@@ -35,9 +36,9 @@ namespace DivvyUp.Web.Validator
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.Id == personId);
             if (person == null)
-                throw new ValidException("Osoba nie znaleziona");
+                throw new ValidException(HttpStatusCode.NotFound,"Osoba nie znaleziona");
             if (person.User.UserId != user.UserId)
-                throw new ValidException("Brak dostępu do osoby: "+person.Id);
+                throw new ValidException(HttpStatusCode.Unauthorized,"Brak dostępu do osoby: "+person.Id);
 
             return person;
         }

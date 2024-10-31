@@ -18,14 +18,14 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register(RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             return await _userServiceInternal.Register(request);
         }
 
         [HttpPost]
         [Route("auth")]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             return await _userServiceInternal.Login(request);
             
@@ -34,22 +34,22 @@ namespace DivvyUp.Web.Controllers
         [HttpPut]
         [Route("edit")]
         [Authorize]
-        public async Task<IActionResult> Edit([FromQuery]  [FromBody] RegisterRequest request)
+        public async Task<IActionResult> Edit([FromBody] RegisterRequest request)
         {
             return await _userServiceInternal.Edit(request, User);
         }
 
         [HttpDelete]
-        [Route("remove/{userId}")]
+        [Route("remove")]
         [Authorize]
-        public async Task<IActionResult> Remove(string userId)
+        public async Task<IActionResult> Remove()
         {
-            return await _userServiceInternal.Remove(userId, User);
+            return await _userServiceInternal.Remove(User);
         }
 
         [HttpGet]
         [Route("validate-token")]
-        public async Task<IActionResult> ValidateToken([FromQuery] string token)
+        public async Task<IActionResult> ValidateToken([FromRoute] string token)
         {
             return await _userServiceInternal.ValidToken(token);
         }
