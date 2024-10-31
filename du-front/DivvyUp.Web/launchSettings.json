@@ -13,27 +13,27 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5266", // HTTP URL for development
+      "applicationUrl": "http://localhost:5266",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development" // Set the environment to Development
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7065;http://localhost:5266", // HTTPS and HTTP URLs for development
+      "applicationUrl": "https://localhost:7065;http://localhost:5266",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development" // Set the environment to Development
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "launchBrowser": true,
-      "launchUrl": "swagger/index.html#/"} // Dodaj tę linię
+      "launchUrl": "swagger/index.html#/"}
     },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development" // Set the environment to Development
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
