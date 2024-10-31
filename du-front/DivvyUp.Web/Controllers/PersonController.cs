@@ -26,9 +26,9 @@ namespace DivvyUp.Web.Controllers
         }
 
         [HttpPut]
-        [Route("edit")]
+        [Route("edit/{personId}")]
         [Authorize]
-        public async Task<IActionResult> Edit([FromBody] AddEditPersonRequest request, int personId)
+        public async Task<IActionResult> Edit([FromBody] AddEditPersonRequest request, [FromRoute] int personId)
         {
             return await _personService.Edit(request, personId, User);
 

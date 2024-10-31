@@ -24,11 +24,11 @@
 
         // Person
         public readonly string AddPerson = $"{BaseUrl}/person/add";
-        public readonly string EditPerson = $"{BaseUrl}/person/{arg_ID}/edit";
-        public readonly string RemovePerson = $"{BaseUrl}/person/{arg_ID}/remove";
-        public readonly string GetPerson = $"{BaseUrl}/person/{arg_ID}";
-        public readonly string GetPersons = $"{BaseUrl}/person";
-        public readonly string GetUserPerson = $"{BaseUrl}/person/user-person";
+        public readonly string EditPerson = $"{BaseUrl}/person/edit/{arg_ID}";
+        public readonly string RemovePerson = $"{BaseUrl}/person/remove/{arg_ID}";
+        public readonly string GetPerson = $"{BaseUrl}/person/get/{arg_ID}";
+        public readonly string GetPersons = $"{BaseUrl}/person/get/persons";
+        public readonly string GetUserPerson = $"{BaseUrl}/person/get/user-person";
         public readonly string GetPersonsFromReceipt = $"{BaseUrl}/person/{arg_ID}/from-receipt";
         public readonly string GetPersonsFromProduct = $"{BaseUrl}/person/{arg_ID}/from-product";
 

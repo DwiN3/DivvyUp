@@ -75,8 +75,9 @@ namespace DivvyUp.Web.Service
 
                 _dbContext.Users.Update(user);
                 await _dbContext.SaveChangesAsync();
+                var token =  GenerateToken(user);
 
-                return new OkObjectResult("Pomyślnie wprowadzono zmiany");
+                return new OkObjectResult(token);
             }
             catch (ValidException ex)
             {
