@@ -43,7 +43,7 @@ namespace DivvyUp.Web.Controllers
         }
 
         [HttpPut]
-        [Route("set-settled/{receiptId}?settled={settled}")]
+        [Route("set-settled/{receiptId}/settled={settled}")]
         [Authorize]
         public async Task<IActionResult> SetSettled([FromRoute] int receiptId, [FromRoute] bool settled)
         {
@@ -67,7 +67,7 @@ namespace DivvyUp.Web.Controllers
         }
 
         [HttpGet]
-        [Route("get/receipts-date-range?from={from}&to={to}")]
+        [Route("get/receipts-date-range/from={from}&to={to}")]
         [Authorize]
         public async Task<IActionResult> GetReceipts([FromRoute] DateTime from, [FromRoute] DateTime to)
         {

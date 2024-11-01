@@ -2,7 +2,7 @@
 {
     public class AddEditReceiptRequest
     {
-        public string Name;
-        public DateTime Date;
+        public string Name { get; set; }
+        public DateTime Date { get; set; }
     }
 }
