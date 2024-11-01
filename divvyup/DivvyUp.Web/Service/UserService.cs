@@ -180,7 +180,7 @@ namespace DivvyUp.Web.Service
             {
                 User = user,
                 Name = user.Username,
-                Surname = String.Empty,
+                Surname = string.Empty,
                 ReceiptsCount = 0,
                 ProductsCount = 0,
                 TotalAmount = 0,

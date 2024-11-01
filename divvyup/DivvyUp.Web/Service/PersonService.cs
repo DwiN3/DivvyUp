@@ -24,7 +24,7 @@ namespace DivvyUp.Web.Service
             _validator = validator;
         }
 
-        public async Task<IActionResult> Add(AddEditPersonRequest person, ClaimsPrincipal claims)
+        public async Task<IActionResult> Add(ClaimsPrincipal claims, AddEditPersonRequest person)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> Edit(AddEditPersonRequest request, int personId, ClaimsPrincipal claims)
+        public async Task<IActionResult> Edit(ClaimsPrincipal claims, AddEditPersonRequest request, int personId)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> Remove(int personId, ClaimsPrincipal claims)
+        public async Task<IActionResult> Remove(ClaimsPrincipal claims, int personId)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> GetPerson(int personId, ClaimsPrincipal claims)
+        public async Task<IActionResult> GetPerson(ClaimsPrincipal claims, int personId)
         {
             try
             {
@@ -115,7 +115,6 @@ namespace DivvyUp.Web.Service
                 return new BadRequestResult();
             }
         }
-
 
         public async Task<IActionResult> GetPersons(ClaimsPrincipal claims)
         {
@@ -158,13 +157,12 @@ namespace DivvyUp.Web.Service
             }
         }
 
-
-        public Task<IActionResult> GetPersonFromReceipt(int receiptId, ClaimsPrincipal claims)
+        public Task<IActionResult> GetPersonFromReceipt(ClaimsPrincipal claims, int receiptId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IActionResult> GetPersonFromProduct(int productId, ClaimsPrincipal claims)
+        public Task<IActionResult> GetPersonFromProduct(ClaimsPrincipal claims, int productId)
         {
             throw new NotImplementedException();
         }

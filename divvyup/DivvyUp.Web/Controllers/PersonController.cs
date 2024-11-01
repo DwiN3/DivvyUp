@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DivvyUp.Web.Controllers
 {
-    [Route("rm/person/")]
+    [Route("rm/person")]
     [ApiController]
     public class PersonController : ControllerBase
     {
@@ -16,69 +16,61 @@ namespace DivvyUp.Web.Controllers
             _personService = personService;
         }
 
-        [HttpPost]
-        [Route("add")]
         [Authorize]
+        [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] AddEditPersonRequest request)
         {
-            return await _personService.Add(request, User);
+            return await _personService.Add(User, request);
         }
 
-        [HttpPut]
-        [Route("edit/{personId}")]
         [Authorize]
+        [HttpPut("edit/{personId}")]
         public async Task<IActionResult> Edit([FromBody] AddEditPersonRequest request, [FromRoute] int personId)
         {
-            return await _personService.Edit(request, personId, User);
+            return await _personService.Edit(User, request, personId);
 
         }
 
-        [HttpDelete]
-        [Route("remove/{personId}")]
         [Authorize]
+        [HttpDelete("remove/{personId}")]
         public async Task<IActionResult> Remove([FromRoute] int personId)
         {
-            return await _personService.Remove(personId, User);
+            return await _personService.Remove(User, personId);
         }
 
-        [HttpGet]
-        [Route("get/{personId}")]
         [Authorize]
+        [HttpGet("{personId}")]
         public async Task<IActionResult> GetPerson([FromRoute] int personId)
         {
-            return await _personService.GetPerson(personId, User);
+            return await _personService.GetPerson(User, personId);
         }
 
-        [HttpGet]
-        [Route("get/persons")]
         [Authorize]
+        [HttpGet("people")]
         public async Task<IActionResult> GetPersons()
         {
             return await _personService.GetPersons(User);
         }
 
-        [HttpGet]
-        [Route("get/user-person")]
         [Authorize]
+        [HttpGet("user-person")]
         public async Task<IActionResult> GetUserPerson()
         {
             return await _personService.GetUserPerson(User);
         }
 
-        [HttpPost]
-        [Route("get/{receiptId}/from-receipt")]
         [Authorize]
+        [HttpGet("from-receipt/{receiptId}")]
         public async Task<IActionResult> GetPersonFromReceipt([FromRoute] int receiptId)
         {
-            return await _personService.GetPersonFromReceipt(receiptId, User);
+            return await _personService.GetPersonFromReceipt(User, receiptId);
         }
 
-        [HttpPost]
-        [Route("get/{productId}/from-product")]
         [Authorize]
+        [HttpGet("from-product/{productId}")]
         public async Task<IActionResult> GetPersonFromProduct([FromRoute] int productId)
         {
-            return await _personService.GetPersonFromProduct(productId, User);
+            return await _personService.GetPersonFromProduct(User, productId);
         }
     }
 }
