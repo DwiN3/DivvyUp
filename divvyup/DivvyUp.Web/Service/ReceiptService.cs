@@ -1,51 +1,50 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using AutoMapper;
+using Azure.Core;
 using DivvyUp.Web.InterfaceWeb;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Person = DivvyUp_Shared.Model.Person;
 
 
 namespace DivvyUp.Web.Service
 {
-    public class PersonService : IPersonService
+    public class ReceiptService : IReceiptService
     {
         private readonly MyDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IValidator _validator;
 
-        public PersonService(MyDbContext dbContext, IMapper mapper, IValidator validator)
+        public ReceiptService(MyDbContext dbContext, IMapper mapper, IValidator validator)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
         }
 
-        public async Task<IActionResult> Add(AddEditPersonRequest person, ClaimsPrincipal claims)
+
+        public async Task<IActionResult> Add(ClaimsPrincipal claims, AddEditReceiptRequest request)
         {
             try
             {
                 var user = await _validator.GetUser(claims);
 
-                var newPerson = new Person()
+                var newReceipt = new Receipt()
                 {
                     User = user,
-                    Name = person.Name,
-                    Surname = person.Surname,
-                    ReceiptsCount = 0,
-                    ProductsCount = 0,
-                    TotalAmount = 0,
-                    UnpaidAmount = 0,
-                    LoanBalance = 0,
-                    UserAccount = false
+                    Name = request.Name,
+                    Date = request.Date,
+                    TotalPrice = 0,
+                    Settled = false,
                 };
 
-                _dbContext.Persons.Add(newPerson);
+                _dbContext.Receipts.Add(newReceipt);
                 await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Pomyślnie dodano osobe");
+                return new OkObjectResult("Pomyślnie dodano rachunek");
             }
             catch (ValidException ex)
             {
@@ -57,14 +56,14 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> Edit(AddEditPersonRequest request, int personId, ClaimsPrincipal claims)
+        public async Task<IActionResult> Edit(ClaimsPrincipal claims, AddEditReceiptRequest request, int receiptId)
         {
             try
             {
-                var person = await _validator.GetPerson(claims, personId);
-                person.Name = request.Name;
-                person.Surname = request.Surname;
-                _dbContext.Persons.Update(person);
+                var receipt = await _validator.GetReceipt(claims, receiptId);
+                receipt.Name = request.Name;
+                receipt.Date = request.Date;
+                _dbContext.Receipts.Update(receipt);
                 await _dbContext.SaveChangesAsync();
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
@@ -78,15 +77,15 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> Remove(int personId, ClaimsPrincipal claims)
+        public async Task<IActionResult> Remove(ClaimsPrincipal claims, int receiptId)
         {
             try
             {
-                var person = await _validator.GetPerson(claims, personId);
+                var receipt = await _validator.GetReceipt(claims, receiptId);
 
-                _dbContext.Persons.Remove(person);
+                _dbContext.Receipts.Remove(receipt);
                 await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Pomyślnie usunięto osobe");
+                return new OkObjectResult("Pomyślnie usunięto rachunek");
             }
             catch (ValidException ex)
             {
@@ -98,13 +97,15 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> GetPerson(int personId, ClaimsPrincipal claims)
+        public async Task<IActionResult> SetSettled(ClaimsPrincipal claims, int receiptId, bool settled)
         {
             try
             {
-                var person = await _validator.GetPerson(claims, personId);
-                var personDto = _mapper.Map<PersonDto>(person);
-                return new OkObjectResult(personDto);
+                var receipt = await _validator.GetReceipt(claims, receiptId);
+                receipt.Settled = settled;
+                _dbContext.Receipts.Update(receipt);
+                await _dbContext.SaveChangesAsync();
+                return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
             catch (ValidException ex)
             {
@@ -116,17 +117,34 @@ namespace DivvyUp.Web.Service
             }
         }
 
+        public async Task<IActionResult> GetReceipt(ClaimsPrincipal claims, int receiptId)
+        {
+            try
+            {
+                var receipt = await _validator.GetReceipt(claims, receiptId);
+                var receiptDto = _mapper.Map<ReceiptDto>(receipt);
+                return new OkObjectResult(receiptDto);
+            }
+            catch (ValidException ex)
+            {
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
+        }
 
-        public async Task<IActionResult> GetPersons(ClaimsPrincipal claims)
+        public async Task<IActionResult> GetReceipts(ClaimsPrincipal claims)
         {
             try
             {
                 var user = await _validator.GetUser(claims);
-                var persons = await _dbContext.Persons
+                var receipts = await _dbContext.Receipts
                     .Where(p => p.User == user)
                     .ToListAsync();
-                var personListDto = _mapper.Map<List<PersonDto>>(persons);
-                return new OkObjectResult(personListDto);
+                var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts);
+                return new OkObjectResult(receiptsDto);
             }
             catch (ValidException ex)
             {
@@ -138,15 +156,16 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> GetUserPerson(ClaimsPrincipal claims)
+        public async Task<IActionResult> GetReceiptsByDataRange(ClaimsPrincipal claims, DateTime from, DateTime to)
         {
             try
             {
                 var user = await _validator.GetUser(claims);
-                var person = await _dbContext.Persons
-                    .FirstOrDefaultAsync(p => p.User == user && p.UserAccount);
-                var personDto = _mapper.Map<PersonDto>(person);
-                return new OkObjectResult(personDto);
+                var receipts = await _dbContext.Receipts
+                    .Where(p => p.User == user && p.Date >= from && p.Date <= to)
+                    .ToListAsync();
+                var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts);
+                return new OkObjectResult(receiptsDto);
             }
             catch (ValidException ex)
             {
@@ -156,17 +175,6 @@ namespace DivvyUp.Web.Service
             {
                 return new BadRequestResult();
             }
-        }
-
-
-        public Task<IActionResult> GetPersonFromReceipt(int receiptId, ClaimsPrincipal claims)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IActionResult> GetPersonFromProduct(int productId, ClaimsPrincipal claims)
-        {
-            throw new NotImplementedException();
         }
     }
 }

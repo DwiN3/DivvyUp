@@ -42,5 +42,20 @@ namespace DivvyUp.Web.Validator
 
             return person;
         }
+
+        public async Task<Receipt> GetReceipt(ClaimsPrincipal claims, int receiptId)
+        {
+            var user = await GetUser(claims);
+
+            var receipt = await _dbContext.Receipts
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == receiptId);
+            if (receipt == null)
+                throw new ValidException(HttpStatusCode.NotFound, "Rachunek nie znaleziony");
+            if (receipt.User.Id != user.Id)
+                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do osoby: " + receipt.Id);
+
+            return receipt;
+        }
     }
 }

@@ -14,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IValidator, Validator>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddScoped<IReceiptService, ReceiptService>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 

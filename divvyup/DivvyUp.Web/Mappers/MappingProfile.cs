@@ -9,6 +9,7 @@ namespace DivvyUp.Web.Mappers
         public MappingProfile()
         {
             CreateMap<Person, PersonDto>();
+            CreateMap<Receipt, ReceiptDto>();
         }
     }
 }
