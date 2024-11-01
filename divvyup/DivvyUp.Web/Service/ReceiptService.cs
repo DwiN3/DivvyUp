@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Security.Claims;
 using AutoMapper;
 using Azure.Core;
@@ -37,7 +38,7 @@ namespace DivvyUp.Web.Service
                 {
                     User = user,
                     Name = request.Name,
-                    Date = request.Date,
+                    Date = request.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc),
                     TotalPrice = 0,
                     Settled = false,
                 };
@@ -61,9 +62,13 @@ namespace DivvyUp.Web.Service
             try
             {
                 var receipt = await _validator.GetReceipt(claims, receiptId);
+                if (string.IsNullOrEmpty(request.Name))
+                    return new BadRequestObjectResult("Nazwa nie może być pusta.");
+
                 receipt.Name = request.Name;
-                receipt.Date = request.Date;
+                receipt.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc);
                 _dbContext.Receipts.Update(receipt);
+
                 await _dbContext.SaveChangesAsync();
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
@@ -143,6 +148,7 @@ namespace DivvyUp.Web.Service
                 var receipts = await _dbContext.Receipts
                     .Where(p => p.User == user)
                     .ToListAsync();
+
                 var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts);
                 return new OkObjectResult(receiptsDto);
             }
@@ -156,14 +162,24 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> GetReceiptsByDataRange(ClaimsPrincipal claims, DateTime from, DateTime to)
+        public async Task<IActionResult> GetReceiptsByDataRange(ClaimsPrincipal claims, string from, string to)
         {
             try
             {
+                if (!DateTime.TryParseExact(from, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fromDate))
+                    throw new ArgumentException("Nieprawidłowy format daty początkowej.");
+
+                if (!DateTime.TryParseExact(to, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime toDate))
+                    throw new ArgumentException("Nieprawidłowy format daty końcowej.");
+
+                fromDate = DateTime.SpecifyKind(fromDate, DateTimeKind.Utc);
+                toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
+
                 var user = await _validator.GetUser(claims);
                 var receipts = await _dbContext.Receipts
-                    .Where(p => p.User == user && p.Date >= from && p.Date <= to)
+                    .Where(p => p.User == user && p.Date >= fromDate && p.Date <= toDate)
                     .ToListAsync();
+
                 var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts);
                 return new OkObjectResult(receiptsDto);
             }

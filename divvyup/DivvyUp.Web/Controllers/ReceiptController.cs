@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DivvyUp.Web.Controllers
 {
-    [Route("rm/receipt/")]
+    [Route("rm/receipt")]
     [ApiController]
     public class ReceiptController : ControllerBase
     {
@@ -17,59 +17,52 @@ namespace DivvyUp.Web.Controllers
             _receiptService = receiptService;
         }
 
-        [HttpPost]
-        [Route("add")]
         [Authorize]
+        [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] AddEditReceiptRequest request)
         {
             return await _receiptService.Add(User, request);
         }
 
-        [HttpPut]
-        [Route("edit/{receiptId}")]
         [Authorize]
+        [HttpPut("edit/{receiptId}")]
         public async Task<IActionResult> Edit([FromBody] AddEditReceiptRequest request, [FromRoute] int receiptId)
         {
             return await _receiptService.Edit(User, request, receiptId);
 
         }
 
-        [HttpDelete]
-        [Route("remove/{receiptId}")]
         [Authorize]
+        [HttpDelete("remove/{receiptId}")]
         public async Task<IActionResult> Remove([FromRoute] int receiptId)
         {
             return await _receiptService.Remove(User, receiptId);
         }
 
-        [HttpPut]
-        [Route("set-settled/{receiptId}/settled={settled}")]
         [Authorize]
-        public async Task<IActionResult> SetSettled([FromRoute] int receiptId, [FromRoute] bool settled)
+        [HttpPut("{receiptId}/settled")]
+        public async Task<IActionResult> SetSettled([FromRoute] int receiptId, [FromQuery] bool settled)
         {
             return await _receiptService.SetSettled(User, receiptId, settled);
         }
 
-        [HttpGet]
-        [Route("get/{receiptId}")]
         [Authorize]
+        [HttpGet("{receiptId}")]
         public async Task<IActionResult> GetReceipt([FromRoute] int receiptId)
         {
             return await _receiptService.GetReceipt(User, receiptId);
         }
 
-        [HttpGet]
-        [Route("get/receipts")]
         [Authorize]
+        [HttpGet("receipts")]
         public async Task<IActionResult> GetReceipts()
         {
             return await _receiptService.GetReceipts(User);
         }
 
-        [HttpGet]
-        [Route("get/receipts-date-range/from={from}&to={to}")]
         [Authorize]
-        public async Task<IActionResult> GetReceipts([FromRoute] DateTime from, [FromRoute] DateTime to)
+        [HttpGet("date-range")]
+        public async Task<IActionResult> GetReceipts([FromQuery] string from, [FromQuery] string to)
         {
             return await _receiptService.GetReceiptsByDataRange(User, from, to);
         }

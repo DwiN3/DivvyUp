@@ -13,6 +13,6 @@ namespace DivvyUp.Web.InterfaceWeb
         Task<IActionResult> SetSettled(ClaimsPrincipal claims, int receiptId, bool settled);
         Task<IActionResult> GetReceipt(ClaimsPrincipal claims, int receiptId);
         Task<IActionResult> GetReceipts(ClaimsPrincipal claims);
-        Task<IActionResult> GetReceiptsByDataRange(ClaimsPrincipal claims, DateTime from, DateTime to);
+        Task<IActionResult> GetReceiptsByDataRange(ClaimsPrincipal claims, string from, string to);
     }
 }
