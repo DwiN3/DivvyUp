@@ -63,7 +63,7 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> Edit(RegisterRequest request, ClaimsPrincipal claims)
+        public async Task<IActionResult> Edit(ClaimsPrincipal claims, RegisterRequest request)
         {
             try
             {
@@ -149,7 +149,7 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request, ClaimsPrincipal claims)
+        public async Task<IActionResult> ChangePassword(ClaimsPrincipal claims, ChangePasswordRequest request)
         {
             try
             {

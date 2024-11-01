@@ -14,12 +14,12 @@
         public const string arg_Lent = "{lent}";
 
         // User
-        public readonly string Login = $"{BaseUrl}/user/auth";
+        public readonly string Login = $"{BaseUrl}/user/login";
         public readonly string Register = $"{BaseUrl}/user/register";
         public readonly string EditUser = $"{BaseUrl}/user/edit";
-        public readonly string ChangePasswordUser = $"{BaseUrl}/user/change-password";
         public readonly string RemoveUser = $"{BaseUrl}/user/remove";
-        public readonly string GetUser = $"{BaseUrl}/user/get-user";
+        public readonly string ChangePasswordUser = $"{BaseUrl}/user/change-password";
+        public readonly string GetUser = $"{BaseUrl}/user/me";
         public readonly string IsValid = $"{BaseUrl}/user/validate-token";
 
         // Person
