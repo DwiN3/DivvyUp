@@ -141,6 +141,30 @@ namespace DivvyUp.Web.Service
             }
         }
 
+        public async Task<IActionResult> GetProducts(ClaimsPrincipal claims)
+        {
+            try
+            {
+                var user = await _validator.GetUser(claims);
+                var products = await _dbContext.Products
+                    .Include(p => p.Receipt)
+                    .Include(p => p.Receipt.User)
+                    .Where(p => p.Receipt.User == user)
+                    .ToListAsync();
+
+                var productsDto = _mapper.Map<List<ProductDto>>(products);
+                return new OkObjectResult(productsDto);
+            }
+            catch (ValidException ex)
+            {
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
+        }
+
         public async Task<IActionResult> GetProductsFromReceipt(ClaimsPrincipal claims, int receiptId)
         {
             try

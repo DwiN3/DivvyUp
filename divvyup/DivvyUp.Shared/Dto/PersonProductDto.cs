@@ -10,6 +10,8 @@
         public bool compensation { get; set; }
         public bool settled { get; set; }
 
+        public PersonDto person { get; set; }
+
         public PersonProductDto()
         {
             id = 0;

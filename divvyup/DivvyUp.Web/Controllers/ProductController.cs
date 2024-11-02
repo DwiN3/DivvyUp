@@ -53,6 +53,13 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
+        [HttpGet("products")]
+        public async Task<IActionResult> GetProducts()
+        {
+            return await _productService.GetProducts(User);
+        }
+
+        [Authorize]
         [HttpGet("products-from-receipt/{receiptId}")]
         public async Task<IActionResult> GetProductsFromReceipt([FromRoute] int receiptId)
         {

@@ -18,6 +18,7 @@ builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IReceiptService, ReceiptService>();
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IPersonProductService, PersonProductService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 

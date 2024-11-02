@@ -89,5 +89,22 @@ namespace DivvyUp.Web.Validator
 
             return product;
         }
+
+        public async Task<PersonProduct> GetPersonProduct(ClaimsPrincipal claims, int personProductId)
+        {
+            var user = await GetUser(claims);
+
+            var personProduct = await _dbContext.PersonProducts
+                .Include(p => p.Product)
+                .Include(p => p.Person)
+                .Include(p => p.Person.User)
+                .FirstOrDefaultAsync(p => p.Id == personProductId);
+            if (personProduct == null)
+                throw new ValidException(HttpStatusCode.NotFound, "Przypis osoby z produktem nie znaleziony");
+            if (personProduct.Person.User.Id != user.Id)
+                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do przypisu produktu z osobą: " + personProductId);
+
+            return personProduct;
+        }
     }
 }

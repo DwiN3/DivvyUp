@@ -41,7 +41,7 @@ namespace DivvyUp.Web.Controllers
 
         [Authorize]
         [HttpPut("{loanId}/set-person")]
-        public async Task<IActionResult> SetLent([FromRoute] int loanId, [FromQuery] int personId)
+        public async Task<IActionResult> SetPerson([FromRoute] int loanId, [FromQuery] int personId)
         {
             return await _loanService.SetPerson(User, loanId, personId);
         }
@@ -76,7 +76,7 @@ namespace DivvyUp.Web.Controllers
 
         [Authorize]
         [HttpGet("person-loans/{personId}")]
-        public async Task<IActionResult> GetPersonLoan([FromRoute] int personId)
+        public async Task<IActionResult> GetPersonLoans([FromRoute] int personId)
         {
             return await _loanService.GetPersonLoans(User, personId);
         }

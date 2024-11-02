@@ -7,6 +7,7 @@
         // Arguments
         public const string arg_ID = "{id}";
         public const string arg_Settled = "{settled}";
+        public const string arg_Compensation = "{compensation}";
         public const string arg_PersonId = "{personId}";
         public const string arg_Year = "{year}";
         public const string arg_From = "{from}";
@@ -59,18 +60,18 @@
         public readonly string RemoveProduct = $"{BaseUrl}/product/remove/{arg_ID}";
         public readonly string SetSettledProduct = $"{BaseUrl}/product/{arg_ID}/settled?settled={arg_Settled}";
         public readonly string GetProduct = $"{BaseUrl}/product/{arg_ID}";
-        public readonly string GetProducts = $"{BaseUrl}/products-from-receipt/{arg_ID}";
+        public readonly string GetProducts = $"{BaseUrl}/product/products-from-receipt/{arg_ID}";
 
         // Person Product
-        public readonly string AddPersonProduct = $"{BaseUrl}/product/{arg_ID}/person-product/add";
-        public readonly string EditPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/edit";
-        public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/{arg_ID}/remove";
+        public readonly string AddPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/add";
+        public readonly string EditPersonProduct = $"{BaseUrl}/person-product/edit/{arg_ID}";
+        public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/remove/{arg_ID}";
         public readonly string SetPersonPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-person?personId={arg_PersonId}";
-        public readonly string SetSettledPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-settled?settled={arg_Settled}";
+        public readonly string SetSettledPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/settled?settled={arg_Settled}";
         public readonly string SetCompensationPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-compensation";
         public readonly string GetPersonProduct = $"{BaseUrl}/person-product/{arg_ID}";
-        public readonly string GetPersonProductsForProduct = $"{BaseUrl}/product/{arg_ID}/person-product";
-        public readonly string GetPersonProducts= $"{BaseUrl}/person-product";
+        public readonly string GetPersonProducts = $"{BaseUrl}/person-product/person-products";
+        public readonly string GetPersonProductsForProduct = $"{BaseUrl}/person-product/product/{arg_ID}";
 
         // Chart
         public readonly string GetTotalAmountsChart = $"{BaseUrl}/chart/total-amounts";

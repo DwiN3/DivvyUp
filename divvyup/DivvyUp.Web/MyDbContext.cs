@@ -18,6 +18,7 @@ namespace DivvyUp.Web
             modelBuilder.Entity<Receipt>().ToTable("receipt");
             modelBuilder.Entity<Loan>().ToTable("loan");
             modelBuilder.Entity<Product>().ToTable("product");
+            modelBuilder.Entity<PersonProduct>().ToTable("person_product");
 
             base.OnModelCreating(modelBuilder);
         }
@@ -27,5 +28,6 @@ namespace DivvyUp.Web
         public DbSet<Receipt> Receipts { get; set; }
         public DbSet<Loan> Loans { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<PersonProduct> PersonProducts { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace DivvyUp.Web.InterfaceWeb
         Task<IActionResult> Remove(ClaimsPrincipal claims, int productId);
         Task<IActionResult> SetSettled(ClaimsPrincipal claims, int productId, bool settled);
         Task<IActionResult> GetProduct(ClaimsPrincipal claims, int productId);
+        Task<IActionResult> GetProducts(ClaimsPrincipal claims);
         Task<IActionResult> GetProductsFromReceipt(ClaimsPrincipal claims, int receiptId);
     }
 }
