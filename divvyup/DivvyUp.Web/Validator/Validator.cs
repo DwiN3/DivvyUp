@@ -43,6 +43,22 @@ namespace DivvyUp.Web.Validator
             return person;
         }
 
+        public async Task<Loan> GetLoan(ClaimsPrincipal claims, int loanId)
+        {
+            var user = await GetUser(claims);
+
+            var loan = await _dbContext.Loans
+                .Include(p => p.Person)
+                .Include(p => p.Person.User)
+                .FirstOrDefaultAsync(p => p.Id == loanId);
+            if (loan == null)
+                throw new ValidException(HttpStatusCode.NotFound, "Pożyczka nie znaleziona");
+            if (loan.Person.User.Id != user.Id)
+                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do pożyczki: " + loan.Id);
+
+            return loan;
+        }
+
         public async Task<Receipt> GetReceipt(ClaimsPrincipal claims, int receiptId)
         {
             var user = await GetUser(claims);
@@ -53,25 +69,25 @@ namespace DivvyUp.Web.Validator
             if (receipt == null)
                 throw new ValidException(HttpStatusCode.NotFound, "Rachunek nie znaleziony");
             if (receipt.User.Id != user.Id)
-                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do osoby: " + receipt.Id);
+                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do rachunku: " + receipt.Id);
 
             return receipt;
         }
 
-        public async Task<Loan> GetLoan(ClaimsPrincipal claims, int loanId)
+        public async Task<Product> GetProduct(ClaimsPrincipal claims, int productId)
         {
             var user = await GetUser(claims);
 
-            var loan = await _dbContext.Loans
-                .Include(p => p.Person)
-                .Include(p => p.Person.User)
-                .FirstOrDefaultAsync(p => p.Id == loanId);
-            if (loan == null)
-                throw new ValidException(HttpStatusCode.NotFound, "Rachunek nie znaleziony");
-            if (loan.Person.User.Id != user.Id)
-                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do osoby: " + loan.Id);
+            var product = await _dbContext.Products
+                .Include(p => p.Receipt)
+                .Include(p => p.Receipt.User)
+                .FirstOrDefaultAsync(p => p.Id == productId);
+            if (product == null)
+                throw new ValidException(HttpStatusCode.NotFound, "Produkt nie znaleziony");
+            if (product.Receipt.User.Id != user.Id)
+                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do produktu: " + product.Id);
 
-            return loan;
+            return product;
         }
     }
 }

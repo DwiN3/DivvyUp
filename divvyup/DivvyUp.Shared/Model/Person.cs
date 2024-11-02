@@ -36,7 +36,7 @@ namespace DivvyUp_Shared.Model
         [Column("loan_balance")]
         public decimal LoanBalance { get; set; }
 
-        [Column("user_account")]
+        [Column("is_user_account")]
         public bool UserAccount { get; set; }
     }
 }

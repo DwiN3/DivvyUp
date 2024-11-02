@@ -54,12 +54,12 @@
         public readonly string GetReceiptsByDataRange = $"{BaseUrl}/receipt/date-range?from={arg_From}&to={arg_To}";
 
         // Product
-        public readonly string AddProduct = $"{BaseUrl}/receipt/{arg_ID}/product/add";
-        public readonly string EditProduct = $"{BaseUrl}/product/{arg_ID}/edit";
-        public readonly string RemoveProduct = $"{BaseUrl}/product/{arg_ID}/remove";
-        public readonly string SetSettledProduct = $"{BaseUrl}/product/{arg_ID}/set-settled?settled={arg_Settled}";
+        public readonly string AddProduct = $"{BaseUrl}/{arg_ID}/add";
+        public readonly string EditProduct = $"{BaseUrl}/product/edit/{arg_ID}";
+        public readonly string RemoveProduct = $"{BaseUrl}/product/remove/{arg_ID}";
+        public readonly string SetSettledProduct = $"{BaseUrl}/product/{arg_ID}/settled?settled={arg_Settled}";
         public readonly string GetProduct = $"{BaseUrl}/product/{arg_ID}";
-        public readonly string GetProducts = $"{BaseUrl}/receipt/{arg_ID}/product";
+        public readonly string GetProducts = $"{BaseUrl}/products-from-receipt/{arg_ID}";
 
         // Person Product
         public readonly string AddPersonProduct = $"{BaseUrl}/product/{arg_ID}/person-product/add";

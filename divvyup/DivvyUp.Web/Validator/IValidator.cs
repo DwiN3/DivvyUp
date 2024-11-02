@@ -7,7 +7,8 @@ namespace DivvyUp.Web.Validator
     {
         Task<User> GetUser(ClaimsPrincipal claims);
         Task<Person> GetPerson(ClaimsPrincipal claims, int personId);
-        Task<Receipt> GetReceipt(ClaimsPrincipal claims, int receiptId);
         Task<Loan> GetLoan(ClaimsPrincipal claims, int loanId);
+        Task<Receipt> GetReceipt(ClaimsPrincipal claims, int receiptId);
+        Task<Product> GetProduct(ClaimsPrincipal claims, int productId);
     }
 }

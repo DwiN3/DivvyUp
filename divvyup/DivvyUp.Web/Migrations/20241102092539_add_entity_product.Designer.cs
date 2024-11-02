@@ -3,6 +3,7 @@ using System;
 using DivvyUp.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DivvyUp.Web.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241102092539_add_entity_product")]
+    partial class add_entity_product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,7 +103,7 @@ namespace DivvyUp.Web.Migrations
 
                     b.Property<bool>("UserAccount")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_user_account");
+                        .HasColumnName("user_account");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
@@ -128,7 +131,7 @@ namespace DivvyUp.Web.Migrations
 
                     b.Property<bool>("Divisible")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_divisible");
+                        .HasColumnName("divisible");
 
                     b.Property<int>("MaxQuantity")
                         .HasColumnType("integer")

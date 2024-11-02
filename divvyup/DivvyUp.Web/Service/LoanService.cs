@@ -34,6 +34,7 @@ namespace DivvyUp.Web.Service
                 var newLoan = new Loan()
                 {
                     Person = person,
+                    PersonId = person.Id,
                     Date = request.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc),
                     Lent = request.Lent,
                     Amount = request.Amount,

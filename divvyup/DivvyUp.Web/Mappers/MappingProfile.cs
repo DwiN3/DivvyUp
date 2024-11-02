@@ -39,6 +39,18 @@ namespace DivvyUp.Web.Mappers
                 .ForMember(dest => dest.person, opt => opt.MapFrom(src => src.Person))
                 //.ForMember(dest => dest.person, opt => opt.Ignore())
                 ;
+
+            CreateMap<Product, ProductDto>()
+                .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.receiptId, opt => opt.MapFrom(src => src.ReceiptId))
+                .ForMember(dest => dest.name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.divisible, opt => opt.MapFrom(src => src.Divisible))
+                .ForMember(dest => dest.maxQuantity, opt => opt.MapFrom(src => src.MaxQuantity))
+                .ForMember(dest => dest.compensationPrice, opt => opt.MapFrom(src => src.CompensationPrice))
+                .ForMember(dest => dest.settled, opt => opt.MapFrom(src => src.Settled))
+                .ForMember(dest => dest.persons, opt => opt.Ignore())
+                ;
             ;
         }
     }
