@@ -1,8 +1,6 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Security.Claims;
 using AutoMapper;
-using Azure.Core;
 using DivvyUp.Web.InterfaceWeb;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
@@ -26,7 +24,6 @@ namespace DivvyUp.Web.Service
             _mapper = mapper;
             _validator = validator;
         }
-
 
         public async Task<IActionResult> Add(ClaimsPrincipal claims, AddEditReceiptRequest request)
         {

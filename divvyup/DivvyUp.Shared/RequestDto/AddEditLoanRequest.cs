@@ -2,9 +2,9 @@
 {
     public class AddEditLoanRequest
     {
-        private int PersonId { get; set; }
-        private DateTime Date { get; set; }
-        private decimal Amount { get; set; }
-        private bool Lent { get; set; }
+        public int PersonId { get; set; }
+        public DateTime Date { get; set; }
+        public decimal Amount { get; set; }
+        public bool Lent { get; set; }
     }
 }

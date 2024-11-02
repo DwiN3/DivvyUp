@@ -34,14 +34,14 @@
 
         // Loan
         public readonly string AddLoan = $"{BaseUrl}/loan/add";
-        public readonly string EditLoan = $"{BaseUrl}/loan/{arg_ID}/edit";
-        public readonly string RemoveLoan = $"{BaseUrl}/loan/{arg_ID}/remove";
+        public readonly string EditLoan = $"{BaseUrl}/loan/edit/{arg_ID}";
+        public readonly string RemoveLoan = $"{BaseUrl}/loan/remove/{arg_ID}";
         public readonly string SetPersonLoan = $"{BaseUrl}/loan/{arg_ID}/set-person?personId={arg_PersonId}";
         public readonly string SetSettledLoan = $"{BaseUrl}/loan/{arg_ID}/set-settled?settled={arg_Settled}";
         public readonly string SetLentLoan = $"{BaseUrl}/loan/{arg_ID}/set-lent?lent={arg_Lent}";
         public readonly string GetLoan = $"{BaseUrl}/loan/{arg_ID}";
-        public readonly string GetLoanPerson = $"{BaseUrl}/loan/person/{arg_ID}";
-        public readonly string GetLoans = $"{BaseUrl}/loan";
+        public readonly string GetLoanPerson = $"{BaseUrl}/loan/person-loans/{arg_PersonId}";
+        public readonly string GetLoans = $"{BaseUrl}/loan/loans";
         public readonly string GetLoansByDataRange = $"{BaseUrl}/loan/date-range?from={arg_From}&to={arg_To}";
 
         // Receipt

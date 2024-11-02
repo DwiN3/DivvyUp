@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using DivvyUp.Web.Service;
 using DivvyUp.Web.Middleware;
 using DivvyUp.Web.Validator;
+using DivvyUp.Web.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,8 @@ builder.Services.AddScoped<IValidator, Validator>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IReceiptService, ReceiptService>();
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddScoped<ILoanService, LoanService>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 builder.Services.AddEndpointsApiExplorer();

@@ -8,12 +8,12 @@ namespace DivvyUp_Shared.Dto
 {
     public class LoanDto
     {
-        public int id;
-        public int personId;
-        public DateTime date;
-        public double amount;
-        public bool lent;
-        public bool settled;
+        public int id { get; set; }
+        public int personId { get; set; }
+        public DateTime date { get; set; }
+        public double amount { get; set; }
+        public bool lent { get; set; }
+        public bool settled { get; set; }
         public PersonDto person { get; set; }
 
         public LoanDto()

@@ -62,7 +62,7 @@ namespace DivvyUp.Web.Controllers
 
         [Authorize]
         [HttpGet("date-range")]
-        public async Task<IActionResult> GetReceipts([FromQuery] string from, [FromQuery] string to)
+        public async Task<IActionResult> GetReceiptsByDataRange([FromQuery] string from, [FromQuery] string to)
         {
             return await _receiptService.GetReceiptsByDataRange(User, from, to);
         }

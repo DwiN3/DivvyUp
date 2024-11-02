@@ -57,5 +57,21 @@ namespace DivvyUp.Web.Validator
 
             return receipt;
         }
+
+        public async Task<Loan> GetLoan(ClaimsPrincipal claims, int loanId)
+        {
+            var user = await GetUser(claims);
+
+            var loan = await _dbContext.Loans
+                .Include(p => p.Person)
+                .Include(p => p.Person.User)
+                .FirstOrDefaultAsync(p => p.Id == loanId);
+            if (loan == null)
+                throw new ValidException(HttpStatusCode.NotFound, "Rachunek nie znaleziony");
+            if (loan.Person.User.Id != user.Id)
+                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do osoby: " + loan.Id);
+
+            return loan;
+        }
     }
 }
