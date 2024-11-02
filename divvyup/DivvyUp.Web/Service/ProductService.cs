@@ -45,8 +45,9 @@ namespace DivvyUp.Web.Service
                 };
 
                 _dbContext.Products.Add(newProduct);
+
                 await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Pomyślnie dodano produkt");
+                return new OkObjectResult(newProduct);
             }
             catch (ValidException ex)
             {

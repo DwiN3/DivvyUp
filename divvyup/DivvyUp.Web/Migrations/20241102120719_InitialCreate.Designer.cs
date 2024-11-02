@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DivvyUp.Web.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20241102092539_add_entity_product")]
-    partial class add_entity_product
+    [Migration("20241102120719_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,7 +103,7 @@ namespace DivvyUp.Web.Migrations
 
                     b.Property<bool>("UserAccount")
                         .HasColumnType("boolean")
-                        .HasColumnName("user_account");
+                        .HasColumnName("is_user_account");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
@@ -114,6 +114,48 @@ namespace DivvyUp.Web.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("person", "divvyup");
+                });
+
+            modelBuilder.Entity("DivvyUp_Shared.Model.PersonProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Compensation")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_compensation");
+
+                    b.Property<decimal>("PartOfPrice")
+                        .HasColumnType("numeric")
+                        .HasColumnName("part_of_price");
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("integer")
+                        .HasColumnName("person_id");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.Property<bool>("Settled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_settled");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("person_product", "divvyup");
                 });
 
             modelBuilder.Entity("DivvyUp_Shared.Model.Product", b =>
@@ -131,7 +173,7 @@ namespace DivvyUp.Web.Migrations
 
                     b.Property<bool>("Divisible")
                         .HasColumnType("boolean")
-                        .HasColumnName("divisible");
+                        .HasColumnName("is_divisible");
 
                     b.Property<int>("MaxQuantity")
                         .HasColumnType("integer")
@@ -247,6 +289,25 @@ namespace DivvyUp.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DivvyUp_Shared.Model.PersonProduct", b =>
+                {
+                    b.HasOne("DivvyUp_Shared.Model.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DivvyUp_Shared.Model.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("DivvyUp_Shared.Model.Product", b =>
