@@ -3,6 +3,7 @@ using AutoMapper;
 using DivvyUp.Web.InterfaceWeb;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -157,14 +158,55 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public Task<IActionResult> GetPersonFromReceipt(ClaimsPrincipal claims, int receiptId)
+        public async Task<IActionResult> GetPersonFromReceipt(ClaimsPrincipal claims, int receiptId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await _validator.GetUser(claims);
+                await _validator.GetReceipt(claims, receiptId);
+
+                var personProducts = await _dbContext.PersonProducts
+                    .Include(pp => pp.Person)
+                    .Include(pp => pp.Product)
+                    .Where(pp => pp.Product.ReceiptId == receiptId && pp.Person.User == user)
+                    .ToListAsync();
+
+                var personsDto = _mapper.Map<List<PersonDto>>(personProducts.Select(pp => pp.Person).ToList());
+                return new OkObjectResult(personsDto);
+            }
+            catch (ValidException ex)
+            {
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
         }
 
-        public Task<IActionResult> GetPersonFromProduct(ClaimsPrincipal claims, int productId)
+        public async Task<IActionResult> GetPersonFromProduct(ClaimsPrincipal claims, int productId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await _validator.GetUser(claims);
+                await _validator.GetProduct(claims, productId);
+
+                var personProducts = await _dbContext.PersonProducts
+                    .Include(pp => pp.Person)
+                    .Where(pp => pp.ProductId == productId && pp.Person.User == user)
+                    .ToListAsync();
+
+                var personsDto = _mapper.Map<List<PersonDto>>(personProducts.Select(pp => pp.Person).ToList());
+                return new OkObjectResult(personsDto);
+            }
+            catch (ValidException ex)
+            {
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
         }
     }
 }

@@ -199,7 +199,7 @@ namespace DivvyUp.Web.Service
                     .Where(p => p.Person.User == user)
                     .ToListAsync();
 
-                var personProductsDto = _mapper.Map<List<PersonProductDto>>(personProducts);
+                var personProductsDto = _mapper.Map<List<PersonProductDto>>(personProducts).ToList();
                 return new OkObjectResult(personProductsDto);
             }
             catch (ValidException ex)
@@ -224,7 +224,7 @@ namespace DivvyUp.Web.Service
                     .Where(p => p.Person.User == user && p.ProductId == productId)
                     .ToListAsync();
 
-                var personProductsDto = _mapper.Map<List<PersonProductDto>>(personProducts);
+                var personProductsDto = _mapper.Map<List<PersonProductDto>>(personProducts).ToList();
                 return new OkObjectResult(personProductsDto);
             }
             catch (ValidException ex)

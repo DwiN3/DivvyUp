@@ -175,7 +175,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetLoanPerson.Replace(ApiRoute.arg_ID, personId.ToString());
+                var url = _url.GetLoanPerson.Replace(ApiRoute.arg_PersonId, personId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<LoanDto>>(jsonResponse);

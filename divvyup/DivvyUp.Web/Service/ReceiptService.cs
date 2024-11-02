@@ -146,7 +146,7 @@ namespace DivvyUp.Web.Service
                     .Where(p => p.User == user)
                     .ToListAsync();
 
-                var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts);
+                var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts).ToList();
                 return new OkObjectResult(receiptsDto);
             }
             catch (ValidException ex)
@@ -177,7 +177,7 @@ namespace DivvyUp.Web.Service
                     .Where(p => p.User == user && p.Date >= fromDate && p.Date <= toDate)
                     .ToListAsync();
 
-                var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts);
+                var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts).ToList();
                 return new OkObjectResult(receiptsDto);
             }
             catch (ValidException ex)

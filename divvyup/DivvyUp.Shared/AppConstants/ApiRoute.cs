@@ -7,7 +7,6 @@
         // Arguments
         public const string arg_ID = "{id}";
         public const string arg_Settled = "{settled}";
-        public const string arg_Compensation = "{compensation}";
         public const string arg_PersonId = "{personId}";
         public const string arg_Year = "{year}";
         public const string arg_From = "{from}";
@@ -55,7 +54,7 @@
         public readonly string GetReceiptsByDataRange = $"{BaseUrl}/receipt/date-range?from={arg_From}&to={arg_To}";
 
         // Product
-        public readonly string AddProduct = $"{BaseUrl}/{arg_ID}/add";
+        public readonly string AddProduct = $"{BaseUrl}/product/{arg_ID}/add";
         public readonly string EditProduct = $"{BaseUrl}/product/edit/{arg_ID}";
         public readonly string RemoveProduct = $"{BaseUrl}/product/remove/{arg_ID}";
         public readonly string SetSettledProduct = $"{BaseUrl}/product/{arg_ID}/settled?settled={arg_Settled}";

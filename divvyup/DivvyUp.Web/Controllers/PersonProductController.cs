@@ -68,7 +68,7 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("/product/{productId}")]
+        [HttpGet("product/{productId}")]
         public async Task<IActionResult> GetPersonProductsFromProduct([FromRoute] int productId)
         {
             return await _personProductService.GetPersonProductsFromProduct(User, productId);
