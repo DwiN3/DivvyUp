@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using AutoMapper;
 using DivvyUp.Web.InterfaceWeb;
@@ -30,6 +31,13 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
+                _validator.IsNull(request.Price, "Cena jest wymagana");
+                _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
+                _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
+                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+
                 var receipt = await _validator.GetReceipt(claims, receiptId);
 
                 var newProduct = new Product()
@@ -63,6 +71,13 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
+                _validator.IsNull(request.Price, "Cena jest wymagana");
+                _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
+                _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
+                _validator.IsNull(productId, "Brak identyfikatora produktu");
+
                 var product = await _validator.GetProduct(claims, productId);
 
                 product.Name = request.Name;
@@ -88,6 +103,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(productId, "Brak identyfikatora produktu");
+
                 var product = await _validator.GetProduct(claims, productId);
 
                 _dbContext.Products.Remove(product);
@@ -108,6 +125,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(productId, "Brak identyfikatora produktu");
+                _validator.IsNull(settled, "Brak decyzji rozliczenia");
+
                 var product = await _validator.GetProduct(claims, productId);
                 product.Settled = settled;
                 _dbContext.Products.Update(product);
@@ -128,6 +148,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(productId, "Brak identyfikatora produktu");
+              
+
                 var product = await _validator.GetProduct(claims, productId);
                 var productDto = _mapper.Map<ProductDto>(product);
                 return new OkObjectResult(productDto);
@@ -170,6 +193,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+
                 var user = await _validator.GetUser(claims);
                 var products = await _dbContext.Products
                     .Include(p => p.Receipt)

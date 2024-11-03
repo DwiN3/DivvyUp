@@ -1,5 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using AutoMapper;
+using Azure.Core;
 using DivvyUp.Web.InterfaceWeb;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
@@ -7,6 +10,7 @@ using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.WebRequestMethods;
 using Person = DivvyUp_Shared.Model.Person;
 
 
@@ -25,17 +29,19 @@ namespace DivvyUp.Web.Service
             _validator = validator;
         }
 
-        public async Task<IActionResult> Add(ClaimsPrincipal claims, AddEditPersonRequest person)
+        public async Task<IActionResult> Add(ClaimsPrincipal claims, AddEditPersonRequest request)
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsEmpty(request.Name, "Nazwa osoby jest wymagana");
                 var user = await _validator.GetUser(claims);
 
                 var newPerson = new Person()
                 {
                     User = user,
-                    Name = person.Name,
-                    Surname = person.Surname,
+                    Name = request.Name,
+                    Surname = request.Surname,
                     ReceiptsCount = 0,
                     ProductsCount = 0,
                     TotalAmount = 0,
@@ -62,6 +68,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsEmpty(request.Name, "Nazwa osoby jest wymagana");
                 var person = await _validator.GetPerson(claims, personId);
                 person.Name = request.Name;
                 person.Surname = request.Surname;
@@ -83,6 +91,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(personId, "Brak identyfikatora osoby");
+
                 var person = await _validator.GetPerson(claims, personId);
 
                 _dbContext.Persons.Remove(person);
@@ -103,6 +113,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(personId, "Brak identyfikatora osoby");
+
                 var person = await _validator.GetPerson(claims, personId);
                 var personDto = _mapper.Map<PersonDto>(person);
                 return new OkObjectResult(personDto);
@@ -162,6 +174,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+
                 var user = await _validator.GetUser(claims);
                 await _validator.GetReceipt(claims, receiptId);
 
@@ -188,6 +202,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(productId, "Brak identyfikatora rachunku");
+
                 var user = await _validator.GetUser(claims);
                 await _validator.GetProduct(claims, productId);
 

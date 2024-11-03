@@ -2,6 +2,9 @@
 using DivvyUp_Shared.Model;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using static System.Net.WebRequestMethods;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DivvyUp.Web.Validator
 {
@@ -12,6 +15,22 @@ namespace DivvyUp.Web.Validator
         public Validator(MyDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public void IsNull(object obj, string message)
+        {
+            if (obj == null)
+            {
+                throw new ValidException(HttpStatusCode.BadRequest, message);
+            }
+        }
+
+        public void IsEmpty(string str, string message)
+        {
+            if (str.IsNullOrEmpty())
+            {
+                throw new ValidException(HttpStatusCode.BadRequest, message);
+            }
         }
 
         public async Task<User> GetUser(ClaimsPrincipal claims)

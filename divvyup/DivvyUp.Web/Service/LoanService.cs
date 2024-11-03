@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Security.Claims;
 using AutoMapper;
 using DivvyUp.Web.InterfaceWeb;
@@ -29,6 +30,11 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsNull(request.PersonId, "Osoba jest wymagana");
+                _validator.IsNull(request.Amount, "Ilość jest wymagana");
+                _validator.IsNull(request.Date, "Data jest wymagana");
+
                 var person = await _validator.GetPerson(claims, request.PersonId);
 
                 var newLoan = new Loan()
@@ -59,6 +65,12 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsNull(request.PersonId, "Osoba jest wymagana");
+                _validator.IsNull(request.Amount, "Ilość jest wymagana");
+                _validator.IsNull(request.Date, "Data jest wymagana");
+                _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
+
                 var loan = await _validator.GetLoan(claims, loanId);
                 var person = await _validator.GetPerson(claims, request.PersonId);
 
@@ -85,6 +97,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
+
                 var loan = await _validator.GetLoan(claims, loanId);
 
                 _dbContext.Loans.Remove(loan);
@@ -105,6 +119,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
+                _validator.IsNull(personId, "Brak identyfikatora osoby");
+
                 var loan = await _validator.GetLoan(claims, loanId);
                 var person = await _validator.GetPerson(claims, personId);
 
@@ -129,6 +146,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
+                _validator.IsNull(settled, "Brak decyzji rozliczenia");
+
                 var loan = await _validator.GetLoan(claims, loanId);
                 loan.Settled = settled;
                 _dbContext.Loans.Update(loan);
@@ -149,6 +169,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
+                _validator.IsNull(lent, "Brak decyzji o pożyczce");
+
                 var loan = await _validator.GetLoan(claims, loanId);
                 loan.Lent = lent;
                 _dbContext.Loans.Update(loan);
@@ -165,11 +188,13 @@ namespace DivvyUp.Web.Service
             }
         }
 
-        public async Task<IActionResult> GetLoan(ClaimsPrincipal claims, int personId)
+        public async Task<IActionResult> GetLoan(ClaimsPrincipal claims, int loanId)
         {
             try
             {
-                var loan = await _validator.GetLoan(claims, personId);
+                _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
+
+                var loan = await _validator.GetLoan(claims, loanId);
                 var loanDto = _mapper.Map<LoanDto>(loan);
                 return new OkObjectResult(loanDto);
             }
@@ -211,6 +236,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(personId, "Brak identyfikatora osoby");
+
                 var user = await _validator.GetUser(claims);
                 var loans = await _dbContext.Loans
                     .Include(p => p.Person)
@@ -235,6 +262,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsEmpty(from, "Brak daty od");
+                _validator.IsEmpty(to, "Brak daty do");
+
                 if (!DateTime.TryParseExact(from, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fromDate))
                     throw new ArgumentException("Nieprawidłowy format daty początkowej.");
 

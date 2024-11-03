@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using AutoMapper;
 using Azure.Core;
 using DivvyUp.Web.InterfaceWeb;
@@ -29,6 +30,11 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsNull(request.PersonId, "Brak identyfikatora osoby");
+                _validator.IsNull(request.Quantity, "Ilość jest wymagana");
+                _validator.IsNull(productId, "Brak identyfikatora produktu");
+
                 var person = await _validator.GetPerson(claims, request.PersonId);
                 var product = await _validator.GetProduct(claims, productId);
 
@@ -62,6 +68,11 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsNull(request.PersonId, "Brak identyfikatora osoby");
+                _validator.IsNull(request.Quantity, "Ilość jest wymagana");
+                _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
+
                 var personProduct = await _validator.GetPersonProduct(claims, personProductId);
                 var person = await _validator.GetPerson(claims, request.PersonId);
 
@@ -87,6 +98,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
+
                 var personProduct = await _validator.GetPersonProduct(claims, personProductId);
 
                 _dbContext.PersonProducts.Remove(personProduct);
@@ -107,6 +120,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
+                _validator.IsNull(personId, "Brak identyfikatora osoby");
+
                 var personProduct = await _validator.GetPersonProduct(claims, personProductId);
                 var person = await _validator.GetPerson(claims, personId);
 
@@ -131,6 +147,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
+                _validator.IsNull(settled, "Brak decyzji rozliczenia");
+
                 var personProduct = await _validator.GetPersonProduct(claims, personProductId);
                 personProduct.Settled = settled;
 
@@ -152,6 +171,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
+
                 var personProduct = await _validator.GetPersonProduct(claims, personProductId);
                 personProduct.Compensation = true;
 
@@ -173,6 +194,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
+            
                 var personProduct = await _validator.GetPersonProduct(claims, personProductId);
                 var personProductDto = _mapper.Map<PersonProductDto>(personProduct);
                 return new OkObjectResult(personProductDto);
@@ -216,6 +239,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(productId, "Brak identyfikatora produktu");
+
                 var user = await _validator.GetUser(claims);
                 var personProducts = await _dbContext.PersonProducts
                     .Include(p => p.Product)

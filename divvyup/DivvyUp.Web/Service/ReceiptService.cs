@@ -29,6 +29,10 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsNull(request.Date, "Data jet wymagana");
+                _validator.IsEmpty(request.Name, "Nazwa jest wymagana");
+
                 var user = await _validator.GetUser(claims);
 
                 var newReceipt = new Receipt()
@@ -58,6 +62,11 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsNull(request.Date, "Data jet wymagana");
+                _validator.IsEmpty(request.Name, "Nazwa jest wymagana");
+                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+
                 var receipt = await _validator.GetReceipt(claims, receiptId);
                 if (string.IsNullOrEmpty(request.Name))
                     return new BadRequestObjectResult("Nazwa nie może być pusta.");
@@ -83,6 +92,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+
                 var receipt = await _validator.GetReceipt(claims, receiptId);
 
                 _dbContext.Receipts.Remove(receipt);
@@ -103,6 +114,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+                _validator.IsNull(settled, "Brak decyzji rozliczenia");
+
                 var receipt = await _validator.GetReceipt(claims, receiptId);
                 receipt.Settled = settled;
                 _dbContext.Receipts.Update(receipt);
@@ -123,6 +137,8 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+
                 var receipt = await _validator.GetReceipt(claims, receiptId);
                 var receiptDto = _mapper.Map<ReceiptDto>(receipt);
                 return new OkObjectResult(receiptDto);
@@ -163,6 +179,9 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsEmpty(from, "Brak daty od");
+                _validator.IsEmpty(to, "Brak daty do");
+
                 if (!DateTime.TryParseExact(from, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fromDate))
                     throw new ArgumentException("Nieprawidłowy format daty początkowej.");
 

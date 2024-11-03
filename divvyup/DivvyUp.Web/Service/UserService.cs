@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
+using System.ComponentModel.DataAnnotations;
+using Azure.Core;
+using System.Linq.Dynamic.Core.Tokenizer;
 
 namespace DivvyUp.Web.Service
 {
@@ -25,6 +28,11 @@ namespace DivvyUp.Web.Service
 
         public async Task<IActionResult> Register(RegisterRequest request)
         {
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
+            _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
+            _validator.IsEmpty(request.Password, "Hasło jest wymagane");
+
             if (_dbContext.Users.Any(x => x.Email == request.Email || x.Username == request.Username))
                 return new ConflictObjectResult("Użytkownik o takich danych istnieje");
 
@@ -48,6 +56,10 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
+                _validator.IsEmpty(request.Password, "Hasło jest wymagane");
+
                 var user = _dbContext.Users.FirstOrDefault(x => x.Username == request.Username);
                 if (user == null)
                     return new NotFoundObjectResult("Nie znaleziono użytkownika");
@@ -67,6 +79,10 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
+                _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
+
                 var user = await _validator.GetUser(claims);
                 user.Username = request.Username;
                 user.Email = request.Email;
@@ -110,6 +126,8 @@ namespace DivvyUp.Web.Service
 
         public Task<IActionResult> ValidToken(string token)
         {
+            _validator.IsEmpty(token, "Token jest wymagany");
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
             try
@@ -153,6 +171,10 @@ namespace DivvyUp.Web.Service
         {
             try
             {
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsEmpty(request.Password, "Hasło jest wymagane");
+                _validator.IsEmpty(request.NewPassword, "Nowe hasło jest wymagane");
+
                 var user = await _validator.GetUser(claims);
 
                 if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
