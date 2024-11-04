@@ -71,8 +71,6 @@ namespace DivvyUp.Web.Service
                 _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
 
                 var receipt = await _validator.GetReceipt(claims, receiptId);
-                if (string.IsNullOrEmpty(request.Name))
-                    return new BadRequestObjectResult("Nazwa nie może być pusta.");
 
                 receipt.Name = request.Name;
                 receipt.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc);
@@ -117,6 +115,7 @@ namespace DivvyUp.Web.Service
                 _dbContext.PersonProducts.RemoveRange(personProductsToRemove);
                 _dbContext.Products.RemoveRange(products);
                 _dbContext.Receipts.Remove(receipt);
+
                 await _dbContext.SaveChangesAsync();
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie usunięto rachunek");
@@ -144,6 +143,17 @@ namespace DivvyUp.Web.Service
                 foreach (var product in products)
                 {
                     product.Settled = settled;
+
+                    var personProducts = await _dbContext.PersonProducts
+                        .Where(pp => pp.ProductId == product.Id)
+                        .ToListAsync();
+
+                    foreach (var personProduct in personProducts)
+                    {
+                        personProduct.Settled = settled;
+                    }
+
+                    _dbContext.PersonProducts.UpdateRange(personProducts);
                 }
 
                 _dbContext.Receipts.Update(receipt);

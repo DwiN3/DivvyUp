@@ -43,7 +43,6 @@ namespace DivvyUp.Web.Service
                 var newLoan = new Loan()
                 {
                     Person = person,
-                    PersonId = person.Id,
                     Date = request.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc),
                     Lent = request.Lent,
                     Amount = request.Amount,
@@ -80,7 +79,6 @@ namespace DivvyUp.Web.Service
 
                 loan.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc);
                 loan.Person = person;
-                loan.PersonId = request.PersonId;
                 loan.Amount = request.Amount;
 
                 _dbContext.Loans.Update(loan);
@@ -132,7 +130,6 @@ namespace DivvyUp.Web.Service
                 var person = await _validator.GetPerson(claims, personId);
 
                 loan.Person = person;
-                loan.PersonId = personId;
 
                 _dbContext.Loans.Update(loan);
                 await _dbContext.SaveChangesAsync();

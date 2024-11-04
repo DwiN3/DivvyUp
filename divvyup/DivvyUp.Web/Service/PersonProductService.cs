@@ -49,16 +49,14 @@ namespace DivvyUp.Web.Service
                 var newPersonProduct = new PersonProduct()
                 {
                     Person = person,
-                    PersonId = person.Id,
                     Product = product,
-                    ProductId = product.Id,
                     Quantity = request.Quantity,
                     Compensation = existingPersonProduct == null ? true : false,
                     PartOfPrice = CalculatePartOfPrice(product, request.Quantity),
                     Settled = false,
                 };
-
                 _dbContext.PersonProducts.Add(newPersonProduct);
+
                 await _dbContext.SaveChangesAsync();
                 await _entityUpdateService.UpdateCompensationPrice(product);
                 await _entityUpdateService.UpdatePerson(claims, false);
@@ -89,11 +87,10 @@ namespace DivvyUp.Web.Service
 
                 personProduct.Quantity = request.Quantity;
                 personProduct.Person = person;
-                personProduct.PersonId = request.PersonId;
                 personProduct.PartOfPrice = CalculatePartOfPrice(product, request.Quantity);
-
                 _dbContext.PersonProducts.Update(personProduct);
                 await _dbContext.SaveChangesAsync();
+
                 await _entityUpdateService.UpdateCompensationPrice(product);
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
@@ -149,7 +146,6 @@ namespace DivvyUp.Web.Service
                 }
 
                 personProduct.Person = person;
-                personProduct.PersonId = personId;
 
                 _dbContext.PersonProducts.Update(personProduct);
                 await _dbContext.SaveChangesAsync();
@@ -175,12 +171,19 @@ namespace DivvyUp.Web.Service
 
                 var personProduct = await _validator.GetPersonProduct(claims, personProductId);
                 personProduct.Settled = settled;
-
                 _dbContext.PersonProducts.Update(personProduct);
-                await _dbContext.SaveChangesAsync();
 
                 var allSettled = await AreAllPersonProductsSettled(personProduct.ProductId);
-                //await _entityUpdateService.UpdateProductSettledStatus(personProduct.ProductId, allSettled);
+                var product = personProduct.Product;
+                product.Settled = allSettled;
+                _dbContext.Products.Update(product);
+
+                //var receipt = personProduct.Product.Receipt;
+                //receipt.Settled = allSettled;
+                //_dbContext.Receipts.Update(receipt);
+
+                await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
             catch (ValidException ex)

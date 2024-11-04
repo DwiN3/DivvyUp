@@ -3,6 +3,7 @@ using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;

@@ -10,7 +10,6 @@ using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.WebRequestMethods;
 using Person = DivvyUp_Shared.Model.Person;
 
 
@@ -70,10 +69,12 @@ namespace DivvyUp.Web.Service
             {
                 _validator.IsNull(request, "Nie przekazano danych");
                 _validator.IsEmpty(request.Name, "Nazwa osoby jest wymagana");
+
                 var person = await _validator.GetPerson(claims, personId);
                 person.Name = request.Name;
                 person.Surname = request.Surname;
                 _dbContext.Persons.Update(person);
+
                 await _dbContext.SaveChangesAsync();
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }

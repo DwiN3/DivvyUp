@@ -47,7 +47,7 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
-        [HttpPut("{personProductId}/set-settled")]
+        [HttpPut("{personProductId}/settled")]
         public async Task<IActionResult> SetSettled([FromRoute] int personProductId, [FromQuery] bool settled)
         {
             return await _personProductService.SetSettled(User, personProductId, settled);

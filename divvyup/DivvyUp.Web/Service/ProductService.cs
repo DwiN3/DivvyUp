@@ -46,7 +46,6 @@ namespace DivvyUp.Web.Service
                 var newProduct = new Product()
                 {
                     Receipt = receipt,
-                    ReceiptId = receipt.Id,
                     Name = request.Name,
                     Price = request.Price,
                     Divisible = request.Divisible,
@@ -163,6 +162,7 @@ namespace DivvyUp.Web.Service
                 var receipt = product.Receipt;
                 bool allSettled = await _entityUpdateService.AreAllProductsSettled(receipt);
                 receipt.Settled = allSettled;
+                _dbContext.Receipts.Update(receipt);
 
                 await _dbContext.SaveChangesAsync();
                 await _entityUpdateService.UpdatePerson(claims, false);
@@ -183,8 +183,7 @@ namespace DivvyUp.Web.Service
             try
             {
                 _validator.IsNull(productId, "Brak identyfikatora produktu");
-              
-
+                
                 var product = await _validator.GetProduct(claims, productId);
                 var productDto = _mapper.Map<ProductDto>(product);
                 return new OkObjectResult(productDto);
