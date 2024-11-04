@@ -92,12 +92,29 @@ namespace DivvyUp.Web.Service
             try
             {
                 _validator.IsNull(personId, "Brak identyfikatora osoby");
-
                 var person = await _validator.GetPerson(claims, personId);
+
+                var personProducts = await _dbContext.PersonProducts
+                    .Where(pp => pp.Person.Id == personId)
+                    .ToListAsync();
+
+                if (personProducts.Any())
+                {
+                    return new ConflictObjectResult("Nie można usunąć osoby, która posiada przypisane produkty");
+                }
+
+                var loans = await _dbContext.Loans
+                    .Where(l => l.Person.Id == personId)
+                    .ToListAsync();
+
+                if (loans.Any())
+                {
+                    return new ConflictObjectResult("Nie można usunąć osoby, która posiada przypisane produkty");
+                }
 
                 _dbContext.Persons.Remove(person);
                 await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Pomyślnie usunięto osobe");
+                return new OkObjectResult("Pomyślnie usunięto osobę");
             }
             catch (ValidException ex)
             {

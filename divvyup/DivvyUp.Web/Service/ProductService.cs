@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using AutoMapper;
 using DivvyUp.Web.InterfaceWeb;
+using DivvyUp.Web.Update;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
@@ -18,12 +19,14 @@ namespace DivvyUp.Web.Service
         private readonly MyDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IValidator _validator;
+        private readonly IEntityUpdateService _entityUpdateService;
 
-        public ProductService(MyDbContext dbContext, IMapper mapper, IValidator validator)
+        public ProductService(MyDbContext dbContext, IMapper mapper, IValidator validator, IEntityUpdateService entityUpdateService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _entityUpdateService = entityUpdateService;
         }
 
 
@@ -47,14 +50,14 @@ namespace DivvyUp.Web.Service
                     Name = request.Name,
                     Price = request.Price,
                     Divisible = request.Divisible,
-                    MaxQuantity = request.MaxQuantity,
-                    CompensationPrice = 0,
+                    MaxQuantity = request.Divisible ? request.MaxQuantity : 1,
+                    CompensationPrice = request.Divisible ? request.Price : 0,
                     Settled = false,
                 };
 
                 _dbContext.Products.Add(newProduct);
-
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
                 return new OkObjectResult(newProduct);
             }
             catch (ValidException ex)
@@ -79,14 +82,26 @@ namespace DivvyUp.Web.Service
                 _validator.IsNull(productId, "Brak identyfikatora produktu");
 
                 var product = await _validator.GetProduct(claims, productId);
+                bool previousDivisible = product.Divisible;
+
+                if (previousDivisible && !request.Divisible)
+                {
+                    var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == product.Id).ToListAsync();
+                    _dbContext.PersonProducts.RemoveRange(personProducts);
+                }
 
                 product.Name = request.Name;
                 product.Price = request.Price;
                 product.Divisible = request.Divisible;
-                product.MaxQuantity = request.MaxQuantity;
+                product.MaxQuantity = request.Divisible ? request.MaxQuantity : 1;
+                product.CompensationPrice = request.Divisible ? request.Price : 0;
 
                 _dbContext.Products.Update(product);
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePartPricesPersonProduct(product);
+                await _entityUpdateService.UpdateCompensationPrice(product);
+                await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
+                await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
             catch (ValidException ex)
@@ -104,11 +119,16 @@ namespace DivvyUp.Web.Service
             try
             {
                 _validator.IsNull(productId, "Brak identyfikatora produktu");
-
                 var product = await _validator.GetProduct(claims, productId);
+                var receipt = await _validator.GetReceipt(claims, product.ReceiptId);
 
+                var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == productId).ToListAsync();
+                _dbContext.PersonProducts.RemoveRange(personProducts);
                 _dbContext.Products.Remove(product);
                 await _dbContext.SaveChangesAsync();
+
+                await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
+                await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie usunięto produkt");
             }
             catch (ValidException ex)
@@ -129,9 +149,23 @@ namespace DivvyUp.Web.Service
                 _validator.IsNull(settled, "Brak decyzji rozliczenia");
 
                 var product = await _validator.GetProduct(claims, productId);
+
                 product.Settled = settled;
                 _dbContext.Products.Update(product);
+
+                var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == product.Id).ToListAsync();
+                foreach (var personProduct in personProducts)
+                {
+                    personProduct.Settled = settled;
+                    _dbContext.PersonProducts.Update(personProduct);
+                }
+
+                var receipt = product.Receipt;
+                bool allSettled = await _entityUpdateService.AreAllProductsSettled(receipt);
+                receipt.Settled = allSettled;
+
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
             catch (ValidException ex)

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Security.Claims;
 using AutoMapper;
 using DivvyUp.Web.InterfaceWeb;
+using DivvyUp.Web.Update;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
@@ -18,12 +19,14 @@ namespace DivvyUp.Web.Service
         private readonly MyDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IValidator _validator;
+        private readonly IEntityUpdateService _entityUpdateService;
 
-        public LoanService(MyDbContext dbContext, IMapper mapper, IValidator validator)
+        public LoanService(MyDbContext dbContext, IMapper mapper, IValidator validator, IEntityUpdateService entityUpdateService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _entityUpdateService = entityUpdateService;
         }
 
         public async Task<IActionResult> Add(ClaimsPrincipal claims, AddEditLoanRequest request)
@@ -49,6 +52,7 @@ namespace DivvyUp.Web.Service
 
                 _dbContext.Loans.Add(newLoan);
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie dodano pożyczkę");
             }
             catch (ValidException ex)
@@ -81,6 +85,7 @@ namespace DivvyUp.Web.Service
 
                 _dbContext.Loans.Update(loan);
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
             catch (ValidException ex)
@@ -103,6 +108,7 @@ namespace DivvyUp.Web.Service
 
                 _dbContext.Loans.Remove(loan);
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie usunięto pożyczkę");
             }
             catch (ValidException ex)
@@ -130,6 +136,7 @@ namespace DivvyUp.Web.Service
 
                 _dbContext.Loans.Update(loan);
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie zmieniono osobe");
             }
             catch (ValidException ex)
@@ -153,6 +160,7 @@ namespace DivvyUp.Web.Service
                 loan.Settled = settled;
                 _dbContext.Loans.Update(loan);
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
             catch (ValidException ex)
@@ -176,6 +184,7 @@ namespace DivvyUp.Web.Service
                 loan.Lent = lent;
                 _dbContext.Loans.Update(loan);
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
             catch (ValidException ex)

@@ -26,7 +26,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.AddProduct.Replace(ApiRoute.arg_ID, receiptId.ToString());
+                var url = _url.AddProduct.Replace(ApiRoute.arg_ID, product.receiptId.ToString());
                 var response = await _dHttpClient.PostAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
                 var jsonResponse = await response.Content.ReadAsStringAsync();

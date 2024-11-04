@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using AutoMapper;
 using DivvyUp.Web.InterfaceWeb;
+using DivvyUp.Web.Update;
 using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
@@ -17,12 +18,14 @@ namespace DivvyUp.Web.Service
         private readonly MyDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IValidator _validator;
+        private readonly IEntityUpdateService _entityUpdateService;
 
-        public ReceiptService(MyDbContext dbContext, IMapper mapper, IValidator validator)
+        public ReceiptService(MyDbContext dbContext, IMapper mapper, IValidator validator, IEntityUpdateService entityUpdateService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _entityUpdateService = entityUpdateService;
         }
 
         public async Task<IActionResult> Add(ClaimsPrincipal claims, AddEditReceiptRequest request)
@@ -96,8 +99,26 @@ namespace DivvyUp.Web.Service
 
                 var receipt = await _validator.GetReceipt(claims, receiptId);
 
+                var products = await _dbContext.Products
+                    .Where(p => p.ReceiptId == receiptId)
+                    .ToListAsync();
+
+                var personProductsToRemove = new List<PersonProduct>();
+
+                foreach (var product in products)
+                {
+                    var personProducts = await _dbContext.PersonProducts
+                        .Where(pp => pp.ProductId == product.Id)
+                        .ToListAsync();
+
+                    personProductsToRemove.AddRange(personProducts);
+                }
+
+                _dbContext.PersonProducts.RemoveRange(personProductsToRemove);
+                _dbContext.Products.RemoveRange(products);
                 _dbContext.Receipts.Remove(receipt);
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie usunięto rachunek");
             }
             catch (ValidException ex)
@@ -115,12 +136,20 @@ namespace DivvyUp.Web.Service
             try
             {
                 _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
-                _validator.IsNull(settled, "Brak decyzji rozliczenia");
 
                 var receipt = await _validator.GetReceipt(claims, receiptId);
                 receipt.Settled = settled;
+
+                var products = await _dbContext.Products.Where(p => p.ReceiptId == receiptId).ToListAsync();
+                foreach (var product in products)
+                {
+                    product.Settled = settled;
+                }
+
                 _dbContext.Receipts.Update(receipt);
+                _dbContext.Products.UpdateRange(products);
                 await _dbContext.SaveChangesAsync();
+                await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
             catch (ValidException ex)

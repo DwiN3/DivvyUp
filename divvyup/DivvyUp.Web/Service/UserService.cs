@@ -10,6 +10,7 @@ using DivvyUp_Shared.RequestDto;
 using System.ComponentModel.DataAnnotations;
 using Azure.Core;
 using System.Linq.Dynamic.Core.Tokenizer;
+using Microsoft.EntityFrameworkCore;
 
 namespace DivvyUp.Web.Service
 {
@@ -109,9 +110,41 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
+
+                var persons = await _dbContext.Persons
+                    .Where(p => p.UserId == user.Id)
+                    .ToListAsync();
+
+                var personIds = persons.Select(p => p.Id).ToList();
+
+                var loans = await _dbContext.Loans
+                    .Where(l => personIds.Contains(l.PersonId))
+                    .ToListAsync();
+
+                var receipts = await _dbContext.Receipts
+                    .Where(r => r.UserId == user.Id)
+                    .ToListAsync();
+
+                var receiptIds = receipts.Select(r => r.Id).ToList();
+
+                var products = await _dbContext.Products
+                    .Where(p => receiptIds.Contains(p.ReceiptId))
+                    .ToListAsync();
+
+                var personProducts = await _dbContext.PersonProducts
+                    .Where(pp => personIds.Contains(pp.PersonId))
+                    .ToListAsync();
+
+                _dbContext.Loans.RemoveRange(loans);
+                _dbContext.PersonProducts.RemoveRange(personProducts);
+                _dbContext.Products.RemoveRange(products);
+                _dbContext.Receipts.RemoveRange(receipts);
+                _dbContext.Persons.RemoveRange(persons);
                 _dbContext.Users.Remove(user);
+
                 await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Usunięto użytkownika");
+
+                return new OkObjectResult("User and all related data successfully deleted.");
             }
             catch (ValidException ex)
             {

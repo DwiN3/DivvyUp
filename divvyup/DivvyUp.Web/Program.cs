@@ -8,11 +8,13 @@ using DivvyUp.Web.Service;
 using DivvyUp.Web.Middleware;
 using DivvyUp.Web.Validator;
 using DivvyUp.Web.Mappers;
+using DivvyUp.Web.Update;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IValidator, Validator>();
+builder.Services.AddScoped<IEntityUpdateService, EntityUpdateService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IReceiptService, ReceiptService>();
