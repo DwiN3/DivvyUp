@@ -6,7 +6,6 @@ namespace DivvyUp_Shared.AppConstants
     {
         private const string BaseUrl = "/rm";
 
-        // Arguments
         public const string arg_ID = "{id}";
         public const string arg_Settled = "{settled}";
         public const string arg_PersonId = "{personId}";
@@ -26,7 +25,6 @@ namespace DivvyUp_Shared.AppConstants
             public const string CHANGE_PASSWORD = $"{USER_ROUTE}/change-password";
             public const string ME = $"{USER_ROUTE}/me";
             public const string VALIDATE_TOKEN = $"{USER_ROUTE}/validate-token/{ARG_TOKEN}";
-            //public const string USER_VALID = $"{USER_ROUTE}/validate-token?token={ARG_TOKEN}";
         }
 
         // Person
@@ -83,8 +81,8 @@ namespace DivvyUp_Shared.AppConstants
         public readonly string GetTotalAmountsChart = $"{BaseUrl}/chart/total-amounts";
         public readonly string GetUnpaidAmountsChart = $"{BaseUrl}/chart/unpaid-amounts";
         public readonly string GetPercentageExpensesChart = $"{BaseUrl}/chart/percentage-expenses";
-        public readonly string GetMonthlyTotalExpensesChart = $"{BaseUrl}/chart/monthly-total-expenses/{arg_Year}";
-        public readonly string GetMonthlyUserExpenses = $"{BaseUrl}/chart/monthly-user-expenses/{arg_Year}";
+        public readonly string GetMonthlyTotalExpensesChart = $"{BaseUrl}/chart/monthly-total-expenses?year={arg_Year}";
+        public readonly string GetMonthlyUserExpenses = $"{BaseUrl}/chart/monthly-user-expenses?year={arg_Year}";
         public readonly string GetWeeklyTotalExpenses = $"{BaseUrl}/chart/weekly-total-expenses";
         public readonly string GetWeeklyUserExpenses = $"{BaseUrl}/chart/weekly-user-expenses";
         public readonly string GetMonthlyTopProducts = $"{BaseUrl}/chart/monthly-top-products";

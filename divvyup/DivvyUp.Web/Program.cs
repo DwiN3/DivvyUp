@@ -21,6 +21,7 @@ builder.Services.AddScoped<IReceiptService, ReceiptService>();
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IPersonProductService, PersonProductService>();
+builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 

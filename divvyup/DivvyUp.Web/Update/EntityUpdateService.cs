@@ -17,14 +17,15 @@ namespace DivvyUp.Web.Update
                 var personProducts = await dbContext.PersonProducts
                     .Where(pp => pp.Person.Id == person.Id)
                     .Include(pp => pp.Product)
+                    .Include(pp => pp.Product.Receipt)
                     .ToListAsync();
 
-                person.ReceiptsCount = personProducts
-                    .Where(pp => pp.Product.Receipt != null)
+                var receipts = personProducts
                     .Select(pp => pp.Product.Receipt.Id)
                     .Distinct()
-                    .Count();
+                    .ToList();
 
+                person.ReceiptsCount = receipts.Count;
                 person.ProductsCount = personProducts.Count;
                 person.TotalAmount = personProducts.Sum(pp => pp.PartOfPrice);
                 person.UnpaidAmount = personProducts.Where(pp => !pp.Settled).Sum(pp => pp.PartOfPrice);
