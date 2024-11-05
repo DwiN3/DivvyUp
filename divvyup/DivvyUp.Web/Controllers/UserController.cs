@@ -1,11 +1,12 @@
 ﻿using DivvyUp.Web.InterfaceWeb;
+using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 namespace DivvyUp.Web.Controllers
 {
-    [Route("rm/user")]
+    [Route(ApiRoute.USER_ROUTES.USER_ROUTE)]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -16,13 +17,13 @@ namespace DivvyUp.Web.Controllers
             _userServiceInternal = userServiceInternal;
         }
 
-        [HttpPost("register")]
+        [HttpPost(ApiRoute.USER_ROUTES.REGISTER)]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             return await _userServiceInternal.Register(request);
         }
 
-        [HttpPost("login")]
+        [HttpPost(ApiRoute.USER_ROUTES.LOGIN)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             return await _userServiceInternal.Login(request);
@@ -30,27 +31,27 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
-        [HttpPut("edit")]
+        [HttpPut(ApiRoute.USER_ROUTES.EDIT)]
         public async Task<IActionResult> Edit([FromBody] RegisterRequest request)
         {
             return await _userServiceInternal.Edit(User, request);
         }
 
         [Authorize]
-        [HttpDelete("remove")]
+        [HttpDelete(ApiRoute.USER_ROUTES.REMOVE)]
         public async Task<IActionResult> Remove()
         {
             return await _userServiceInternal.Remove(User);
         }
 
-        [HttpGet("validate-token")]
-        public async Task<IActionResult> ValidateToken([FromQuery] string token)
+        [HttpGet(ApiRoute.USER_ROUTES.VALIDATE_TOKEN)]
+        public async Task<IActionResult> ValidateToken([FromRoute] string token)
         {
             return await _userServiceInternal.ValidToken(token);
         }
 
         [Authorize]
-        [HttpGet("me")]
+        [HttpGet(ApiRoute.USER_ROUTES.ME)]
         public async Task<IActionResult> GetUser()
         {
             return await _userServiceInternal.GetUser(User);

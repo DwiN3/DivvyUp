@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
+using static DivvyUp_Shared.AppConstants.ApiRoute;
 
 namespace DivvyUp_Impl_Maui.Service
 {
@@ -13,7 +14,6 @@ namespace DivvyUp_Impl_Maui.Service
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
-        private ApiRoute _url { get; } = new();
         private readonly ILogger<ReceiptHttpService> _logger;
 
         public UserHttpService(DHttpClient dHttpClient, ILogger<ReceiptHttpService> logger)
@@ -26,7 +26,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.Login;
+                var url = USER_ROUTES.LOGIN;
                 var response = await _dHttpClient.PostAsync(url, user);
                 var result = await response.Content.ReadAsStringAsync();
                 await EnsureCorrectResponse(response, "Błąd w czasie logowania");
@@ -53,7 +53,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.Register;
+                var url = ApiRoute.USER_ROUTES.REGISTER;
                 var response = await _dHttpClient.PostAsync(url, user);
                 await EnsureCorrectResponse(response, "Błąd w czasie rejestracji");
             }
@@ -78,7 +78,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.EditUser;
+                var url = USER_ROUTES.EDIT;
                 var response = await _dHttpClient.PutAsync(url, user);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji użytkownika"); 
                 var result = await response.Content.ReadAsStringAsync();
@@ -111,7 +111,7 @@ namespace DivvyUp_Impl_Maui.Service
                     newPassword = newPassword
                 };
 
-                var url = _url.ChangePasswordUser;
+                var url = USER_ROUTES.CHANGE_PASSWORD;
                 var response = await _dHttpClient.PutAsync(url, data);
                 await EnsureCorrectResponse(response, "Błąd w czasie zmieniania hasła");
             }
@@ -136,7 +136,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.RemoveUser;
+                var url = USER_ROUTES.REMOVE;
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie usuwania użytkownika");
             }
@@ -162,7 +162,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = $"{_url.IsValid}?token={token}";
+                var url = USER_ROUTES.VALIDATE_TOKEN
+                    .Replace(ARG_TOKEN, token);
                 var response = await _dHttpClient.GetAsync(url);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 bool result = bool.Parse(responseContent);
@@ -190,7 +191,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetUser;
+                var url = USER_ROUTES.ME;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<UserDto>(jsonResponse);

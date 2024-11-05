@@ -1,8 +1,10 @@
-﻿namespace DivvyUp_Shared.AppConstants
+﻿using System.Linq.Dynamic.Core.Tokenizer;
+
+namespace DivvyUp_Shared.AppConstants
 {
     public class ApiRoute
     {
-        private const string BaseUrl = "http://localhost:5185/rm";
+        private const string BaseUrl = "/rm";
 
         // Arguments
         public const string arg_ID = "{id}";
@@ -12,15 +14,20 @@
         public const string arg_From = "{from}";
         public const string arg_To = "{to}";
         public const string arg_Lent = "{lent}";
+        public const string ARG_TOKEN = "{token}";
 
-        // User
-        public readonly string Login = $"{BaseUrl}/user/login";
-        public readonly string Register = $"{BaseUrl}/user/register";
-        public readonly string EditUser = $"{BaseUrl}/user/edit";
-        public readonly string RemoveUser = $"{BaseUrl}/user/remove";
-        public readonly string ChangePasswordUser = $"{BaseUrl}/user/change-password";
-        public readonly string GetUser = $"{BaseUrl}/user/me";
-        public readonly string IsValid = $"{BaseUrl}/user/validate-token";
+        public static class USER_ROUTES
+        {
+            public const string USER_ROUTE = $"{BaseUrl}/user";
+            public const string LOGIN = $"{USER_ROUTE}/login";
+            public const string REGISTER = $"{USER_ROUTE}/register";
+            public const string EDIT = $"{USER_ROUTE}/edit";
+            public const string REMOVE = $"{USER_ROUTE}/remove";
+            public const string CHANGE_PASSWORD = $"{USER_ROUTE}/change-password";
+            public const string ME = $"{USER_ROUTE}/me";
+            public const string VALIDATE_TOKEN = $"{USER_ROUTE}/validate-token/{ARG_TOKEN}";
+            //public const string USER_VALID = $"{USER_ROUTE}/validate-token?token={ARG_TOKEN}";
+        }
 
         // Person
         public readonly string AddPerson = $"{BaseUrl}/person/add";
