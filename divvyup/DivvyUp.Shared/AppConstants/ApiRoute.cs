@@ -6,13 +6,16 @@ namespace DivvyUp_Shared.AppConstants
     {
         private const string BaseUrl = "/rm";
 
-        public const string arg_ID = "{id}";
-        public const string arg_Settled = "{settled}";
-        public const string arg_PersonId = "{personId}";
-        public const string arg_Year = "{year}";
-        public const string arg_From = "{from}";
-        public const string arg_To = "{to}";
-        public const string arg_Lent = "{lent}";
+        public const string ARG_PERSON = "{personId}";
+        public const string ARG_RECEIPT = "{receiptId}";
+        public const string ARG_PRODUCT = "{productId}";
+        public const string ARG_PERSON_PRODUCT = "{personProductId}";
+        public const string ARG_LOAN = "{loanId}";
+        public const string ARG_SETTLED = "{settled}";
+        public const string ARG_YEAR = "{year}";
+        public const string ARG_FROM = "{from}";
+        public const string ARG_TO = "{to}";
+        public const string ARG_LENT = "{lent}";
         public const string ARG_TOKEN = "{token}";
 
         public static class USER_ROUTES
@@ -27,64 +30,84 @@ namespace DivvyUp_Shared.AppConstants
             public const string VALIDATE_TOKEN = $"{USER_ROUTE}/validate-token/{ARG_TOKEN}";
         }
 
-        // Person
-        public readonly string AddPerson = $"{BaseUrl}/person/add";
-        public readonly string EditPerson = $"{BaseUrl}/person/edit/{arg_ID}";
-        public readonly string RemovePerson = $"{BaseUrl}/person/remove/{arg_ID}";
-        public readonly string GetPerson = $"{BaseUrl}/person/{arg_ID}";
-        public readonly string GetPersons = $"{BaseUrl}/person/people";
-        public readonly string GetUserPerson = $"{BaseUrl}/person/user-person";
-        public readonly string GetPersonsFromReceipt = $"{BaseUrl}/person/from-receipt/{arg_ID}";
-        public readonly string GetPersonsFromProduct = $"{BaseUrl}/person/from-product/{arg_ID}";
+        public static class PERSON_ROUTES
+        {
+            public const string PERSON_ROUTE = $"{BaseUrl}/person";
+            public const string ADD = $"{PERSON_ROUTE}/add";
+            public const string EDIT = $"{PERSON_ROUTE}/edit/{ARG_PERSON}";
+            public const string REMOVE = $"{PERSON_ROUTE}/remove/{ARG_PERSON}";
+            public const string PERSON = $"{PERSON_ROUTE}/{ARG_PERSON}";
+            public const string PEOPLE = $"{PERSON_ROUTE}/people";
+            public const string PERSON_USER = $"{PERSON_ROUTE}/user-person";
+            public const string PEOPLE_FROM_RECEIPT = $"{PERSON_ROUTE}/from-receipt/{ARG_RECEIPT}";
+            public const string PEOPLE_FROM_PRODUCT = $"{PERSON_ROUTE}/from-product/{ARG_PRODUCT}";
+        }
 
-        // Loan
-        public readonly string AddLoan = $"{BaseUrl}/loan/add";
-        public readonly string EditLoan = $"{BaseUrl}/loan/edit/{arg_ID}";
-        public readonly string RemoveLoan = $"{BaseUrl}/loan/remove/{arg_ID}";
-        public readonly string SetPersonLoan = $"{BaseUrl}/loan/{arg_ID}/set-person?personId={arg_PersonId}";
-        public readonly string SetSettledLoan = $"{BaseUrl}/loan/{arg_ID}/set-settled?settled={arg_Settled}";
-        public readonly string SetLentLoan = $"{BaseUrl}/loan/{arg_ID}/set-lent?lent={arg_Lent}";
-        public readonly string GetLoan = $"{BaseUrl}/loan/{arg_ID}";
-        public readonly string GetLoanPerson = $"{BaseUrl}/loan/person-loans/{arg_PersonId}";
-        public readonly string GetLoans = $"{BaseUrl}/loan/loans";
-        public readonly string GetLoansByDataRange = $"{BaseUrl}/loan/date-range?from={arg_From}&to={arg_To}";
+        public static class LOAN_ROUTES
+        {
+            public const string LOAN_ROUTE = $"{BaseUrl}/loan";
+            public const string ADD = $"{LOAN_ROUTE}/add";
+            public const string EDIT = $"{LOAN_ROUTE}/edit/{ARG_LOAN}";
+            public const string REMOVE = $"{LOAN_ROUTE}/remove/{ARG_LOAN}";
+            public const string SET_PERSON = $"{LOAN_ROUTE}/set-person/{ARG_LOAN}/{ARG_PERSON}";
+            public const string SET_SETTLED = $"{LOAN_ROUTE}/set-settled/{ARG_LOAN}/{ARG_SETTLED}";
+            public const string SET_LENT = $"{LOAN_ROUTE}/set-lent/{ARG_LOAN}/{ARG_LENT}";
+            public const string LOAN = $"{LOAN_ROUTE}/{ARG_LOAN}";
+            public const string LOANS_PERSON = $"{LOAN_ROUTE}/person-loans/{ARG_PERSON}";
+            public const string LOANS = $"{LOAN_ROUTE}/loans";
+            public const string LOANS_DATA_RANGE = $"{LOAN_ROUTE}/date-range/{ARG_FROM}/{ARG_TO}";
+        }
 
-        // Receipt
-        public readonly string AddReceipt = $"{BaseUrl}/receipt/add";
-        public readonly string EditReceipt = $"{BaseUrl}/receipt/edit/{arg_ID}";
-        public readonly string RemoveReceipt = $"{BaseUrl}/receipt/remove/{arg_ID}";
-        public readonly string SetSettledReceipt = $"{BaseUrl}/receipt/{arg_ID}/settled?settled={arg_Settled}";
-        public readonly string GetReceipt = $"{BaseUrl}/receipt/{arg_ID}";
-        public readonly string GetReceipts = $"{BaseUrl}/receipt/receipts";
-        public readonly string GetReceiptsByDataRange = $"{BaseUrl}/receipt/date-range?from={arg_From}&to={arg_To}";
+        public static class RECEIPT_ROUTES
+        {
+            public const string RECEIPT_ROUTE = $"{BaseUrl}/receipt";
+            public const string ADD = $"{RECEIPT_ROUTE}/add";
+            public const string EDIT = $"{RECEIPT_ROUTE}/edit/{ARG_RECEIPT}";
+            public const string REMOVE = $"{RECEIPT_ROUTE}/remove/{ARG_RECEIPT}";
+            public const string SET_SETTLED = $"{RECEIPT_ROUTE}/set-settled/{ARG_RECEIPT}/{ARG_SETTLED}";
+            public const string RECEIPT = $"{RECEIPT_ROUTE}/{ARG_RECEIPT}";
+            public const string RECEIPTS = $"{RECEIPT_ROUTE}/receipts";
+            public const string RECEIPTS_DATA_RANGE = $"{RECEIPT_ROUTE}/date-range/{ARG_FROM}/{ARG_TO}";
+        }
 
-        // Product
-        public readonly string AddProduct = $"{BaseUrl}/product/{arg_ID}/add";
-        public readonly string EditProduct = $"{BaseUrl}/product/edit/{arg_ID}";
-        public readonly string RemoveProduct = $"{BaseUrl}/product/remove/{arg_ID}";
-        public readonly string SetSettledProduct = $"{BaseUrl}/product/{arg_ID}/settled?settled={arg_Settled}";
-        public readonly string GetProduct = $"{BaseUrl}/product/{arg_ID}";
-        public readonly string GetProducts = $"{BaseUrl}/product/products-from-receipt/{arg_ID}";
+        public static class PRODUCT_ROUTES
+        {
+            public const string PRODUCT_ROUTE = $"{BaseUrl}/product";
+            public const string ADD = $"{PRODUCT_ROUTE}/{ARG_RECEIPT}/add";
+            public const string EDIT = $"{PRODUCT_ROUTE}/edit/{ARG_PRODUCT}";
+            public const string REMOVE = $"{PRODUCT_ROUTE}/remove/{ARG_PRODUCT}";
+            public const string SET_SETTLED = $"{PRODUCT_ROUTE}/set-settled/{ARG_PRODUCT}/{ARG_SETTLED}";
+            public const string PRODUCT = $"{PRODUCT_ROUTE}/{ARG_PRODUCT}";
+            public const string PRODUCTS = $"{PRODUCT_ROUTE}";
+            public const string PRODUCTS_FROM_RECEIPT = $"{PRODUCT_ROUTE}/products-from-receipt/{ARG_RECEIPT}";
+        }
 
-        // Person Product
-        public readonly string AddPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/add";
-        public readonly string EditPersonProduct = $"{BaseUrl}/person-product/edit/{arg_ID}";
-        public readonly string RemovePersonProduct = $"{BaseUrl}/person-product/remove/{arg_ID}";
-        public readonly string SetPersonPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-person?personId={arg_PersonId}";
-        public readonly string SetSettledPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/settled?settled={arg_Settled}";
-        public readonly string SetCompensationPersonProduct = $"{BaseUrl}/person-product/{arg_ID}/set-compensation";
-        public readonly string GetPersonProduct = $"{BaseUrl}/person-product/{arg_ID}";
-        public readonly string GetPersonProducts = $"{BaseUrl}/person-product/person-products";
-        public readonly string GetPersonProductsForProduct = $"{BaseUrl}/person-product/product/{arg_ID}";
+        public static class PERSON_PRODUCT_ROUTES
+        {
+            public const string PERSON_PRODUCT_ROUTE = $"{BaseUrl}/person-product";
+            public const string ADD = $"{PERSON_PRODUCT_ROUTE}/{ARG_PRODUCT}/add";
+            public const string EDIT = $"{PERSON_PRODUCT_ROUTE}/edit/{ARG_PERSON_PRODUCT}";
+            public const string REMOVE = $"{PERSON_PRODUCT_ROUTE}/remove/{ARG_PERSON_PRODUCT}";
+            public const string SET_PERSON = $"{PERSON_PRODUCT_ROUTE}/set-person/{ARG_PERSON_PRODUCT}/{ARG_PERSON}";
+            public const string SET_SETTLED = $"{PERSON_PRODUCT_ROUTE}/set-settled/{ARG_PERSON_PRODUCT}/{ARG_SETTLED}";
+            public const string SET_COMPENSATION = $"{PERSON_PRODUCT_ROUTE}/set-compensation/{ARG_PERSON_PRODUCT}";
+            public const string PERSON_PRODUCT = $"{PERSON_PRODUCT_ROUTE}/{ARG_PERSON_PRODUCT}";
+            public const string PERSON_PRODUCTS = $"{PERSON_PRODUCT_ROUTE}/person-products";
+            public const string PERSON_PRODUCT_FROM_PRODUCT= $"{PERSON_PRODUCT_ROUTE}/product/{ARG_PRODUCT}";
+        }
 
-        // Chart
-        public readonly string GetTotalAmountsChart = $"{BaseUrl}/chart/total-amounts";
-        public readonly string GetUnpaidAmountsChart = $"{BaseUrl}/chart/unpaid-amounts";
-        public readonly string GetPercentageExpensesChart = $"{BaseUrl}/chart/percentage-expenses";
-        public readonly string GetMonthlyTotalExpensesChart = $"{BaseUrl}/chart/monthly-total-expenses?year={arg_Year}";
-        public readonly string GetMonthlyUserExpenses = $"{BaseUrl}/chart/monthly-user-expenses?year={arg_Year}";
-        public readonly string GetWeeklyTotalExpenses = $"{BaseUrl}/chart/weekly-total-expenses";
-        public readonly string GetWeeklyUserExpenses = $"{BaseUrl}/chart/weekly-user-expenses";
-        public readonly string GetMonthlyTopProducts = $"{BaseUrl}/chart/monthly-top-products";
+        public static class CHART_ROUTES
+        {
+
+            public const string CHART_ROUTE = $"{BaseUrl}/chart";
+            public const string TOTAL_AMOUNTS = $"{CHART_ROUTE}/total-amounts";
+            public const string UNPAID_AMOUNTS = $"{CHART_ROUTE}/unpaid-amounts";
+            public const string PERCENTAGE_EXPENSES = $"{CHART_ROUTE}/percentage-expenses";
+            public const string MONTHLY_TOTAL_EXPANSES = $"{CHART_ROUTE}/monthly-total-expenses/{ARG_YEAR}";
+            public const string MONTHLY_USER_EXPANSES = $"{CHART_ROUTE}/monthly-user-expenses/{ARG_YEAR}";
+            public const string WEEKLY_TOTAL_EXPENSES = $"{CHART_ROUTE}/weekly-total-expenses";
+            public const string WEEKLY_USER_EXPENSES = $"{CHART_ROUTE}/weekly-user-expenses";
+            public const string MONTHLY_TOP_PRODUCTS = $"{CHART_ROUTE}/monthly-top-products";
+        }
     }
 }

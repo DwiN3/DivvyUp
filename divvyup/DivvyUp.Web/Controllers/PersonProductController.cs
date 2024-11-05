@@ -1,12 +1,13 @@
 ﻿using System.Runtime.InteropServices.JavaScript;
 using DivvyUp.Web.InterfaceWeb;
+using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DivvyUp.Web.Controllers
 {
-    [Route("rm/person-product")]
+    [Route(ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCT_ROUTE)]
     [ApiController]
     public class PersonProductController : ControllerBase
     {
@@ -18,14 +19,14 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
-        [HttpPost("{productId}/add")]
+        [HttpPost(ApiRoute.PERSON_PRODUCT_ROUTES.ADD)]
         public async Task<IActionResult> Add([FromBody] AddEditPersonProductRequest request, [FromRoute] int productId)
         {
             return await _personProductService.Add(User, request, productId);
         }
 
         [Authorize]
-        [HttpPut("edit/{personProductId}")]
+        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.EDIT)]
         public async Task<IActionResult> Edit([FromBody] AddEditPersonProductRequest request, [FromRoute] int personProductId)
         {
             return await _personProductService.Edit(User, request, personProductId);
@@ -33,49 +34,49 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
-        [HttpDelete("remove/{personProductId}")]
+        [HttpDelete(ApiRoute.PERSON_PRODUCT_ROUTES.REMOVE)]
         public async Task<IActionResult> Remove([FromRoute] int personProductId)
         {
             return await _personProductService.Remove(User, personProductId);
         }
 
         [Authorize]
-        [HttpPut("{personProductId}/set-person")]
-        public async Task<IActionResult> SetPerson([FromRoute] int personProductId, [FromQuery] int personId)
+        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.SET_PERSON)]
+        public async Task<IActionResult> SetPerson([FromRoute] int personProductId, [FromRoute] int personId)
         {
             return await _personProductService.SetPerson(User, personProductId, personId);
         }
 
         [Authorize]
-        [HttpPut("{personProductId}/settled")]
-        public async Task<IActionResult> SetSettled([FromRoute] int personProductId, [FromQuery] bool settled)
+        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.SET_SETTLED)]
+        public async Task<IActionResult> SetSettled([FromRoute] int personProductId, [FromRoute] bool settled)
         {
             return await _personProductService.SetSettled(User, personProductId, settled);
         }
 
         [Authorize]
-        [HttpPut("{personProductId}/set-compensation")]
+        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.SET_COMPENSATION)]
         public async Task<IActionResult> SetCompensation([FromRoute] int personProductId)
         {
             return await _personProductService.SetCompensation(User, personProductId);
         }
 
         [Authorize]
-        [HttpGet("{personProductId}")]
+        [HttpGet(ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCT)]
         public async Task<IActionResult> GetPersonProduct([FromRoute] int personProductId)
         {
             return await _personProductService.GetPersonProduct(User, personProductId);
         }
 
         [Authorize]
-        [HttpGet("product/{productId}")]
+        [HttpGet(ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCT_FROM_PRODUCT)]
         public async Task<IActionResult> GetPersonProductsFromProduct([FromRoute] int productId)
         {
             return await _personProductService.GetPersonProductsFromProduct(User, productId);
         }
 
         [Authorize]
-        [HttpGet("person-products")]
+        [HttpGet(ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCTS)]
         public async Task<IActionResult> GetPersonProducts()
         {
             return await _personProductService.GetPersonProducts(User);

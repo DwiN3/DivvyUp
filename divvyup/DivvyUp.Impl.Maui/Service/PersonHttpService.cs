@@ -13,7 +13,6 @@ namespace DivvyUp_Impl_Maui.Service
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
-        private ApiRoute _url { get; } = new();
         private readonly ILogger<PersonHttpService> _logger;
 
         public PersonHttpService(DHttpClient dHttpClient, ILogger<PersonHttpService> logger)
@@ -25,7 +24,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.AddPerson;
+                var url = ApiRoute.PERSON_ROUTES.ADD;
                 var response = await _dHttpClient.PostAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania osoby");
             }
@@ -45,7 +44,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.EditPerson.Replace(ApiRoute.arg_ID, person.id.ToString());
+                var url = ApiRoute.PERSON_ROUTES.EDIT
+                    .Replace(ApiRoute.ARG_PERSON, person.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
@@ -65,7 +65,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.RemovePerson.Replace(ApiRoute.arg_ID, personId.ToString());
+                var url = ApiRoute.PERSON_ROUTES.REMOVE
+                    .Replace(ApiRoute.ARG_PERSON, personId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
@@ -85,7 +86,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPerson.Replace(ApiRoute.arg_ID, personId.ToString());
+                var url = ApiRoute.PERSON_ROUTES.PERSON
+                    .Replace(ApiRoute.ARG_PERSON, personId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<PersonDto>(jsonResponse);
@@ -108,7 +110,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersons;
+                var url = ApiRoute.PERSON_ROUTES.PEOPLE;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
@@ -131,7 +133,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetUserPerson;
+                var url = ApiRoute.PERSON_ROUTES.PERSON_USER;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<PersonDto>(jsonResponse);
@@ -154,7 +156,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonsFromReceipt.Replace(ApiRoute.arg_ID, receiptId.ToString());
+                var url = ApiRoute.PERSON_ROUTES.PEOPLE_FROM_RECEIPT.Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);
@@ -177,7 +179,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPersonsFromProduct.Replace(ApiRoute.arg_ID, productId.ToString());
+                var url = ApiRoute.PERSON_ROUTES.PEOPLE_FROM_PRODUCT.Replace(ApiRoute.ARG_PRODUCT, productId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonDto>>(jsonResponse);

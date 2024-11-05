@@ -13,7 +13,6 @@ namespace DivvyUp_Impl_Maui.Service
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
-        private ApiRoute _url { get; } = new();
         private readonly ILogger<LoanHttpSevice> _logger;
 
         public LoanHttpSevice(DHttpClient dHttpClient, ILogger<LoanHttpSevice> logger)
@@ -26,7 +25,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.AddLoan;
+                var url = ApiRoute.LOAN_ROUTES.ADD;
                 var response = await _dHttpClient.PostAsync(url, loan);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawaniu pożyczki");
             }
@@ -46,7 +45,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.EditLoan.Replace(ApiRoute.arg_ID, loan.id.ToString());
+                var url = ApiRoute.LOAN_ROUTES.EDIT
+                    .Replace(ApiRoute.ARG_LOAN, loan.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, loan);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji pożyczki");
             }
@@ -66,7 +66,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.RemoveLoan.Replace(ApiRoute.arg_ID, loanId.ToString());
+                var url = ApiRoute.LOAN_ROUTES.REMOVE
+                    .Replace(ApiRoute.ARG_LOAN, loanId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie usuwania pożyczki");
             }
@@ -86,9 +87,9 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.SetPersonLoan
-                    .Replace(ApiRoute.arg_ID, loadId.ToString())
-                    .Replace(ApiRoute.arg_PersonId, personId.ToString());
+                var url = ApiRoute.LOAN_ROUTES.SET_PERSON
+                    .Replace(ApiRoute.ARG_LOAN, loadId.ToString())
+                    .Replace(ApiRoute.ARG_PERSON, personId.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji pożyczki");
             }
@@ -108,9 +109,9 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.SetLentLoan
-                    .Replace(ApiRoute.arg_ID, loanId.ToString())
-                    .Replace(ApiRoute.arg_Lent, lent.ToString());
+                var url = ApiRoute.LOAN_ROUTES.SET_LENT
+                    .Replace(ApiRoute.ARG_LOAN, loanId.ToString())
+                    .Replace(ApiRoute.ARG_LENT, lent.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji");
             }
@@ -130,9 +131,9 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.SetSettledLoan
-                    .Replace(ApiRoute.arg_ID, loanId.ToString())
-                    .Replace(ApiRoute.arg_Settled, isSettled.ToString());
+                var url = ApiRoute.LOAN_ROUTES.SET_SETTLED
+                    .Replace(ApiRoute.ARG_LOAN, loanId.ToString())
+                    .Replace(ApiRoute.ARG_SETTLED, isSettled.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji");
             }
@@ -152,7 +153,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetLoan.Replace(ApiRoute.arg_ID, loanId.ToString());
+                var url = ApiRoute.LOAN_ROUTES.LOAN
+                    .Replace(ApiRoute.ARG_LOAN, loanId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<LoanDto>(jsonResponse);
@@ -175,7 +177,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetLoanPerson.Replace(ApiRoute.arg_PersonId, personId.ToString());
+                var url = ApiRoute.LOAN_ROUTES.LOANS_PERSON
+                    .Replace(ApiRoute.ARG_PERSON, personId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<LoanDto>>(jsonResponse);
@@ -198,7 +201,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetLoans;
+                var url = ApiRoute.LOAN_ROUTES.LOANS;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<LoanDto>>(jsonResponse);
@@ -227,9 +230,9 @@ namespace DivvyUp_Impl_Maui.Service
                 string fromFormatted = from.Value.ToString("dd-MM-yyyy");
                 string toFormatted = to.Value.ToString("dd-MM-yyyy");
 
-                var url = _url.GetLoansByDataRange
-                    .Replace(ApiRoute.arg_From, fromFormatted)
-                    .Replace(ApiRoute.arg_To, toFormatted);
+                var url = ApiRoute.LOAN_ROUTES.LOANS_DATA_RANGE
+                    .Replace(ApiRoute.ARG_FROM, fromFormatted)
+                    .Replace(ApiRoute.ARG_TO, toFormatted);
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<LoanDto>>(jsonResponse);

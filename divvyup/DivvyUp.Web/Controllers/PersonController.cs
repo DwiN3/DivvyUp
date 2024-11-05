@@ -1,11 +1,12 @@
 ﻿using DivvyUp.Web.InterfaceWeb;
+using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DivvyUp.Web.Controllers
 {
-    [Route("rm/person")]
+    [Route(ApiRoute.PERSON_ROUTES.PERSON_ROUTE)]
     [ApiController]
     public class PersonController : ControllerBase
     {
@@ -17,14 +18,14 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
-        [HttpPost("add")]
+        [HttpPost(ApiRoute.PERSON_ROUTES.ADD)]
         public async Task<IActionResult> Add([FromBody] AddEditPersonRequest request)
         {
             return await _personService.Add(User, request);
         }
 
         [Authorize]
-        [HttpPut("edit/{personId}")]
+        [HttpPut(ApiRoute.PERSON_ROUTES.EDIT)]
         public async Task<IActionResult> Edit([FromBody] AddEditPersonRequest request, [FromRoute] int personId)
         {
             return await _personService.Edit(User, request, personId);
@@ -32,42 +33,42 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
-        [HttpDelete("remove/{personId}")]
+        [HttpDelete(ApiRoute.PERSON_ROUTES.REMOVE)]
         public async Task<IActionResult> Remove([FromRoute] int personId)
         {
             return await _personService.Remove(User, personId);
         }
 
         [Authorize]
-        [HttpGet("{personId}")]
+        [HttpGet(ApiRoute.PERSON_ROUTES.PERSON)]
         public async Task<IActionResult> GetPerson([FromRoute] int personId)
         {
             return await _personService.GetPerson(User, personId);
         }
 
         [Authorize]
-        [HttpGet("people")]
+        [HttpGet(ApiRoute.PERSON_ROUTES.PEOPLE)]
         public async Task<IActionResult> GetPersons()
         {
             return await _personService.GetPersons(User);
         }
 
         [Authorize]
-        [HttpGet("user-person")]
+        [HttpGet(ApiRoute.PERSON_ROUTES.PERSON_USER)]
         public async Task<IActionResult> GetUserPerson()
         {
             return await _personService.GetUserPerson(User);
         }
 
         [Authorize]
-        [HttpGet("from-receipt/{receiptId}")]
+        [HttpGet(ApiRoute.PERSON_ROUTES.PEOPLE_FROM_RECEIPT)]
         public async Task<IActionResult> GetPersonFromReceipt([FromRoute] int receiptId)
         {
             return await _personService.GetPersonFromReceipt(User, receiptId);
         }
 
         [Authorize]
-        [HttpGet("from-product/{productId}")]
+        [HttpGet(ApiRoute.PERSON_ROUTES.PEOPLE_FROM_PRODUCT)]
         public async Task<IActionResult> GetPersonFromProduct([FromRoute] int productId)
         {
             return await _personService.GetPersonFromProduct(User, productId);

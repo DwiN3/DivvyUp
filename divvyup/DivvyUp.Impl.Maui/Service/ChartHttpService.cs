@@ -13,7 +13,6 @@ namespace DivvyUp_Impl_Maui.Service
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
-        private ApiRoute _url { get; } = new();
         private readonly ILogger<ChartHttpService> _logger;
 
         public ChartHttpService(DHttpClient dHttpClient, ILogger<ChartHttpService> logger)
@@ -26,7 +25,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetTotalAmountsChart;
+                var url = ApiRoute.CHART_ROUTES.TOTAL_AMOUNTS;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
@@ -49,7 +48,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetUnpaidAmountsChart;
+                var url = ApiRoute.CHART_ROUTES.UNPAID_AMOUNTS;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
@@ -72,7 +71,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetPercentageExpensesChart;
+                var url = ApiRoute.CHART_ROUTES.PERCENTAGE_EXPENSES;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
@@ -95,7 +94,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetMonthlyTotalExpensesChart.Replace(ApiRoute.arg_Year, year.ToString());
+                var url = ApiRoute.CHART_ROUTES.MONTHLY_TOTAL_EXPANSES
+                    .Replace(ApiRoute.ARG_YEAR, year.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
@@ -118,7 +118,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetMonthlyUserExpenses.Replace(ApiRoute.arg_Year, year.ToString());
+                var url = ApiRoute.CHART_ROUTES.MONTHLY_USER_EXPANSES
+                    .Replace(ApiRoute.ARG_YEAR, year.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
@@ -141,7 +142,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetWeeklyTotalExpenses;
+                var url = ApiRoute.CHART_ROUTES.WEEKLY_TOTAL_EXPENSES;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
@@ -164,7 +165,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetWeeklyUserExpenses;
+                var url = ApiRoute.CHART_ROUTES.WEEKLY_USER_EXPENSES;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
@@ -187,7 +188,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetMonthlyTopProducts;
+                var url = ApiRoute.CHART_ROUTES.MONTHLY_TOP_PRODUCTS;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);

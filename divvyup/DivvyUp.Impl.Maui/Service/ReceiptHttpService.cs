@@ -13,7 +13,6 @@ namespace DivvyUp_Impl_Maui.Service
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
-        private ApiRoute _url { get; } = new();
         private readonly ILogger<ReceiptHttpService> _logger;
 
         public ReceiptHttpService(DHttpClient dHttpClient, ILogger<ReceiptHttpService> logger)
@@ -26,7 +25,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.AddReceipt;
+                var url = ApiRoute.RECEIPT_ROUTES.ADD;
                 var response = await _dHttpClient.PostAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania rachunku");
             }
@@ -46,7 +45,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.EditReceipt.Replace(ApiRoute.arg_ID, receipt.id.ToString());
+                var url = ApiRoute.RECEIPT_ROUTES.EDIT
+                    .Replace(ApiRoute.ARG_RECEIPT, receipt.id.ToString());
                 var response = await _dHttpClient.PutAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
@@ -66,7 +66,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.RemoveReceipt.Replace(ApiRoute.arg_ID, receiptId.ToString());
+                var url = ApiRoute.RECEIPT_ROUTES.REMOVE
+                    .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString());
                 var response = await _dHttpClient.DeleteAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
@@ -86,9 +87,9 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.SetSettledReceipt
-                    .Replace(ApiRoute.arg_ID, receiptId.ToString())
-                    .Replace(ApiRoute.arg_Settled, settled.ToString());
+                var url = ApiRoute.RECEIPT_ROUTES.SET_SETTLED
+                    .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString())
+                    .Replace(ApiRoute.ARG_SETTLED, settled.ToString());
                 var response = await _dHttpClient.PutAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
@@ -108,7 +109,8 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetReceipt.Replace(ApiRoute.arg_ID, receiptId.ToString());
+                var url = ApiRoute.RECEIPT_ROUTES.RECEIPT
+                    .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString());
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<ReceiptDto>(jsonResponse);
@@ -131,7 +133,7 @@ namespace DivvyUp_Impl_Maui.Service
         {
             try
             {
-                var url = _url.GetReceipts;
+                var url = ApiRoute.RECEIPT_ROUTES.RECEIPTS;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ReceiptDto>>(jsonResponse);
@@ -160,9 +162,9 @@ namespace DivvyUp_Impl_Maui.Service
                 string fromFormatted = from.Value.ToString("dd-MM-yyyy");
                 string toFormatted = to.Value.ToString("dd-MM-yyyy");
 
-                var url = _url.GetReceiptsByDataRange
-                    .Replace(ApiRoute.arg_From, fromFormatted)
-                    .Replace(ApiRoute.arg_To, toFormatted);
+                var url = ApiRoute.RECEIPT_ROUTES.RECEIPTS_DATA_RANGE
+                    .Replace(ApiRoute.ARG_FROM, fromFormatted)
+                    .Replace(ApiRoute.ARG_TO, toFormatted);
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ReceiptDto>>(jsonResponse);
