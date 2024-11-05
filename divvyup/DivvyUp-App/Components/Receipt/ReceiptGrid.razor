@@ -21,8 +21,8 @@
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" Disabled="@IsGridEdit" />
         @if (!ShowAllReceipts)
         {
-            <RadzenDatePicker TValue="DateTime?" Value="@DateFrom" Change="@(args => DateFrom = args)" Name="Data od" DateFormat="dd-MM-yyyy" />
-            <RadzenDatePicker TValue="DateTime?" Value="@DateTo" Change="@(args => DateTo = args)" Name="Data do" DateFormat="dd-MM-yyyy" />
+            <RadzenDatePicker TValue="DateTime?" Value="@DateFrom" Change="@(args => DateFrom = args)" Name="Data od" DateFormat="@Format.DateFormat" />
+            <RadzenDatePicker TValue="DateTime?" Value="@DateTo" Change="@(args => DateTo = args)" Name="Data do" DateFormat="@Format.DateFormat" />
             <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" Disabled="@IsGridEdit" />
         }
         <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllReceipts ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="receipt" Text="Pokaż wszystkie rachunki" Click="@(async() => { ShowAllReceipts = !ShowAllReceipts; await LoadGrid();})" Disabled="@IsGridEdit" />
@@ -60,10 +60,10 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
             <Template Context="receipt">
-                @receipt.date.ToString("dd.MM.yyyy")
+                @receipt.date.ToString(@Format.DateFormat)
             </Template>
             <EditTemplate Context="receipt">
-                <RadzenDatePicker @bind-Value="@receipt.date" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="width: 100%;"/>
+                <RadzenDatePicker @bind-Value="@receipt.date" ShowCalendarWeek DateFormat="@Format.DateFormat" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.totalPrice)" Title="Kwota" Width="20%" TextAlign="TextAlign.Start" Frozen="true">

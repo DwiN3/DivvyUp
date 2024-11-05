@@ -4,7 +4,7 @@ namespace DivvyUp_Shared.AppConstants
 {
     public class ApiRoute
     {
-        private const string BaseUrl = "/rm";
+        private const string BaseUrl = "/api";
 
         public const string ARG_PERSON = "{personId}";
         public const string ARG_RECEIPT = "{receiptId}";

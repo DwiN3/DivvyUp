@@ -22,8 +22,8 @@
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" Disabled="@IsGridEdit" />
         @if (!ShowAllLoans && GridMode == LoanGridMode.All)
         {
-            <RadzenDatePicker TValue="DateTime?" Value="@DateFrom" Change="@(args => DateFrom = args)" Name="Data od" DateFormat="dd-MM-yyyy" />
-            <RadzenDatePicker TValue="DateTime?" Value="@DateTo" Change="@(args => DateTo = args)" Name="Data do" DateFormat="dd-MM-yyyy" />
+            <RadzenDatePicker TValue="DateTime?" Value="@DateFrom" Change="@(args => DateFrom = args)" Name="Data od" DateFormat="@Format.DateFormat" />
+            <RadzenDatePicker TValue="DateTime?" Value="@DateTo" Change="@(args => DateTo = args)" Name="Data do" DateFormat="@Format.DateFormat" />
             <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" Disabled="@IsGridEdit" />
         }
         <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="attach_money" Text="Pokaż wszystkie pożyczki" Click="@(async() => { ShowAllLoans = !ShowAllLoans; await LoadGrid();})" Visible="@(GridMode == LoanGridMode.All)" Disabled="@IsGridEdit" />
@@ -55,10 +55,10 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
             <Template Context="loan">
-                @loan.date.ToString("dd.MM.yyyy")
+                @loan.date.ToString(Format.DateFormat)
             </Template>
             <EditTemplate Context="loan">
-                <RadzenDatePicker @bind-Value="@loan.date" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="width: 100%;" />
+                <RadzenDatePicker @bind-Value="@loan.date" ShowCalendarWeek DateFormat="@Format.DateFormat" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.lent)" Title="Pożyczka" Width="10%" TextAlign="TextAlign.Center" Frozen="true">

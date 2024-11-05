@@ -2,12 +2,13 @@
 {
     public class AppPath
     {
-        public const string Dashboard = "/";
-        public const string AccontManager = "/accountManager";
-        public const string Login = "/login";
-        public const string Register = "/register";
-        public const string Person = "/person";
-        public const string Receipt = "/receipt";
-        public const string Product = "/receipt/{id:int}/products";
+        public const string DASHBOARD = "/";
+        public const string ACCOUT_MANAGER = "/accountManager";
+        public const string LOGIN = "/login";
+        public const string REGISTER = "/register";
+        public const string PERSON = "/person";
+        public const string RECEIPT = "/receipt";
+        public const string PRODUCT = "/receipt/{receiptId}/products";
+        public const string LOAN = "/loan";
     }
 }
