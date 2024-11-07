@@ -205,6 +205,7 @@ namespace DivvyUp.Web.Service
             {
                 var user = await _validator.GetUser(claims);
                 var products = await _dbContext.Products
+                    .AsNoTracking()
                     .Include(p => p.Receipt)
                     .Include(p => p.Receipt.User)
                     .Where(p => p.Receipt.User == user)
@@ -233,6 +234,7 @@ namespace DivvyUp.Web.Service
 
                 var user = await _validator.GetUser(claims);
                 var products = await _dbContext.Products
+                    .AsNoTracking()
                     .Include(p => p.Receipt)
                     .Include(p => p.Receipt.User)
                     .Where(p => p.Receipt.User == user && p.ReceiptId == receiptId)

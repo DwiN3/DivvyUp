@@ -67,7 +67,9 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.partOfPrice)" Title="Cena" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="personProduct">
-                @personProduct.partOfPrice.ToString(Format.PriceFormat)
+                <div style="color: @(personProduct.settled ? "green" : "red")">
+                    <b>@personProduct.partOfPrice.ToString(Format.PriceFormat)</b>
+                </div>
             </Template>
             <EditTemplate Context="personProduct">
                 -
@@ -80,21 +82,29 @@
                                         ValueChanged="async (int personId) => await OnPersonChange(personProduct, personId)"
                                         Data="@Persons"
                                         TextProperty="@nameof(PersonDto.fullName)"
-                                        ValueProperty="@nameof(PersonDto.id)" />
+                                        ValueProperty="@nameof(PersonDto.id)"/>
             </Template>
             <EditTemplate Context="personProduct">
                 @{
-                    if (PeopleAvailable != null && PeopleAvailable.Count > 0 && personProduct.personId == 0)
+                    if (personProduct.id != 0)
                     {
-                        personProduct.personId = Persons.First().id;
+                        if (!PeopleAvailable.Any(p => p.id == personProduct.person.id))
+                        {
+                            PeopleAvailable.Add(personProduct.person);
+                        }
                     }
+                    else if (PeopleAvailable.Any())
+                    {
+                        personProduct.personId = PeopleAvailable.First().id;
+                    }
+
+                    <RadzenDropDownDataGrid
+                        TValue="int"
+                        @bind-Value="@personProduct.personId"
+                        Data="@PeopleAvailable"
+                        TextProperty="@nameof(PersonDto.fullName)"
+                        ValueProperty="@nameof(PersonDto.id)" />
                 }
-                <RadzenDropDownDataGrid
-                    TValue="int"
-                    @bind-Value="@personProduct.personId"
-                    Data="@PeopleAvailable"
-                    TextProperty="@nameof(PersonDto.fullName)"
-                    ValueProperty="@nameof(PersonDto.id)"/>
             </EditTemplate>
         </RadzenDataGridColumn>
 

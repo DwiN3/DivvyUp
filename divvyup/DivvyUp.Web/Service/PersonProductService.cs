@@ -259,6 +259,7 @@ namespace DivvyUp.Web.Service
             {
                 var user = await _validator.GetUser(claims);
                 var personProducts = await _dbContext.PersonProducts
+                    .AsNoTracking()
                     .Include(p => p.Product)
                     .Include(p => p.Person)
                     .Include(p => p.Person.User)
@@ -286,6 +287,7 @@ namespace DivvyUp.Web.Service
 
                 var user = await _validator.GetUser(claims);
                 var personProducts = await _dbContext.PersonProducts
+                    .AsNoTracking()
                     .Include(p => p.Product)
                     .Include(p => p.Person)
                     .Include(p => p.Person.User)

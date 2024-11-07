@@ -151,6 +151,7 @@ namespace DivvyUp.Web.Service
             {
                 var user = await _validator.GetUser(claims);
                 var persons = await _dbContext.Persons
+                    .AsNoTracking()
                     .Where(p => p.User == user)
                     .ToListAsync();
                 var personListDto = _mapper.Map<List<PersonDto>>(persons);
@@ -171,8 +172,7 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
-                var person = await _dbContext.Persons
-                    .FirstOrDefaultAsync(p => p.User == user && p.UserAccount);
+                var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.User == user && p.UserAccount);
                 var personDto = _mapper.Map<PersonDto>(person);
                 return new OkObjectResult(personDto);
             }
@@ -196,6 +196,7 @@ namespace DivvyUp.Web.Service
                 await _validator.GetReceipt(claims, receiptId);
 
                 var personProducts = await _dbContext.PersonProducts
+                    .AsNoTracking()
                     .Include(pp => pp.Person)
                     .Include(pp => pp.Product)
                     .Where(pp => pp.Product.ReceiptId == receiptId && pp.Person.User == user)
@@ -224,6 +225,7 @@ namespace DivvyUp.Web.Service
                 await _validator.GetProduct(claims, productId);
 
                 var personProducts = await _dbContext.PersonProducts
+                    .AsNoTracking()
                     .Include(pp => pp.Person)
                     .Where(pp => pp.ProductId == productId && pp.Person.User == user)
                     .ToListAsync();

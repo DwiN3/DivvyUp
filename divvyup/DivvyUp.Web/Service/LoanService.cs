@@ -222,6 +222,7 @@ namespace DivvyUp.Web.Service
             {
                 var user = await _validator.GetUser(claims);
                 var loans = await _dbContext.Loans
+                    .AsNoTracking()
                     .Include(p => p.Person)
                     .Include(p => p.Person.User)
                     .Where(p => p.Person.User == user)
@@ -248,6 +249,7 @@ namespace DivvyUp.Web.Service
 
                 var user = await _validator.GetUser(claims);
                 var loans = await _dbContext.Loans
+                    .AsNoTracking()
                     .Include(p => p.Person)
                     .Include(p => p.Person.User)
                     .Where(p => p.Person.User == user && p.Person.Id == personId)
@@ -284,6 +286,7 @@ namespace DivvyUp.Web.Service
 
                 var user = await _validator.GetUser(claims);
                 var loans = await _dbContext.Loans
+                    .AsNoTracking()
                     .Include(p => p.Person)
                     .Include(p => p.Person.User)
                     .Where(p => p.Person.User == user && p.Date >= fromDate && p.Date <= toDate)

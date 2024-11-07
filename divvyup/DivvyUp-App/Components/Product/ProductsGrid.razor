@@ -146,20 +146,15 @@
                         PersonDto person = product.persons.First();
 
                         <RadzenDropDownDataGrid TValue="PersonDto"
-                                                Value="person"
+                                                Value="@person"
                                                 ValueChanged="async(PersonDto person) => await OnPersonChange(product.id, person)"
                                                 Data="@Persons"
                                                 TextProperty="@nameof(PersonDto.fullName)" />
                     }
                     else
                     {
-                        if (Persons != null && Persons.Count > 0)
-                        {
-                            SelectedPerson = Persons.First();
-                        }
-                        
                         <RadzenDropDownDataGrid TValue="PersonDto"
-                                                Value="SelectedPerson"
+                                                Value="@SelectedPerson"
                                                 ValueChanged="OnPersonSet"
                                                 Data="@Persons"
                                                 TextProperty="@nameof(PersonDto.fullName)" />

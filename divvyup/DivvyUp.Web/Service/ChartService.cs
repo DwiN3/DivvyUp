@@ -66,7 +66,9 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
-                var persons = await _dbContext.Persons.Where(p => p.UserId == user.Id).ToListAsync();
+                var persons = await _dbContext.Persons
+                    .AsNoTracking()
+                    .Where(p => p.UserId == user.Id).ToListAsync();
 
                 var responseList = new List<ChartDto>();
                 foreach (var person in persons)
@@ -99,6 +101,7 @@ namespace DivvyUp.Web.Service
                 var user = await _validator.GetUser(claims);
 
                 var receipts = await _dbContext.Receipts
+                    .AsNoTracking()
                     .Where(r => r.UserId == user.Id && r.Date.Year == year)
                     .ToListAsync();
 
@@ -138,7 +141,10 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
-                var persons = await _dbContext.Persons.Where(p => p.UserId == user.Id).ToListAsync();
+                var persons = await _dbContext.Persons
+                    .AsNoTracking()
+                    .Where(p => p.UserId == user.Id)
+                    .ToListAsync();
                 var userAccountPersons = persons.Where(p => p.UserAccount).ToList();
 
                 var monthlyTotals = new Dictionary<int, decimal>();
@@ -146,6 +152,7 @@ namespace DivvyUp.Web.Service
                 foreach (var person in userAccountPersons)
                 {
                     var personProducts = await _dbContext.PersonProducts
+                        .AsNoTracking()
                         .Include(pp => pp.Product)
                         .Include(pp => pp.Product.Receipt)
                         .Where(pp => pp.PersonId == person.Id)
@@ -194,7 +201,9 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
-                var receipts = await _dbContext.Receipts.Where(r => r.UserId == user.Id).ToListAsync();
+                var receipts = await _dbContext.Receipts
+                    .AsNoTracking()
+                    .Where(r => r.UserId == user.Id).ToListAsync();
 
                 var dailyTotals = new Dictionary<DayOfWeek, decimal>();
                 foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
@@ -246,7 +255,10 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
-                var persons = await _dbContext.Persons.Where(p => p.UserId == user.Id).ToListAsync();
+                var persons = await _dbContext.Persons
+                    .AsNoTracking()
+                    .Where(p => p.UserId == user.Id)
+                    .ToListAsync();
                 var userAccountPersons = persons.Where(p => p.UserAccount).ToList();
 
                 var dailyTotals = new Dictionary<DayOfWeek, decimal>();
@@ -262,6 +274,7 @@ namespace DivvyUp.Web.Service
                 foreach (var person in userAccountPersons)
                 {
                     var personProducts = await _dbContext.PersonProducts
+                        .AsNoTracking()
                         .Include(pp => pp.Product)
                         .Include(pp => pp.Product.Receipt)
                         .Where(pp => pp.PersonId == person.Id)
@@ -317,6 +330,7 @@ namespace DivvyUp.Web.Service
                 foreach (var person in persons)
                 {
                     var personProducts = await _dbContext.PersonProducts
+                        .AsNoTracking()
                         .Include(pp => pp.Product)
                         .Include(pp => pp.Product.Receipt)
                         .Where(pp => pp.PersonId == person.Id)

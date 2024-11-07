@@ -48,9 +48,10 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private void LoadAvailablePersons()
         {
-            var productPersons = Product.persons;
-            PeopleAvailable = Persons.Where(p => !productPersons.Contains(p)).ToList();
+            var productPersonIds = Product.persons.Select(p => p.id).ToHashSet();
+            PeopleAvailable = Persons.Where(p => !productPersonIds.Contains(p.id)).ToList();
         }
+
 
         private async Task InsertRow()
         {

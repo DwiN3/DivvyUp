@@ -98,6 +98,15 @@ namespace DivvyUp.Web.Service
                 _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
 
                 var user = await _validator.GetUser(claims);
+
+                if (!user.Username.Equals(request.Username))
+                {
+                    var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.UserId == user.Id && p.UserAccount);
+                    person.Name = request.Username;
+                    _dbContext.Persons.Update(person);
+                    
+                }
+
                 user.Username = request.Username;
                 user.Email = request.Email;
 
