@@ -6,6 +6,7 @@ using DivvyUp.Web.Data;
 using DivvyUp.Web.Interface;
 using DivvyUp.Web.Update;
 using DivvyUp.Web.Validation;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
@@ -55,7 +56,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie dodano pożyczkę");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -87,7 +88,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -110,7 +111,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie usunięto pożyczkę");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -137,7 +138,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie zmieniono osobe");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -161,7 +162,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -185,7 +186,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, true);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -205,7 +206,7 @@ namespace DivvyUp.Web.Service
                 var loanDto = _mapper.Map<LoanDto>(loan);
                 return new OkObjectResult(loanDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -229,7 +230,7 @@ namespace DivvyUp.Web.Service
                 var loansDto = _mapper.Map<List<LoanDto>>(loans).ToList();
                 return new OkObjectResult(loansDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -255,7 +256,7 @@ namespace DivvyUp.Web.Service
                 var loansDto = _mapper.Map<List<LoanDto>>(loans).ToList();
                 return new OkObjectResult(loansDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -291,7 +292,7 @@ namespace DivvyUp.Web.Service
                 var loansDto = _mapper.Map<List<LoanDto>>(loans).ToList();
                 return new OkObjectResult(loansDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }

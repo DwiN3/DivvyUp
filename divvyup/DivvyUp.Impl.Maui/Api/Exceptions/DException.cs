@@ -4,12 +4,12 @@ namespace DivvyUp_Impl_Maui.Api.Exceptions
 {
     public class DException : Exception
     {
-        public HttpStatusCode StatusCode { get; }
+        public HttpStatusCode Status { get; }
         public string Message { get; }
 
-        public DException(HttpStatusCode statusCode, string message) : base(message)
+        public DException(HttpStatusCode status, string message) : base(message)
         {
-            StatusCode = statusCode;
+            Status = status;
             Message = message;
         }
     }

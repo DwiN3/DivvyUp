@@ -4,6 +4,7 @@ using DivvyUp.Web.Data;
 using DivvyUp.Web.Interface;
 using DivvyUp.Web.Update;
 using DivvyUp.Web.Validation;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
@@ -63,7 +64,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie dodano przypis produktu do osoby");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -96,7 +97,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -120,7 +121,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie usunięto przypis produktu do osoby");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -153,7 +154,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -187,7 +188,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -217,7 +218,7 @@ namespace DivvyUp.Web.Service
 
                 return new OkObjectResult("Pomyślnie zaktualizowano stan kompensacji.");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -237,7 +238,7 @@ namespace DivvyUp.Web.Service
                 var personProductDto = _mapper.Map<PersonProductDto>(personProduct);
                 return new OkObjectResult(personProductDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -262,7 +263,7 @@ namespace DivvyUp.Web.Service
                 var personProductsDto = _mapper.Map<List<PersonProductDto>>(personProducts).ToList();
                 return new OkObjectResult(personProductsDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -289,7 +290,7 @@ namespace DivvyUp.Web.Service
                 var personProductsDto = _mapper.Map<List<PersonProductDto>>(personProducts).ToList();
                 return new OkObjectResult(personProductsDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }

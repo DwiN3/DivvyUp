@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using DivvyUp.Web.Data;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 
 namespace DivvyUp.Web.Validation
 {
@@ -20,7 +21,7 @@ namespace DivvyUp.Web.Validation
         {
             if (obj == null)
             {
-                throw new ValidException(HttpStatusCode.BadRequest, message);
+                throw new DException(HttpStatusCode.BadRequest, message);
             }
         }
 
@@ -28,7 +29,7 @@ namespace DivvyUp.Web.Validation
         {
             if (str.IsNullOrEmpty())
             {
-                throw new ValidException(HttpStatusCode.BadRequest, message);
+                throw new DException(HttpStatusCode.BadRequest, message);
             }
         }
 
@@ -36,12 +37,12 @@ namespace DivvyUp.Web.Validation
         {
             var userIdClaim = claims.FindFirst("Id")?.Value;
             if (userIdClaim == null)
-                throw new ValidException(HttpStatusCode.Unauthorized,"Błędny token");
+                throw new DException(HttpStatusCode.Unauthorized,"Błędny token");
 
             var userId = int.Parse(userIdClaim);
             var user = await _dbContext.Users.FindAsync(userId);
             if (user == null)
-                throw new ValidException(HttpStatusCode.NotFound,"Nie znaleziono osoby");
+                throw new DException(HttpStatusCode.NotFound,"Nie znaleziono osoby");
 
             return user;
         }
@@ -54,9 +55,9 @@ namespace DivvyUp.Web.Validation
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.Id == personId);
             if (person == null)
-                throw new ValidException(HttpStatusCode.NotFound,"Osoba nie znaleziona");
+                throw new DException(HttpStatusCode.NotFound,"Osoba nie znaleziona");
             if (person.User.Id != user.Id)
-                throw new ValidException(HttpStatusCode.Unauthorized,"Brak dostępu do osoby: "+person.Id);
+                throw new DException(HttpStatusCode.Unauthorized,"Brak dostępu do osoby: "+person.Id);
 
             return person;
         }
@@ -70,9 +71,9 @@ namespace DivvyUp.Web.Validation
                 .Include(p => p.Person.User)
                 .FirstOrDefaultAsync(p => p.Id == loanId);
             if (loan == null)
-                throw new ValidException(HttpStatusCode.NotFound, "Pożyczka nie znaleziona");
+                throw new DException(HttpStatusCode.NotFound, "Pożyczka nie znaleziona");
             if (loan.Person.User.Id != user.Id)
-                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do pożyczki: " + loan.Id);
+                throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do pożyczki: " + loan.Id);
 
             return loan;
         }
@@ -85,9 +86,9 @@ namespace DivvyUp.Web.Validation
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.Id == receiptId);
             if (receipt == null)
-                throw new ValidException(HttpStatusCode.NotFound, "Rachunek nie znaleziony");
+                throw new DException(HttpStatusCode.NotFound, "Rachunek nie znaleziony");
             if (receipt.User.Id != user.Id)
-                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do rachunku: " + receipt.Id);
+                throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do rachunku: " + receipt.Id);
 
             return receipt;
         }
@@ -101,9 +102,9 @@ namespace DivvyUp.Web.Validation
                 .Include(p => p.Receipt.User)
                 .FirstOrDefaultAsync(p => p.Id == productId);
             if (product == null)
-                throw new ValidException(HttpStatusCode.NotFound, "Produkt nie znaleziony");
+                throw new DException(HttpStatusCode.NotFound, "Produkt nie znaleziony");
             if (product.Receipt.User.Id != user.Id)
-                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do produktu: " + product.Id);
+                throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do produktu: " + product.Id);
 
             return product;
         }
@@ -118,9 +119,9 @@ namespace DivvyUp.Web.Validation
                 .Include(p => p.Person.User)
                 .FirstOrDefaultAsync(p => p.Id == personProductId);
             if (personProduct == null)
-                throw new ValidException(HttpStatusCode.NotFound, "Przypis osoby z produktem nie znaleziony");
+                throw new DException(HttpStatusCode.NotFound, "Przypis osoby z produktem nie znaleziony");
             if (personProduct.Person.User.Id != user.Id)
-                throw new ValidException(HttpStatusCode.Unauthorized, "Brak dostępu do przypisu produktu z osobą: " + personProductId);
+                throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do przypisu produktu z osobą: " + personProductId);
 
             return personProduct;
         }

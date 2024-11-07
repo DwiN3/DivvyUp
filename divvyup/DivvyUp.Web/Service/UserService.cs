@@ -9,6 +9,7 @@ using DivvyUp_Shared.RequestDto;
 using Microsoft.EntityFrameworkCore;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Validation;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 
 namespace DivvyUp.Web.Service
 {
@@ -27,28 +28,38 @@ namespace DivvyUp.Web.Service
 
         public async Task<IActionResult> Register(RegisterRequest request)
         {
-            _validator.IsNull(request, "Nie przekazano danych");
-            _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
-            _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
-            _validator.IsEmpty(request.Password, "Hasło jest wymagane");
-
-            if (_dbContext.Users.Any(x => x.Email == request.Email || x.Username == request.Username))
-                return new ConflictObjectResult("Użytkownik o takich danych istnieje");
-
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
-
-            var newUser = new User
+            try
             {
-                Username = request.Username,
-                Email = request.Email,
-                Password = hashedPassword
-            };
-            _dbContext.Users.Add(newUser);
-            await AddPersonUser(newUser);
+                _validator.IsNull(request, "Nie przekazano danych");
+                _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
+                _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
+                _validator.IsEmpty(request.Password, "Hasło jest wymagane");
 
-            await _dbContext.SaveChangesAsync();
+                if (_dbContext.Users.Any(x => x.Email == request.Email || x.Username == request.Username))
+                    return new ConflictObjectResult("Użytkownik o takich danych istnieje");
 
-            return new OkObjectResult("Pomyślnie zarejstrowano");
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+                var newUser = new User
+                {
+                    Username = request.Username,
+                    Email = request.Email,
+                    Password = hashedPassword
+                };
+                _dbContext.Users.Add(newUser);
+                await AddPersonUser(newUser);
+
+                await _dbContext.SaveChangesAsync();
+                return new OkObjectResult("Pomyślnie zarejstrowano");
+            }
+            catch (DException ex)
+            {
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
         }
 
         public async Task<IActionResult> Login(LoginRequest request)
@@ -67,6 +78,10 @@ namespace DivvyUp.Web.Service
 
                 var token = GenerateToken(user);
                 return new OkObjectResult(token);
+            }
+            catch (DException ex)
+            {
+                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
             catch (Exception)
             {
@@ -92,7 +107,7 @@ namespace DivvyUp.Web.Service
 
                 return new OkObjectResult(token);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -144,7 +159,7 @@ namespace DivvyUp.Web.Service
 
                 return new OkObjectResult("User and all related data successfully deleted.");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -188,7 +203,7 @@ namespace DivvyUp.Web.Service
                 var user = await _validator.GetUser(claims);
                 return new OkObjectResult(user);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -217,7 +232,7 @@ namespace DivvyUp.Web.Service
                 await _dbContext.SaveChangesAsync();
                 return new OkObjectResult("Pomyślnie zmieniono hasło");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }

@@ -5,6 +5,7 @@ using AutoMapper;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Interfac;
 using DivvyUp.Web.Validation;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@ namespace DivvyUp.Web.Service
                 }
                 return new OkObjectResult(responseList);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -81,7 +82,7 @@ namespace DivvyUp.Web.Service
                 }
                 return new OkObjectResult(responseList);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -122,7 +123,7 @@ namespace DivvyUp.Web.Service
                 }
                 return new OkObjectResult(responseList);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -178,7 +179,7 @@ namespace DivvyUp.Web.Service
 
                 return new OkObjectResult(responseList);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -229,7 +230,7 @@ namespace DivvyUp.Web.Service
 
                 return new OkObjectResult(responseList);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -294,7 +295,7 @@ namespace DivvyUp.Web.Service
 
                 return new OkObjectResult(responseList);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -350,7 +351,7 @@ namespace DivvyUp.Web.Service
 
                 return new OkObjectResult(topProducts);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }

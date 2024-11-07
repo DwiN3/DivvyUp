@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DivvyUp.Impl.Maui\DivvyUp.Impl.Maui.csproj" />
     <ProjectReference Include="..\DivvyUp.Shared\DivvyUp.Shared.csproj" />
   </ItemGroup>
 

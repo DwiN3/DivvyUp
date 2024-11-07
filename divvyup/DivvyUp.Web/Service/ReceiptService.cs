@@ -5,6 +5,7 @@ using DivvyUp.Web.Data;
 using DivvyUp.Web.Interface;
 using DivvyUp.Web.Update;
 using DivvyUp.Web.Validation;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
@@ -52,7 +53,7 @@ namespace DivvyUp.Web.Service
                 await _dbContext.SaveChangesAsync();
                 return new OkObjectResult("Pomyślnie dodano rachunek");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -80,7 +81,7 @@ namespace DivvyUp.Web.Service
                 await _dbContext.SaveChangesAsync();
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -121,7 +122,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie usunięto rachunek");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -163,7 +164,7 @@ namespace DivvyUp.Web.Service
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -183,7 +184,7 @@ namespace DivvyUp.Web.Service
                 var receiptDto = _mapper.Map<ReceiptDto>(receipt);
                 return new OkObjectResult(receiptDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -205,7 +206,7 @@ namespace DivvyUp.Web.Service
                 var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts).ToList();
                 return new OkObjectResult(receiptsDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
@@ -239,7 +240,7 @@ namespace DivvyUp.Web.Service
                 var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts).ToList();
                 return new OkObjectResult(receiptsDto);
             }
-            catch (ValidException ex)
+            catch (DException ex)
             {
                 return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
             }
