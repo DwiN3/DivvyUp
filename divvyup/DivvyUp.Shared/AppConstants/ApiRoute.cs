@@ -1,6 +1,4 @@
-﻿using System.Linq.Dynamic.Core.Tokenizer;
-
-namespace DivvyUp_Shared.AppConstants
+﻿namespace DivvyUp_Shared.AppConstants
 {
     public class ApiRoute
     {
