@@ -1,4 +1,4 @@
-﻿using DivvyUp.Web.InterfaceWeb;
+﻿using DivvyUp.Web.Interfac;
 using DivvyUp_Shared.AppConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

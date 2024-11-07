@@ -1,16 +1,13 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using AutoMapper;
-using Azure.Core;
-using DivvyUp.Web.InterfaceWeb;
-using DivvyUp.Web.Validator;
+using DivvyUp.Web.Data;
+using DivvyUp.Web.Interface;
+using DivvyUp.Web.Validation;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Person = DivvyUp_Shared.Model.Person;
 
 
 namespace DivvyUp.Web.Service
@@ -19,9 +16,9 @@ namespace DivvyUp.Web.Service
     {
         private readonly MyDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IValidator _validator;
+        private readonly MyValidator _validator;
 
-        public PersonService(MyDbContext dbContext, IMapper mapper, IValidator validator)
+        public PersonService(MyDbContext dbContext, IMapper mapper, MyValidator validator)
         {
             _dbContext = dbContext;
             _mapper = mapper;

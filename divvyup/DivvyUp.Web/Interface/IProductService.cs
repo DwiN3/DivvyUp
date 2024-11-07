@@ -1,9 +1,8 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DivvyUp_Shared.RequestDto;
 
-namespace DivvyUp.Web.InterfaceWeb
+namespace DivvyUp.Web.Interface
 {
     public interface IProductService
     {

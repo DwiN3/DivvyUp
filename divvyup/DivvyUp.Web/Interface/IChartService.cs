@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace DivvyUp.Web.InterfaceWeb
+namespace DivvyUp.Web.Interfac
 {
     public interface IChartService
     {

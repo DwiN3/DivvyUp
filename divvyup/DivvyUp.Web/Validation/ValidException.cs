@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace DivvyUp.Web.Validator
+namespace DivvyUp.Web.Validation
 {
     public class ValidException : Exception
     {

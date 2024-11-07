@@ -1,20 +1,21 @@
 using System.Text;
-using DivvyUp.Web;
-using DivvyUp.Web.InterfaceWeb;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using DivvyUp.Web.Service;
 using DivvyUp.Web.Middleware;
-using DivvyUp.Web.Validator;
 using DivvyUp.Web.Mappers;
 using DivvyUp.Web.Update;
+using DivvyUp.Web.Data;
+using DivvyUp.Web.Interfac;
+using DivvyUp.Web.Interface;
+using DivvyUp.Web.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IValidator, Validator>();
-builder.Services.AddScoped<IEntityUpdateService, EntityUpdateService>();
+builder.Services.AddScoped<MyValidator>();
+builder.Services.AddScoped<EntityUpdateService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IReceiptService, ReceiptService>();

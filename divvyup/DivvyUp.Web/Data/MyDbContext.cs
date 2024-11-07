@@ -1,13 +1,13 @@
 ﻿using DivvyUp_Shared.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace DivvyUp.Web
+namespace DivvyUp.Web.Data
 {
     public class MyDbContext : DbContext
     {
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

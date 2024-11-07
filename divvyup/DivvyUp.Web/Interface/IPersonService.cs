@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using DivvyUp_Shared.RequestDto;
 
-namespace DivvyUp.Web.InterfaceWeb
+namespace DivvyUp.Web.Interface
 {
     public interface IPersonService
     {

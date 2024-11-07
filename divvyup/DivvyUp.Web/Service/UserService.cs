@@ -2,12 +2,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DivvyUp.Web.InterfaceWeb;
+using DivvyUp.Web.Interface;
 using Microsoft.AspNetCore.Mvc;
-using DivvyUp.Web.Validator;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.EntityFrameworkCore;
+using DivvyUp.Web.Data;
+using DivvyUp.Web.Validation;
 
 namespace DivvyUp.Web.Service
 {
@@ -15,9 +16,9 @@ namespace DivvyUp.Web.Service
     {
         private readonly MyDbContext _dbContext;
         private readonly IConfiguration _configuration;
-        private readonly IValidator _validator;
+        private readonly MyValidator _validator;
 
-        public UserService(MyDbContext dbContext, IConfiguration configuration, IValidator validator)
+        public UserService(MyDbContext dbContext, IConfiguration configuration, MyValidator validator)
         {
             _dbContext = dbContext;
             _configuration = configuration;

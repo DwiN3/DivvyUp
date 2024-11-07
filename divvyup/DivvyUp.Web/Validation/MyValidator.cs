@@ -2,17 +2,16 @@
 using DivvyUp_Shared.Model;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using static System.Net.WebRequestMethods;
 using Microsoft.IdentityModel.Tokens;
+using DivvyUp.Web.Data;
 
-namespace DivvyUp.Web.Validator
+namespace DivvyUp.Web.Validation
 {
-    public class Validator : IValidator
+    public class MyValidator
     {
         private readonly MyDbContext _dbContext;
 
-        public Validator(MyDbContext dbContext)
+        public MyValidator(MyDbContext dbContext)
         {
             _dbContext = dbContext;
         }

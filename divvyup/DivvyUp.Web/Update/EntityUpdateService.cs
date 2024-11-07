@@ -1,11 +1,12 @@
 ﻿using System.Security.Claims;
-using DivvyUp.Web.Validator;
+using DivvyUp.Web.Data;
+using DivvyUp.Web.Validation;
 using DivvyUp_Shared.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace DivvyUp.Web.Update
 {
-    public class EntityUpdateService(MyDbContext dbContext, IValidator validator) : IEntityUpdateService
+    public class EntityUpdateService(MyDbContext dbContext, MyValidator validator)
     {
         public async Task UpdatePerson(ClaimsPrincipal claims, bool updateBalance)
         {
