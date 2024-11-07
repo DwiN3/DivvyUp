@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.Impl.Maui", "..\Div
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.Web", "..\DivvyUp.Web\DivvyUp.Web.csproj", "{DFE0575B-C059-4249-BD2D-9FE4D8311B0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivvyUp.Impl.Web", "..\DivvyUp.Impl.Web\DivvyUp.Impl.Web.csproj", "{E834C25A-D59B-419D-A48A-13DCBFCCE8A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{DFE0575B-C059-4249-BD2D-9FE4D8311B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFE0575B-C059-4249-BD2D-9FE4D8311B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFE0575B-C059-4249-BD2D-9FE4D8311B0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E834C25A-D59B-419D-A48A-13DCBFCCE8A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E834C25A-D59B-419D-A48A-13DCBFCCE8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E834C25A-D59B-419D-A48A-13DCBFCCE8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E834C25A-D59B-419D-A48A-13DCBFCCE8A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
