@@ -34,22 +34,22 @@ namespace DivvyUp_App.Components.PersonProduct
         protected override async Task OnInitializedAsync()
         {
             Persons = await PersonService.GetPersons();
-            Product = await ProductService.GetProduct(ProductId);
             await LoadGrid();
         }
 
         private async Task LoadGrid()
         {
             IsGridEdit = false;
+            Product = await ProductService.GetProduct(ProductId);
             PersonProducts = await PersonProductService.GetPersonProductsFromProduct(ProductId);
-            await LoadAvailablePersons();
+            LoadAvailablePersons();
             StateHasChanged();
         }
 
-        private async Task LoadAvailablePersons()
+        private void LoadAvailablePersons()
         {
-            var personProductIds = PersonProducts?.Select(pp => pp.personId).ToHashSet() ?? new HashSet<int>();
-            PeopleAvailable = Persons.Where(p => !personProductIds.Contains(p.id)).ToList();
+            var productPersons = Product.persons;
+            PeopleAvailable = Persons.Where(p => !productPersons.Contains(p)).ToList();
         }
 
         private async Task InsertRow()
@@ -187,7 +187,6 @@ namespace DivvyUp_App.Components.PersonProduct
 
                 return lastParts;
             }
-
             return 0;
         }
 

@@ -153,6 +153,11 @@
                     }
                     else
                     {
+                        if (Persons != null && Persons.Count > 0)
+                        {
+                            SelectedPerson = Persons.First();
+                        }
+                        
                         <RadzenDropDownDataGrid TValue="PersonDto"
                                                 Value="SelectedPerson"
                                                 ValueChanged="OnPersonSet"

@@ -45,15 +45,20 @@ namespace DivvyUp.Web.Service
                 if (totalQuantity + request.Quantity > product.MaxQuantity)
                     return new BadRequestObjectResult("Przekroczono maksymalną ilość produktu.");
 
-                var existingPersonProduct = await _dbContext.PersonProducts
-                    .FirstOrDefaultAsync(pp => pp.ProductId == product.Id && pp.PersonId == person.Id);
+                var isFirstPersonProduct = await _dbContext.PersonProducts
+                    .FirstOrDefaultAsync(pp => pp.ProductId == product.Id);
+
+                var existingPerson = await _dbContext.PersonProducts
+                    .FirstOrDefaultAsync(pp => pp.ProductId == product.Id && pp.Person.Id == person.Id);
+                if(existingPerson != null)
+                    return new ConflictObjectResult("Osoba jest już przypisana.");
 
                 var newPersonProduct = new PersonProduct()
                 {
                     Person = person,
                     Product = product,
                     Quantity = request.Quantity,
-                    Compensation = existingPersonProduct == null ? true : false,
+                    Compensation = isFirstPersonProduct == null ? true : false,
                     PartOfPrice = CalculatePartOfPrice(product, request.Quantity),
                     Settled = false,
                 };

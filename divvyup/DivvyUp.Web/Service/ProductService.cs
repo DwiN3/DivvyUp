@@ -183,9 +183,9 @@ namespace DivvyUp.Web.Service
             try
             {
                 _validator.IsNull(productId, "Brak identyfikatora produktu");
-                
                 var product = await _validator.GetProduct(claims, productId);
-                var productDto = _mapper.Map<ProductDto>(product);
+                var productDto = MapProductToDto(product);
+
                 return new OkObjectResult(productDto);
             }
             catch (DException ex)
@@ -198,6 +198,7 @@ namespace DivvyUp.Web.Service
             }
         }
 
+
         public async Task<IActionResult> GetProducts(ClaimsPrincipal claims)
         {
             try
@@ -209,7 +210,8 @@ namespace DivvyUp.Web.Service
                     .Where(p => p.Receipt.User == user)
                     .ToListAsync();
 
-                var productsDto = _mapper.Map<List<ProductDto>>(products).ToList();
+                var productsDto = products.Select(p => MapProductToDto(p)).ToList();
+
                 return new OkObjectResult(productsDto);
             }
             catch (DException ex)
@@ -221,6 +223,7 @@ namespace DivvyUp.Web.Service
                 return new BadRequestResult();
             }
         }
+
 
         public async Task<IActionResult> GetProductsFromReceipt(ClaimsPrincipal claims, int receiptId)
         {
@@ -235,7 +238,7 @@ namespace DivvyUp.Web.Service
                     .Where(p => p.Receipt.User == user && p.ReceiptId == receiptId)
                     .ToListAsync();
 
-                var productsDto = _mapper.Map<List<ProductDto>>(products).ToList();
+                var productsDto = products.Select(p => MapProductToDto(p)).ToList();
                 return new OkObjectResult(productsDto);
             }
             catch (DException ex)
@@ -246,6 +249,19 @@ namespace DivvyUp.Web.Service
             {
                 return new BadRequestResult();
             }
+        }
+
+        public ProductDto MapProductToDto(Product product)
+        {
+            var productDto = _mapper.Map<ProductDto>(product);
+
+            var personProducts = _dbContext.PersonProducts
+                .Where(pp => pp.ProductId == product.Id) 
+                .Include(pp => pp.Person) 
+                .ToList();
+
+            productDto.persons = personProducts.Select(pp => _mapper.Map<PersonDto>(pp.Person)).ToList();
+            return productDto;
         }
     }
 }

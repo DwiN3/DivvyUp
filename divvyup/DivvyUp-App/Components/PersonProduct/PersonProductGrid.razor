@@ -91,7 +91,7 @@
                 }
                 <RadzenDropDownDataGrid
                     TValue="int"
-                    @bind-Value="personProduct.personId"
+                    @bind-Value="@personProduct.personId"
                     Data="@PeopleAvailable"
                     TextProperty="@nameof(PersonDto.fullName)"
                     ValueProperty="@nameof(PersonDto.id)"/>

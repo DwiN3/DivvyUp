@@ -27,7 +27,6 @@ namespace DivvyUp_App.Components.Product
 
         private List<ProductDto> Products { get; set; }
         private List<PersonDto> Persons { get; set; }
-        private List<PersonProductDto> PersonProducts { get; set; }
         private RadzenDataGrid<ProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private PersonDto SelectedPerson { get; set; } = new();
@@ -37,18 +36,12 @@ namespace DivvyUp_App.Components.Product
         {
             await LoadGrid();
             Persons = await PersonService.GetPersons();
-            if (Persons != null && Persons.Count > 0)
-                SelectedPerson = Persons.First();
-            
-            PersonProducts = await PersonProductService.GetPersonProducts();
         }
 
         private async Task LoadGrid()
         {
             IsGridEdit = false;
             Products = await ProductService.GetProducts(ReceiptId);
-            foreach (var product in Products) 
-                product.persons = await PersonService.GetPersonFromProduct(product.id);
             StateHasChanged();
         }
 
