@@ -221,11 +221,12 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
+
                 var loans = await _dbContext.Loans
                     .AsNoTracking()
                     .Include(p => p.Person)
                     .Include(p => p.Person.User)
-                    .Where(p => p.Person.User == user)
+                    .Where(p => p.Person.UserId == user.Id)
                     .ToListAsync();
 
                 var loansDto = _mapper.Map<List<LoanDto>>(loans).ToList();
@@ -252,7 +253,7 @@ namespace DivvyUp.Web.Service
                     .AsNoTracking()
                     .Include(p => p.Person)
                     .Include(p => p.Person.User)
-                    .Where(p => p.Person.User == user && p.Person.Id == personId)
+                    .Where(p => p.Person.UserId == user.Id && p.Person.Id == personId)
                     .ToListAsync();
 
                 var loansDto = _mapper.Map<List<LoanDto>>(loans).ToList();
@@ -289,7 +290,7 @@ namespace DivvyUp.Web.Service
                     .AsNoTracking()
                     .Include(p => p.Person)
                     .Include(p => p.Person.User)
-                    .Where(p => p.Person.User == user && p.Date >= fromDate && p.Date <= toDate)
+                    .Where(p => p.Person.UserId == user.Id && p.Date >= fromDate && p.Date <= toDate)
                     .ToListAsync();
 
                 var loansDto = _mapper.Map<List<LoanDto>>(loans).ToList();

@@ -152,7 +152,7 @@ namespace DivvyUp.Web.Service
                 var user = await _validator.GetUser(claims);
                 var persons = await _dbContext.Persons
                     .AsNoTracking()
-                    .Where(p => p.User == user)
+                    .Where(p => p.UserId == user.Id)
                     .ToListAsync();
                 var personListDto = _mapper.Map<List<PersonDto>>(persons);
                 return new OkObjectResult(personListDto);
@@ -172,7 +172,7 @@ namespace DivvyUp.Web.Service
             try
             {
                 var user = await _validator.GetUser(claims);
-                var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.User == user && p.UserAccount);
+                var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.UserId == user.Id && p.UserAccount);
                 var personDto = _mapper.Map<PersonDto>(person);
                 return new OkObjectResult(personDto);
             }
@@ -199,7 +199,7 @@ namespace DivvyUp.Web.Service
                     .AsNoTracking()
                     .Include(pp => pp.Person)
                     .Include(pp => pp.Product)
-                    .Where(pp => pp.Product.ReceiptId == receiptId && pp.Person.User == user)
+                    .Where(pp => pp.Product.ReceiptId == receiptId && pp.Person.UserId == user.Id)
                     .ToListAsync();
 
                 var personsDto = _mapper.Map<List<PersonDto>>(personProducts.Select(pp => pp.Person).ToList());
@@ -227,7 +227,7 @@ namespace DivvyUp.Web.Service
                 var personProducts = await _dbContext.PersonProducts
                     .AsNoTracking()
                     .Include(pp => pp.Person)
-                    .Where(pp => pp.ProductId == productId && pp.Person.User == user)
+                    .Where(pp => pp.ProductId == productId && pp.Person.UserId == user.Id)
                     .ToListAsync();
 
                 var personsDto = _mapper.Map<List<PersonDto>>(personProducts.Select(pp => pp.Person).ToList());

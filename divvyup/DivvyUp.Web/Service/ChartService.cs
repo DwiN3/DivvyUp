@@ -17,16 +17,14 @@ namespace DivvyUp.Web.Service
     public class ChartService : IChartService
     {
         private readonly MyDbContext _dbContext;
-        private readonly IMapper _mapper;
         private readonly MyValidator _validator;
 
         private static readonly string[] MonthNames = { "Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru" };
         private static readonly string[] WeekNames = { "Pon", "Wt", "Śr", "Czw", "Pt", "Sb", "Ndz" };
 
-        public ChartService(MyDbContext dbContext, IMapper mapper, MyValidator validator)
+        public ChartService(MyDbContext dbContext, MyValidator validator)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
             _validator = validator;
         }
 

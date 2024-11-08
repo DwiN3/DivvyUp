@@ -201,7 +201,7 @@ namespace DivvyUp.Web.Service
                 var user = await _validator.GetUser(claims);
                 var receipts = await _dbContext.Receipts
                     .AsNoTracking()
-                    .Where(p => p.User == user)
+                    .Where(p => p.UserId == user.Id)
                     .ToListAsync();
 
                 var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts).ToList();
@@ -236,7 +236,7 @@ namespace DivvyUp.Web.Service
                 var user = await _validator.GetUser(claims);
                 var receipts = await _dbContext.Receipts
                     .AsNoTracking()
-                    .Where(p => p.User == user && p.Date >= fromDate && p.Date <= toDate)
+                    .Where(p => p.UserId == user.Id && p.Date >= fromDate && p.Date <= toDate)
                     .ToListAsync();
 
                 var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts).ToList();

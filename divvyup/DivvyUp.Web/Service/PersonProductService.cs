@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Net;
+using System.Security.Claims;
 using AutoMapper;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Interface;
@@ -175,19 +176,30 @@ namespace DivvyUp.Web.Service
             {
                 _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
                 _validator.IsNull(settled, "Brak decyzji rozliczenia");
+                var user = await _validator.GetUser(claims);
 
-                var personProduct = await _validator.GetPersonProduct(claims, personProductId);
+                var personProduct = await _dbContext.PersonProducts
+                    .Include(p => p.Product)
+                    .Include(p => p.Product.Receipt)
+                    .Include(p => p.Person)
+                    .FirstOrDefaultAsync(p => p.Id == personProductId);
+                if (personProduct == null)
+                    throw new DException(HttpStatusCode.NotFound, "Przypis osoby z produktem nie znaleziony");
+                if (personProduct.Person.UserId != user.Id)
+                    throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do przypisu produktu z osobą: " + personProductId);
+
                 personProduct.Settled = settled;
                 _dbContext.PersonProducts.Update(personProduct);
 
-                var allSettled = await AreAllPersonProductsSettled(personProduct.ProductId);
                 var product = personProduct.Product;
-                product.Settled = allSettled;
+                var allSettledPersonProduct = await _entityUpdateService.AreAllPersonProductsSettled(product);
+                product.Settled = allSettledPersonProduct;
                 _dbContext.Products.Update(product);
 
-                //var receipt = personProduct.Product.Receipt;
-                //receipt.Settled = allSettled;
-                //_dbContext.Receipts.Update(receipt);
+                var receipt = personProduct.Product.Receipt;
+                var allSettledProduct = await _entityUpdateService.AreAllProductsSettled(receipt);
+                receipt.Settled = allSettledProduct;
+                _dbContext.Receipts.Update(receipt);
 
                 await _dbContext.SaveChangesAsync();
                 await _entityUpdateService.UpdatePerson(claims, false);
@@ -262,8 +274,7 @@ namespace DivvyUp.Web.Service
                     .AsNoTracking()
                     .Include(p => p.Product)
                     .Include(p => p.Person)
-                    .Include(p => p.Person.User)
-                    .Where(p => p.Person.User == user)
+                    .Where(p => p.Person.UserId == user.Id)
                     .ToListAsync();
 
                 var personProductsDto = _mapper.Map<List<PersonProductDto>>(personProducts).ToList();
@@ -290,8 +301,7 @@ namespace DivvyUp.Web.Service
                     .AsNoTracking()
                     .Include(p => p.Product)
                     .Include(p => p.Person)
-                    .Include(p => p.Person.User)
-                    .Where(p => p.Person.User == user && p.ProductId == productId)
+                    .Where(p => p.Person.UserId == user.Id && p.ProductId == productId)
                     .ToListAsync();
 
                 var personProductsDto = _mapper.Map<List<PersonProductDto>>(personProducts).ToList();
@@ -329,13 +339,6 @@ namespace DivvyUp.Web.Service
             return await _dbContext.PersonProducts
                 .Where(pp => pp.ProductId == productId && pp.Id != excludeId && pp.Compensation)
                 .ToListAsync();
-        }
-
-        private async Task<bool> AreAllPersonProductsSettled(int productId)
-        {
-            return await _dbContext.PersonProducts
-                .Where(pp => pp.ProductId == productId)
-                .AllAsync(pp => pp.Settled);
         }
     }
 }

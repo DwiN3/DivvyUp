@@ -51,12 +51,10 @@ namespace DivvyUp.Web.Validation
         {
             var user = await GetUser(claims);
 
-            var person = await _dbContext.Persons
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(p => p.Id == personId);
+            var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.Id == personId);
             if (person == null)
                 throw new DException(HttpStatusCode.NotFound,"Osoba nie znaleziona");
-            if (person.User.Id != user.Id)
+            if (person.UserId != user.Id)
                 throw new DException(HttpStatusCode.Unauthorized,"Brak dostępu do osoby: "+person.Id);
 
             return person;
@@ -68,11 +66,10 @@ namespace DivvyUp.Web.Validation
 
             var loan = await _dbContext.Loans
                 .Include(p => p.Person)
-                .Include(p => p.Person.User)
                 .FirstOrDefaultAsync(p => p.Id == loanId);
             if (loan == null)
                 throw new DException(HttpStatusCode.NotFound, "Pożyczka nie znaleziona");
-            if (loan.Person.User.Id != user.Id)
+            if (loan.Person.UserId != user.Id)
                 throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do pożyczki: " + loan.Id);
 
             return loan;
@@ -82,12 +79,10 @@ namespace DivvyUp.Web.Validation
         {
             var user = await GetUser(claims);
 
-            var receipt = await _dbContext.Receipts
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(p => p.Id == receiptId);
+            var receipt = await _dbContext.Receipts.FirstOrDefaultAsync(p => p.Id == receiptId);
             if (receipt == null)
                 throw new DException(HttpStatusCode.NotFound, "Rachunek nie znaleziony");
-            if (receipt.User.Id != user.Id)
+            if (receipt.UserId != user.Id)
                 throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do rachunku: " + receipt.Id);
 
             return receipt;
@@ -99,11 +94,10 @@ namespace DivvyUp.Web.Validation
 
             var product = await _dbContext.Products
                 .Include(p => p.Receipt)
-                .Include(p => p.Receipt.User)
                 .FirstOrDefaultAsync(p => p.Id == productId);
             if (product == null)
                 throw new DException(HttpStatusCode.NotFound, "Produkt nie znaleziony");
-            if (product.Receipt.User.Id != user.Id)
+            if (product.Receipt.UserId != user.Id)
                 throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do produktu: " + product.Id);
 
             return product;
@@ -116,11 +110,10 @@ namespace DivvyUp.Web.Validation
             var personProduct = await _dbContext.PersonProducts
                 .Include(p => p.Product)
                 .Include(p => p.Person)
-                .Include(p => p.Person.User)
                 .FirstOrDefaultAsync(p => p.Id == personProductId);
             if (personProduct == null)
                 throw new DException(HttpStatusCode.NotFound, "Przypis osoby z produktem nie znaleziony");
-            if (personProduct.Person.User.Id != user.Id)
+            if (personProduct.Person.UserId != user.Id)
                 throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do przypisu produktu z osobą: " + personProductId);
 
             return personProduct;

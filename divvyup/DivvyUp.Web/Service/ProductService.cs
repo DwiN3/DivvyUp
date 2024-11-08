@@ -207,8 +207,7 @@ namespace DivvyUp.Web.Service
                 var products = await _dbContext.Products
                     .AsNoTracking()
                     .Include(p => p.Receipt)
-                    .Include(p => p.Receipt.User)
-                    .Where(p => p.Receipt.User == user)
+                    .Where(p => p.Receipt.UserId == user.Id)
                     .ToListAsync();
 
                 var productsDto = products.Select(p => MapProductToDto(p)).ToList();
@@ -236,8 +235,7 @@ namespace DivvyUp.Web.Service
                 var products = await _dbContext.Products
                     .AsNoTracking()
                     .Include(p => p.Receipt)
-                    .Include(p => p.Receipt.User)
-                    .Where(p => p.Receipt.User == user && p.ReceiptId == receiptId)
+                    .Where(p => p.Receipt.UserId == user.Id && p.ReceiptId == receiptId)
                     .ToListAsync();
 
                 var productsDto = products.Select(p => MapProductToDto(p)).ToList();
