@@ -55,7 +55,7 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task InsertRow()
         {
-            if (CountLastPart(0) > 0)
+            if (Product.availableQuantity > 0)
             {
                 IsGridEdit = true;
                 var personProduct = new PersonProductDto();
@@ -170,25 +170,6 @@ namespace DivvyUp_App.Components.PersonProduct
             {
                 await LoadGrid();
             }
-        }
-
-        private int CountLastPart(int personProductId)
-        {
-            if (Product != null)
-            {
-                int lastParts = Product.maxQuantity;
-
-                foreach (var personProduct in PersonProducts)
-                {
-                    if (personProduct.id == 0 || personProductId == personProduct.id)
-                        continue;
-                    
-                    lastParts -= personProduct.quantity;
-                }
-
-                return lastParts;
-            }
-            return 0;
         }
 
         private string GetPersonName(int personId)

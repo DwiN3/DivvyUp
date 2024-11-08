@@ -66,7 +66,7 @@ namespace DivvyUp.Web.Service
                 _dbContext.PersonProducts.Add(newPersonProduct);
 
                 await _dbContext.SaveChangesAsync();
-                await _entityUpdateService.UpdateCompensationPrice(product);
+                await _entityUpdateService.UpdateProductDetails(product);
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie dodano przypis produktu do osoby");
             }
@@ -99,7 +99,7 @@ namespace DivvyUp.Web.Service
                 _dbContext.PersonProducts.Update(personProduct);
                 await _dbContext.SaveChangesAsync();
 
-                await _entityUpdateService.UpdateCompensationPrice(product);
+                await _entityUpdateService.UpdateProductDetails(product);
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");
             }
@@ -123,7 +123,7 @@ namespace DivvyUp.Web.Service
 
                 _dbContext.PersonProducts.Remove(personProduct);
                 await _dbContext.SaveChangesAsync();
-                await _entityUpdateService.UpdateCompensationPrice(personProduct.Product);
+                await _entityUpdateService.UpdateProductDetails(personProduct.Product);
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie usunięto przypis produktu do osoby");
             }

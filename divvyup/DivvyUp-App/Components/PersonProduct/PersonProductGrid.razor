@@ -60,9 +60,9 @@
             <EditTemplate Context="personProduct">
                 @if (personProduct.quantity == 0)
                 {
-                    personProduct.quantity = CountLastPart(personProduct.id);
+                    personProduct.quantity = @Product.availableQuantity;
                 }
-                <RadzenNumeric @bind-Value="@personProduct.quantity" Min="1" Max="CountLastPart(personProduct.id)" />
+                <RadzenNumeric @bind-Value="@personProduct.quantity" Min="1" Max="@Product.availableQuantity" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonProductDto.partOfPrice)" Title="Cena" Width="15%" TextAlign="TextAlign.Center" Frozen="true">

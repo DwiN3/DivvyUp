@@ -120,8 +120,10 @@ namespace DivvyUp.Web.Migrations
                     receipt_id = table.Column<int>(type: "integer", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     price = table.Column<decimal>(type: "numeric", nullable: false),
+                    additional_price = table.Column<decimal>(type: "numeric", nullable: false),
                     is_divisible = table.Column<bool>(type: "boolean", nullable: false),
                     max_quantity = table.Column<int>(type: "integer", nullable: false),
+                    available_quantity = table.Column<int>(type: "integer", nullable: false),
                     compensation_price = table.Column<decimal>(type: "numeric", nullable: false),
                     is_settled = table.Column<bool>(type: "boolean", nullable: false)
                 },

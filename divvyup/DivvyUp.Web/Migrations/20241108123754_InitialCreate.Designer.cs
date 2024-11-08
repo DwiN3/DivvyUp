@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DivvyUp.Web.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20241102120719_InitialCreate")]
+    [Migration("20241108123754_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -166,6 +166,14 @@ namespace DivvyUp.Web.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("AdditionalPrice")
+                        .HasColumnType("numeric")
+                        .HasColumnName("additional_price");
+
+                    b.Property<int>("AvailableQuantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("available_quantity");
 
                     b.Property<decimal>("CompensationPrice")
                         .HasColumnType("numeric")

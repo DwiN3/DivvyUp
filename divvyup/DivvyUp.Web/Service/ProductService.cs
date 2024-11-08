@@ -50,6 +50,7 @@ namespace DivvyUp.Web.Service
                     Price = request.Price,
                     Divisible = request.Divisible,
                     MaxQuantity = request.Divisible ? request.MaxQuantity : 1,
+                    AvailableQuantity = request.Divisible ? request.MaxQuantity : 1,
                     CompensationPrice = request.Divisible ? request.Price : 0,
                     Settled = false,
                 };
@@ -98,7 +99,7 @@ namespace DivvyUp.Web.Service
                 _dbContext.Products.Update(product);
                 await _dbContext.SaveChangesAsync();
                 await _entityUpdateService.UpdatePartPricesPersonProduct(product);
-                await _entityUpdateService.UpdateCompensationPrice(product);
+                await _entityUpdateService.UpdateProductDetails(product);
                 await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
                 await _entityUpdateService.UpdatePerson(claims, false);
                 return new OkObjectResult("Pomyślnie wprowadzono zmiany");

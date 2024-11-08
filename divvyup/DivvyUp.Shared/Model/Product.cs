@@ -22,6 +22,10 @@ namespace DivvyUp_Shared.Model
         [Column("price")]
         public decimal Price { get; set; }
 
+        [Required]
+        [Column("additional_price")]
+        public decimal AdditionalPrice { get; set; }
+
         [Required] 
         [Column("is_divisible")] 
         public bool Divisible { get; set; }
@@ -29,6 +33,9 @@ namespace DivvyUp_Shared.Model
         [Required]
         [Column("max_quantity")]
         public int MaxQuantity { get; set; }
+
+        [Column("available_quantity")]
+        public int AvailableQuantity { get; set; }
 
         [Column("compensation_price")]
         public decimal CompensationPrice { get; set; }

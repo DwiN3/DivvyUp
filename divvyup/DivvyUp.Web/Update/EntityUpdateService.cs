@@ -72,19 +72,18 @@ namespace DivvyUp.Web.Update
             return products.All(p => p.Settled);
         }
 
-        public async Task UpdateCompensationPrice(Product product)
+        public async Task UpdateProductDetails(Product product)
         {
             var personProducts = await dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
-            product.CompensationPrice = await CalculateCompensationPrice(personProducts, product.Price);
+
+            var compensationPrice = product.Price - personProducts.Sum(pp => pp.PartOfPrice);
+            product.CompensationPrice = compensationPrice;
+
+            var availableQuantity = product.MaxQuantity - personProducts.Sum(pp => pp.Quantity);
+            product.AvailableQuantity = availableQuantity;
 
             dbContext.Products.Update(product);
             await dbContext.SaveChangesAsync();
-        }
-
-        private Task<decimal> CalculateCompensationPrice(List<PersonProduct> personProducts, decimal price)
-        {
-            var compensationPrice = price - personProducts.Sum(pp => pp.PartOfPrice);
-            return Task.FromResult(compensationPrice);
         }
 
         public async Task<bool> AreAllPersonProductsSettled(Product product)

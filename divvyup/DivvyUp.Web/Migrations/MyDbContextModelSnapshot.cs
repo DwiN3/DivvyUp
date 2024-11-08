@@ -164,6 +164,14 @@ namespace DivvyUp.Web.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("AdditionalPrice")
+                        .HasColumnType("numeric")
+                        .HasColumnName("additional_price");
+
+                    b.Property<int>("AvailableQuantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("available_quantity");
+
                     b.Property<decimal>("CompensationPrice")
                         .HasColumnType("numeric")
                         .HasColumnName("compensation_price");
