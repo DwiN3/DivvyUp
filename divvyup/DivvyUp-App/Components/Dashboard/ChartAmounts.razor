@@ -4,7 +4,7 @@
 
 <RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start" Orientation="Orientation.Horizontal">
     <RadzenChart Style="max-height: 110%; width: 50%;">
-        <RadzenPieSeries Data="@ChartUnpaidAmount" Title="Aktualny bilans" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+        <RadzenPieSeries Data="@ChartUnpaidAmount" Title="Kwota nieopłacona" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
             <RadzenSeriesDataLabels Visible="false" />
             <RadzenLegend Visible="false" />
             <RadzenValueAxis Formatter="@Format">
@@ -13,7 +13,7 @@
         </RadzenPieSeries>
     </RadzenChart>
     <RadzenChart Style="max-height: 110%; width: 50%;">
-        <RadzenPieSeries Data="@ChartTotalAmount" Title="Łączny wydatek" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+        <RadzenPieSeries Data="@ChartTotalAmount" Title="Kwota łączna" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
             <RadzenSeriesDataLabels Visible="false" />
             <RadzenLegend Visible="true" />
             <RadzenValueAxis Formatter="@Format">

@@ -71,12 +71,15 @@ namespace DivvyUp.Web.Service
                 var responseList = new List<ChartDto>();
                 foreach (var person in persons)
                 {
-                    decimal amount = CalculatePaidPercentage(person.TotalAmount, person.UnpaidAmount);
+                    decimal totalAmount = person.TotalAmount + (person.LoanBalance < 0 ? person.LoanBalance * -1 : 0);
+                    decimal unpaidAmount = person.UnpaidAmount + (person.LoanBalance < 0 ? person.LoanBalance * -1 : 0);
+
+                    decimal reliabilityPercentage = CalculatePaidPercentage(totalAmount, unpaidAmount);
 
                     var response = new ChartDto
                     {
                         Name = $"{person.Name} {person.Surname}",
-                        Value = amount
+                        Value = reliabilityPercentage
                     };
                     responseList.Add(response);
                 }

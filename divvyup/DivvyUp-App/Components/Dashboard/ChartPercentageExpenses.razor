@@ -3,7 +3,7 @@
 
 <RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
     <RadzenChart Style="min-height: 100%; width: 100%;">
-        <RadzenColumnSeries Data="@PercantageExpenses" Title="Procent rzetelności" FillRange="@ColorRanges" LineType="LineType.Dashed" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+        <RadzenColumnSeries Data="@PercantageExpenses" Title="Rzetelność osoby" FillRange="@ColorRanges" LineType="LineType.Dashed" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
             <RadzenSeriesDataLabels Visible="false" />
             <RadzenColumnOptions Radius="5" />
             <RadzenLegend Visible="false" />

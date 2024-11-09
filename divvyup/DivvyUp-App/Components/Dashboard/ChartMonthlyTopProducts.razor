@@ -4,7 +4,7 @@
 
 <RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
     <RadzenChart Style="min-height: 100%; width: 100%;">
-        <RadzenColumnSeries Data="@MonthlyTopProductList" Title="Koszt" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)" />
+        <RadzenColumnSeries Data="@MonthlyTopProductList" Title="Koszt produktu" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)" />
         <RadzenValueAxis Formatter="@Format">
             <RadzenGridLines Visible="true" />
             <RadzenLegend Visible="false" />
