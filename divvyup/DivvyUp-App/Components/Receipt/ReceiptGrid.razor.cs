@@ -90,7 +90,7 @@ namespace DivvyUp_App.Components.Receipt
             }
             catch (DException ex)
             {
-                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
+                DNotificationService.ShowNotification(ex.DisplayMessage, NotificationSeverity.Error);
             }
             catch (Exception)
             {
@@ -101,7 +101,6 @@ namespace DivvyUp_App.Components.Receipt
                 StateHasChanged();
             }
         }
-
 
 
         private async Task RemoveRow(ReceiptDto receipt)

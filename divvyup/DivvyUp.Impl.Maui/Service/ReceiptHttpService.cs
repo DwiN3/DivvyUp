@@ -183,8 +183,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-
-    private async Task EnsureCorrectResponse(HttpResponseMessage response, string errorMessage)
+        private async Task EnsureCorrectResponse(HttpResponseMessage response, string errorMessage)
         {
             if (!response.IsSuccessStatusCode)
             {
