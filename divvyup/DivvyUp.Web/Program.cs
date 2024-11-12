@@ -14,8 +14,10 @@ using DivvyUp.Web.Validation;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<UserContext>();
 builder.Services.AddScoped<MyValidator>();
 builder.Services.AddScoped<EntityUpdateService>();
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IReceiptService, ReceiptService>();

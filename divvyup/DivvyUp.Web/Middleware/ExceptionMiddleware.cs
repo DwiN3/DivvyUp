@@ -44,6 +44,5 @@ namespace DivvyUp.Web.Middleware
 
             return context.Response.WriteAsync("An unexpected error occurred");
         }
-
     }
 }
