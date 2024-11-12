@@ -8,6 +8,13 @@ namespace DivvyUp.Web.Mappers
     {
         public MappingProfile()
         {
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.username, opt => opt.MapFrom(src => src.Username))
+                .ForMember(dest => dest.email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.password, opt => opt.MapFrom(src => src.Password))
+                ;
+
             CreateMap<Receipt, ReceiptDto>()
                 .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.name, opt => opt.MapFrom(src => src.Name))

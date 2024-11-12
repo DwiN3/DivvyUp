@@ -11,19 +11,23 @@ using Microsoft.EntityFrameworkCore;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Validation;
 using DivvyUp_Impl_Maui.Api.Exceptions;
+using DivvyUp_Shared.Dto;
+using AutoMapper;
 
 namespace DivvyUp.Web.Service
 {
     public class UserService : IUserService
     {
         private readonly MyDbContext _dbContext;
+        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly MyValidator _validator;
         private readonly UserContext _userContext;
 
-        public UserService(MyDbContext dbContext, IConfiguration configuration, MyValidator validator, UserContext userContext)
+        public UserService(MyDbContext dbContext, IMapper mapper, IConfiguration configuration, MyValidator validator, UserContext userContext)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
             _configuration = configuration;
             _validator = validator;
             _userContext = userContext;
@@ -160,10 +164,11 @@ namespace DivvyUp.Web.Service
         }
 
 
-        public async Task<User> GetUser()
+        public async Task<UserDto> GetUser()
         {
             var user = await _userContext.GetCurrentUser();
-            return user;
+            var userDto = _mapper.Map<UserDto>(user);
+            return userDto;
         }
 
         public async Task ChangePassword(ChangePasswordRequest request)
