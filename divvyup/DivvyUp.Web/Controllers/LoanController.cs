@@ -25,70 +25,80 @@ namespace DivvyUp.Web.Controllers
         [SwaggerOperation(Summary = "Add a new loan", Description = "Adds a new loan to the system.")]
         public async Task<IActionResult> Add([FromBody] AddEditLoanRequest request)
         {
-            return await _loanService.Add(User, request);
+           await _loanService.Add(request);
+           return Ok();
         }
 
         [HttpPut(ApiRoute.LOAN_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit a loan", Description = "Edits the details of an existing loan by its ID.")]
         public async Task<IActionResult> Edit([FromBody] AddEditLoanRequest request, [FromRoute] int loanId)
         {
-            return await _loanService.Edit(User, request, loanId);
+            await _loanService.Edit(request, loanId);
+            return Ok();
         }
 
         [HttpDelete(ApiRoute.LOAN_ROUTES.REMOVE)]
         [SwaggerOperation(Summary = "Remove a loan", Description = "Removes a loan from the system by its ID.")]
         public async Task<IActionResult> Remove([FromRoute] int loanId)
         {
-            return await _loanService.Remove(User, loanId);
+            await _loanService.Remove(loanId);
+            return Ok();
         }
 
         [HttpPut(ApiRoute.LOAN_ROUTES.SET_PERSON)]
         [SwaggerOperation(Summary = "Set person in loan", Description = "Changes the person in an existing loan.")]
         public async Task<IActionResult> SetPerson([FromRoute] int loanId, [FromRoute] int personId)
         {
-            return await _loanService.SetPerson(User, loanId, personId);
+            await _loanService.SetPerson(loanId, personId);
+            return Ok();
         }
 
         [HttpPut(ApiRoute.LOAN_ROUTES.SET_SETTLED)]
         [SwaggerOperation(Summary = "Set loan as settled", Description = "Marks a loan as settled by its ID.")]
         public async Task<IActionResult> SetSettled([FromRoute] int loanId, [FromRoute] bool settled)
         {
-            return await _loanService.SetSettled(User, loanId, settled);
+            await _loanService.SetSettled(loanId, settled);
+            return Ok();
         }
 
         [HttpPut(ApiRoute.LOAN_ROUTES.SET_LENT)]
         [SwaggerOperation(Summary = "Set loan as lent", Description = "Marks a loan as lent by its ID.")]
         public async Task<IActionResult> SetLent([FromRoute] int loanId, [FromRoute] bool lent)
         {
-            return await _loanService.SetLent(User, loanId, lent);
+            await _loanService.SetLent(loanId, lent);
+            return Ok();
         }
 
         [HttpGet(ApiRoute.LOAN_ROUTES.LOAN)]
         [SwaggerOperation(Summary = "Retrieve a loan", Description = "Retrieves the details of a loan by its ID.")]
         public async Task<IActionResult> GetLoan([FromRoute] int loanId)
         {
-            return await _loanService.GetLoan(User, loanId);
+            var loan = await _loanService.GetLoan(loanId);
+            return Ok(loan);
         }
 
         [HttpGet(ApiRoute.LOAN_ROUTES.LOANS)]
         [SwaggerOperation(Summary = "Retrieve all loans", Description = "Retrieves all loans associated with the current user.")]
         public async Task<IActionResult> GetLoans()
         {
-            return await _loanService.GetLoans(User);
+            var loans = await _loanService.GetLoans();
+            return Ok(loans);
         }
 
         [HttpGet(ApiRoute.LOAN_ROUTES.LOANS_PERSON)]
         [SwaggerOperation(Summary = "Retrieve a loan by person", Description = "Retrieves the details of a loan associated with a specific person by their ID.")]
         public async Task<IActionResult> GetPersonLoans([FromRoute] int personId)
         {
-            return await _loanService.GetPersonLoans(User, personId);
+            var loans = await _loanService.GetPersonLoans(personId);
+            return Ok(loans);
         }
 
         [HttpGet(ApiRoute.LOAN_ROUTES.LOANS_DATA_RANGE)]
         [SwaggerOperation(Summary = "Retrieve all loans in date range", Description = "Retrieves all loans in date range associated with the current user.")]
         public async Task<IActionResult> GetLoansByDataRange([FromRoute] string from, [FromRoute] string to)
         {
-            return await _loanService.GetLoansByDataRange(User, from, to);
+            var loans = await _loanService.GetLoansByDataRange(from, to);
+            return Ok(loans);
         }
     }
 }
