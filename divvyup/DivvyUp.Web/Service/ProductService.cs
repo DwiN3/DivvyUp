@@ -20,236 +20,163 @@ namespace DivvyUp.Web.Service
         private readonly IMapper _mapper;
         private readonly MyValidator _validator;
         private readonly EntityUpdateService _entityUpdateService;
+        private readonly UserContext _userContext;
 
-        public ProductService(MyDbContext dbContext, IMapper mapper, MyValidator validator, EntityUpdateService entityUpdateService)
+        public ProductService(MyDbContext dbContext, IMapper mapper, MyValidator validator, EntityUpdateService entityUpdateService, UserContext userContext)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
             _entityUpdateService = entityUpdateService;
+            _userContext = userContext;
         }
 
 
-        public async Task<IActionResult> Add(ClaimsPrincipal claims, AddEditProductRequest request, int receiptId)
+        public async Task<ProductDto> Add(AddEditProductRequest request, int receiptId)
         {
-            try
-            {
-                _validator.IsNull(request, "Nie przekazano danych");
-                _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
-                _validator.IsNull(request.Price, "Cena jest wymagana");
-                _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
-                _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
-                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
+            _validator.IsNull(request.Price, "Cena jest wymagana");
+            _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
+            _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
+            _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+            var user = await _userContext.GetCurrentUser();
+            var receipt = await _validator.GetReceipt(user, receiptId);
 
-                var receipt = await _validator.GetReceipt(claims, receiptId);
-
-                var newProduct = new Product()
-                {
-                    Receipt = receipt,
-                    Name = request.Name,
-                    Price = request.Price,
-                    Divisible = request.Divisible,
-                    MaxQuantity = request.Divisible ? request.MaxQuantity : 1,
-                    AvailableQuantity = request.Divisible ? request.MaxQuantity : 1,
-                    CompensationPrice = request.Divisible ? request.Price : 0,
-                    Settled = false,
-                };
-
-                _dbContext.Products.Add(newProduct);
-                await _dbContext.SaveChangesAsync();
-                await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
-                return new OkObjectResult(newProduct);
-            }
-            catch (DException ex)
+            var newProduct = new Product()
             {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+                Receipt = receipt,
+                Name = request.Name,
+                Price = request.Price,
+                Divisible = request.Divisible,
+                MaxQuantity = request.Divisible ? request.MaxQuantity : 1,
+                AvailableQuantity = request.Divisible ? request.MaxQuantity : 1,
+                CompensationPrice = request.Divisible ? request.Price : 0,
+                Settled = false,
+            };
+
+            _dbContext.Products.Add(newProduct);
+            await _dbContext.SaveChangesAsync();
+            await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
+            var productDto = MapProductToDto(newProduct);
+            return productDto;
         }
 
-        public async Task<IActionResult> Edit(ClaimsPrincipal claims, AddEditProductRequest request, int productId)
+        public async Task<ProductDto> Edit(AddEditProductRequest request, int productId)
         {
-            try
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
+            _validator.IsNull(request.Price, "Cena jest wymagana");
+            _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
+            _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
+            _validator.IsNull(productId, "Brak identyfikatora produktu");
+            var user = await _userContext.GetCurrentUser();
+            var product = await _validator.GetProduct(user, productId);
+
+            bool previousDivisible = product.Divisible;
+
+            if (previousDivisible && !request.Divisible)
             {
-                _validator.IsNull(request, "Nie przekazano danych");
-                _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
-                _validator.IsNull(request.Price, "Cena jest wymagana");
-                _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
-                _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
-                _validator.IsNull(productId, "Brak identyfikatora produktu");
-
-                var product = await _validator.GetProduct(claims, productId);
-                bool previousDivisible = product.Divisible;
-
-                if (previousDivisible && !request.Divisible)
-                {
-                    var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == product.Id).ToListAsync();
-                    _dbContext.PersonProducts.RemoveRange(personProducts);
-                }
-
-                product.Name = request.Name;
-                product.Price = request.Price;
-                product.Divisible = request.Divisible;
-                product.MaxQuantity = request.Divisible ? request.MaxQuantity : 1;
-                product.CompensationPrice = request.Divisible ? request.Price : 0;
-
-                _dbContext.Products.Update(product);
-                await _dbContext.SaveChangesAsync();
-                await _entityUpdateService.UpdatePartPricesPersonProduct(product);
-                await _entityUpdateService.UpdateProductDetails(product);
-                await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
-                await _entityUpdateService.UpdatePerson(claims, false);
-                return new OkObjectResult("Pomyślnie wprowadzono zmiany");
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
-        }
-
-        public async Task<IActionResult> Remove(ClaimsPrincipal claims, int productId)
-        {
-            try
-            {
-                _validator.IsNull(productId, "Brak identyfikatora produktu");
-                var product = await _validator.GetProduct(claims, productId);
-                var receipt = await _validator.GetReceipt(claims, product.ReceiptId);
-
-                var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == productId).ToListAsync();
-                _dbContext.PersonProducts.RemoveRange(personProducts);
-                _dbContext.Products.Remove(product);
-                await _dbContext.SaveChangesAsync();
-
-                await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
-                await _entityUpdateService.UpdatePerson(claims, false);
-                return new OkObjectResult("Pomyślnie usunięto produkt");
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
-        }
-
-        public async Task<IActionResult> SetSettled(ClaimsPrincipal claims, int productId, bool settled)
-        {
-            try
-            {
-                _validator.IsNull(productId, "Brak identyfikatora produktu");
-                _validator.IsNull(settled, "Brak decyzji rozliczenia");
-
-                var product = await _validator.GetProduct(claims, productId);
-
-                product.Settled = settled;
-                _dbContext.Products.Update(product);
-
                 var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == product.Id).ToListAsync();
-                foreach (var personProduct in personProducts)
-                {
-                    personProduct.Settled = settled;
-                    _dbContext.PersonProducts.Update(personProduct);
-                }
+                _dbContext.PersonProducts.RemoveRange(personProducts);
+            }
 
-                var receipt = product.Receipt;
-                bool allSettled = await _entityUpdateService.AreAllProductsSettled(receipt);
-                receipt.Settled = allSettled;
-                _dbContext.Receipts.Update(receipt);
+            product.Name = request.Name;
+            product.Price = request.Price;
+            product.Divisible = request.Divisible;
+            product.MaxQuantity = request.Divisible ? request.MaxQuantity : 1;
+            product.CompensationPrice = request.Divisible ? request.Price : 0;
 
-                await _dbContext.SaveChangesAsync();
-                await _entityUpdateService.UpdatePerson(claims, false);
-                return new OkObjectResult("Pomyślnie wprowadzono zmiany");
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            _dbContext.Products.Update(product);
+            await _dbContext.SaveChangesAsync();
+            await _entityUpdateService.UpdatePartPricesPersonProduct(product);
+            await _entityUpdateService.UpdateProductDetails(product);
+            await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
+            await _entityUpdateService.UpdatePerson(user, false);
+            var productDto = MapProductToDto(product);
+            return productDto;
         }
 
-        public async Task<IActionResult> GetProduct(ClaimsPrincipal claims, int productId)
+        public async Task Remove(int productId)
         {
-            try
-            {
-                _validator.IsNull(productId, "Brak identyfikatora produktu");
-                var product = await _validator.GetProduct(claims, productId);
-                var productDto = MapProductToDto(product);
+            _validator.IsNull(productId, "Brak identyfikatora produktu");
+            var user = await _userContext.GetCurrentUser();
+            var product = await _validator.GetProduct(user, productId);
+            var receipt = await _validator.GetReceipt(user, product.ReceiptId);
 
-                return new OkObjectResult(productDto);
-            }
-            catch (DException ex)
+            var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == productId).ToListAsync();
+            _dbContext.PersonProducts.RemoveRange(personProducts);
+            _dbContext.Products.Remove(product);
+            await _dbContext.SaveChangesAsync();
+
+            await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
+            await _entityUpdateService.UpdatePerson(user, false);
+        }
+
+        public async Task SetSettled(int productId, bool settled)
+        {
+            _validator.IsNull(productId, "Brak identyfikatora produktu");
+            _validator.IsNull(settled, "Brak decyzji rozliczenia");
+            var user = await _userContext.GetCurrentUser();
+
+            var product = await _validator.GetProduct(user, productId);
+
+            product.Settled = settled;
+            _dbContext.Products.Update(product);
+
+            var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == product.Id).ToListAsync();
+            foreach (var personProduct in personProducts)
             {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
+                personProduct.Settled = settled;
+                _dbContext.PersonProducts.Update(personProduct);
             }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+
+            var receipt = product.Receipt;
+            bool allSettled = await _entityUpdateService.AreAllProductsSettled(receipt);
+            receipt.Settled = allSettled;
+            _dbContext.Receipts.Update(receipt);
+
+            await _dbContext.SaveChangesAsync();
+            await _entityUpdateService.UpdatePerson(user, false);
+        }
+
+        public async Task<ProductDto> GetProduct(int productId)
+        {
+            _validator.IsNull(productId, "Brak identyfikatora produktu");
+            var user = await _userContext.GetCurrentUser();
+            var product = await _validator.GetProduct(user, productId);
+            var productDto = MapProductToDto(product);
+            return productDto;
         }
 
 
-        public async Task<IActionResult> GetProducts(ClaimsPrincipal claims)
+        public async Task<List<ProductDto>> GetProducts()
         {
-            try
-            {
-                var user = await _validator.GetUser(claims);
-                var products = await _dbContext.Products
-                    .AsNoTracking()
-                    .Include(p => p.Receipt)
-                    .Where(p => p.Receipt.UserId == user.Id)
-                    .ToListAsync();
+            var user = await _userContext.GetCurrentUser();
+            var products = await _dbContext.Products
+                .AsNoTracking()
+                .Include(p => p.Receipt)
+                .Where(p => p.Receipt.UserId == user.Id)
+                .ToListAsync();
 
-                var productsDto = products.Select(p => MapProductToDto(p)).ToList();
-
-                return new OkObjectResult(productsDto);
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            var productsDto = products.Select(p => MapProductToDto(p)).ToList();
+            return productsDto;
         }
 
 
-        public async Task<IActionResult> GetProductsFromReceipt(ClaimsPrincipal claims, int receiptId)
+        public async Task<List<ProductDto>> GetProductsFromReceipt(int receiptId)
         {
-            try
-            {
-                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+            _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
 
-                var user = await _validator.GetUser(claims);
-                var products = await _dbContext.Products
-                    .AsNoTracking()
-                    .Include(p => p.Receipt)
-                    .Where(p => p.Receipt.UserId == user.Id && p.ReceiptId == receiptId)
-                    .ToListAsync();
+            var user = await _userContext.GetCurrentUser();
+            var products = await _dbContext.Products
+                .AsNoTracking()
+                .Include(p => p.Receipt)
+                .Where(p => p.Receipt.UserId == user.Id && p.ReceiptId == receiptId)
+                .ToListAsync();
 
-                var productsDto = products.Select(p => MapProductToDto(p)).ToList();
-                return new OkObjectResult(productsDto);
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            var productsDto = products.Select(p => MapProductToDto(p)).ToList();
+            return productsDto;
         }
 
         public ProductDto MapProductToDto(Product product)
