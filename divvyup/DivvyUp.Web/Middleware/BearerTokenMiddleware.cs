@@ -1,15 +1,8 @@
 ﻿namespace DivvyUp.Web.Middleware
 {
-    public class BearerTokenMiddleware
+    public class BearerTokenMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
-
-        public BearerTokenMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
-
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             if (context.Request.Headers.ContainsKey("Authorization"))
             {
@@ -20,7 +13,7 @@
                 }
             }
 
-            await _next(context);
+            await next(context);
         }
     }
 }

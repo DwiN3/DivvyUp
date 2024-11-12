@@ -4,20 +4,13 @@ using System.Net;
 
 namespace DivvyUp.Web.Middleware
 {
-    public class ExceptionMiddleware
+    public class ExceptionMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
-
-        public ExceptionMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
-
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
             {
-                await _next(context);
+                await next(context);
             }
             catch (DException ex)
             {
@@ -33,7 +26,6 @@ namespace DivvyUp.Web.Middleware
         {
             context.Response.ContentType = "text/plain";
             context.Response.StatusCode = (int)ex.Status;
-
             return context.Response.WriteAsync(ex.Message);
         }
 
@@ -41,7 +33,6 @@ namespace DivvyUp.Web.Middleware
         {
             context.Response.ContentType = "text/plain";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
             return context.Response.WriteAsync("An unexpected error occurred");
         }
     }
