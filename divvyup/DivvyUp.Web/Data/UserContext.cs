@@ -1,5 +1,6 @@
-﻿using DivvyUp.Web.Validation;
+﻿using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Model;
+using System.Net;
 using System.Security.Claims;
 
 namespace DivvyUp.Web.Data
@@ -7,12 +8,12 @@ namespace DivvyUp.Web.Data
     public class UserContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly MyValidator _validator;
+        private readonly MyDbContext _dbContext;
 
-        public UserContext(IHttpContextAccessor httpContextAccessor, MyValidator validator)
+        public UserContext(IHttpContextAccessor httpContextAccessor, MyDbContext dbContext)
         {
             _httpContextAccessor = httpContextAccessor;
-            _validator = validator;
+            _dbContext = dbContext;
         }
 
         public ClaimsPrincipal User => _httpContextAccessor.HttpContext.User;
@@ -23,7 +24,16 @@ namespace DivvyUp.Web.Data
         {
             if (_currentUser == null)
             {
-                _currentUser = await _validator.GetUser(User);
+                var userIdClaim = User.FindFirst("Id")?.Value;
+                if (userIdClaim == null)
+                    throw new DException(HttpStatusCode.Unauthorized, "Błędny token");
+
+                var userId = int.Parse(userIdClaim);
+                var user = await _dbContext.Users.FindAsync(userId);
+                if (user == null)
+                    throw new DException(HttpStatusCode.NotFound, "Nie znaleziono osoby");
+
+                _currentUser = user;
             }
             return _currentUser;
         }
