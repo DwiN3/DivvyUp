@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using DivvyUp_Shared.Dto;
 
-namespace DivvyUp.Web.Interfac
+namespace DivvyUp.Web.Interface
 {
     public interface IChartService
     {
-        Task<IActionResult> GetAmounts(ClaimsPrincipal claims, bool isTotalAmounts);
-        Task<IActionResult> GetPercentageExpanses(ClaimsPrincipal claims);
-        Task<IActionResult> GetMonthlyTotalExpenses(ClaimsPrincipal claims, int year);
-        Task<IActionResult> GetMonthlyUserExpenses(ClaimsPrincipal claims, int year);
-        Task<IActionResult> GetWeeklyTotalExpenses(ClaimsPrincipal claims);
-        Task<IActionResult> GetWeeklyUserExpenses(ClaimsPrincipal claims);
-        Task<IActionResult> GetMonthlyTopProducts(ClaimsPrincipal claims);
+        Task<List<ChartDto>> GetAmounts(bool isTotalAmounts);
+        Task<List<ChartDto>> GetPercentageExpanses();
+        Task<List<ChartDto>> GetMonthlyTotalExpenses(int year);
+        Task<List<ChartDto>> GetMonthlyUserExpenses(int year);
+        Task<List<ChartDto>> GetWeeklyTotalExpenses();
+        Task<List<ChartDto>> GetWeeklyUserExpenses();
+        Task<List<ChartDto>> GetMonthlyTopProducts();
     }
 }

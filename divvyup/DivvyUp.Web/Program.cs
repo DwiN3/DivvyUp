@@ -1,6 +1,5 @@
 using System.Text;
 using DivvyUp.Web.Data;
-using DivvyUp.Web.Interfac;
 using DivvyUp.Web.Interface;
 using DivvyUp.Web.Mappers;
 using DivvyUp.Web.Middleware;

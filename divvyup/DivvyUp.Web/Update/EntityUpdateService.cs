@@ -8,39 +8,6 @@ namespace DivvyUp.Web.Update
 {
     public class EntityUpdateService(MyDbContext dbContext, MyValidator validator)
     {
-        public async Task UpdatePerson(ClaimsPrincipal claims, bool updateBalance)
-        {
-            var user = await validator.GetUser(claims);
-            var persons = await dbContext.Persons.Where(p => p.User == user).ToListAsync();
-
-            foreach (var person in persons)
-            {
-                var personProducts = await dbContext.PersonProducts
-                    .Where(pp => pp.Person.Id == person.Id)
-                    .Include(pp => pp.Product)
-                    .Include(pp => pp.Product.Receipt)
-                    .ToListAsync();
-
-                var receipts = personProducts
-                    .Select(pp => pp.Product.Receipt.Id)
-                    .Distinct()
-                    .ToList();
-
-                person.ReceiptsCount = receipts.Count;
-                person.ProductsCount = personProducts.Count;
-                person.TotalAmount = personProducts.Sum(pp => pp.PartOfPrice);
-                person.UnpaidAmount = personProducts.Where(pp => !pp.Settled).Sum(pp => pp.PartOfPrice);
-
-                if (updateBalance)
-                {
-                    person.LoanBalance = await CalculateBalance(person);
-                }
-            }
-
-            dbContext.Persons.UpdateRange(persons);
-            await dbContext.SaveChangesAsync();
-        }
-
         public async Task UpdatePerson(User user, bool updateBalance)
         {
             var persons = await dbContext.Persons.Where(p => p.User.Id == user.Id).ToListAsync();
