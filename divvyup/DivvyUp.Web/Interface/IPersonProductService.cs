@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Dto;
 
 namespace DivvyUp.Web.Interface
 {
     public interface IPersonProductService
     {
-        Task<IActionResult> Add(ClaimsPrincipal claims, AddEditPersonProductRequest request, int productId);
-        Task<IActionResult> Edit(ClaimsPrincipal claims, AddEditPersonProductRequest request, int personProductId);
-        Task<IActionResult> Remove(ClaimsPrincipal claims, int personProductId);
-        Task<IActionResult> SetPerson(ClaimsPrincipal claims, int personProductId, int personId);
-        Task<IActionResult> SetSettled(ClaimsPrincipal claims, int personProductId, bool settled);
-        Task<IActionResult> SetCompensation(ClaimsPrincipal claims, int personProductId);
-        Task<IActionResult> GetPersonProduct(ClaimsPrincipal claims, int personProductId);
-        Task<IActionResult> GetPersonProducts(ClaimsPrincipal claims);
-        Task<IActionResult> GetPersonProductsFromProduct(ClaimsPrincipal claims, int productId);
+        Task Add(AddEditPersonProductRequest request, int productId);
+        Task Edit(AddEditPersonProductRequest request, int personProductId);
+        Task Remove(int personProductId);
+        Task SetPerson(int personProductId, int personId);
+        Task SetSettled(int personProductId, bool settled);
+        Task SetCompensation(int personProductId);
+        Task<PersonProductDto> GetPersonProduct(int personProductId);
+        Task<List<PersonProductDto>> GetPersonProducts();
+        Task<List<PersonProductDto>> GetPersonProductsFromProduct(int productId);
     }
 }
