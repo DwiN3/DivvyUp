@@ -39,7 +39,7 @@ namespace DivvyUp.Web.Service
         }
 
         public async Task Add(AddEditReceiptRequest request)
-    {
+        {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsNull(request.Date, "Data jet wymagana");
             _validator.IsEmpty(request.Name, "Nazwa jest wymagana");

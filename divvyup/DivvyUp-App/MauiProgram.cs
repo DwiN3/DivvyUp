@@ -50,7 +50,7 @@ namespace DivvyUp_App
             builder.Services.AddTransient<IReceiptHttpService, ReceiptHttpService>();
             builder.Services.AddTransient<IProductHttpService, ProductHttpService>();
             builder.Services.AddTransient<IPersonProductHttpService, PersonProductHttpService>();
-            builder.Services.AddTransient<IChartHttpService, ChartHttpService>();
+            builder.Services.AddTransient<IChartService, ChartHttpService>();
             ;
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

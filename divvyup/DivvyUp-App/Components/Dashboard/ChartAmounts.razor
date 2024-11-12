@@ -29,15 +29,15 @@
 
 @code {
     [Inject]
-    private IChartHttpService ChartService { get; set; }
+    private IChartService ChartService { get; set; }
 
     private List<ChartDto> ChartUnpaidAmount { get; set; }
     private List<ChartDto> ChartTotalAmount { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        ChartUnpaidAmount = await ChartService.GetUnpaindAmounts();
-        ChartTotalAmount = await ChartService.GetTotalAmounts();
+        ChartUnpaidAmount = await ChartService.GetAmounts(false);
+        ChartTotalAmount = await ChartService.GetAmounts(true);
     }
 
     string Format(object value)

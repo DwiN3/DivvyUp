@@ -24,7 +24,7 @@
 
 @code {
     [Inject]
-    private IChartHttpService ChartService { get; set; }
+    private IChartService ChartService { get; set; }
 
     private List<ChartDto> WeeklyTotalExpenses { get; set; } = new();
     private List<ChartDto> WeeklyUserExpenses { get; set; } = new();

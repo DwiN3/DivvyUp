@@ -6,10 +6,10 @@ using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
+
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class ChartHttpService : IChartHttpService
+    public class ChartHttpService : IChartService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
@@ -21,11 +21,11 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task<List<ChartDto>> GetTotalAmounts()
+        public async Task<List<ChartDto>> GetAmounts(bool isTotalAmounts)
         {
             try
             {
-                var url = ApiRoute.CHART_ROUTES.TOTAL_AMOUNTS;
+                var url = isTotalAmounts ? ApiRoute.CHART_ROUTES.TOTAL_AMOUNTS : ApiRoute.CHART_ROUTES.UNPAID_AMOUNTS;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
@@ -44,30 +44,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<ChartDto>> GetUnpaindAmounts()
-        {
-            try
-            {
-                var url = ApiRoute.CHART_ROUTES.UNPAID_AMOUNTS;
-                var response = await _dHttpClient.GetAsync(url);
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<List<ChartDto>>(jsonResponse);
-                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie wykresów nie opłaconych kosztów");
-                return result;
-            }
-            catch (DException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Błąd w czasie pobieranie wykresów nie opłaconych kosztów: {Message}", ex.Message);
-                throw;
-            }
-        }
-
-        public async Task<List<ChartDto>> GetPercantageExpenses()
+        public async Task<List<ChartDto>> GetPercentageExpanses()
         {
             try
             {

@@ -1,20 +1,25 @@
-﻿using System.Security.Claims;
-using DivvyUp.Web.Data;
-using DivvyUp.Web.Validation;
+﻿using DivvyUp.Web.Data;
 using DivvyUp_Shared.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace DivvyUp.Web.Update
 {
-    public class EntityUpdateService(MyDbContext dbContext, MyValidator validator)
+    public class EntityUpdateService
     {
+        private readonly MyDbContext _dbContext;
+
+        public EntityUpdateService(MyDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public async Task UpdatePerson(User user, bool updateBalance)
         {
-            var persons = await dbContext.Persons.Where(p => p.User.Id == user.Id).ToListAsync();
+            var persons = await _dbContext.Persons.Where(p => p.User.Id == user.Id).ToListAsync();
 
             foreach (var person in persons)
             {
-                var personProducts = await dbContext.PersonProducts
+                var personProducts = await _dbContext.PersonProducts
                     .Where(pp => pp.Person.Id == person.Id)
                     .Include(pp => pp.Product)
                     .Include(pp => pp.Product.Receipt)
@@ -36,13 +41,13 @@ namespace DivvyUp.Web.Update
                 }
             }
 
-            dbContext.Persons.UpdateRange(persons);
-            await dbContext.SaveChangesAsync();
+            _dbContext.Persons.UpdateRange(persons);
+            await _dbContext.SaveChangesAsync();
         }
 
         private async Task<decimal> CalculateBalance(Person person)
         {
-            var loans = await dbContext.Loans.Where(l => l.Person.Id == person.Id).ToListAsync();
+            var loans = await _dbContext.Loans.Where(l => l.Person.Id == person.Id).ToListAsync();
             decimal balance = 0;
 
             foreach (var loan in loans)
@@ -58,22 +63,22 @@ namespace DivvyUp.Web.Update
 
         public async Task UpdateTotalPriceReceipt(Receipt receipt)
         {
-            var products = await dbContext.Products.Where(p => p.Receipt.Id == receipt.Id).ToListAsync();
+            var products = await _dbContext.Products.Where(p => p.Receipt.Id == receipt.Id).ToListAsync();
             receipt.TotalPrice = products.Sum(p => p.Price);
 
-            dbContext.Receipts.Update(receipt);
-            await dbContext.SaveChangesAsync();
+            _dbContext.Receipts.Update(receipt);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<bool> AreAllProductsSettled(Receipt receipt)
         {
-            var products = await dbContext.Products.Where(p => p.Receipt.Id == receipt.Id).ToListAsync();
+            var products = await _dbContext.Products.Where(p => p.Receipt.Id == receipt.Id).ToListAsync();
             return products.All(p => p.Settled);
         }
 
         public async Task UpdateProductDetails(Product product)
         {
-            var personProducts = await dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
+            var personProducts = await _dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
 
             var compensationPrice = product.Price - personProducts.Sum(pp => pp.PartOfPrice);
             product.CompensationPrice = compensationPrice;
@@ -81,28 +86,28 @@ namespace DivvyUp.Web.Update
             var availableQuantity = product.MaxQuantity - personProducts.Sum(pp => pp.Quantity);
             product.AvailableQuantity = availableQuantity;
 
-            dbContext.Products.Update(product);
-            await dbContext.SaveChangesAsync();
+            _dbContext.Products.Update(product);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<bool> AreAllPersonProductsSettled(Product product)
         {
-            var personProducts = await dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
+            var personProducts = await _dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
             return personProducts.All(pp => pp.Settled);
         }
 
         public async Task UpdatePartPricesPersonProduct(Product product)
         {
-            var personProducts = await dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
+            var personProducts = await _dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
 
             foreach (var personProduct in personProducts)
             {
                 personProduct.PartOfPrice =
                     await CalculatePartPrice(personProduct.Quantity, product.MaxQuantity, product.Price);
-                dbContext.PersonProducts.Update(personProduct);
+                _dbContext.PersonProducts.Update(personProduct);
             }
 
-            await dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         private Task<decimal> CalculatePartPrice(int quantity, int maxQuantity, decimal price)
