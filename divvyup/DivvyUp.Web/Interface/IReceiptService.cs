@@ -6,12 +6,12 @@ namespace DivvyUp.Web.Interface
 {
     public interface IReceiptService
     {
-        Task<IActionResult> Add(AddEditReceiptRequest request);
-        Task<IActionResult> Edit(AddEditReceiptRequest request, int receiptId);
-        Task<IActionResult> Remove(int receiptId);
-        Task<IActionResult> SetSettled(int receiptId, bool settled);
-        Task<ActionResult<ReceiptDto>> GetReceipt(int receiptId);
-        Task<ActionResult<List<ReceiptDto>>> GetReceipts();
-        Task<ActionResult<List<ReceiptDto>>> GetReceiptsByDataRange(string from, string to);
+        Task Add(AddEditReceiptRequest request);
+        Task Edit(AddEditReceiptRequest request, int receiptId);
+        Task Remove(int receiptId);
+        Task SetSettled(int receiptId, bool settled);
+        Task<ReceiptDto> GetReceipt(int receiptId);
+        Task<List<ReceiptDto>> GetReceipts();
+        Task<List<ReceiptDto>> GetReceiptsByDataRange(string from, string to);
     }
 }

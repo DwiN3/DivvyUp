@@ -78,6 +78,7 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<BearerTokenMiddleware>();
 
 if (app.Environment.IsDevelopment())

@@ -90,7 +90,7 @@ namespace DivvyUp_App.Components.Receipt
             }
             catch (DException ex)
             {
-                DNotificationService.ShowNotification(ex.DisplayMessage, NotificationSeverity.Error);
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {

@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
+using DivvyUp_Shared.Model;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace DivvyUp_Impl_Maui.Service
 {

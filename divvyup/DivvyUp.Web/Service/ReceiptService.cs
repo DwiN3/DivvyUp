@@ -1,10 +1,12 @@
 ﻿using System.Globalization;
+using System.Net;
 using System.Security.Claims;
 using AutoMapper;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Interface;
 using DivvyUp.Web.Update;
 using DivvyUp.Web.Validation;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
@@ -38,13 +40,13 @@ namespace DivvyUp.Web.Service
 
         private ClaimsPrincipal User => _httpContextAccessor.HttpContext.User;
 
-        public async Task<IActionResult> Add(AddEditReceiptRequest request)
-        {
+        public async Task Add(AddEditReceiptRequest request)
+    {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsNull(request.Date, "Data jet wymagana");
             _validator.IsEmpty(request.Name, "Nazwa jest wymagana");
-            var user = await _validator.GetUser(User);
 
+            var user = await _validator.GetUser(User);
 
             var newReceipt = new Receipt()
             {
@@ -57,10 +59,9 @@ namespace DivvyUp.Web.Service
 
             _dbContext.Receipts.Add(newReceipt);
             await _dbContext.SaveChangesAsync();
-            return new OkObjectResult("Pomyślnie dodano rachunek");
         }
 
-        public async Task<IActionResult> Edit(AddEditReceiptRequest request, int receiptId)
+        public async Task Edit(AddEditReceiptRequest request, int receiptId)
         {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsNull(request.Date, "Data jet wymagana");
@@ -74,10 +75,9 @@ namespace DivvyUp.Web.Service
             _dbContext.Receipts.Update(receipt);
 
             await _dbContext.SaveChangesAsync();
-            return new OkObjectResult("Pomyślnie wprowadzono zmiany");
         }
 
-        public async Task<IActionResult> Remove(int receiptId)
+        public async Task Remove(int receiptId)
         {
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
 
@@ -104,10 +104,9 @@ namespace DivvyUp.Web.Service
 
             await _dbContext.SaveChangesAsync();
             await _entityUpdateService.UpdatePerson(User, false);
-            return new OkObjectResult("Pomyślnie usunięto rachunek");
         }
 
-        public async Task<IActionResult> SetSettled(int receiptId, bool settled)
+        public async Task SetSettled(int receiptId, bool settled)
         {
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
 
@@ -135,19 +134,18 @@ namespace DivvyUp.Web.Service
             _dbContext.Products.UpdateRange(products);
             await _dbContext.SaveChangesAsync();
             await _entityUpdateService.UpdatePerson(User, false);
-            return new OkObjectResult("Pomyślnie wprowadzono zmiany");
         }
 
-        public async Task<ActionResult<ReceiptDto>> GetReceipt(int receiptId)
+        public async Task<ReceiptDto> GetReceipt(int receiptId)
         {
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
 
             var receipt = await _validator.GetReceipt(User, receiptId);
             var receiptDto = _mapper.Map<ReceiptDto>(receipt);
-            return new OkObjectResult(receiptDto);
+            return receiptDto;
         }
 
-        public async Task<ActionResult<List<ReceiptDto>>> GetReceipts()
+        public async Task<List<ReceiptDto>> GetReceipts()
         {
             var user = await _validator.GetUser(User);
             var receipts = await _dbContext.Receipts
@@ -156,10 +154,10 @@ namespace DivvyUp.Web.Service
                 .ToListAsync();
 
             var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts).ToList();
-            return new OkObjectResult(receiptsDto);
+            return receiptsDto;
         }
 
-        public async Task<ActionResult<List<ReceiptDto>>> GetReceiptsByDataRange(string from, string to)
+        public async Task<List<ReceiptDto>> GetReceiptsByDataRange(string from, string to)
         {
             _validator.IsEmpty(from, "Brak daty od");
             _validator.IsEmpty(to, "Brak daty do");
@@ -180,7 +178,7 @@ namespace DivvyUp.Web.Service
                 .ToListAsync();
 
             var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts).ToList();
-            return new OkObjectResult(receiptsDto);
+            return receiptsDto;
         }
     }
 }
