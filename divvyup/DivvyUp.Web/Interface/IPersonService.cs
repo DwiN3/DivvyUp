@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Dto;
 
 namespace DivvyUp.Web.Interface
 {
     public interface IPersonService
     {
-        Task<IActionResult> Add(ClaimsPrincipal claims, AddEditPersonRequest person);
-        Task<IActionResult> Edit(ClaimsPrincipal claims, AddEditPersonRequest person, int personId);
-        Task<IActionResult> Remove(ClaimsPrincipal claims, int personId);
-        Task<IActionResult> GetPerson(ClaimsPrincipal claims, int personId);
-        Task<IActionResult> GetPersons(ClaimsPrincipal claims);
-        Task<IActionResult> GetUserPerson(ClaimsPrincipal claims);
-        Task<IActionResult> GetPersonFromReceipt(ClaimsPrincipal claims, int receiptId);
-        Task<IActionResult> GetPersonFromProduct(ClaimsPrincipal claims, int productId);
+        Task Add(AddEditPersonRequest person);
+        Task Edit(AddEditPersonRequest person, int personId);
+        Task Remove(int personId);
+        Task<PersonDto> GetPerson(int personId);
+        Task<List<PersonDto>> GetPersons();
+        Task<PersonDto> GetUserPerson();
+        Task<List<PersonDto>> GetPersonFromReceipt(int receiptId);
+        Task<List<PersonDto>> GetPersonFromProduct(int productId);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+﻿using System.Net;
 using AutoMapper;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Interface;
@@ -7,7 +7,6 @@ using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -18,229 +17,142 @@ namespace DivvyUp.Web.Service
         private readonly MyDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly MyValidator _validator;
+        private readonly UserContext _userContext;
 
-        public PersonService(MyDbContext dbContext, IMapper mapper, MyValidator validator)
+        public PersonService(MyDbContext dbContext, IMapper mapper, MyValidator validator, UserContext userContext)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _userContext = userContext;
         }
 
-        public async Task<IActionResult> Add(ClaimsPrincipal claims, AddEditPersonRequest request)
+        public async Task Add(AddEditPersonRequest request)
         {
-            try
-            {
-                _validator.IsNull(request, "Nie przekazano danych");
-                _validator.IsEmpty(request.Name, "Nazwa osoby jest wymagana");
-                var user = await _validator.GetUser(claims);
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Name, "Nazwa osoby jest wymagana");
+            var user = await _userContext.GetCurrentUser();
 
-                var newPerson = new Person()
-                {
-                    User = user,
-                    Name = request.Name,
-                    Surname = request.Surname,
-                    ReceiptsCount = 0,
-                    ProductsCount = 0,
-                    TotalAmount = 0,
-                    UnpaidAmount = 0,
-                    LoanBalance = 0,
-                    UserAccount = false
-                };
+            var newPerson = new Person()
+            {
+                User = user,
+                Name = request.Name,
+                Surname = request.Surname,
+                ReceiptsCount = 0,
+                ProductsCount = 0,
+                TotalAmount = 0,
+                UnpaidAmount = 0,
+                LoanBalance = 0,
+                UserAccount = false
+            };
 
-                _dbContext.Persons.Add(newPerson);
-                await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Pomyślnie dodano osobe");
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            _dbContext.Persons.Add(newPerson);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IActionResult> Edit(ClaimsPrincipal claims, AddEditPersonRequest request, int personId)
+        public async Task Edit(AddEditPersonRequest request, int personId)
         {
-            try
-            {
-                _validator.IsNull(request, "Nie przekazano danych");
-                _validator.IsEmpty(request.Name, "Nazwa osoby jest wymagana");
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Name, "Nazwa osoby jest wymagana");
+            var user = await _userContext.GetCurrentUser();
+            var person = await _validator.GetPerson(user, personId);
 
-                var person = await _validator.GetPerson(claims, personId);
-                person.Name = request.Name;
-                person.Surname = request.Surname;
-                _dbContext.Persons.Update(person);
+            person.Name = request.Name;
+            person.Surname = request.Surname;
+            _dbContext.Persons.Update(person);
 
-                await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Pomyślnie wprowadzono zmiany");
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IActionResult> Remove(ClaimsPrincipal claims, int personId)
+        public async Task Remove(int personId)
         {
-            try
+            _validator.IsNull(personId, "Brak identyfikatora osoby");
+            var user = await _userContext.GetCurrentUser();
+            var person = await _validator.GetPerson(user, personId);
+
+            var personProducts = await _dbContext.PersonProducts
+                .Where(pp => pp.Person.Id == personId)
+                .ToListAsync();
+
+            if (personProducts.Any())
             {
-                _validator.IsNull(personId, "Brak identyfikatora osoby");
-                var person = await _validator.GetPerson(claims, personId);
-
-                var personProducts = await _dbContext.PersonProducts
-                    .Where(pp => pp.Person.Id == personId)
-                    .ToListAsync();
-
-                if (personProducts.Any())
-                {
-                    return new ConflictObjectResult("Nie można usunąć osoby, która posiada przypisane produkty");
-                }
-
-                var loans = await _dbContext.Loans
-                    .Where(l => l.Person.Id == personId)
-                    .ToListAsync();
-
-                if (loans.Any())
-                {
-                    return new ConflictObjectResult("Nie można usunąć osoby, która posiada przypisane produkty");
-                }
-
-                _dbContext.Persons.Remove(person);
-                await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Pomyślnie usunięto osobę");
+                throw new DException(HttpStatusCode.Conflict,"Nie można usunąć osoby, która posiada przypisane produkty");
             }
-            catch (DException ex)
+
+            var loans = await _dbContext.Loans
+                .Where(l => l.Person.Id == personId)
+                .ToListAsync();
+
+            if (loans.Any())
             {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
+                throw new DException(HttpStatusCode.Conflict, "Nie można usunąć osoby, która posiada przypisane pożyczki");
             }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+
+            _dbContext.Persons.Remove(person);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IActionResult> GetPerson(ClaimsPrincipal claims, int personId)
+        public async Task<PersonDto> GetPerson(int personId)
         {
-            try
-            {
-                _validator.IsNull(personId, "Brak identyfikatora osoby");
-
-                var person = await _validator.GetPerson(claims, personId);
-                var personDto = _mapper.Map<PersonDto>(person);
-                return new OkObjectResult(personDto);
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            _validator.IsNull(personId, "Brak identyfikatora osoby");
+            var user = await _userContext.GetCurrentUser();
+            var person = await _validator.GetPerson(user, personId);
+            var personDto = _mapper.Map<PersonDto>(person);
+            return personDto;
         }
 
-        public async Task<IActionResult> GetPersons(ClaimsPrincipal claims)
+        public async Task<List<PersonDto>> GetPersons()
         {
-            try
-            {
-                var user = await _validator.GetUser(claims);
-                var persons = await _dbContext.Persons
-                    .AsNoTracking()
-                    .Where(p => p.UserId == user.Id)
-                    .ToListAsync();
-                var personListDto = _mapper.Map<List<PersonDto>>(persons);
-                return new OkObjectResult(personListDto);
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            var user = await _userContext.GetCurrentUser();
+            var persons = await _dbContext.Persons
+                .AsNoTracking()
+                .Where(p => p.UserId == user.Id)
+                .ToListAsync();
+            var personsDto = _mapper.Map<List<PersonDto>>(persons);
+            return personsDto;
         }
 
-        public async Task<IActionResult> GetUserPerson(ClaimsPrincipal claims)
+        public async Task<PersonDto> GetUserPerson()
         {
-            try
-            {
-                var user = await _validator.GetUser(claims);
-                var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.UserId == user.Id && p.UserAccount);
-                var personDto = _mapper.Map<PersonDto>(person);
-                return new OkObjectResult(personDto);
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            var user = await _userContext.GetCurrentUser();
+            var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.UserId == user.Id && p.UserAccount);
+            var personDto = _mapper.Map<PersonDto>(person);
+            return personDto;
         }
 
-        public async Task<IActionResult> GetPersonFromReceipt(ClaimsPrincipal claims, int receiptId)
+        public async Task<List<PersonDto>> GetPersonFromReceipt(int receiptId)
         {
-            try
-            {
-                _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+            _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
 
-                var user = await _validator.GetUser(claims);
-                await _validator.GetReceipt(claims, receiptId);
+            var user = await _userContext.GetCurrentUser();
+            await _validator.GetReceipt(user, receiptId);
 
-                var personProducts = await _dbContext.PersonProducts
-                    .AsNoTracking()
-                    .Include(pp => pp.Person)
-                    .Include(pp => pp.Product)
-                    .Where(pp => pp.Product.ReceiptId == receiptId && pp.Person.UserId == user.Id)
-                    .ToListAsync();
+            var personProducts = await _dbContext.PersonProducts
+                .AsNoTracking()
+                .Include(pp => pp.Person)
+                .Include(pp => pp.Product)
+                .Where(pp => pp.Product.ReceiptId == receiptId && pp.Person.UserId == user.Id)
+                .ToListAsync();
 
-                var personsDto = _mapper.Map<List<PersonDto>>(personProducts.Select(pp => pp.Person).ToList());
-                return new OkObjectResult(personsDto);
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            var personsDto = _mapper.Map<List<PersonDto>>(personProducts.Select(pp => pp.Person).ToList());
+            return personsDto;
         }
 
-        public async Task<IActionResult> GetPersonFromProduct(ClaimsPrincipal claims, int productId)
+        public async Task<List<PersonDto>> GetPersonFromProduct(int productId)
         {
-            try
-            {
-                _validator.IsNull(productId, "Brak identyfikatora rachunku");
+            _validator.IsNull(productId, "Brak identyfikatora rachunku");
 
-                var user = await _validator.GetUser(claims);
-                await _validator.GetProduct(claims, productId);
+            var user = await _userContext.GetCurrentUser();
+            await _validator.GetProduct(user, productId);
 
-                var personProducts = await _dbContext.PersonProducts
-                    .AsNoTracking()
-                    .Include(pp => pp.Person)
-                    .Where(pp => pp.ProductId == productId && pp.Person.UserId == user.Id)
-                    .ToListAsync();
+            var personProducts = await _dbContext.PersonProducts
+                .AsNoTracking()
+                .Include(pp => pp.Person)
+                .Where(pp => pp.ProductId == productId && pp.Person.UserId == user.Id)
+                .ToListAsync();
 
-                var personsDto = _mapper.Map<List<PersonDto>>(personProducts.Select(pp => pp.Person).ToList());
-                return new OkObjectResult(personsDto);
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            var personsDto = _mapper.Map<List<PersonDto>>(personProducts.Select(pp => pp.Person).ToList());
+            return personsDto;
         }
     }
 }
