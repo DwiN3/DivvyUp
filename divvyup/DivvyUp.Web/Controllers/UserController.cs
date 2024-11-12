@@ -23,14 +23,16 @@ namespace DivvyUp.Web.Controllers
         [SwaggerOperation(Summary = "Register a new user", Description = "Registers a new user account in the system.")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            return await _userServiceInternal.Register(request);
+            await _userServiceInternal.Register(request);
+            return Ok();
         }
 
         [HttpPost(ApiRoute.USER_ROUTES.LOGIN)]
         [SwaggerOperation(Summary = "Authenticate user", Description = "Authenticates a user and returns an authentication token.")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            return await _userServiceInternal.Login(request);
+            var token = await _userServiceInternal.Login(request);
+            return Ok(token);
         }
 
         [Authorize]
@@ -38,7 +40,8 @@ namespace DivvyUp.Web.Controllers
         [SwaggerOperation(Summary = "Edit user account", Description = "Edits the details of the currently authenticated user.")]
         public async Task<IActionResult> Edit([FromBody] RegisterRequest request)
         {
-            return await _userServiceInternal.Edit(User, request);
+            var token = await _userServiceInternal.Edit(request);
+            return Ok(token);
         }
 
         [Authorize]
@@ -46,14 +49,16 @@ namespace DivvyUp.Web.Controllers
         [SwaggerOperation(Summary = "Remove user account", Description = "Removes the currently authenticated user's account.")]
         public async Task<IActionResult> Remove()
         {
-            return await _userServiceInternal.Remove(User);
+            await _userServiceInternal.Remove();
+            return Ok();
         }
 
         [HttpGet(ApiRoute.USER_ROUTES.VALIDATE_TOKEN)]
         [SwaggerOperation(Summary = "Validate token", Description = "Checks the validity of a given authentication token.")]
         public async Task<IActionResult> ValidateToken([FromRoute] string token)
         {
-            return await _userServiceInternal.ValidToken(token);
+            var isValid = await _userServiceInternal.ValidToken(token);
+            return Ok(isValid);
         }
 
         [Authorize]
@@ -61,7 +66,8 @@ namespace DivvyUp.Web.Controllers
         [SwaggerOperation(Summary = "Retrieve user by token", Description = "Retrieves the user information associated with the provided token.")]
         public async Task<IActionResult> GetUser()
         {
-            return await _userServiceInternal.GetUser(User);
+            var user = await _userServiceInternal.GetUser();
+            return Ok(user);
         }
 
         [Authorize]
@@ -69,7 +75,8 @@ namespace DivvyUp.Web.Controllers
         [SwaggerOperation(Summary = "Change user password", Description = "Changes the password for the currently authenticated user.")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
-            return await _userServiceInternal.ChangePassword(User, request);
+            await _userServiceInternal.ChangePassword(request);
+            return Ok();
         }
     }
 }

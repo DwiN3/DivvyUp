@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using DivvyUp.Web.Interface;
@@ -18,168 +19,122 @@ namespace DivvyUp.Web.Service
         private readonly MyDbContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly MyValidator _validator;
+        private readonly UserContext _userContext;
 
-        public UserService(MyDbContext dbContext, IConfiguration configuration, MyValidator validator)
+        public UserService(MyDbContext dbContext, IConfiguration configuration, MyValidator validator, UserContext userContext)
         {
             _dbContext = dbContext;
             _configuration = configuration;
             _validator = validator;
+            _userContext = userContext;
         }
 
-        public async Task<IActionResult> Register(RegisterRequest request)
+        public async Task Register(RegisterRequest request)
         {
-            try
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
+            _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
+            _validator.IsEmpty(request.Password, "Hasło jest wymagane");
+
+            if (_dbContext.Users.Any(x => x.Email == request.Email || x.Username == request.Username))
+                throw new DException(HttpStatusCode.Conflict, "Użytkownik o takich danych istnieje");
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+            var newUser = new User
             {
-                _validator.IsNull(request, "Nie przekazano danych");
-                _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
-                _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
-                _validator.IsEmpty(request.Password, "Hasło jest wymagane");
+                Username = request.Username,
+                Email = request.Email,
+                Password = hashedPassword
+            };
+            _dbContext.Users.Add(newUser);
+            await AddPersonUser(newUser);
 
-                if (_dbContext.Users.Any(x => x.Email == request.Email || x.Username == request.Username))
-                    return new ConflictObjectResult("Użytkownik o takich danych istnieje");
-
-                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
-
-                var newUser = new User
-                {
-                    Username = request.Username,
-                    Email = request.Email,
-                    Password = hashedPassword
-                };
-                _dbContext.Users.Add(newUser);
-                await AddPersonUser(newUser);
-
-                await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Pomyślnie zarejstrowano");
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<string> Login(LoginRequest request)
         {
-            try
-            {
-                _validator.IsNull(request, "Nie przekazano danych");
-                _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
-                _validator.IsEmpty(request.Password, "Hasło jest wymagane");
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
+            _validator.IsEmpty(request.Password, "Hasło jest wymagane");
 
-                var user = _dbContext.Users.FirstOrDefault(x => x.Username == request.Username);
-                if (user == null)
-                    return new NotFoundObjectResult("Nie znaleziono użytkownika");
-                if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
-                    return new UnauthorizedObjectResult("Błędne hasło");
+            var user = _dbContext.Users.FirstOrDefault(x => x.Username == request.Username);
+            if (user == null)
+                throw new DException(HttpStatusCode.NotFound,"Nie znaleziono użytkownika");
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+                throw new DException(HttpStatusCode.Unauthorized, "Błędne hasło");
 
-                var token = GenerateToken(user);
-                return new OkObjectResult(token);
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            var token = GenerateToken(user);
+            return token;
         }
 
-        public async Task<IActionResult> Edit(ClaimsPrincipal claims, RegisterRequest request)
+        public async Task<string> Edit(RegisterRequest request)
         {
-            try
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
+            _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
+
+            var user = await _userContext.GetCurrentUser();
+
+            if (!user.Username.Equals(request.Username))
             {
-                _validator.IsNull(request, "Nie przekazano danych");
-                _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
-                _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
-
-                var user = await _validator.GetUser(claims);
-
-                if (!user.Username.Equals(request.Username))
-                {
-                    var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.UserId == user.Id && p.UserAccount);
-                    person.Name = request.Username;
-                    _dbContext.Persons.Update(person);
-                    
-                }
-
-                user.Username = request.Username;
-                user.Email = request.Email;
-
-                _dbContext.Users.Update(user);
-                await _dbContext.SaveChangesAsync();
-                var token =  GenerateToken(user);
-
-                return new OkObjectResult(token);
+                var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.UserId == user.Id && p.UserAccount);
+                person.Name = request.Username;
+                _dbContext.Persons.Update(person);
+                
             }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+
+            user.Username = request.Username;
+            user.Email = request.Email;
+
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+            var token =  GenerateToken(user);
+            return token;
         }
 
 
-        public async Task<IActionResult> Remove(ClaimsPrincipal claims)
+        public async Task Remove()
         {
-            try
-            {
-                var user = await _validator.GetUser(claims);
+            var user = await _userContext.GetCurrentUser();
 
-                var persons = await _dbContext.Persons
-                    .Where(p => p.UserId == user.Id)
-                    .ToListAsync();
+            var persons = await _dbContext.Persons
+                .Where(p => p.UserId == user.Id)
+                .ToListAsync();
 
-                var personIds = persons.Select(p => p.Id).ToList();
+            var personIds = persons.Select(p => p.Id).ToList();
 
-                var loans = await _dbContext.Loans
-                    .Where(l => personIds.Contains(l.PersonId))
-                    .ToListAsync();
+            var loans = await _dbContext.Loans
+                .Where(l => personIds.Contains(l.PersonId))
+                .ToListAsync();
 
-                var receipts = await _dbContext.Receipts
-                    .Where(r => r.UserId == user.Id)
-                    .ToListAsync();
+            var receipts = await _dbContext.Receipts
+                .Where(r => r.UserId == user.Id)
+                .ToListAsync();
 
-                var receiptIds = receipts.Select(r => r.Id).ToList();
+            var receiptIds = receipts.Select(r => r.Id).ToList();
 
-                var products = await _dbContext.Products
-                    .Where(p => receiptIds.Contains(p.ReceiptId))
-                    .ToListAsync();
+            var products = await _dbContext.Products
+                .Where(p => receiptIds.Contains(p.ReceiptId))
+                .ToListAsync();
 
-                var personProducts = await _dbContext.PersonProducts
-                    .Where(pp => personIds.Contains(pp.PersonId))
-                    .ToListAsync();
+            var personProducts = await _dbContext.PersonProducts
+                .Where(pp => personIds.Contains(pp.PersonId))
+                .ToListAsync();
 
-                _dbContext.Loans.RemoveRange(loans);
-                _dbContext.PersonProducts.RemoveRange(personProducts);
-                _dbContext.Products.RemoveRange(products);
-                _dbContext.Receipts.RemoveRange(receipts);
-                _dbContext.Persons.RemoveRange(persons);
-                _dbContext.Users.Remove(user);
+            _dbContext.Loans.RemoveRange(loans);
+            _dbContext.PersonProducts.RemoveRange(personProducts);
+            _dbContext.Products.RemoveRange(products);
+            _dbContext.Receipts.RemoveRange(receipts);
+            _dbContext.Persons.RemoveRange(persons);
+            _dbContext.Users.Remove(user);
 
-                await _dbContext.SaveChangesAsync();
-
-                return new OkObjectResult("User and all related data successfully deleted.");
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            await _dbContext.SaveChangesAsync();
         }
 
 
-        public Task<IActionResult> ValidToken(string token)
+        public async Task<bool> ValidToken(string token)
         {
             _validator.IsEmpty(token, "Token jest wymagany");
 
@@ -196,59 +151,36 @@ namespace DivvyUp.Web.Service
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
-                return Task.FromResult<IActionResult>(new OkObjectResult(true));
+                return true;
             }
             catch
             {
-                return Task.FromResult<IActionResult>(new OkObjectResult(false));
+                return false;
             }
         }
 
 
-        public async Task<IActionResult> GetUser(ClaimsPrincipal claims)
+        public async Task<User> GetUser()
         {
-            try
-            {
-                var user = await _validator.GetUser(claims);
-                return new OkObjectResult(user);
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
+            var user = await _userContext.GetCurrentUser();
+            return user;
         }
 
-        public async Task<IActionResult> ChangePassword(ClaimsPrincipal claims, ChangePasswordRequest request)
+        public async Task ChangePassword(ChangePasswordRequest request)
         {
-            try
-            {
                 _validator.IsNull(request, "Nie przekazano danych");
                 _validator.IsEmpty(request.Password, "Hasło jest wymagane");
                 _validator.IsEmpty(request.NewPassword, "Nowe hasło jest wymagane");
 
-                var user = await _validator.GetUser(claims);
+            var user = await _userContext.GetCurrentUser();
 
-                if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
-                    return new UnauthorizedObjectResult("Błędne hasło");
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+                    throw new DException(HttpStatusCode.Unauthorized,"Błędne hasło");
 
                 user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
 
                 _dbContext.Users.Update(user);
                 await _dbContext.SaveChangesAsync();
-                return new OkObjectResult("Pomyślnie zmieniono hasło");
-            }
-            catch (DException ex)
-            {
-                return new ObjectResult(ex.Message) { StatusCode = (int)ex.Status };
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult();
-            }
         }
 
         private async Task AddPersonUser(User user)

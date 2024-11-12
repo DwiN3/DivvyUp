@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
 
 namespace DivvyUp.Web.Interface
 {
     public interface IUserService
     {
-        Task<IActionResult> Register(RegisterRequest request);
-        Task<IActionResult> Login(LoginRequest request);
-        Task<IActionResult> Edit(ClaimsPrincipal user, RegisterRequest request);
-        Task<IActionResult> Remove(ClaimsPrincipal user);
-        Task<IActionResult> ValidToken(string token);
-        Task<IActionResult> GetUser(ClaimsPrincipal user);
-        Task<IActionResult> ChangePassword(ClaimsPrincipal user, ChangePasswordRequest request);
+        Task Register(RegisterRequest request);
+        Task<string> Login(LoginRequest request);
+        Task<string> Edit(RegisterRequest request);
+        Task Remove();
+        Task<bool> ValidToken(string token);
+        Task<User> GetUser();
+        Task ChangePassword(ChangePasswordRequest request);
     }
 }
