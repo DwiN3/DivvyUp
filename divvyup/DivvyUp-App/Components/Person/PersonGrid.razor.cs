@@ -2,6 +2,8 @@
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.Model;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -11,7 +13,7 @@ namespace DivvyUp_App.Components.Person
     partial class PersonGrid : ComponentBase
     {
         [Inject]
-        private IPersonHttpService PersonService { get; set; }
+        private IPersonService PersonService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]
@@ -59,10 +61,15 @@ namespace DivvyUp_App.Components.Person
             IsGridEdit = false;
             try
             {
+                AddEditPersonRequest request = new()
+                {
+                    Name = person.name,
+                    Surname = person.surname
+                };
                 if (person.id == 0)
-                    await PersonService.Add(person);
+                    await PersonService.Add(request);
                 else
-                    await PersonService.Edit(person);
+                    await PersonService.Edit(request, person.id);
             }
             catch (DException ex)
             {

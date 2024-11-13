@@ -3,13 +3,14 @@ using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class PersonHttpService : IPersonHttpService
+    public class PersonHttpService : IPersonService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
@@ -20,7 +21,7 @@ namespace DivvyUp_Impl_Maui.Service
             _dHttpClient = dHttpClient;
             _logger = logger;
         }
-        public async Task Add(PersonDto person)
+        public async Task Add(AddEditPersonRequest person)
         {
             try
             {
@@ -40,12 +41,12 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task Edit(PersonDto person)
+        public async Task Edit(AddEditPersonRequest person, int personId)
         {
             try
             {
                 var url = ApiRoute.PERSON_ROUTES.EDIT
-                    .Replace(ApiRoute.ARG_PERSON, person.id.ToString());
+                    .Replace(ApiRoute.ARG_PERSON, personId.ToString());
                 var response = await _dHttpClient.PutAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }

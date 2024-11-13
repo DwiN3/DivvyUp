@@ -14,9 +14,9 @@ namespace DivvyUp_App.Components.Product
         [Inject]
         private IProductService ProductService { get; set; }
         [Inject]
-        private IPersonHttpService PersonService { get; set; }
+        private IPersonService PersonService { get; set; }
         [Inject]
-        private IPersonProductHttpService PersonProductService { get; set; }
+        private IPersonProductService PersonProductService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
@@ -93,15 +93,13 @@ namespace DivvyUp_App.Components.Product
                 
                 if (!product.divisible && Persons.Count > 0)
                 {
-                    PersonProductDto personProduct = new PersonProductDto
+                    AddEditPersonProductRequest requestPersonproduct = new()
                     {
-                        productId = newProduct.id,
-                        personId = SelectedPerson.id,
-                        compensation = true,
-                        partOfPrice = product.price,
-                        quantity = 1
+                        PersonId = SelectedPerson.id,
+                        Quantity = 1,
                     };
-                    await PersonProductService.Add(personProduct, newProduct.id);
+
+                    await PersonProductService.Add(requestPersonproduct, newProduct.id);
                 }
             }
             catch (DException ex)

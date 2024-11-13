@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using AutoMapper;
 using DivvyUp.Web.Data;
-using DivvyUp.Web.Interface;
 using DivvyUp.Web.Validation;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
+using DivvyUp_Shared.Interface;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.EntityFrameworkCore;

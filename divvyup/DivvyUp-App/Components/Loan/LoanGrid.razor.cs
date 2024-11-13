@@ -4,6 +4,8 @@ using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Enum;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.Model;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -13,9 +15,9 @@ namespace DivvyUp_App.Components.Loan
     partial class LoanGrid : ComponentBase
     {
         [Inject]
-        private ILoanHttpService LoanService { get; set; }
+        private ILoanService LoanService { get; set; }
         [Inject]
-        private IPersonHttpService PersonService { get; set; }
+        private IPersonService PersonService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]
@@ -58,11 +60,18 @@ namespace DivvyUp_App.Components.Loan
                 if(ShowAllLoans)
                     Loans = await LoanService.GetLoans();
                 else
-                    Loans = await LoanService.GetLoansByDataRange(DateFrom, DateTo);
+                {
+                    if (!DateFrom.HasValue || !DateTo.HasValue)
+                        throw new ArgumentException("Obie daty muszą być podane");
+
+                    string fromFormatted = DateFrom.Value.ToString("dd-MM-yyyy");
+                    string toFormatted = DateTo.Value.ToString("dd-MM-yyyy");
+                    Loans = await LoanService.GetLoansByDataRange(fromFormatted, toFormatted);
+                }
             }
             else
             {
-                Loans = await LoanService.GetLoansPerson(PersonId);
+                Loans = await LoanService.GetPersonLoans(PersonId);
             }
 
             StateHasChanged();
@@ -93,6 +102,14 @@ namespace DivvyUp_App.Components.Loan
             IsGridEdit = false;
             try
             {
+                AddEditLoanRequest request = new()
+                {
+                    PersonId = loan.personId,
+                    Date = loan.date,
+                    Lent = loan.lent,
+                    Amount = (decimal)loan.amount,
+                };
+
                 if (loan.id == 0)
                 {
                     if(GridMode == LoanGridMode.All)
@@ -100,11 +117,11 @@ namespace DivvyUp_App.Components.Loan
                     else
                         loan.personId = PersonId;
 
-                    await LoanService.Add(loan);
+                    await LoanService.Add(request);
                 }
                 else
                 {
-                    await LoanService.Edit(loan);
+                    await LoanService.Edit(request, loan.id);
                 }
             }
             catch (DException ex)

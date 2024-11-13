@@ -3,13 +3,14 @@ using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class LoanHttpSevice : ILoanHttpService
+    public class LoanHttpSevice : ILoanService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
@@ -21,7 +22,7 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task Add(LoanDto loan)
+        public async Task Add(AddEditLoanRequest loan)
         {
             try
             {
@@ -41,12 +42,12 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task Edit(LoanDto loan)
+        public async Task Edit(AddEditLoanRequest loan, int loanId)
         {
             try
             {
                 var url = ApiRoute.LOAN_ROUTES.EDIT
-                    .Replace(ApiRoute.ARG_LOAN, loan.id.ToString());
+                    .Replace(ApiRoute.ARG_LOAN, loanId.ToString());
                 var response = await _dHttpClient.PutAsync(url, loan);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji pożyczki");
             }
@@ -173,7 +174,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<LoanDto>> GetLoansPerson(int personId)
+        public async Task<List<LoanDto>> GetPersonLoans(int personId)
         {
             try
             {
@@ -220,19 +221,13 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<LoanDto>> GetLoansByDataRange(DateTime? from, DateTime? to)
+        public async Task<List<LoanDto>> GetLoansByDataRange(string from, string to)
         {
             try
             {
-                if (!from.HasValue || !to.HasValue)
-                    throw new ArgumentException("Obie daty muszą być podane");
-
-                string fromFormatted = from.Value.ToString("dd-MM-yyyy");
-                string toFormatted = to.Value.ToString("dd-MM-yyyy");
-
                 var url = ApiRoute.LOAN_ROUTES.LOANS_DATA_RANGE
-                    .Replace(ApiRoute.ARG_FROM, fromFormatted)
-                    .Replace(ApiRoute.ARG_TO, toFormatted);
+                    .Replace(ApiRoute.ARG_FROM, from)
+                    .Replace(ApiRoute.ARG_TO, to);
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<LoanDto>>(jsonResponse);

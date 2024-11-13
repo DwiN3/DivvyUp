@@ -3,14 +3,14 @@ using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.Model;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class PersonProductHttpService : IPersonProductHttpService
+    public class PersonProductHttpService : IPersonProductService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
@@ -22,7 +22,7 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task Add(PersonProductDto personProduct, int productId)
+        public async Task Add(AddEditPersonProductRequest personProduct, int productId)
         {
             try
             {
@@ -43,12 +43,12 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task Edit(PersonProductDto personProduct)
+        public async Task Edit(AddEditPersonProductRequest personProduct, int personProductId)
         {
             try
             {
                 var url = ApiRoute.PERSON_PRODUCT_ROUTES.EDIT
-                    .Replace(ApiRoute.ARG_PERSON_PRODUCT, personProduct.id.ToString());
+                    .Replace(ApiRoute.ARG_PERSON_PRODUCT, personProductId.ToString());
                 var response = await _dHttpClient.PutAsync(url, personProduct);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }

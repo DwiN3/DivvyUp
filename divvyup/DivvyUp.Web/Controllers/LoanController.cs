@@ -1,6 +1,5 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using DivvyUp.Web.Interface;
-using DivvyUp_Shared.AppConstants;
+﻿using DivvyUp_Shared.AppConstants;
+using DivvyUp_Shared.Interface;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

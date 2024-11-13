@@ -5,15 +5,16 @@ using Radzen.Blazor;
 using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using Radzen;
+using DivvyUp_Shared.RequestDto;
 
 namespace DivvyUp_App.Components.PersonProduct
 {
     partial class PersonProductGrid
     {
         [Inject]
-        private IPersonHttpService PersonService { get; set; }
+        private IPersonService PersonService { get; set; }
         [Inject]
-        private IPersonProductHttpService PersonProductService { get; set; }
+        private IPersonProductService PersonProductService { get; set; }
         [Inject]
         private IProductService ProductService { get; set; }
         [Inject]
@@ -83,12 +84,18 @@ namespace DivvyUp_App.Components.PersonProduct
         private async Task SaveRow(PersonProductDto personProduct)
         {
             IsGridEdit = false;
+            AddEditPersonProductRequest request = new()
+            {
+                PersonId = personProduct.personId,
+                Quantity = personProduct.quantity
+            };
+
             try
             {
                 if (personProduct.id == 0)
-                    await PersonProductService.Add(personProduct, ProductId);
+                    await PersonProductService.Add(request, ProductId);
                 else
-                    await PersonProductService.Edit(personProduct);
+                    await PersonProductService.Edit(request, personProduct.id);
             }
             catch (DException)
             {
