@@ -2,6 +2,8 @@
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.Model;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 
@@ -10,7 +12,7 @@ namespace DivvyUp_App.Components.Product
     partial class ProductsGrid
     {
         [Inject]
-        private IProductHttpService ProductService { get; set; }
+        private IProductService ProductService { get; set; }
         [Inject]
         private IPersonHttpService PersonService { get; set; }
         [Inject]
@@ -43,7 +45,7 @@ namespace DivvyUp_App.Components.Product
         private async Task LoadGrid()
         {
             IsGridEdit = false;
-            Products = await ProductService.GetProducts(ReceiptId);
+            Products = await ProductService.GetProductsFromReceipt(ReceiptId);
             StateHasChanged();
         }
 
@@ -73,14 +75,21 @@ namespace DivvyUp_App.Components.Product
             IsGridEdit = false;
             try
             {
-                product.receiptId = ReceiptId;
+                AddEditProductRequest request = new()
+                {
+                    Name = product.name,
+                    Price = (decimal)product.price,
+                    MaxQuantity = product.maxQuantity,
+                    Divisible = product.divisible,
+                };
+
                 var newProduct = new ProductDto();
 
                 if (product.id == 0) 
-                    newProduct = await ProductService.Add(product);
+                    newProduct = await ProductService.Add(request, ReceiptId);
                 
                 else
-                    newProduct = await ProductService.Edit(product);
+                    newProduct = await ProductService.Edit(request, product.id);
                 
                 if (!product.divisible && Persons.Count > 0)
                 {

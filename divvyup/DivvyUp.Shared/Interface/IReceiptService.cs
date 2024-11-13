@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using DivvyUp_Shared.Dto;
+﻿using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.RequestDto;
 
-namespace DivvyUp.Web.Interface
+namespace DivvyUp_Shared.Interface
 {
     public interface IReceiptService
     {

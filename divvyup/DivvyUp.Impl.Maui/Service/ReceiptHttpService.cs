@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.Interface;
 using Newtonsoft.Json;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Model;
-using System.Text.Json;
-using System.Text.RegularExpressions;
+using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.RequestDto;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class ReceiptHttpService : IReceiptHttpService
+    public class ReceiptHttpService : IReceiptService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
@@ -24,7 +22,7 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task Add(ReceiptDto receipt)
+        public async Task Add(AddEditReceiptRequest receipt)
         {
             try
             {
@@ -44,12 +42,12 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task Edit(ReceiptDto receipt)
+        public async Task Edit(AddEditReceiptRequest receipt, int receiptId)
         {
             try
             {
                 var url = ApiRoute.RECEIPT_ROUTES.EDIT
-                    .Replace(ApiRoute.ARG_RECEIPT, receipt.id.ToString());
+                    .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString());
                 var response = await _dHttpClient.PutAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
@@ -155,19 +153,13 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<ReceiptDto>> GetReceiptsByDataRange(DateTime? from, DateTime? to)
+        public async Task<List<ReceiptDto>> GetReceiptsByDataRange(string from, string to)
         {
             try
             {
-                if (!from.HasValue || !to.HasValue)
-                    throw new ArgumentException("Obie daty muszą być podane");
-
-                string fromFormatted = from.Value.ToString("dd-MM-yyyy");
-                string toFormatted = to.Value.ToString("dd-MM-yyyy");
-
                 var url = ApiRoute.RECEIPT_ROUTES.RECEIPTS_DATA_RANGE
-                    .Replace(ApiRoute.ARG_FROM, fromFormatted)
-                    .Replace(ApiRoute.ARG_TO, toFormatted);
+                    .Replace(ApiRoute.ARG_FROM, from)
+                    .Replace(ApiRoute.ARG_TO, to);
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ReceiptDto>>(jsonResponse);

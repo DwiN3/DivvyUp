@@ -15,7 +15,7 @@ namespace DivvyUp_App.Components.PersonProduct
         [Inject]
         private IPersonProductHttpService PersonProductService { get; set; }
         [Inject]
-        private IProductHttpService ProductService { get; set; }
+        private IProductService ProductService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 

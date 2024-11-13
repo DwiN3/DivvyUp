@@ -3,6 +3,7 @@ using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 
@@ -11,7 +12,7 @@ namespace DivvyUp_App.Components.AccountManager
     partial class AccountManagerForm
     {
         [Inject]
-        private IUserHttpService UserService { get; set; }
+        private IUserService UserService { get; set; }
         [Inject]
         private UserAppService UserAppService { get; set; }
         [Inject]
@@ -23,24 +24,24 @@ namespace DivvyUp_App.Components.AccountManager
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 
-        private UserDto User { get; set; } = new();
+        private RegisterRequest EditData { get; set; } = new();
         private string FileName { get; set; }
         private long? FileSize { get; set; }
         private string Avatar;
 
         protected override async Task OnInitializedAsync()
         {
-            User.username = UserAppService.GetUser().username;
-            User.email = UserAppService.GetUser().email;
+            EditData.Username = UserAppService.GetUser().username;
+            EditData.Email = UserAppService.GetUser().email;
         }
 
         private async Task SaveChanges()
         {
             try
             {
-                var token = await UserService.Edit(User);
+                var token = await UserService.Edit(EditData);
                 DHttpClient.setToken(token);
-                UserAppService.SetUser(User.username, User.email, token, true);
+                UserAppService.SetUser(EditData.Username, EditData.Email, token, true);
                 DNotificationService.ShowNotification("Zapisano zmiany", NotificationSeverity.Success);
             }
             catch (DException ex)

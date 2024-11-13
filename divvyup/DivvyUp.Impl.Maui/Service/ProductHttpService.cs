@@ -3,13 +3,15 @@ using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.Model;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class ProductHttpService : IProductHttpService
+    public class ProductHttpService : IProductService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
@@ -21,12 +23,12 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task<ProductDto> Add(ProductDto product)
+        public async Task<ProductDto> Add(AddEditProductRequest product, int receiptId)
         {
             try
             {
                 var url = ApiRoute.PRODUCT_ROUTES.ADD
-                    .Replace(ApiRoute.ARG_RECEIPT, product.receiptId.ToString());
+                    .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString());
                 var response = await _dHttpClient.PostAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
                 var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -45,12 +47,12 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<ProductDto> Edit(ProductDto product)
+        public async Task<ProductDto> Edit(AddEditProductRequest product, int productId)
         {
             try
             {
                 var url = ApiRoute.PRODUCT_ROUTES.EDIT
-                    .Replace(ApiRoute.ARG_PRODUCT, product.id.ToString());
+                    .Replace(ApiRoute.ARG_PRODUCT, productId.ToString());
                 var response = await _dHttpClient.PutAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
                 var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -68,7 +70,7 @@ namespace DivvyUp_Impl_Maui.Service
                 throw;
             }
         }
-
+        
         public async Task Remove(int productId)
         {
             try
@@ -136,7 +138,30 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<ProductDto>> GetProducts(int receiptId)
+        public async Task<List<ProductDto>> GetProducts()
+        {
+            try
+            {
+                var url = ApiRoute.PRODUCT_ROUTES.PRODUCTS;
+                var response = await _dHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<ProductDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów");
+                return result;
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie pobierania listy produktów do tabeli: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<ProductDto>> GetProductsFromReceipt(int receiptId)
         {
             try
             {

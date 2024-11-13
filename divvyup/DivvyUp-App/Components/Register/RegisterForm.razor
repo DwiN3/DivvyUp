@@ -1,13 +1,13 @@
 ﻿<div style="height: 100%; display:flex; justify-content: center; align-items: center;">
     <div style="width: 300px;">
         <RadzenFormField class="input" Text="Nazwa">
-            <RadzenTextBox @bind-Value="@User.username"/>
+            <RadzenTextBox @bind-Value="@RegisterData.Username" />
         </RadzenFormField>
         <RadzenFormField class="input" Text="Email">
-            <RadzenTextBox @bind-Value="@User.email"/>
+            <RadzenTextBox @bind-Value="@RegisterData.Email" />
         </RadzenFormField>
         <RadzenFormField class="input" Text="Hasło">
-            <RadzenPassword @bind-Value="@User.password"/>
+            <RadzenPassword @bind-Value="@RegisterData.Password" />
         </RadzenFormField>
         <RadzenFormField class="input" Text="Powtórz Hasło">
             <RadzenPassword @bind-Value="@RePassword"/>

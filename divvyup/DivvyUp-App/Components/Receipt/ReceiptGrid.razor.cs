@@ -1,10 +1,9 @@
 ﻿using DivvyUp_App.GuiService;
 using DivvyUp_Impl_Maui.Api.Exceptions;
-using DivvyUp_Impl_Maui.Service;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
-using Microsoft.VisualBasic;
 using Radzen;
 using Radzen.Blazor;
 
@@ -13,7 +12,7 @@ namespace DivvyUp_App.Components.Receipt
     partial class ReceiptGrid : ComponentBase
     {
         [Inject]
-        private IReceiptHttpService ReceiptService { get; set; }
+        private IReceiptService ReceiptService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]
@@ -41,7 +40,14 @@ namespace DivvyUp_App.Components.Receipt
                 if (ShowAllReceipts)
                     Receipts = await ReceiptService.GetReceipts();
                 else
-                    Receipts = await ReceiptService.GetReceiptsByDataRange(DateFrom, DateTo);
+                {
+                    if (!DateFrom.HasValue || !DateTo.HasValue)
+                        throw new ArgumentException("Obie daty muszą być podane");
+
+                    string fromFormatted = DateFrom.Value.ToString("dd-MM-yyyy");
+                    string toFormatted = DateTo.Value.ToString("dd-MM-yyyy");
+                    Receipts = await ReceiptService.GetReceiptsByDataRange(fromFormatted, toFormatted);
+                }
             }
             catch (DException ex)
             {
@@ -79,13 +85,19 @@ namespace DivvyUp_App.Components.Receipt
             IsGridEdit = false;
             try
             {
+                AddEditReceiptRequest request = new()
+                {
+                    Name = receipt.name,
+                    Date = receipt.date
+                };
+
                 if (receipt.id == 0)
                 {
-                    await ReceiptService.Add(receipt);
+                    await ReceiptService.Add(request);
                 }
                 else
                 {
-                    await ReceiptService.Edit(receipt);
+                    await ReceiptService.Edit(request, receipt.id);
                 }
             }
             catch (DException ex)

@@ -8,7 +8,7 @@ namespace DivvyUp_App.Layout
     partial class MainLayout : IDisposable
     {
         [Inject]
-        private IUserHttpService UserService { get; set; }
+        private IUserService UserService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
@@ -38,7 +38,7 @@ namespace DivvyUp_App.Layout
             {
                 try
                 {
-                    bool isValid = await UserService.IsValid(user.token);
+                    bool isValid = await UserService.ValidToken(user.token);
                     if (isValid)
                     {
                         UserAppService.SetLoggedIn(true);

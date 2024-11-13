@@ -3,6 +3,7 @@ using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.RequestDto;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 
@@ -11,7 +12,7 @@ namespace DivvyUp_App.Components.Login
     partial class LoginForm
     {
         [Inject]
-        private IUserHttpService UserService { get; set; }
+        private IUserService UserService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
@@ -21,13 +22,13 @@ namespace DivvyUp_App.Components.Login
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 
-        private UserDto User { get; set; } = new();
+        private LoginRequest LoginData { get; set; } = new();
 
         private async Task SignUp()
         {
             try
             {
-                var token = await UserService.Login(User);
+                var token = await UserService.Login(LoginData);
                 DHttpClient.setToken(token);
                 UserDto user = await UserService.GetUser();
                 UserAppService.SetUser(user.username, user.email, token, true);

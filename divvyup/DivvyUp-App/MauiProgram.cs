@@ -44,11 +44,11 @@ namespace DivvyUp_App
             builder.Services.AddSingleton<DAlertService>();
             builder.Services.AddScoped<HeaderService>();
 
-            builder.Services.AddTransient<IUserHttpService, UserHttpService>();
+            builder.Services.AddTransient<IUserService, UserHttpService>();
             builder.Services.AddTransient<IPersonHttpService, PersonHttpService>();
             builder.Services.AddTransient<ILoanHttpService, LoanHttpSevice>();
-            builder.Services.AddTransient<IReceiptHttpService, ReceiptHttpService>();
-            builder.Services.AddTransient<IProductHttpService, ProductHttpService>();
+            builder.Services.AddTransient<IReceiptService, ReceiptHttpService>();
+            builder.Services.AddTransient<IProductService, ProductHttpService>();
             builder.Services.AddTransient<IPersonProductHttpService, PersonProductHttpService>();
             builder.Services.AddTransient<IChartService, ChartHttpService>();
             ;

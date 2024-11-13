@@ -8,11 +8,11 @@
         <RadzenFieldset Text="Informacje o koncie" class="form">
             <div class="section">
                 <b class="name-section">Nazwa</b>
-                <RadzenTextBox class="section-input" @bind-Value="@User.username"/>
+                <RadzenTextBox class="section-input" @bind-Value="@EditData.Username" />
             </div>
             <div class="section">
                 <b class="name-section">Email</b>
-                <RadzenTextBox class="section-input" @bind-Value="@User.email"/>
+                <RadzenTextBox class="section-input" @bind-Value="@EditData.Email" />
             </div>
             <div class="section" style="justify-content: space-evenly">
                 <RadzenButton Style="margin-top: 20px; width: 40%;" Text="Zmień hasło" ButtonStyle="ButtonStyle.Light" Click="ChangePassword"/>

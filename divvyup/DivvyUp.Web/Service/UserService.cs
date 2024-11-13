@@ -3,8 +3,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
-using DivvyUp.Web.Interface;
-using Microsoft.AspNetCore.Mvc;
 using DivvyUp_Shared.Model;
 using DivvyUp_Shared.RequestDto;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +11,7 @@ using DivvyUp.Web.Validation;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using AutoMapper;
+using DivvyUp_Shared.Interface;
 
 namespace DivvyUp.Web.Service
 {

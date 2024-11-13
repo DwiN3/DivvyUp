@@ -6,11 +6,12 @@ using Newtonsoft.Json;
 using DivvyUp_Impl_Maui.Api.DHttpClient;
 using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.AppConstants;
+using DivvyUp_Shared.RequestDto;
 using static DivvyUp_Shared.AppConstants.ApiRoute;
 
 namespace DivvyUp_Impl_Maui.Service
 {
-    public class UserHttpService : IUserHttpService
+    public class UserHttpService : IUserService
     {
         [Inject]
         private DHttpClient _dHttpClient { get; set; }
@@ -22,12 +23,12 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task<string> Login(UserDto user)
+        public async Task<string> Login(LoginRequest request)
         {
             try
             {
                 var url = USER_ROUTES.LOGIN;
-                var response = await _dHttpClient.PostAsync(url, user);
+                var response = await _dHttpClient.PostAsync(url, request);
                 var result = await response.Content.ReadAsStringAsync();
                 await EnsureCorrectResponse(response, "Błąd w czasie logowania");
                 return result;
@@ -49,12 +50,12 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task Register(UserDto user)
+        public async Task Register(RegisterRequest request)
         {
             try
             {
                 var url = ApiRoute.USER_ROUTES.REGISTER;
-                var response = await _dHttpClient.PostAsync(url, user);
+                var response = await _dHttpClient.PostAsync(url, request);
                 await EnsureCorrectResponse(response, "Błąd w czasie rejestracji");
             }
             catch (DException ex)
@@ -74,12 +75,12 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<string> Edit(UserDto user)
+        public async Task<string> Edit(RegisterRequest request)
         {
             try
             {
                 var url = USER_ROUTES.EDIT;
-                var response = await _dHttpClient.PutAsync(url, user);
+                var response = await _dHttpClient.PutAsync(url, request);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji użytkownika"); 
                 var result = await response.Content.ReadAsStringAsync();
                 return result;
@@ -101,18 +102,12 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task ChangePassword(string password, string newPassword)
+        public async Task ChangePassword(ChangePasswordRequest request)
         {
             try
             {
-                var data = new
-                {
-                    password = password,
-                    newPassword = newPassword
-                };
-
                 var url = USER_ROUTES.CHANGE_PASSWORD;
-                var response = await _dHttpClient.PutAsync(url, data);
+                var response = await _dHttpClient.PutAsync(url, request);
                 await EnsureCorrectResponse(response, "Błąd w czasie zmieniania hasła");
             }
             catch(DException ex)
@@ -157,8 +152,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-
-        public async Task<bool> IsValid(string token)
+        public async Task<bool> ValidToken(string token)
         {
             try
             {

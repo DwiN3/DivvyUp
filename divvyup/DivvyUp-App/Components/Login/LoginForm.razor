@@ -1,10 +1,10 @@
 ﻿<div style="height: 100%; display:flex; justify-content: center; align-items: center;">
     <div style="width: 300px;">
         <RadzenFormField class="input" Text="Nazwa">
-            <RadzenTextBox @bind-Value="@User.username" />
+            <RadzenTextBox @bind-Value="@LoginData.Username" />
         </RadzenFormField>
         <RadzenFormField class="input" Text="Hasło">
-            <RadzenPassword @bind-Value="@User.password" />
+            <RadzenPassword @bind-Value="@LoginData.Password" />
         </RadzenFormField>
         <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Zaloguj się" Click="@SignUp" />
         <RadzenButton Style="margin-top: 20px; width: 100%;" Text="Zarejestruj się" Click="@(() => Navigation.NavigateTo("/register"))" />
