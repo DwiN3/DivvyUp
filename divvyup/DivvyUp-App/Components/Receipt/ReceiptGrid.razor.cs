@@ -23,8 +23,8 @@ namespace DivvyUp_App.Components.Receipt
         private List<ReceiptDto> Receipts { get; set; }
         private RadzenDataGrid<ReceiptDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
-        private DateTime? DateFrom = new DateTime();
-        private DateTime? DateTo = new DateTime();
+        private DateOnly DateFrom = new DateOnly();
+        private DateOnly DateTo = new DateOnly();
         private bool ShowAllReceipts = false;
         private bool IsGridEdit { get; set; } = false;
 
@@ -41,12 +41,7 @@ namespace DivvyUp_App.Components.Receipt
                     Receipts = await ReceiptService.GetReceipts();
                 else
                 {
-                    if (!DateFrom.HasValue || !DateTo.HasValue)
-                        throw new ArgumentException("Obie daty muszą być podane");
-
-                    string fromFormatted = DateFrom.Value.ToString("dd-MM-yyyy");
-                    string toFormatted = DateTo.Value.ToString("dd-MM-yyyy");
-                    Receipts = await ReceiptService.GetReceiptsByDataRange(fromFormatted, toFormatted);
+                    Receipts = await ReceiptService.GetReceiptsByDataRange(DateFrom, DateTo);
                 }
             }
             catch (DException ex)
@@ -160,9 +155,9 @@ namespace DivvyUp_App.Components.Receipt
 
         private async Task SetCurrentMonth()
         {
-            DateFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            DateFrom = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1);
             int dayInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-            DateTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, dayInMonth);
+            DateTo = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, dayInMonth);
             await LoadGrid();
         }
     }

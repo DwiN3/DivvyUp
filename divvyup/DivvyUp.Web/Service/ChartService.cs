@@ -161,15 +161,15 @@ namespace DivvyUp.Web.Service
                 dailyTotals[day] = 0;
             }
 
-            var today = DateTime.UtcNow;
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
             var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
             var endOfWeek = startOfWeek.AddDays(6);
 
             foreach (var receipt in receipts)
             {
-                var date = receipt.Date.Date;
+                var date = receipt.Date;
 
-                if (date >= startOfWeek.Date && date <= endOfWeek.Date)
+                if (date >= startOfWeek && date <= endOfWeek)
                 {
                     var dayOfWeek = date.DayOfWeek;
                     dailyTotals[dayOfWeek] += receipt.TotalPrice;
@@ -190,7 +190,6 @@ namespace DivvyUp.Web.Service
             return responseList;
         }
 
-
         public async Task<List<ChartDto>> GetWeeklyUserExpenses()
         {
             var user = await _userContext.GetCurrentUser();
@@ -206,7 +205,7 @@ namespace DivvyUp.Web.Service
                 dailyTotals[day] = 0;
             }
 
-            var today = DateTime.UtcNow;
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
             var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
             var endOfWeek = startOfWeek.AddDays(6);
 
@@ -223,9 +222,9 @@ namespace DivvyUp.Web.Service
                 {
                     if (personProduct?.Product?.Receipt != null)
                     {
-                        var date = personProduct.Product.Receipt.Date.Date;
+                        var date = personProduct.Product.Receipt.Date;
 
-                        if (date >= startOfWeek.Date && date <= endOfWeek.Date)
+                        if (date >= startOfWeek && date <= endOfWeek)
                         {
                             var dayOfWeek = date.DayOfWeek;
                             dailyTotals[dayOfWeek] += personProduct.PartOfPrice;
@@ -247,7 +246,6 @@ namespace DivvyUp.Web.Service
 
             return responseList;
         }
-
 
         public async Task<List<ChartDto>> GetMonthlyTopProducts()
         {

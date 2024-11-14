@@ -45,7 +45,7 @@ namespace DivvyUp.Web.Service
             {
                 User = user,
                 Name = request.Name,
-                Date = request.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc),
+                Date = request.Date,
                 TotalPrice = 0,
                 Settled = false,
             };
@@ -64,7 +64,8 @@ namespace DivvyUp.Web.Service
             var receipt = await _validator.GetReceipt(user, receiptId);
 
             receipt.Name = request.Name;
-            receipt.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc);
+            receipt.Date = request.Date;
+
             _dbContext.Receipts.Update(receipt);
 
             await _dbContext.SaveChangesAsync();
@@ -151,28 +152,25 @@ namespace DivvyUp.Web.Service
             return receiptsDto;
         }
 
-        public async Task<List<ReceiptDto>> GetReceiptsByDataRange(string from, string to)
+        public async Task<List<ReceiptDto>> GetReceiptsByDataRange(DateOnly from, DateOnly to)
         {
-            _validator.IsEmpty(from, "Brak daty od");
-            _validator.IsEmpty(to, "Brak daty do");
-
-            if (!DateTime.TryParseExact(from, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fromDate))
-                throw new ArgumentException("Nieprawidłowy format daty początkowej.");
-
-            if (!DateTime.TryParseExact(to, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime toDate))
-                throw new ArgumentException("Nieprawidłowy format daty końcowej.");
-
-            fromDate = DateTime.SpecifyKind(fromDate, DateTimeKind.Utc);
-            toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
+            _validator.IsNull(from, "Brak daty od");
+            _validator.IsNull(to, "Brak daty do");
+            if (from > to)
+            {
+                throw new ArgumentException("Data od nie może być późniejsza niż data do");
+            }
 
             var user = await _userContext.GetCurrentUser();
+
             var receipts = await _dbContext.Receipts
                 .AsNoTracking()
-                .Where(p => p.UserId == user.Id && p.Date >= fromDate && p.Date <= toDate)
+                .Where(p => p.UserId == user.Id && p.Date >= from && p.Date <= to)
                 .ToListAsync();
 
-            var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts).ToList();
+            var receiptsDto = _mapper.Map<List<ReceiptDto>>(receipts);
             return receiptsDto;
         }
+
     }
 }

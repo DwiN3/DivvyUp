@@ -65,7 +65,7 @@
             public const string SET_SETTLED = $"{RECEIPT_ROUTE}/set-settled/{ARG_RECEIPT}/{ARG_SETTLED}";
             public const string RECEIPT = $"{RECEIPT_ROUTE}/{ARG_RECEIPT}";
             public const string RECEIPTS = $"{RECEIPT_ROUTE}/receipts";
-            public const string RECEIPTS_DATA_RANGE = $"{RECEIPT_ROUTE}/date-range/{ARG_FROM}/{ARG_TO}";
+            public const string RECEIPTS_DATA_RANGE = $"{RECEIPT_ROUTE}/date-range";
         }
 
         public static class PRODUCT_ROUTES

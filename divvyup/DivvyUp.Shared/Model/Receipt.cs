@@ -20,7 +20,7 @@ namespace DivvyUp_Shared.Model
 
         [Required]
         [Column("date")]
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
 
         [Column("total_price")]
         public decimal TotalPrice { get; set; }

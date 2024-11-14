@@ -33,6 +33,7 @@ namespace DivvyUp_App.Components.AccountManager
         {
             EditData.Username = UserAppService.GetUser().username;
             EditData.Email = UserAppService.GetUser().email;
+            EditData.Password = string.Empty;
         }
 
         private async Task SaveChanges()

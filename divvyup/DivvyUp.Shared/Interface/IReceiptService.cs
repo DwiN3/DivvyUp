@@ -11,6 +11,6 @@ namespace DivvyUp_Shared.Interface
         Task SetSettled(int receiptId, bool settled);
         Task<ReceiptDto> GetReceipt(int receiptId);
         Task<List<ReceiptDto>> GetReceipts();
-        Task<List<ReceiptDto>> GetReceiptsByDataRange(string from, string to);
+        Task<List<ReceiptDto>> GetReceiptsByDataRange(DateOnly from, DateOnly to);
     }
 }

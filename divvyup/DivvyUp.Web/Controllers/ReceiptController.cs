@@ -72,7 +72,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpGet(ApiRoute.RECEIPT_ROUTES.RECEIPTS_DATA_RANGE)]
         [SwaggerOperation(Summary = "Retrieve all receipts in date range", Description = "Retrieves all receipts in date range associated with the current user.")]
-        public async Task<ActionResult<List<ReceiptDto>>> GetReceiptsByDataRange([FromRoute] string from, [FromRoute] string to)
+        public async Task<ActionResult<List<ReceiptDto>>> GetReceiptsByDataRange([FromQuery] DateOnly from, [FromQuery] DateOnly to)
         {
             var receipts = await _receiptService.GetReceiptsByDataRange(from, to);
             return Ok(receipts);

@@ -153,13 +153,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<ReceiptDto>> GetReceiptsByDataRange(string from, string to)
+        public async Task<List<ReceiptDto>> GetReceiptsByDataRange(DateOnly from, DateOnly to)
         {
             try
             {
-                var url = ApiRoute.RECEIPT_ROUTES.RECEIPTS_DATA_RANGE
-                    .Replace(ApiRoute.ARG_FROM, from)
-                    .Replace(ApiRoute.ARG_TO, to);
+                var url = $"{ApiRoute.RECEIPT_ROUTES.RECEIPTS_DATA_RANGE}?from={from:yyyy-MM-dd}&to={to:yyyy-MM-dd}";
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ReceiptDto>>(jsonResponse);
