@@ -32,7 +32,7 @@ namespace DivvyUp.Web.Service
             _userContext = userContext;
         }
 
-        public async Task Register(RegisterRequest request)
+        public async Task Register(RegisterUserRequest request)
         {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
@@ -56,7 +56,7 @@ namespace DivvyUp.Web.Service
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<string> Login(LoginRequest request)
+        public async Task<string> Login(LoginUserRequest request)
         {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
@@ -72,7 +72,7 @@ namespace DivvyUp.Web.Service
             return token;
         }
 
-        public async Task<string> Edit(RegisterRequest request)
+        public async Task<string> Edit(EditUserRequest request)
         {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
@@ -170,7 +170,7 @@ namespace DivvyUp.Web.Service
             return userDto;
         }
 
-        public async Task ChangePassword(ChangePasswordRequest request)
+        public async Task ChangePassword(ChangePasswordUserRequest request)
         {
                 _validator.IsNull(request, "Nie przekazano danych");
                 _validator.IsEmpty(request.Password, "Hasło jest wymagane");

@@ -59,10 +59,8 @@ namespace DivvyUp_App.Components.Loan
             {
                 if(ShowAllLoans)
                     Loans = await LoanService.GetLoans();
-                else
-                {
+                else 
                     Loans = await LoanService.GetLoansByDataRange(DateFrom, DateTo);
-                }
             }
             else
             {

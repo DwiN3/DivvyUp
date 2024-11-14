@@ -23,8 +23,8 @@ namespace DivvyUp_App.Components.Receipt
         private List<ReceiptDto> Receipts { get; set; }
         private RadzenDataGrid<ReceiptDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
-        private DateOnly DateFrom = new DateOnly();
-        private DateOnly DateTo = new DateOnly();
+        private DateOnly DateFrom { get; set; }
+        private DateOnly DateTo { get; set; }
         private bool ShowAllReceipts = false;
         private bool IsGridEdit { get; set; } = false;
 
@@ -40,9 +40,7 @@ namespace DivvyUp_App.Components.Receipt
                 if (ShowAllReceipts)
                     Receipts = await ReceiptService.GetReceipts();
                 else
-                {
                     Receipts = await ReceiptService.GetReceiptsByDataRange(DateFrom, DateTo);
-                }
             }
             catch (DException ex)
             {

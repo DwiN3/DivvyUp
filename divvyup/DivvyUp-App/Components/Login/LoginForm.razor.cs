@@ -22,7 +22,7 @@ namespace DivvyUp_App.Components.Login
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 
-        private LoginRequest LoginData { get; set; } = new();
+        private LoginUserRequest LoginData { get; set; } = new();
 
         private async Task SignUp()
         {

@@ -23,7 +23,7 @@ namespace DivvyUp_Impl_Maui.Service
             _logger = logger;
         }
 
-        public async Task<string> Login(LoginRequest request)
+        public async Task<string> Login(LoginUserRequest request)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task Register(RegisterRequest request)
+        public async Task Register(RegisterUserRequest request)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<string> Edit(RegisterRequest request)
+        public async Task<string> Edit(EditUserRequest request)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task ChangePassword(ChangePasswordRequest request)
+        public async Task ChangePassword(ChangePasswordUserRequest request)
         {
             try
             {

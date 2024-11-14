@@ -17,7 +17,7 @@ namespace DivvyUp_App.Components.Register
         [Inject]
         private NavigationManager Navigation { get; set; }
 
-        private RegisterRequest RegisterData { get; set; } = new();
+        private RegisterUserRequest RegisterData { get; set; } = new();
         private string RePassword { get; set; }
 
 

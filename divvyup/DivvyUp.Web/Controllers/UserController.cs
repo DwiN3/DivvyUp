@@ -21,7 +21,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPost(ApiRoute.USER_ROUTES.REGISTER)]
         [SwaggerOperation(Summary = "Register a new user", Description = "Registers a new user account in the system.")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
             await _userServiceInternal.Register(request);
             return Ok();
@@ -29,7 +29,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPost(ApiRoute.USER_ROUTES.LOGIN)]
         [SwaggerOperation(Summary = "Authenticate user", Description = "Authenticates a user and returns an authentication token.")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginUserRequest request)
         {
             var token = await _userServiceInternal.Login(request);
             return Ok(token);
@@ -38,7 +38,7 @@ namespace DivvyUp.Web.Controllers
         [Authorize]
         [HttpPut(ApiRoute.USER_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit user account", Description = "Edits the details of the currently authenticated user.")]
-        public async Task<IActionResult> Edit([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Edit([FromBody] EditUserRequest request)
         {
             var token = await _userServiceInternal.Edit(request);
             return Ok(token);
@@ -73,7 +73,7 @@ namespace DivvyUp.Web.Controllers
         [Authorize]
         [HttpPut("change-password")]
         [SwaggerOperation(Summary = "Change user password", Description = "Changes the password for the currently authenticated user.")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordUserRequest request)
         {
             await _userServiceInternal.ChangePassword(request);
             return Ok();

@@ -24,7 +24,7 @@ namespace DivvyUp_App.Components.AccountManager
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 
-        private RegisterRequest EditData { get; set; } = new();
+        private EditUserRequest EditData { get; set; } = new();
         private string FileName { get; set; }
         private long? FileSize { get; set; }
         private string Avatar;
@@ -33,7 +33,6 @@ namespace DivvyUp_App.Components.AccountManager
         {
             EditData.Username = UserAppService.GetUser().username;
             EditData.Email = UserAppService.GetUser().email;
-            EditData.Password = string.Empty;
         }
 
         private async Task SaveChanges()

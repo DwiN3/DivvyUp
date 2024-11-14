@@ -1,6 +1,6 @@
 ﻿namespace DivvyUp_Shared.RequestDto
 {
-    public class RegisterRequest
+    public class RegisterUserRequest
     {
         public string Username { get; set; }
         public string Email { get; set; }

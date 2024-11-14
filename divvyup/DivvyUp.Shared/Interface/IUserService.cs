@@ -5,12 +5,12 @@ namespace DivvyUp_Shared.Interface
 {
     public interface IUserService
     {
-        Task Register(RegisterRequest request);
-        Task<string> Login(LoginRequest request);
-        Task<string> Edit(RegisterRequest request);
+        Task Register(RegisterUserRequest request);
+        Task<string> Login(LoginUserRequest request);
+        Task<string> Edit(EditUserRequest request);
         Task Remove();
         Task<bool> ValidToken(string token);
         Task<UserDto> GetUser();
-        Task ChangePassword(ChangePasswordRequest request);
+        Task ChangePassword(ChangePasswordUserRequest request);
     }
 }
