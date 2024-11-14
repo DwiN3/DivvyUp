@@ -4,6 +4,7 @@ using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Enum;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
+using DivvyUp_Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -88,15 +89,15 @@ namespace DivvyUp_App.Components.Loan
         {
             try
             {
+                if (GridMode == LoanGridMode.All)
+                    loan.PersonId = SelectedPerson.Id;
+                else
+                    loan.PersonId = PersonId;
+
                 AddEditLoanDto request = new(loan.PersonId, loan.Date, loan.Amount, loan.Lent);
 
                 if (loan.Id == 0)
                 {
-                    if(GridMode == LoanGridMode.All)
-                        loan.PersonId = SelectedPerson.Id;
-                    else
-                        loan.PersonId = PersonId;
-
                     await LoanService.Add(request);
                 }
                 else

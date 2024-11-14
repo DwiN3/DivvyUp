@@ -15,7 +15,9 @@ namespace DivvyUp.Web.Update
 
         public async Task UpdatePerson(User user, bool updateBalance)
         {
-            var persons = await _dbContext.Persons.Where(p => p.User.Id == user.Id).ToListAsync();
+            var persons = await _dbContext.Persons
+                .Where(p => p.User.Id == user.Id)
+                .ToListAsync();
 
             foreach (var person in persons)
             {
@@ -47,7 +49,9 @@ namespace DivvyUp.Web.Update
 
         private async Task<decimal> CalculateBalance(Person person)
         {
-            var loans = await _dbContext.Loans.Where(l => l.Person.Id == person.Id).ToListAsync();
+            var loans = await _dbContext.Loans
+                .Where(l => l.Person.Id == person.Id)
+                .ToListAsync();
             decimal balance = 0;
 
             foreach (var loan in loans)
@@ -63,8 +67,11 @@ namespace DivvyUp.Web.Update
 
         public async Task UpdateTotalPriceReceipt(Receipt receipt)
         {
-            var products = await _dbContext.Products.Where(p => p.Receipt.Id == receipt.Id).ToListAsync();
-            receipt.TotalPrice = products.Sum(p => p.Price);
+            var totalPrice = await _dbContext.Products
+                .Where(p => p.Receipt.Id == receipt.Id)
+                .SumAsync(p => p.Price);
+
+            receipt.TotalPrice = totalPrice;
 
             _dbContext.Receipts.Update(receipt);
             await _dbContext.SaveChangesAsync();
@@ -72,13 +79,17 @@ namespace DivvyUp.Web.Update
 
         public async Task<bool> AreAllProductsSettled(Receipt receipt)
         {
-            var products = await _dbContext.Products.Where(p => p.Receipt.Id == receipt.Id).ToListAsync();
+            var products = await _dbContext.Products
+                .Where(p => p.Receipt.Id == receipt.Id)
+                .ToListAsync();
             return products.All(p => p.Settled);
         }
 
         public async Task UpdateProductDetails(Product product)
         {
-            var personProducts = await _dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
+            var personProducts = await _dbContext.PersonProducts
+                .Where(pp => pp.Product.Id == product.Id)
+                .ToListAsync();
 
             var compensationPrice = product.Price - personProducts.Sum(pp => pp.PartOfPrice);
             product.CompensationPrice = compensationPrice;
@@ -92,21 +103,25 @@ namespace DivvyUp.Web.Update
 
         public async Task<bool> AreAllPersonProductsSettled(Product product)
         {
-            var personProducts = await _dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
+            var personProducts = await _dbContext.PersonProducts
+                .Where(pp => pp.Product.Id == product.Id)
+                .ToListAsync();
             return personProducts.All(pp => pp.Settled);
         }
 
         public async Task UpdatePartPricesPersonProduct(Product product)
         {
-            var personProducts = await _dbContext.PersonProducts.Where(pp => pp.Product.Id == product.Id).ToListAsync();
+            var personProducts = await _dbContext.PersonProducts
+                .Where(pp => pp.Product.Id == product.Id)
+                .ToListAsync();
 
             foreach (var personProduct in personProducts)
             {
                 personProduct.PartOfPrice =
                     await CalculatePartPrice(personProduct.Quantity, product.MaxQuantity, product.Price);
-                _dbContext.PersonProducts.Update(personProduct);
             }
 
+            _dbContext.PersonProducts.UpdateRange(personProducts);
             await _dbContext.SaveChangesAsync();
         }
 
