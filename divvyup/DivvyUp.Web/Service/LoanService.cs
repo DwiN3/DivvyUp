@@ -1,8 +1,10 @@
 ﻿using System.Globalization;
+using System.Net;
 using AutoMapper;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Update;
 using DivvyUp.Web.Validation;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using DivvyUp_Shared.Model;
@@ -41,7 +43,7 @@ namespace DivvyUp.Web.Service
             var newLoan = new Loan()
             {
                 Person = person,
-                Date = request.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc),
+                Date = request.Date,
                 Lent = request.Lent,
                 Amount = request.Amount,
                 Settled = false,
@@ -63,7 +65,7 @@ namespace DivvyUp.Web.Service
             var loan = await _validator.GetLoan(user, loanId);
             var person = await _validator.GetPerson(user, request.PersonId);
 
-            loan.Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc);
+            loan.Date = request.Date;
             loan.Person = person;
             loan.Amount = request.Amount;
 
@@ -142,7 +144,6 @@ namespace DivvyUp.Web.Service
             var loans = await _dbContext.Loans
                 .AsNoTracking()
                 .Include(p => p.Person)
-                .Include(p => p.Person.User)
                 .Where(p => p.Person.UserId == user.Id)
                 .ToListAsync();
 
@@ -158,7 +159,6 @@ namespace DivvyUp.Web.Service
             var loans = await _dbContext.Loans
                     .AsNoTracking()
                     .Include(p => p.Person)
-                    .Include(p => p.Person.User)
                     .Where(p => p.Person.UserId == user.Id && p.Person.Id == personId)
                     .ToListAsync();
 
@@ -166,26 +166,21 @@ namespace DivvyUp.Web.Service
             return loansDto;
         }
 
-        public async Task<List<LoanDto>> GetLoansByDataRange(string from, string to)
+        public async Task<List<LoanDto>> GetLoansByDataRange(DateOnly from, DateOnly to)
         {
-            _validator.IsEmpty(from, "Brak daty od");
-            _validator.IsEmpty(to, "Brak daty do");
-
-            if (!DateTime.TryParseExact(from, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fromDate))
-                throw new ArgumentException("Nieprawidłowy format daty początkowej.");
-
-            if (!DateTime.TryParseExact(to, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime toDate))
-                throw new ArgumentException("Nieprawidłowy format daty końcowej.");
-
-            fromDate = DateTime.SpecifyKind(fromDate, DateTimeKind.Utc);
-            toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
-
+            _validator.IsNull(from, "Brak daty od");
+            _validator.IsNull(to, "Brak daty do");
             var user = await _userContext.GetCurrentUser();
+
+            if (from > to)
+            {
+                throw new DException(HttpStatusCode.BadRequest,"Data od nie może być późniejsza niż data do");
+            }
+
             var loans = await _dbContext.Loans
                 .AsNoTracking()
                 .Include(p => p.Person)
-                .Include(p => p.Person.User)
-                .Where(p => p.Person.UserId == user.Id && p.Date >= fromDate && p.Date <= toDate)
+                .Where(p => p.Person.UserId == user.Id && p.Date >= from && p.Date <= to)
                 .ToListAsync();
 
             var loansDto = _mapper.Map<List<LoanDto>>(loans).ToList();

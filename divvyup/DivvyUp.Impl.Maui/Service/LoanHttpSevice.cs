@@ -221,13 +221,11 @@ namespace DivvyUp_Impl_Maui.Service
             }
         }
 
-        public async Task<List<LoanDto>> GetLoansByDataRange(string from, string to)
+        public async Task<List<LoanDto>> GetLoansByDataRange(DateOnly from, DateOnly to)
         {
             try
             {
-                var url = ApiRoute.LOAN_ROUTES.LOANS_DATA_RANGE
-                    .Replace(ApiRoute.ARG_FROM, from)
-                    .Replace(ApiRoute.ARG_TO, to);
+                var url = $"{ApiRoute.LOAN_ROUTES.LOANS_DATA_RANGE}?from={from:yyyy-MM-dd}&to={to:yyyy-MM-dd}";
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<LoanDto>>(jsonResponse);

@@ -1,8 +1,10 @@
 ﻿using System.Globalization;
+using System.Net;
 using AutoMapper;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Update;
 using DivvyUp.Web.Validation;
+using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using DivvyUp_Shared.Interface;
 using DivvyUp_Shared.Model;
@@ -156,12 +158,12 @@ namespace DivvyUp.Web.Service
         {
             _validator.IsNull(from, "Brak daty od");
             _validator.IsNull(to, "Brak daty do");
+            var user = await _userContext.GetCurrentUser();
+
             if (from > to)
             {
-                throw new ArgumentException("Data od nie może być późniejsza niż data do");
+                throw new DException(HttpStatusCode.BadRequest, "Data od nie może być późniejsza niż data do");
             }
-
-            var user = await _userContext.GetCurrentUser();
 
             var receipts = await _dbContext.Receipts
                 .AsNoTracking()

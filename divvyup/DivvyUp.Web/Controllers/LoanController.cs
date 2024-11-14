@@ -94,7 +94,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpGet(ApiRoute.LOAN_ROUTES.LOANS_DATA_RANGE)]
         [SwaggerOperation(Summary = "Retrieve all loans in date range", Description = "Retrieves all loans in date range associated with the current user.")]
-        public async Task<IActionResult> GetLoansByDataRange([FromRoute] string from, [FromRoute] string to)
+        public async Task<IActionResult> GetLoansByDataRange([FromQuery] DateOnly from, [FromQuery] DateOnly to)
         {
             var loans = await _loanService.GetLoansByDataRange(from, to);
             return Ok(loans);

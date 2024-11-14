@@ -33,8 +33,8 @@ namespace DivvyUp_App.Components.Loan
         private RadzenDataGrid<LoanDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private PersonDto SelectedPerson { get; set; } = new();
-        private DateTime? DateFrom = new DateTime();
-        private DateTime? DateTo = new DateTime();
+        private DateOnly DateFrom { get; set; }
+        private DateOnly DateTo { get; set; }
         private bool ShowAllLoans = false;
         private bool IsGridEdit { get; set; } = false;
 
@@ -61,12 +61,7 @@ namespace DivvyUp_App.Components.Loan
                     Loans = await LoanService.GetLoans();
                 else
                 {
-                    if (!DateFrom.HasValue || !DateTo.HasValue)
-                        throw new ArgumentException("Obie daty muszą być podane");
-
-                    string fromFormatted = DateFrom.Value.ToString("dd-MM-yyyy");
-                    string toFormatted = DateTo.Value.ToString("dd-MM-yyyy");
-                    Loans = await LoanService.GetLoansByDataRange(fromFormatted, toFormatted);
+                    Loans = await LoanService.GetLoansByDataRange(DateFrom, DateTo);
                 }
             }
             else
@@ -218,9 +213,9 @@ namespace DivvyUp_App.Components.Loan
 
         private async Task SetCurrentMonth()
         {
-            DateFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            DateFrom = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1);
             int dayInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-            DateTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, dayInMonth);
+            DateTo = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, dayInMonth);
             await LoadGrid();
         }
     }

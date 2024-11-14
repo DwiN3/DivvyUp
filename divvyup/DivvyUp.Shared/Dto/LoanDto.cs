@@ -4,7 +4,7 @@
     {
         public int id { get; set; }
         public int personId { get; set; }
-        public DateTime date { get; set; }
+        public DateOnly date { get; set; }
         public double amount { get; set; }
         public bool lent { get; set; }
         public bool settled { get; set; }
@@ -14,13 +14,13 @@
         {
             id = 0;
             personId = 0;
-            date = DateTime.Now;
+            date = DateOnly.FromDateTime(DateTime.Now);
             amount = 0;
             lent = false;
             settled = false;
         }
 
-        public LoanDto(int id, int personId, DateTime date, double amount, bool lent, bool settled)
+        public LoanDto(int id, int personId, DateOnly date, double amount, bool lent, bool settled)
         {
             this.id = id;
             this.personId = personId;
