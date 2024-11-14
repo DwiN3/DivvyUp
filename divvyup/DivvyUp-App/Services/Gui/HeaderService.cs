@@ -10,7 +10,7 @@ namespace DivvyUp_App.Services.Gui
             { AppPath.RECEIPT, "Rachunki" },
             { AppPath.PERSON, "Osoby" },
             { AppPath.LOAN, "Pożyczki" },
-            { AppPath.ACCOUT_MANAGER, "Zarządzaj kontem" },
+            { AppPath.ACCOUT_MANAGER, "Zarządzanie kontem" },
             { AppPath.LOGIN, "Logowanie" },
             { AppPath.REGISTER, "Rejestracja" },
         };
@@ -19,9 +19,9 @@ namespace DivvyUp_App.Services.Gui
         {
             var relativePath = new Uri(url).AbsolutePath;
 
-            if (relativePath.Contains(AppPath.RECEIPT) && relativePath.Contains("/products"))
+            if (relativePath.Contains(AppPath.RECEIPT) && relativePath.Contains(AppPath.PRODUCT))
             {
-                return "Rachunek " + relativePath.Split('/')[2];
+                return "Produkty";
             }
             else if (MenuItems.ContainsKey(relativePath))
             {

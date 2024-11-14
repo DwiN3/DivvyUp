@@ -8,7 +8,7 @@
         public const string REGISTER = "/register";
         public const string PERSON = "/person";
         public const string RECEIPT = "/receipt";
-        public const string PRODUCT = "/receipt/{receiptId}/products";
+        public const string PRODUCT = "/products";
         public const string LOAN = "/loan";
     }
 }

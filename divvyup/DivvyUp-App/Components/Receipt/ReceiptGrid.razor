@@ -27,6 +27,9 @@
         }
         <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllReceipts ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="receipt" Text="Pokaż wszystkie rachunki" Click="@(async() => { ShowAllReceipts = !ShowAllReceipts; await LoadGrid();})" />
     </HeaderTemplate>
+    <EmptyTemplate>
+        <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>
+    </EmptyTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="receipt">

@@ -19,15 +19,18 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid"/>
         @if (!ShowAllLoans && GridMode == LoanGridMode.All)
         {
-            <RadzenDatePicker TValue="DateOnly" @bind-Value="@DateFrom" Name="Data od" DateFormat="@Format.DateFormat" />
-            <RadzenDatePicker TValue="DateOnly" @bind-Value="@DateTo" Name="Data do" DateFormat="@Format.DateFormat" />
-            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" />
+            <RadzenDatePicker TValue="DateOnly" @bind-Value="@DateFrom" Name="Data od" DateFormat="@Format.DateFormat"/>
+            <RadzenDatePicker TValue="DateOnly" @bind-Value="@DateTo" Name="Data do" DateFormat="@Format.DateFormat"/>
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async () => await SetCurrentMonth())"/>
         }
-        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="attach_money" Text="Pokaż wszystkie pożyczki" Click="@(async() => { ShowAllLoans = !ShowAllLoans; await LoadGrid();})" Visible="@(GridMode == LoanGridMode.All)" />
+        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="attach_money" Text="Pokaż wszystkie pożyczki" Click="@(async () => { ShowAllLoans = !ShowAllLoans; await LoadGrid(); })" Visible="@(GridMode == LoanGridMode.All)"/>
     </HeaderTemplate>
+    <EmptyTemplate>
+        <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>
+    </EmptyTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="loan">
