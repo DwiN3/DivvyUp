@@ -89,13 +89,7 @@ namespace DivvyUp_App.Components.Loan
         {
             try
             {
-                AddEditLoanRequest request = new()
-                {
-                    PersonId = loan.PersonId,
-                    Date = loan.Date,
-                    Lent = loan.Lent,
-                    Amount = loan.Amount,
-                };
+                AddEditLoanRequest request = new(loan.PersonId, loan.Date, loan.Amount, loan.Lent);
 
                 if (loan.Id == 0)
                 {

@@ -74,11 +74,7 @@ namespace DivvyUp_App.Components.Receipt
         {
             try
             {
-                AddEditReceiptRequest request = new()
-                {
-                    Name = receipt.Name,
-                    Date = receipt.Date
-                };
+                AddEditReceiptRequest request = new(receipt.Name, receipt.Date);
 
                 if (receipt.Id == 0)
                 {

@@ -78,14 +78,10 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task SaveRow(PersonProductDto personProduct)
         {
-            AddEditPersonProductRequest request = new()
-            {
-                PersonId = personProduct.PersonId,
-                Quantity = personProduct.Quantity
-            };
-
             try
             {
+                AddEditPersonProductRequest request = new(personProduct.PersonId, personProduct.Quantity);
+
                 if (personProduct.Id == 0)
                     await PersonProductService.Add(request, ProductId);
                 else

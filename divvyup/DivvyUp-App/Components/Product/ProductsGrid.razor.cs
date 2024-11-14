@@ -68,13 +68,7 @@ namespace DivvyUp_App.Components.Product
         {
             try
             {
-                AddEditProductRequest request = new()
-                {
-                    Name = product.Name,
-                    Price = product.Price,
-                    MaxQuantity = product.MaxQuantity,
-                    Divisible = product.Divisible,
-                };
+                AddEditProductRequest request = new(product.Name, product.Price, product.Divisible, product.MaxQuantity);
 
                 var newProduct = new ProductDto();
 
