@@ -1,8 +1,8 @@
-﻿using DivvyUp_App.Service.Gui;
-using DivvyUp_Shared.Dto;
+﻿using DivvyUp_App.Services.Gui;
+using DivvyUp_Shared.Dtos.Entity;
+using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -74,7 +74,7 @@ namespace DivvyUp_App.Components.Receipt
         {
             try
             {
-                AddEditReceiptRequest request = new(receipt.Name, receipt.Date);
+                AddEditReceiptDto request = new(receipt.Name, receipt.Date);
 
                 if (receipt.Id == 0)
                 {

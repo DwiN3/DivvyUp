@@ -1,8 +1,8 @@
-﻿using DivvyUp_App.Service.Gui;
-using DivvyUp_Shared.Dto;
+﻿using DivvyUp_App.Services.Gui;
+using DivvyUp_Shared.Dtos.Entity;
+using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -55,7 +55,7 @@ namespace DivvyUp_App.Components.Person
         {
             try
             {
-                AddEditPersonRequest request = new()
+                AddEditPersonDto request = new()
                 {
                     Name = person.Name,
                     Surname = person.Surname

@@ -1,14 +1,14 @@
 ﻿using DivvyUp.Web.Data;
-using DivvyUp_Shared.Model;
+using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DivvyUp.Web.Update
 {
     public class EntityUpdateService
     {
-        private readonly MyDbContext _dbContext;
+        private readonly DuDbContext _dbContext;
 
-        public EntityUpdateService(MyDbContext dbContext)
+        public EntityUpdateService(DuDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -1,6 +1,6 @@
 ﻿using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Dtos.Request;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -22,7 +22,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPost(ApiRoute.PERSON_PRODUCT_ROUTES.ADD)]
         [SwaggerOperation(Summary = "Add person to product", Description = "Associates a person with a specific product.")]
-        public async Task<IActionResult> Add([FromBody] AddEditPersonProductRequest request, [FromRoute] int productId)
+        public async Task<IActionResult> Add([FromBody] AddEditPersonProductDto request, [FromRoute] int productId)
         {
             await _personProductService.Add(request, productId);
             return Ok();
@@ -30,7 +30,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit person-product association", Description = "Edits the details of an existing person-product association by its ID.")]
-        public async Task<IActionResult> Edit([FromBody] AddEditPersonProductRequest request, [FromRoute] int personProductId)
+        public async Task<IActionResult> Edit([FromBody] AddEditPersonProductDto request, [FromRoute] int personProductId)
         {
             await _personProductService.Edit(request, personProductId);
             return Ok();

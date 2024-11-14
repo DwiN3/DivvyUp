@@ -1,9 +1,9 @@
-﻿using DivvyUp_App.Service.Gui;
-using DivvyUp_Shared.Dto;
+﻿using DivvyUp_App.Services.Gui;
+using DivvyUp_Shared.Dtos.Entity;
+using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.HttpClients;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 
@@ -22,7 +22,7 @@ namespace DivvyUp_App.Components.Login
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 
-        private LoginUserRequest LoginData { get; set; } = new();
+        private LoginUserDto LoginData { get; set; } = new();
 
         private async Task SignUp()
         {

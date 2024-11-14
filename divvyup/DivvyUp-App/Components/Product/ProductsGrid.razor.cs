@@ -1,8 +1,8 @@
-﻿using DivvyUp_App.Service.Gui;
-using DivvyUp_Shared.Dto;
+﻿using DivvyUp_App.Services.Gui;
+using DivvyUp_Shared.Dtos.Entity;
+using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 
@@ -68,7 +68,7 @@ namespace DivvyUp_App.Components.Product
         {
             try
             {
-                AddEditProductRequest request = new(product.Name, product.Price, product.Divisible, product.MaxQuantity);
+                AddEditProductDto request = new(product.Name, product.Price, product.Divisible, product.MaxQuantity);
 
                 var newProduct = new ProductDto();
 
@@ -80,7 +80,7 @@ namespace DivvyUp_App.Components.Product
                 
                 if (!product.Divisible && Persons.Count > 0)
                 {
-                    AddEditPersonProductRequest requestPersonproduct = new()
+                    AddEditPersonProductDto requestPersonproduct = new()
                     {
                         PersonId = SelectedPerson.Id,
                         Quantity = 1,

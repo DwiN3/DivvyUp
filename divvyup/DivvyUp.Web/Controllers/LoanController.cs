@@ -1,6 +1,6 @@
 ﻿using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Dtos.Request;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -22,7 +22,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPost(ApiRoute.LOAN_ROUTES.ADD)]
         [SwaggerOperation(Summary = "Add a new loan", Description = "Adds a new loan to the system.")]
-        public async Task<IActionResult> Add([FromBody] AddEditLoanRequest request)
+        public async Task<IActionResult> Add([FromBody] AddEditLoanDto request)
         {
            await _loanService.Add(request);
            return Ok();
@@ -30,7 +30,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPut(ApiRoute.LOAN_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit a loan", Description = "Edits the details of an existing loan by its ID.")]
-        public async Task<IActionResult> Edit([FromBody] AddEditLoanRequest request, [FromRoute] int loanId)
+        public async Task<IActionResult> Edit([FromBody] AddEditLoanDto request, [FromRoute] int loanId)
         {
             await _loanService.Edit(request, loanId);
             return Ok();

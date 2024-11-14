@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DivvyUp.Web.Migrations
 {
-    [DbContext(typeof(MyDbContext))]
+    [DbContext(typeof(DuDbContext))]
     [Migration("20241108123754_InitialCreate")]
     partial class InitialCreate
     {

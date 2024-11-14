@@ -1,11 +1,13 @@
 using System.Text;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Mappers;
-using DivvyUp.Web.Middleware;
-using DivvyUp.Web.Service;
+using DivvyUp.Web.Middlewares;
+using DivvyUp.Web.Middlewares;
+using DivvyUp.Web.Services;
+using DivvyUp.Web.Services;
 using DivvyUp.Web.Update;
 using DivvyUp.Web.Validation;
-using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,7 +22,7 @@ namespace DivvyUp.Web
 
             builder.Services.AddControllers();
             builder.Services.AddScoped<UserContext>();
-            builder.Services.AddScoped<MyValidator>();
+            builder.Services.AddScoped<DuValidator>();
             builder.Services.AddScoped<EntityUpdateService>();
 
             builder.Services.AddScoped<IUserService, UserService>();
@@ -83,7 +85,7 @@ namespace DivvyUp.Web
                 };
             });
 
-            builder.Services.AddDbContext<MyDbContext>(options =>
+            builder.Services.AddDbContext<DuDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
 
             var app = builder.Build();

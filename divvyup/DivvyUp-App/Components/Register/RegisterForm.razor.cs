@@ -1,9 +1,9 @@
-﻿using DivvyUp_App.Service.Gui;
-using DivvyUp_Shared.Interface;
+﻿using DivvyUp_App.Services.Gui;
+using DivvyUp_Shared.Dtos.Request;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using DivvyUp_Shared.Exceptions;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Interfaces;
 
 namespace DivvyUp_App.Components.Register
 {
@@ -16,7 +16,7 @@ namespace DivvyUp_App.Components.Register
         [Inject]
         private NavigationManager Navigation { get; set; }
 
-        private RegisterUserRequest RegisterData { get; set; } = new();
+        private RegisterUserDto RegisterData { get; set; } = new();
         private string RePassword { get; set; }
 
 

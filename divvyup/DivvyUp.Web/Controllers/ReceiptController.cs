@@ -1,7 +1,7 @@
 ﻿using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Dtos.Entity;
+using DivvyUp_Shared.Dtos.Request;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -23,7 +23,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPost(ApiRoute.RECEIPT_ROUTES.ADD)]
         [SwaggerOperation(Summary = "Add a new receipt", Description = "Adds a new receipt to the system.")]
-        public async Task<IActionResult> Add([FromBody] AddEditReceiptRequest request)
+        public async Task<IActionResult> Add([FromBody] AddEditReceiptDto request)
         {
             await _receiptService.Add(request);
             return Ok();
@@ -31,7 +31,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPut(ApiRoute.RECEIPT_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit a receipt", Description = "Edits the details of an existing receipt by its ID.")]
-        public async Task<IActionResult> Edit([FromBody] AddEditReceiptRequest request, [FromRoute] int receiptId)
+        public async Task<IActionResult> Edit([FromBody] AddEditReceiptDto request, [FromRoute] int receiptId)
         {
             await _receiptService.Edit(request, receiptId);
             return Ok();

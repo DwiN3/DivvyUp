@@ -1,11 +1,11 @@
-﻿using DivvyUp_Shared.Dto;
-using DivvyUp_Shared.Interface;
+﻿using DivvyUp_App.Services.Gui;
+using DivvyUp_Shared.Dtos.Entity;
+using DivvyUp_Shared.Dtos.Request;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
-using DivvyUp_App.Service.Gui;
 using DivvyUp_Shared.Exceptions;
+using DivvyUp_Shared.Interfaces;
 using Radzen;
-using DivvyUp_Shared.RequestDto;
 
 namespace DivvyUp_App.Components.PersonProduct
 {
@@ -80,7 +80,7 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                AddEditPersonProductRequest request = new(personProduct.PersonId, personProduct.Quantity);
+                AddEditPersonProductDto request = new(personProduct.PersonId, personProduct.Quantity);
 
                 if (personProduct.Id == 0)
                     await PersonProductService.Add(request, ProductId);

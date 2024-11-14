@@ -1,5 +1,5 @@
 ﻿using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

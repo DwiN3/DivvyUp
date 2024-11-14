@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Blazored.LocalStorage;
-using DivvyUp_App.Service.Api;
-using DivvyUp_App.Service.Gui;
-using DivvyUp_Shared.Interface;
+using DivvyUp_App.Services.Api;
+using DivvyUp_App.Services.Gui;
 using Radzen;
 using DivvyUp_Shared.HttpClients;
+using DivvyUp_Shared.Interfaces;
 
 namespace DivvyUp_App
 {

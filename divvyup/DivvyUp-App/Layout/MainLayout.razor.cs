@@ -1,6 +1,6 @@
-﻿using DivvyUp_App.Service.Gui;
+﻿using DivvyUp_App.Services.Gui;
 using DivvyUp_Shared.HttpClients;
-using DivvyUp_Shared.Interface;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Layout

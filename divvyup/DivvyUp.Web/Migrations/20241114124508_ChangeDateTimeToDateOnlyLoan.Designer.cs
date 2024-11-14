@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DivvyUp.Web.Migrations
 {
-    [DbContext(typeof(MyDbContext))]
+    [DbContext(typeof(DuDbContext))]
     [Migration("20241114124508_ChangeDateTimeToDateOnlyLoan")]
     partial class ChangeDateTimeToDateOnlyLoan
     {

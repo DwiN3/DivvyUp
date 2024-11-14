@@ -1,8 +1,8 @@
-﻿using DivvyUp_App.Service.Gui;
+﻿using DivvyUp_App.Services.Gui;
+using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.HttpClients;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 
@@ -23,7 +23,7 @@ namespace DivvyUp_App.Components.AccountManager
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 
-        private EditUserRequest EditData { get; set; } = new();
+        private EditUserDto EditData { get; set; } = new();
         private string FileName { get; set; }
         private long? FileSize { get; set; }
         private string Avatar;

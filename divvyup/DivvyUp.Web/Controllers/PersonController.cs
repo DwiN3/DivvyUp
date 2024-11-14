@@ -1,7 +1,6 @@
 ﻿using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.Model;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Dtos.Request;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -23,7 +22,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPost(ApiRoute.PERSON_ROUTES.ADD)]
         [SwaggerOperation(Summary = "Add a new person", Description = "Adds a new person to the system.")]
-        public async Task<IActionResult> Add([FromBody] AddEditPersonRequest request)
+        public async Task<IActionResult> Add([FromBody] AddEditPersonDto request)
         {
             await _personService.Add(request);
             return Ok();
@@ -31,7 +30,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPut(ApiRoute.PERSON_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit a person", Description = "Edits the details of an existing person by their ID.")]
-        public async Task<IActionResult> Edit([FromBody] AddEditPersonRequest request, [FromRoute] int personId)
+        public async Task<IActionResult> Edit([FromBody] AddEditPersonDto request, [FromRoute] int personId)
         {
             await _personService.Edit(request, personId);
             return Ok();

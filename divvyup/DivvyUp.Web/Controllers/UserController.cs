@@ -1,6 +1,6 @@
 ﻿using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Dtos.Request;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
@@ -21,7 +21,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPost(ApiRoute.USER_ROUTES.REGISTER)]
         [SwaggerOperation(Summary = "Register a new user", Description = "Registers a new user account in the system.")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto request)
         {
             await _userServiceInternal.Register(request);
             return Ok();
@@ -29,7 +29,7 @@ namespace DivvyUp.Web.Controllers
 
         [HttpPost(ApiRoute.USER_ROUTES.LOGIN)]
         [SwaggerOperation(Summary = "Authenticate user", Description = "Authenticates a user and returns an authentication token.")]
-        public async Task<IActionResult> Login([FromBody] LoginUserRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto request)
         {
             var token = await _userServiceInternal.Login(request);
             return Ok(token);
@@ -38,7 +38,7 @@ namespace DivvyUp.Web.Controllers
         [Authorize]
         [HttpPut(ApiRoute.USER_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit user account", Description = "Edits the details of the currently authenticated user.")]
-        public async Task<IActionResult> Edit([FromBody] EditUserRequest request)
+        public async Task<IActionResult> Edit([FromBody] EditUserDto request)
         {
             var token = await _userServiceInternal.Edit(request);
             return Ok(token);
@@ -73,7 +73,7 @@ namespace DivvyUp.Web.Controllers
         [Authorize]
         [HttpPut("change-password")]
         [SwaggerOperation(Summary = "Change user password", Description = "Changes the password for the currently authenticated user.")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordUserRequest request)
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordUserDto request)
         {
             await _userServiceInternal.ChangePassword(request);
             return Ok();

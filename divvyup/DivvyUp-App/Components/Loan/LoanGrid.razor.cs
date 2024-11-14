@@ -1,10 +1,9 @@
-﻿using DivvyUp_App.Service.Gui;
-using DivvyUp_Shared.Dto;
+﻿using DivvyUp_App.Services.Gui;
+using DivvyUp_Shared.Dtos.Entity;
+using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Enum;
 using DivvyUp_Shared.Exceptions;
-using DivvyUp_Shared.Interface;
-using DivvyUp_Shared.Model;
-using DivvyUp_Shared.RequestDto;
+using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -89,7 +88,7 @@ namespace DivvyUp_App.Components.Loan
         {
             try
             {
-                AddEditLoanRequest request = new(loan.PersonId, loan.Date, loan.Amount, loan.Lent);
+                AddEditLoanDto request = new(loan.PersonId, loan.Date, loan.Amount, loan.Lent);
 
                 if (loan.Id == 0)
                 {
