@@ -1,6 +1,6 @@
 ﻿using DivvyUp_Shared.AppConstants;
 
-namespace DivvyUp_App.GuiService
+namespace DivvyUp_App.Service.Gui
 {
     public class HeaderService
     {

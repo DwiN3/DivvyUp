@@ -1,9 +1,8 @@
-﻿using DivvyUp_App.GuiService;
-using DivvyUp_Shared.Dto;
+﻿using DivvyUp_App.Service.Gui;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen;
-using DivvyUp_Impl_Maui.Api.Exceptions;
+using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.RequestDto;
 
 namespace DivvyUp_App.Components.Register

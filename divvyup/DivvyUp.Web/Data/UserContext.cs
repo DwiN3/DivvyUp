@@ -1,7 +1,7 @@
-﻿using DivvyUp_Impl_Maui.Api.Exceptions;
-using DivvyUp_Shared.Model;
+﻿using DivvyUp_Shared.Model;
 using System.Net;
 using System.Security.Claims;
+using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp.Web.Data
 {

@@ -1,10 +1,9 @@
 ﻿using System.Net;
 using DivvyUp_Shared.Model;
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using DivvyUp.Web.Data;
-using DivvyUp_Impl_Maui.Api.Exceptions;
+using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp.Web.Validation
 {

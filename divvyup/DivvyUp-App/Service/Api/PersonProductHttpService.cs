@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace DivvyUp_Impl_Maui.Service
+namespace DivvyUp_App.Service.Api
 {
     public class PersonProductHttpService : IPersonProductService
     {

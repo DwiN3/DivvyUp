@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using DivvyUp_Shared.Model;
 
-namespace DivvyUp_App.GuiService
+namespace DivvyUp_App.Service.Gui
 {
     public class UserAppService
     {
@@ -20,7 +20,7 @@ namespace DivvyUp_App.GuiService
 
         public void SetUser(string username, string email, string token, bool isLogin)
         {
-            _currentUser = new UserApp {username = username, email = email, token = token, isLogin = isLogin };
+            _currentUser = new UserApp { username = username, email = email, token = token, isLogin = isLogin };
             SaveUserData();
         }
 

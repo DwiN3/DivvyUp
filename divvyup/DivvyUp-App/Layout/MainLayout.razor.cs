@@ -1,5 +1,5 @@
-﻿using DivvyUp_App.GuiService;
-using DivvyUp_Impl_Maui.Api.DHttpClient;
+﻿using DivvyUp_App.Service.Gui;
+using DivvyUp_Shared.HttpClients;
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 

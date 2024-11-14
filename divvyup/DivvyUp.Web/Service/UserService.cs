@@ -8,9 +8,9 @@ using DivvyUp_Shared.RequestDto;
 using Microsoft.EntityFrameworkCore;
 using DivvyUp.Web.Data;
 using DivvyUp.Web.Validation;
-using DivvyUp_Impl_Maui.Api.Exceptions;
 using DivvyUp_Shared.Dto;
 using AutoMapper;
+using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interface;
 
 namespace DivvyUp.Web.Service

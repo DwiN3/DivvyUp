@@ -8,7 +8,7 @@ using DivvyUp_Shared.HttpClients;
 using DivvyUp_Shared.Interface;
 using DivvyUp_Shared.RequestDto;
 
-namespace DivvyUp_Impl_Maui.Service
+namespace DivvyUp_App.Service.Api
 {
     public class ReceiptHttpService : IReceiptService
     {

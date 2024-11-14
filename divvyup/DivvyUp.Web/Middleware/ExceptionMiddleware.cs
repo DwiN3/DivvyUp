@@ -1,6 +1,6 @@
-﻿using DivvyUp_Impl_Maui.Api.Exceptions;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Net;
+using DivvyUp_Shared.Exceptions;
 
 namespace DivvyUp.Web.Middleware
 {

@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace DivvyUp_Impl_Maui.Api.DHttpClient
+namespace DivvyUp_Shared.HttpClients
 {
     public class DHttpClient
     {

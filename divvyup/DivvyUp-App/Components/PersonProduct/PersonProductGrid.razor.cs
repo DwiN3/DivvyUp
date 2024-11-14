@@ -2,8 +2,8 @@
 using DivvyUp_Shared.Interface;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
-using DivvyUp_App.GuiService;
-using DivvyUp_Impl_Maui.Api.Exceptions;
+using DivvyUp_App.Service.Gui;
+using DivvyUp_Shared.Exceptions;
 using Radzen;
 using DivvyUp_Shared.RequestDto;
 

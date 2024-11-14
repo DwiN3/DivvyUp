@@ -1,7 +1,6 @@
 ﻿using System.Net;
-using System.Text.RegularExpressions;
 
-namespace DivvyUp_Impl_Maui.Api.Exceptions
+namespace DivvyUp_Shared.Exceptions
 {
     public class DException : Exception
     {

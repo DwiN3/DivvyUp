@@ -1,4 +1,4 @@
-﻿using DivvyUp_App.GuiService;
+﻿using DivvyUp_App.Service.Gui;
 using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Components.Dashboard
