@@ -185,7 +185,7 @@ namespace DivvyUp.Web.Service
                 .Include(pp => pp.Person) 
                 .ToList();
 
-            productDto.persons = personProducts.Select(pp => _mapper.Map<PersonDto>(pp.Person)).ToList();
+            productDto.Persons = personProducts.Select(pp => _mapper.Map<PersonDto>(pp.Person)).ToList();
             return productDto;
         }
     }

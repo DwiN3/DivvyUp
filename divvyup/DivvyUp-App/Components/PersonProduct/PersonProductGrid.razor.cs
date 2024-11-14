@@ -49,14 +49,14 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private void LoadAvailablePersons()
         {
-            var productPersonIds = Product.persons.Select(p => p.id).ToHashSet();
-            PeopleAvailable = Persons.Where(p => !productPersonIds.Contains(p.id)).ToList();
+            var productPersonIds = Product.Persons.Select(p => p.Id).ToHashSet();
+            PeopleAvailable = Persons.Where(p => !productPersonIds.Contains(p.Id)).ToList();
         }
 
 
         private async Task InsertRow()
         {
-            if (Product.availableQuantity > 0)
+            if (Product.AvailableQuantity > 0)
             {
                 IsGridEdit = true;
                 var personProduct = new PersonProductDto();
@@ -86,16 +86,16 @@ namespace DivvyUp_App.Components.PersonProduct
             IsGridEdit = false;
             AddEditPersonProductRequest request = new()
             {
-                PersonId = personProduct.personId,
-                Quantity = personProduct.quantity
+                PersonId = personProduct.PersonId,
+                Quantity = personProduct.Quantity
             };
 
             try
             {
-                if (personProduct.id == 0)
+                if (personProduct.Id == 0)
                     await PersonProductService.Add(request, ProductId);
                 else
-                    await PersonProductService.Edit(request, personProduct.id);
+                    await PersonProductService.Edit(request, personProduct.Id);
             }
             catch (DException)
             {
@@ -114,7 +114,7 @@ namespace DivvyUp_App.Components.PersonProduct
             IsGridEdit = false;
             try
             {
-                await PersonProductService.Remove(personProduct.id);
+                await PersonProductService.Remove(personProduct.Id);
             }
             catch (DException ex)
             {
@@ -164,8 +164,8 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             try
             {
-                personProduct.personId = personId;
-                await PersonProductService.SetPerson(personProduct.id, personId);
+                personProduct.PersonId = personId;
+                await PersonProductService.SetPerson(personProduct.Id, personId);
             }
             catch (DException ex)
             {
@@ -183,10 +183,10 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             if (Persons != null && Persons.Count > 0)
             {
-                PersonDto person = Persons.FirstOrDefault(e => e.id == personId);
+                PersonDto person = Persons.FirstOrDefault(e => e.Id == personId);
 
                 if (person != null)
-                    return $"{person.name} {person.surname}";
+                    return $"{person.Name} {person.Surname}";
             }
 
             return "-";

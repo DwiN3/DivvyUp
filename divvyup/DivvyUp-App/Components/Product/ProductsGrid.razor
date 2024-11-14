@@ -39,42 +39,42 @@
                 </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.settled)" Title="Rozliczono" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.Settled)" Title="Rozliczono" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                <RadzenCheckBox class="button" @bind-Value="@product.settled" Change="@(async (bool Check) => await ChangeSettled(product.id, product.settled))" />
+                <RadzenCheckBox class="button" @bind-Value="@product.Settled" Change="@(async (bool Check) => await ChangeSettled(product.Id, product.Settled))" />
             </Template>
             <EditTemplate Context="product">
-                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@product.settled" ReadOnly="true" />
+                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@product.Settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.name)" Title="Nazwa" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.Name)" Title="Nazwa" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="product">
-                <RadzenTextBox @bind-value="@product.name" Style="width: 100%;" />
+                <RadzenTextBox @bind-value="@product.Name" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.price)" Title="Kwota" Width="12%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.Price)" Title="Kwota" Width="12%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="product">
-                <div style="color: @(product.settled ? "green" : "red")">
-                    <b>@product.price.ToString((Format.PriceFormat))</b>
+                <div style="color: @(product.Settled ? "green" : "red")">
+                    <b>@product.Price.ToString((Format.PriceFormat))</b>
                 </div>
             </Template>
             <EditTemplate Context="product">
-                <RadzenNumeric @bind-Value="@product.price" Style="width: 100%;" />
+                <RadzenNumeric @bind-Value="@product.Price" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.divisible)" Title="Podzielność" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.Divisible)" Title="Podzielność" Width="7%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                <RadzenButton ButtonStyle="@(ButtonStyle.Base)" Icon="@(product.divisible ? "groups" : "person")" Click="@(() => { product.divisible = !product.divisible; })" Disabled="true" />
+                <RadzenButton ButtonStyle="@(ButtonStyle.Base)" Icon="@(product.Divisible ? "groups" : "person")" Click="@(() => { product.Divisible = !product.Divisible; })" Disabled="true" />
             </Template>
             <EditTemplate Context="product">
-                <RadzenButton ButtonStyle="@(ButtonStyle.Base)" Icon="@(product.divisible ? "groups" : "person")" Click="@(() => { product.divisible = !product.divisible; })" />
+                <RadzenButton ButtonStyle="@(ButtonStyle.Base)" Icon="@(product.Divisible ? "groups" : "person")" Click="@(() => { product.Divisible = !product.Divisible; })" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.maxQuantity)" Title="Ilość częsci" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.MaxQuantity)" Title="Ilość częsci" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                @if (product.divisible)
+                @if (product.Divisible)
                 {
-                    @product.maxQuantity
+                    @product.MaxQuantity
                 }
                 else
                 {
@@ -82,22 +82,22 @@
                 }
             </Template>
             <EditTemplate Context="product">
-                @if (product.divisible)
+                @if (product.Divisible)
                 {
-                    <RadzenNumeric @bind-Value="@product.maxQuantity" />
+                    <RadzenNumeric @bind-Value="@product.MaxQuantity" />
                 }
                 else
                 {
-                    product.maxQuantity = 1;
+                    product.MaxQuantity = 1;
                     <div>-</div>                    
                 }
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.compensationPrice)" Title="Wyrównanie" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.CompensationPrice)" Title="Wyrównanie" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                @if (product.divisible)
+                @if (product.Divisible)
                 {
-                    @product.compensationPrice.ToString(Format.PriceFormat)
+                    @product.CompensationPrice.ToString(Format.PriceFormat)
                 }
                 else
                 {
@@ -108,17 +108,17 @@
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.persons)" Title="Osoby" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.Persons)" Title="Osoby" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                @if (product.divisible)
+                @if (product.Divisible)
                 {
-                    <RadzenButton Click="@(async () => { await ManagePerson(product.id); })" Style="width: 100%;">
-                        @if (product.persons != null && product.persons.Count() > 0)
+                    <RadzenButton Click="@(async () => { await ManagePerson(product.Id); })" Style="width: 100%;">
+                        @if (product.Persons != null && product.Persons.Count() > 0)
                         {
                             <div style="display: flex; flex-direction: column;">
-                                @foreach (var person in product.persons)
+                                @foreach (var person in product.Persons)
                                 {
-                                    <div>@($"{person.name} {person.surname}")</div>
+                                    <div>@($"{person.Name} {person.Surname}")</div>
                                 }
                             </div>
                         }
@@ -126,30 +126,30 @@
                 }
                 else
                 {
-                    @if (product.persons != null && product.persons.Count() > 0)
+                    @if (product.Persons != null && product.Persons.Count() > 0)
                     {
-                        PersonDto person = product.persons.First();
+                        PersonDto person = product.Persons.First();
 
                         <RadzenDropDownDataGrid TValue="PersonDto"
                                                 Value="person"
-                                                ValueChanged="async(PersonDto person) => await OnPersonChange(product.id, person)"
+                                                ValueChanged="async(PersonDto person) => await OnPersonChange(product.Id, person)"
                                                 Data="@Persons"
-                                                TextProperty="@nameof(PersonDto.fullName)" />
+                                                TextProperty="@nameof(PersonDto.FullName)" />
                     }
                 }
             </Template>
             <EditTemplate Context="product">
-                @if (Persons.Count > 0 && !product.divisible)
+                @if (Persons.Count > 0 && !product.Divisible)
                 {
-                    if (product.id != 0 && product.persons != null && product.persons.Count() > 0)
+                    if (product.Id != 0 && product.Persons != null && product.Persons.Count() > 0)
                     {
-                        PersonDto person = product.persons.First();
+                        PersonDto person = product.Persons.First();
 
                         <RadzenDropDownDataGrid TValue="PersonDto"
                                                 Value="@person"
-                                                ValueChanged="async(PersonDto person) => await OnPersonChange(product.id, person)"
+                                                ValueChanged="async(PersonDto person) => await OnPersonChange(product.Id, person)"
                                                 Data="@Persons"
-                                                TextProperty="@nameof(PersonDto.fullName)" />
+                                                TextProperty="@nameof(PersonDto.FullName)" />
                     }
                     else
                     {
@@ -157,7 +157,7 @@
                                                 Value="@SelectedPerson"
                                                 ValueChanged="OnPersonSet"
                                                 Data="@Persons"
-                                                TextProperty="@nameof(PersonDto.fullName)" />
+                                                TextProperty="@nameof(PersonDto.FullName)" />
                     }
                 }
             </EditTemplate>

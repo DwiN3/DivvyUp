@@ -63,13 +63,13 @@ namespace DivvyUp_App.Components.Person
             {
                 AddEditPersonRequest request = new()
                 {
-                    Name = person.name,
-                    Surname = person.surname
+                    Name = person.Name,
+                    Surname = person.Surname
                 };
-                if (person.id == 0)
+                if (person.Id == 0)
                     await PersonService.Add(request);
                 else
-                    await PersonService.Edit(request, person.id);
+                    await PersonService.Edit(request, person.Id);
             }
             catch (DException ex)
             {
@@ -89,9 +89,9 @@ namespace DivvyUp_App.Components.Person
             IsGridEdit = false;
             try
             {
-                var result = await DDialogService.OpenYesNoDialog("Usuwanie osoby", $"Czy potwierdzasz usunięcie osoby: {person.fullName}?");
+                var result = await DDialogService.OpenYesNoDialog("Usuwanie osoby", $"Czy potwierdzasz usunięcie osoby: {person.FullName}?");
                 if (result)
-                    await PersonService.Remove(person.id);
+                    await PersonService.Remove(person.Id);
             }
             catch (DException ex)
             {

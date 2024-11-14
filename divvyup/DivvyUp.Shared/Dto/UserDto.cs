@@ -2,25 +2,25 @@
 {
     public class UserDto
     {
-        public int id { get; set; }
-        public string username { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
 
         public UserDto()
         {
-            id = 0;
-            username = string.Empty;
-            email = string.Empty;
-            password = string.Empty;
+            Id = 0;
+            Username = string.Empty;
+            Email = string.Empty;
+            Password = string.Empty;
         }
 
         public UserDto(int id, string username, string email, string password)
         {
-            this.id = id;
-            this.username = username;
-            this.email = email;
-            this.password = password;
+            Id = id;
+            Username = username;
+            Email = email;
+            Password = password;
         }
     }
 }

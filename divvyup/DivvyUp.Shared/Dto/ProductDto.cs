@@ -2,47 +2,47 @@
 {
     public class ProductDto
     {
-        public int id { get; set; }
-        public int receiptId { get; set; }
-        public string name { get; set; }
-        public double price { get; set; }
-        public double additionalPrice { get; set; }
-        public double compensationPrice { get; set; }
-        public bool divisible { get; set; }
-        public bool settled { get; set; }
-        public int maxQuantity { get; set; }
-        public int availableQuantity { get; set; }
+        public int Id { get; set; }
+        public int ReceiptId { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public decimal AdditionalPrice { get; set; }
+        public decimal CompensationPrice { get; set; }
+        public bool Divisible { get; set; }
+        public bool Settled { get; set; }
+        public int MaxQuantity { get; set; }
+        public int AvailableQuantity { get; set; }
 
-        public double totalPrice => price + additionalPrice;
+        public decimal TotalPrice => Price + AdditionalPrice;
 
-        public List<PersonDto> persons { get; set; } 
+        public List<PersonDto> Persons { get; set; } 
 
         public ProductDto()
         {
-            id = 0;
-            receiptId = 0;
-            name = string.Empty;
-            compensationPrice = 0;
-            divisible = false;
-            price = 0;
-            additionalPrice = 0;
-            settled = false;
-            maxQuantity = 1;
-            availableQuantity = 1;
+            Id = 0;
+            ReceiptId = 0;
+            Name = string.Empty;
+            CompensationPrice = 0;
+            Divisible = false;
+            Price = 0;
+            AdditionalPrice = 0;
+            Settled = false;
+            MaxQuantity = 1;
+            AvailableQuantity = 1;
         }
 
-        public ProductDto(int id, int receiptId, string name, double price, double additionalPrice, double compensationPrice, bool divisible, bool settled, int maxQuantity, int availableQuantity)
+        public ProductDto(int id, int receiptId, string name, decimal price, decimal additionalPrice, decimal compensationPrice, bool divisible, bool settled, int maxQuantity, int availableQuantity)
         {
-            this.id = id;
-            this.receiptId = receiptId;
-            this.name = name;
-            this.price = price;
-            this.additionalPrice = additionalPrice;
-            this.compensationPrice = compensationPrice;
-            this.divisible = divisible;
-            this.settled = settled;
-            this.maxQuantity = maxQuantity;
-            this.availableQuantity = availableQuantity;
+            Id = id;
+            ReceiptId = receiptId;
+            Name = name;
+            Price = price;
+            AdditionalPrice = additionalPrice;
+            CompensationPrice = compensationPrice;
+            Divisible = divisible;
+            Settled = settled;
+            MaxQuantity = maxQuantity;
+            AvailableQuantity = availableQuantity;
         }
     }
 }

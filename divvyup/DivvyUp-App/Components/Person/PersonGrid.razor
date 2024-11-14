@@ -24,7 +24,7 @@
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="person">
                 <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(person))" />
-                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(person))" Visible="@(!person.userAccount)" />
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(person))" Visible="@(!person.UserAccount)" />
             </Template>
             <EditTemplate Context="person">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(person))" />
@@ -37,22 +37,22 @@
                 </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.name)" Title="Imie" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.Name)" Title="Imie" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="person">
-                <RadzenTextBox @bind-value="@person.name" Style="width: 100%;" />
+                <RadzenTextBox @bind-value="@person.Name" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.surname)" Title="Nazwisko" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.Surname)" Title="Nazwisko" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="person">
-                <RadzenTextBox @bind-value="@person.surname" Style="width: 100%;" />
+                <RadzenTextBox @bind-value="@person.Surname" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.loanBalance)" Title="Bilans pożyczek" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.LoanBalance)" Title="Bilans pożyczek" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                @if (!person.userAccount)
+                @if (!person.UserAccount)
                 {
-                    <RadzenButton ButtonStyle="@(person.loanBalance >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" Click="async () => { await ManageLoanPerson(person.id); }">
-                        @person.loanBalance.ToString(Format.PriceFormat)
+                    <RadzenButton ButtonStyle="@(person.LoanBalance >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" Click="async () => { await ManageLoanPerson(person.Id); }">
+                        @person.LoanBalance.ToString(Format.PriceFormat)
                     </RadzenButton>
                 }
             </Template>
@@ -60,17 +60,17 @@
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.unpaidAmount)" Title="Kwota aktualna" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.UnpaidAmount)" Title="Kwota aktualna" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b style="color: @(person.unpaidAmount > 0 ? "red" : "green")"> @person.unpaidAmount.ToString(Format.PriceFormat)</b>
+                <b style="color: @(person.UnpaidAmount > 0 ? "red" : "green")"> @person.UnpaidAmount.ToString(Format.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.totalAmount)" Title="Kwota łączna" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.TotalAmount)" Title="Kwota łączna" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="person">
-                <b>@person.totalAmount.ToString(Format.PriceFormat)</b>
+                <b>@person.TotalAmount.ToString(Format.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -

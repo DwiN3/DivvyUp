@@ -44,7 +44,7 @@ namespace DivvyUp_App.Components.Loan
             if (GridMode == LoanGridMode.All)
             {
                 Persons = await PersonService.GetPersons();
-                var userAccount = Persons.Single(r => r.userAccount);
+                var userAccount = Persons.Single(r => r.UserAccount);
                 Persons.Remove(userAccount);
                 if (Persons != null && Persons.Count > 0)
                     SelectedPerson = Persons.First();
@@ -97,24 +97,24 @@ namespace DivvyUp_App.Components.Loan
             {
                 AddEditLoanRequest request = new()
                 {
-                    PersonId = loan.personId,
-                    Date = loan.date,
-                    Lent = loan.lent,
-                    Amount = (decimal)loan.amount,
+                    PersonId = loan.PersonId,
+                    Date = loan.Date,
+                    Lent = loan.Lent,
+                    Amount = loan.Amount,
                 };
 
-                if (loan.id == 0)
+                if (loan.Id == 0)
                 {
                     if(GridMode == LoanGridMode.All)
-                        loan.personId = SelectedPerson.id;
+                        loan.PersonId = SelectedPerson.Id;
                     else
-                        loan.personId = PersonId;
+                        loan.PersonId = PersonId;
 
                     await LoanService.Add(request);
                 }
                 else
                 {
-                    await LoanService.Edit(request, loan.id);
+                    await LoanService.Edit(request, loan.Id);
                 }
             }
             catch (DException ex)
@@ -137,7 +137,7 @@ namespace DivvyUp_App.Components.Loan
             {
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie osoby", $"Czy potwierdzasz usunięcie pożyczki?");
                 if (result)
-                    await LoanService.Remove(loan.id);
+                    await LoanService.Remove(loan.Id);
             }
             catch (DException ex)
             {
@@ -188,8 +188,8 @@ namespace DivvyUp_App.Components.Loan
         {
             try
             {
-                loan.personId = personId;
-                await LoanService.SetPerson(loan.id, personId);
+                loan.PersonId = personId;
+                await LoanService.SetPerson(loan.Id, personId);
             }
             catch (DException ex)
             {

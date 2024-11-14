@@ -80,17 +80,17 @@ namespace DivvyUp_App.Components.Receipt
             {
                 AddEditReceiptRequest request = new()
                 {
-                    Name = receipt.name,
-                    Date = receipt.date
+                    Name = receipt.Name,
+                    Date = receipt.Date
                 };
 
-                if (receipt.id == 0)
+                if (receipt.Id == 0)
                 {
                     await ReceiptService.Add(request);
                 }
                 else
                 {
-                    await ReceiptService.Edit(request, receipt.id);
+                    await ReceiptService.Edit(request, receipt.Id);
                 }
             }
             catch (DException ex)
@@ -113,9 +113,9 @@ namespace DivvyUp_App.Components.Receipt
             IsGridEdit = false;
             try
             {
-                var result = await DDialogService.OpenYesNoDialog("Usuwanie rachunku", $"Czy potwierdzasz usunięcie rachunku: {receipt.name}?");
+                var result = await DDialogService.OpenYesNoDialog("Usuwanie rachunku", $"Czy potwierdzasz usunięcie rachunku: {receipt.Name}?");
                 if (result)
-                    await ReceiptService.Remove(receipt.id);
+                    await ReceiptService.Remove(receipt.Id);
             }
             catch (DException ex)
             {

@@ -31,7 +31,7 @@ namespace DivvyUp_App.Components.Login
                 var token = await UserService.Login(LoginData);
                 DHttpClient.setToken(token);
                 UserDto user = await UserService.GetUser();
-                UserAppService.SetUser(user.username, user.email, token, true);
+                UserAppService.SetUser(user.Username, user.Email, token, true);
                 Navigation.NavigateTo("/");
             }
             catch (DException ex)

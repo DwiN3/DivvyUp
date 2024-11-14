@@ -2,32 +2,32 @@
 {
     public class LoanDto
     {
-        public int id { get; set; }
-        public int personId { get; set; }
-        public DateOnly date { get; set; }
-        public double amount { get; set; }
-        public bool lent { get; set; }
-        public bool settled { get; set; }
-        public PersonDto person { get; set; }
+        public int Id { get; set; }
+        public int PersonId { get; set; }
+        public DateOnly Date { get; set; }
+        public decimal Amount { get; set; }
+        public bool Lent { get; set; }
+        public bool Settled { get; set; }
+        public PersonDto Person { get; set; }
 
         public LoanDto()
         {
-            id = 0;
-            personId = 0;
-            date = DateOnly.FromDateTime(DateTime.Now);
-            amount = 0;
-            lent = false;
-            settled = false;
+            Id = 0;
+            PersonId = 0;
+            Date = DateOnly.FromDateTime(DateTime.Now);
+            Amount = 0;
+            Lent = false;
+            Settled = false;
         }
 
-        public LoanDto(int id, int personId, DateOnly date, double amount, bool lent, bool settled)
+        public LoanDto(int id, int personId, DateOnly date, decimal amount, bool lent, bool settled)
         {
-            this.id = id;
-            this.personId = personId;
-            this.date = date;
-            this.amount = amount;
-            this.lent = lent;
-            this.settled = settled;
+            Id = id;
+            PersonId = personId;
+            Date = date;
+            Amount = amount;
+            Lent = lent;
+            Settled = settled;
         }
     }
 }

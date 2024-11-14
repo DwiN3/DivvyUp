@@ -77,29 +77,29 @@ namespace DivvyUp_App.Components.Product
             {
                 AddEditProductRequest request = new()
                 {
-                    Name = product.name,
-                    Price = (decimal)product.price,
-                    MaxQuantity = product.maxQuantity,
-                    Divisible = product.divisible,
+                    Name = product.Name,
+                    Price = product.Price,
+                    MaxQuantity = product.MaxQuantity,
+                    Divisible = product.Divisible,
                 };
 
                 var newProduct = new ProductDto();
 
-                if (product.id == 0) 
+                if (product.Id == 0) 
                     newProduct = await ProductService.Add(request, ReceiptId);
                 
                 else
-                    newProduct = await ProductService.Edit(request, product.id);
+                    newProduct = await ProductService.Edit(request, product.Id);
                 
-                if (!product.divisible && Persons.Count > 0)
+                if (!product.Divisible && Persons.Count > 0)
                 {
                     AddEditPersonProductRequest requestPersonproduct = new()
                     {
-                        PersonId = SelectedPerson.id,
+                        PersonId = SelectedPerson.Id,
                         Quantity = 1,
                     };
 
-                    await PersonProductService.Add(requestPersonproduct, newProduct.id);
+                    await PersonProductService.Add(requestPersonproduct, newProduct.Id);
                 }
             }
             catch (DException ex)
@@ -119,9 +119,9 @@ namespace DivvyUp_App.Components.Product
             IsGridEdit = false;
             try
             {
-                var result = await DDialogService.OpenYesNoDialog("Usuwanie produktu", $"Czy potwierdzasz usunięcie produktu: {product.name}?");
+                var result = await DDialogService.OpenYesNoDialog("Usuwanie produktu", $"Czy potwierdzasz usunięcie produktu: {product.Name}?");
                 if (result)
-                    await ProductService.Remove(product.id);
+                    await ProductService.Remove(product.Id);
             }
             catch (DException ex)
             {
@@ -140,11 +140,11 @@ namespace DivvyUp_App.Components.Product
             IsGridEdit = true;
             var newProduct = new ProductDto
             {
-                name = product.name,
-                price = product.price,
-                receiptId = product.receiptId,
-                divisible = product.divisible,
-                maxQuantity = product.maxQuantity
+                Name = product.Name,
+                Price = product.Price,
+                ReceiptId = product.ReceiptId,
+                Divisible = product.Divisible,
+                MaxQuantity = product.MaxQuantity
             };
             Products.Add(newProduct);
             await Grid.InsertRow(newProduct);
@@ -183,7 +183,7 @@ namespace DivvyUp_App.Components.Product
             var personProduct = personProductList.First();
             try
             {
-                await PersonProductService.SetPerson(personProduct.id, person.id);
+                await PersonProductService.SetPerson(personProduct.Id, person.Id);
                 
             }
             catch (DException ex)

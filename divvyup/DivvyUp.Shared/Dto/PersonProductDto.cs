@@ -2,36 +2,36 @@
 {
     public class PersonProductDto
     {
-        public int id { get; set; }
-        public int productId { get; set; }
-        public int personId { get; set; }
-        public double partOfPrice { get; set; }
-        public int quantity { get; set; }
-        public bool compensation { get; set; }
-        public bool settled { get; set; }
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public int PersonId { get; set; }
+        public decimal PartOfPrice { get; set; }
+        public int Quantity { get; set; }
+        public bool Compensation { get; set; }
+        public bool Settled { get; set; }
 
-        public PersonDto person { get; set; }
+        public PersonDto Person { get; set; }
 
         public PersonProductDto()
         {
-            id = 0;
-            productId = 0;
-            personId = 0;
-            quantity = 0;
-            partOfPrice = 0;
-            compensation = false;
-            settled = false;
+            Id = 0;
+            ProductId = 0;
+            PersonId = 0;
+            Quantity = 0;
+            PartOfPrice = 0;
+            Compensation = false;
+            Settled = false;
         }
 
-        public PersonProductDto(int id, int productId, int personId, double partOfPrice, int quantity, bool compensation, bool settled)
+        public PersonProductDto(int id, int productId, int personId, decimal partOfPrice, int quantity, bool compensation, bool settled)
         {
-            this.id = id;
-            this.productId = productId;
-            this.personId = personId;
-            this.partOfPrice = partOfPrice;
-            this.quantity = quantity;
-            this.compensation = compensation;
-            this.settled = settled;
+            Id = id;
+            ProductId = productId;
+            PersonId = personId;
+            PartOfPrice = partOfPrice;
+            Quantity = quantity;
+            Compensation = compensation;
+            Settled = settled;
         }
     }
 }
