@@ -25,7 +25,7 @@
             <RadzenDatePicker TValue="DateOnly" @bind-Value="@DateTo" Name="Data do" DateFormat="@Format.DateFormat" />
             <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" />
         }
-        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllReceipts ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="receipt" Text="Pokaż wszystkie rachunki" Click="@(async() => { ShowAllReceipts = !ShowAllReceipts; await LoadGrid();})" Disabled="@IsGridEdit" />
+        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllReceipts ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="receipt" Text="Pokaż wszystkie rachunki" Click="@(async() => { ShowAllReceipts = !ShowAllReceipts; await LoadGrid();})" />
     </HeaderTemplate>
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
@@ -36,7 +36,7 @@
             </Template>
             <EditTemplate Context="receipt">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(receipt))"/>
-                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(receipt))"/>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@(async(args) => await CancelEdit(receipt))"/>
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">

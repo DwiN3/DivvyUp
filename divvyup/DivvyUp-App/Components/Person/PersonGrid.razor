@@ -28,7 +28,7 @@
             </Template>
             <EditTemplate Context="person">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(person))" />
-                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(person))" />
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@(async(args) => await CancelEdit(person))" />
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">

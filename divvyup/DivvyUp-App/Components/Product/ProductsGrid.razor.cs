@@ -31,7 +31,6 @@ namespace DivvyUp_App.Components.Product
         private RadzenDataGrid<ProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private PersonDto SelectedPerson { get; set; } = new();
-        private bool IsGridEdit { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -43,14 +42,12 @@ namespace DivvyUp_App.Components.Product
 
         private async Task LoadGrid()
         {
-            IsGridEdit = false;
             Products = await ProductService.GetProductsFromReceipt(ReceiptId);
             StateHasChanged();
         }
 
         private async Task InsertRow()
         {
-            IsGridEdit = true;
             var product = new ProductDto();
             Products.Add(product);
             await Grid.InsertRow(product);
@@ -58,20 +55,17 @@ namespace DivvyUp_App.Components.Product
 
         private async Task EditRow(ProductDto product)
         {
-            IsGridEdit = true;
             await Grid.EditRow(product);
-
         }
 
-        private void CancelEdit(ProductDto product)
+        private async Task CancelEdit(ProductDto product)
         {
-            IsGridEdit = false;
             Grid.CancelEditRow(product);
+            await LoadGrid();
         }
 
         private async Task SaveRow(ProductDto product)
         {
-            IsGridEdit = false;
             try
             {
                 AddEditProductRequest request = new()
@@ -115,7 +109,6 @@ namespace DivvyUp_App.Components.Product
 
         private async Task RemoveRow(ProductDto product)
         {
-            IsGridEdit = false;
             try
             {
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie produktu", $"Czy potwierdzasz usunięcie produktu: {product.Name}?");
@@ -136,7 +129,6 @@ namespace DivvyUp_App.Components.Product
 
         private async Task Duplicate(ProductDto product)
         {
-            IsGridEdit = true;
             var newProduct = new ProductDto
             {
                 Name = product.Name,

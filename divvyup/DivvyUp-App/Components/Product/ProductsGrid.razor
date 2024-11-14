@@ -30,7 +30,7 @@
             </Template>
             <EditTemplate Context="product">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(product))" />
-                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@((args) => CancelEdit(product))" />
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@(async(args) => await CancelEdit(product))" />
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">

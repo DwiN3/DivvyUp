@@ -29,8 +29,6 @@ namespace DivvyUp_App.Components.PersonProduct
         private ProductDto Product { get; set; }
         private RadzenDataGrid<PersonProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
-        private bool IsGridEdit { get; set; } = false;
-
 
         protected override async Task OnInitializedAsync()
         {
@@ -40,7 +38,6 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task LoadGrid()
         {
-            IsGridEdit = false;
             Product = await ProductService.GetProduct(ProductId);
             PersonProducts = await PersonProductService.GetPersonProductsFromProduct(ProductId);
             LoadAvailablePersons();
@@ -58,7 +55,6 @@ namespace DivvyUp_App.Components.PersonProduct
         {
             if (Product.AvailableQuantity > 0)
             {
-                IsGridEdit = true;
                 var personProduct = new PersonProductDto();
                 PersonProducts.Add(personProduct);
                 await Grid.InsertRow(personProduct);
@@ -71,19 +67,17 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task EditRow(PersonProductDto personProduct)
         {
-            IsGridEdit = true;
             await Grid.EditRow(personProduct);
         }
 
-        private void CancelEdit(PersonProductDto personProduct)
+        private async Task CancelEdit(PersonProductDto personProduct)
         {
-            IsGridEdit = false;
             Grid.CancelEditRow(personProduct);
+            await LoadGrid();
         }
 
         private async Task SaveRow(PersonProductDto personProduct)
         {
-            IsGridEdit = false;
             AddEditPersonProductRequest request = new()
             {
                 PersonId = personProduct.PersonId,
@@ -111,7 +105,6 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task RemoveRow(PersonProductDto personProduct)
         {
-            IsGridEdit = false;
             try
             {
                 await PersonProductService.Remove(personProduct.Id);

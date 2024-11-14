@@ -26,7 +26,6 @@ namespace DivvyUp_App.Components.Receipt
         private DateOnly DateFrom { get; set; }
         private DateOnly DateTo { get; set; }
         private bool ShowAllReceipts = false;
-        private bool IsGridEdit { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -56,26 +55,23 @@ namespace DivvyUp_App.Components.Receipt
 
         private async Task InsertRow()
         {
-            IsGridEdit = true;
             var receipt = new ReceiptDto();
             await Grid.InsertRow(receipt);
         }
 
         private async Task EditRow(ReceiptDto receipt)
         {
-            IsGridEdit = true;
             await Grid.EditRow(receipt);
         }
 
-        private void CancelEdit(ReceiptDto receipt)
+        private async Task CancelEdit(ReceiptDto receipt)
         {
-            IsGridEdit = false;
             Grid.CancelEditRow(receipt);
+            await LoadGrid();
         }
 
         private async Task SaveRow(ReceiptDto receipt)
         {
-            IsGridEdit = false;
             try
             {
                 AddEditReceiptRequest request = new()
@@ -110,7 +106,6 @@ namespace DivvyUp_App.Components.Receipt
 
         private async Task RemoveRow(ReceiptDto receipt)
         {
-            IsGridEdit = false;
             try
             {
                 var result = await DDialogService.OpenYesNoDialog("Usuwanie rachunku", $"Czy potwierdzasz usunięcie rachunku: {receipt.Name}?");
