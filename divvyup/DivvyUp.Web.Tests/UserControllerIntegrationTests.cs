@@ -19,24 +19,16 @@ namespace DivvyUp.Web.Tests
             _factory = factory.WithWebHostBuilder(builder =>
             {
                 builder.UseEnvironment("Testing");
-
                 builder.ConfigureServices(services =>
                 {
                     services.AddLogging();
-
-                    var descriptor = services.SingleOrDefault(
-                        d => d.ServiceType == typeof(DbContextOptions<DuDbContext>));
-                    if (descriptor != null)
-                    {
-                        services.Remove(descriptor);
-                    }
 
                     services.AddDbContext<DuDbContext>(options =>
                         options.UseInMemoryDatabase("TestDatabase"));
 
                     var serviceProvider = services.BuildServiceProvider();
-                    using var scope = serviceProvider.CreateScope();
-                    var db = scope.ServiceProvider.GetRequiredService<DuDbContext>();
+                    var scopedServices = serviceProvider.CreateScope().ServiceProvider;
+                    var db = scopedServices.GetRequiredService<DuDbContext>();
                     db.Database.EnsureCreated();
                 });
             });
