@@ -1,4 +1,4 @@
-﻿namespace DivvyUp_Shared.Enum
+﻿namespace DivvyUp_Shared.Enums
 {
     public enum LoanGridMode
     {

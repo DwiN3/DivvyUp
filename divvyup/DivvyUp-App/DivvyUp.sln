@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.Shared", "..\DivvyU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivvyUp.Web", "..\DivvyUp.Web\DivvyUp.Web.csproj", "{DFE0575B-C059-4249-BD2D-9FE4D8311B0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivvyUp.Web.Tests", "..\DivvyUp.Web.Tests\DivvyUp.Web.Tests.csproj", "{293B13C7-E4CB-4AD9-A6E9-7B65CA8D1ABB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{DFE0575B-C059-4249-BD2D-9FE4D8311B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFE0575B-C059-4249-BD2D-9FE4D8311B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFE0575B-C059-4249-BD2D-9FE4D8311B0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293B13C7-E4CB-4AD9-A6E9-7B65CA8D1ABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293B13C7-E4CB-4AD9-A6E9-7B65CA8D1ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293B13C7-E4CB-4AD9-A6E9-7B65CA8D1ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293B13C7-E4CB-4AD9-A6E9-7B65CA8D1ABB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

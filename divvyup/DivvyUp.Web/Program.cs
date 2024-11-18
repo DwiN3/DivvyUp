@@ -66,6 +66,17 @@ namespace DivvyUp.Web
             });
             });
 
+            if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Testing"))
+            {
+                builder.Services.AddDbContext<DuDbContext>(options =>
+                    options.UseInMemoryDatabase("TestDatabase"));
+            }
+            else
+            {
+                builder.Services.AddDbContext<DuDbContext>(options =>
+                    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
+            }
+
 
             builder.Services.AddAuthentication(options =>
             {
@@ -87,6 +98,9 @@ namespace DivvyUp.Web
 
             builder.Services.AddDbContext<DuDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
+            builder.Services.AddDbContext<DuDbContext>(options =>
+                options.UseInMemoryDatabase("TestDatabase"));
+
 
             var app = builder.Build();
 

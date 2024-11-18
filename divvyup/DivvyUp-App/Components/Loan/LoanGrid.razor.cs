@@ -1,7 +1,7 @@
 ﻿using DivvyUp_App.Services.Gui;
 using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
-using DivvyUp_Shared.Enum;
+using DivvyUp_Shared.Enums;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
 using DivvyUp_Shared.Models;
