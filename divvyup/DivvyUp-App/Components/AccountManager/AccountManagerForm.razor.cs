@@ -30,6 +30,11 @@ namespace DivvyUp_App.Components.AccountManager
 
         protected override async Task OnInitializedAsync()
         {
+            SetUserData();
+        }
+
+        private void SetUserData()
+        {
             EditData.Username = UserAppService.GetUser().username;
             EditData.Email = UserAppService.GetUser().email;
         }
@@ -45,6 +50,8 @@ namespace DivvyUp_App.Components.AccountManager
             }
             catch (DException ex)
             {
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
+                SetUserData();
             }
             catch (Exception)
             {

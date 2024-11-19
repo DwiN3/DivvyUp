@@ -80,6 +80,12 @@ namespace DivvyUp.Web.Services
 
             var user = await _userContext.GetCurrentUser();
 
+            var existingUser = await _dbContext.Users.FirstOrDefaultAsync(p => (p.Username == request.Username || p.Email == request.Email) && p.Id != user.Id);
+            if (existingUser != null)
+            {
+                throw new DException(HttpStatusCode.Conflict, "Użytkownik o takich danych istnieje");
+            }
+
             if (!user.Username.Equals(request.Username))
             {
                 var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.UserId == user.Id && p.UserAccount);
@@ -96,7 +102,6 @@ namespace DivvyUp.Web.Services
             var token =  GenerateToken(user);
             return token;
         }
-
 
         public async Task Remove()
         {
