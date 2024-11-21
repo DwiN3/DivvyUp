@@ -1,7 +1,9 @@
 ﻿@using DivvyUp_Shared.AppConstants
 @using DivvyUp_Shared.Dtos.Entity
 @using DivvyUp_Shared.Enums
+@using DivvyUp_App.BaseComponents.DLoadingPanel
 
+<DLoadingPanel IsLoading="@IsLoading"/>
 <RadzenDataGrid @ref="@Grid"
                 Data="@Loans"
                 TItem="LoanDto"
@@ -43,8 +45,8 @@
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">
-                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" Disabled="@IsLoading" />
-                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" Disabled="@IsLoading" />
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
                 </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
