@@ -116,21 +116,17 @@
                 @if (product.Divisible)
                 {
                     <RadzenButton Click="@(async () => { await ManagePerson(product.Id); })" Style="width: 100%;">
-                        @if (product.Persons != null && product.Persons.Count() > 0)
-                        {
+
                             <div style="display: flex; flex-direction: column;">
                                 @foreach (var person in product.Persons)
                                 {
                                     <div>@($"{person.Name} {person.Surname}")</div>
                                 }
                             </div>
-                        }
                     </RadzenButton>
                 }
                 else
                 {
-                    @if (product.Persons != null && product.Persons.Count() > 0)
-                    {
                         PersonDto person = product.Persons.First();
 
                         <RadzenDropDownDataGrid TValue="PersonDto"
@@ -138,30 +134,16 @@
                                                 ValueChanged="async(PersonDto person) => await OnPersonChange(product.Id, person)"
                                                 Data="@Persons"
                                                 TextProperty="@nameof(PersonDto.FullName)" />
-                    }
                 }
             </Template>
             <EditTemplate Context="product">
-                @if (Persons.Count > 0 && !product.Divisible)
+                @if (!product.Divisible)
                 {
-                    if (product.Id != 0 && product.Persons != null && product.Persons.Count() > 0)
-                    {
-                        PersonDto person = product.Persons.First();
-
-                        <RadzenDropDownDataGrid TValue="PersonDto"
-                                                Value="@person"
-                                                ValueChanged="async(PersonDto person) => await OnPersonChange(product.Id, person)"
-                                                Data="@Persons"
-                                                TextProperty="@nameof(PersonDto.FullName)" />
-                    }
-                    else
-                    {
-                        <RadzenDropDownDataGrid TValue="PersonDto"
-                                                Value="@SelectedPerson"
-                                                ValueChanged="OnPersonSet"
-                                                Data="@Persons"
-                                                TextProperty="@nameof(PersonDto.FullName)" />
-                    }
+                    <RadzenDropDownDataGrid TValue="PersonDto"
+                                            Value="@SelectedPerson"
+                                            ValueChanged="OnPersonSet"
+                                            Data="@Persons"
+                                            TextProperty="@nameof(PersonDto.FullName)" />
                 }
             </EditTemplate>
         </RadzenDataGridColumn>

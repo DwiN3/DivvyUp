@@ -4,6 +4,7 @@ using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.HttpClients;
 using DivvyUp_Shared.Interfaces;
+using DivvyUp_Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -69,7 +70,51 @@ namespace DivvyUp_App.Services.Api
                 throw;
             }
         }
-        
+
+        public async Task AddWithPerson(AddEditProductDto request, int receiptId, int personId)
+        {
+            try
+            {
+                var url = ApiRoute.PRODUCT_ROUTES.ADD_WIDTH_PERSON
+                    .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString())
+                    .Replace(ApiRoute.ARG_PERSON, personId.ToString());
+                var response = await _dHttpClient.PostAsync(url, request);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie dodawania produktu: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task EditWithPerson(AddEditProductDto request, int productId, int personId)
+        {
+            try
+            {
+                var url = ApiRoute.PRODUCT_ROUTES.EDIT_WIDTH_PERSON
+                    .Replace(ApiRoute.ARG_PRODUCT, productId.ToString())
+                    .Replace(ApiRoute.ARG_PERSON, personId.ToString());
+                var response = await _dHttpClient.PutAsync(url, request);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task Remove(int productId)
         {
             try

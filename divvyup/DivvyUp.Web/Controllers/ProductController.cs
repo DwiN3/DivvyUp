@@ -36,6 +36,22 @@ namespace DivvyUp.Web.Controllers
             return Ok(product);
         }
 
+        [HttpPost(ApiRoute.PRODUCT_ROUTES.ADD_WIDTH_PERSON)]
+        [SwaggerOperation(Summary = "Add a product and assign it to a person", Description = "Adds a product to a receipt and associates it with a specific person. This allows tracking who is responsible for the product.")]
+        public async Task<IActionResult> AddWidthPerson([FromBody] AddEditProductDto request, [FromRoute] int receiptId, [FromRoute] int personId)
+        {
+            await _productService.AddWithPerson(request, receiptId, personId);
+            return Ok();
+        }
+
+        [HttpPut(ApiRoute.PRODUCT_ROUTES.EDIT_WIDTH_PERSON)]
+        [SwaggerOperation(Summary = "Edit a product and reassign it to a person", Description = "Edits the details of a product and reassigns it to a new person. This ensures the correct person is tracked for the product.")]
+        public async Task<IActionResult> EditWithPerson([FromBody] AddEditProductDto request, [FromRoute] int productId, [FromRoute] int personId)
+        {
+            await _productService.EditWithPerson(request, productId, personId);
+            return Ok();
+        }
+
         [HttpDelete(ApiRoute.PRODUCT_ROUTES.REMOVE)]
         [SwaggerOperation(Summary = "Remove a product", Description = "Removes a product by its ID.")]
         public async Task<IActionResult> Remove([FromRoute] int productId)

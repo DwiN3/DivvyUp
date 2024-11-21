@@ -95,6 +95,108 @@ namespace DivvyUp.Web.Services
             return productDto;
         }
 
+        public async Task AddWithPerson(AddEditProductDto request, int receiptId, int personId)
+        {
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
+            _validator.IsNull(request.Price, "Cena jest wymagana");
+            _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
+            _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
+            _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+            var user = await _userContext.GetCurrentUser();
+            var receipt = await _validator.GetReceipt(user, receiptId);
+
+            var newProduct = new Product()
+            {
+                Receipt = receipt,
+                Name = request.Name,
+                Price = request.Price,
+                Divisible = request.Divisible,
+                MaxQuantity = request.Divisible ? request.MaxQuantity : 1,
+                AvailableQuantity = request.Divisible ? request.MaxQuantity : 1,
+                CompensationPrice = request.Divisible ? request.Price : 0,
+                Settled = false,
+            };
+
+            _dbContext.Products.Add(newProduct);
+            await _dbContext.SaveChangesAsync();
+
+            if (!request.Divisible)
+            {
+                var product = _dbContext.Products.Where(p => p == newProduct).FirstOrDefault();
+                var personProduct = new PersonProduct()
+                {
+                    PersonId = personId,
+                    ProductId = product.Id,
+                    PartOfPrice = product.Price,
+                    Quantity = 1,
+                    Compensation = true,
+                    Settled = false,
+                };
+                _dbContext.PersonProducts.Add(personProduct);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
+        }
+
+        public async Task EditWithPerson(AddEditProductDto request, int productId, int personId)
+        {
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
+            _validator.IsNull(request.Price, "Cena jest wymagana");
+            _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
+            _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
+            _validator.IsNull(productId, "Brak identyfikatora produktu");
+            var user = await _userContext.GetCurrentUser();
+            var product = await _validator.GetProduct(user, productId);
+
+            bool previousDivisible = product.Divisible;
+
+            product.Name = request.Name;
+            product.Price = request.Price;
+            product.Divisible = request.Divisible;
+            product.MaxQuantity = request.Divisible ? request.MaxQuantity : 1;
+            product.CompensationPrice = request.Divisible ? request.Price : 0;
+            _dbContext.Products.Update(product);
+            await _dbContext.SaveChangesAsync();
+
+            if (previousDivisible && !request.Divisible)
+            {
+                var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == product.Id).ToListAsync();
+                _dbContext.PersonProducts.RemoveRange(personProducts);
+                var personProduct = new PersonProduct()
+                {
+                    PersonId = personId,
+                    ProductId = product.Id,
+                    PartOfPrice = product.Price,
+                    Quantity = 1,
+                    Compensation = true,
+                    Settled = false,
+                };
+                _dbContext.PersonProducts.Add(personProduct);
+                await _dbContext.SaveChangesAsync();
+            }
+            else if (!request.Divisible)
+            {
+                var personProducts = await _dbContext.PersonProducts
+                    .Where(pp => pp.ProductId == product.Id)
+                    .ToListAsync();
+                var personProduct = personProducts.FirstOrDefault();
+                if (personProduct.PersonId != personId)
+                {
+                    personProduct.PersonId = personId;
+                    _dbContext.PersonProducts.Update(personProduct);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+
+            await _entityUpdateService.UpdatePartPricesPersonProduct(product);
+            await _entityUpdateService.UpdateProductDetails(product);
+            await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
+            await _entityUpdateService.UpdatePerson(user, false);
+        }
+
         public async Task Remove(int productId)
         {
             _validator.IsNull(productId, "Brak identyfikatora produktu");
@@ -188,6 +290,11 @@ namespace DivvyUp.Web.Services
 
             productDto.Persons = personProducts.Select(pp => _mapper.Map<PersonDto>(pp.Person)).ToList();
             return productDto;
+        }
+
+        private async Task AddPersonProduct(Product product, int personId)
+        {
+
         }
     }
 }

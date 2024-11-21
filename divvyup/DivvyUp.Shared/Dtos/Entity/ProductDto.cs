@@ -14,6 +14,7 @@
         public int AvailableQuantity { get; set; }
 
         public decimal TotalPrice => Price + AdditionalPrice;
+        public bool isNew => Id == 0;
 
         public List<PersonDto> Persons { get; set; }
 

@@ -4,6 +4,7 @@ using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
+using Radzen;
 using Radzen.Blazor;
 
 namespace DivvyUp_App.Components.Product
@@ -55,6 +56,10 @@ namespace DivvyUp_App.Components.Product
 
         private async Task EditRow(ProductDto product)
         {
+            if (!product.isNew && !product.Divisible)
+            {
+                SelectedPerson = product.Persons.FirstOrDefault();
+            }
             await Grid.EditRow(product);
         }
 
@@ -70,20 +75,18 @@ namespace DivvyUp_App.Components.Product
             {
                 AddEditProductDto request = new(product.Name, product.Price, product.Divisible, product.MaxQuantity);
 
-                if (product.Id == 0)
+                if (product.isNew)
                 {
-                    var newProduct = await ProductService.Add(request, ReceiptId);
-                    await AddPersonProduct(newProduct, true, true);
+                    await ProductService.AddWithPerson(request, ReceiptId, SelectedPerson.Id);
                 }
                 else
                 {
-                    var productBeforeChanges = await ProductService.GetProduct(product.Id);
-                    var newProduct = await ProductService.Edit(request, product.Id);
-                    await AddPersonProduct(newProduct, false, productBeforeChanges.Divisible);
+                    await ProductService.EditWithPerson(request, product.Id, SelectedPerson.Id);
                 }
             }
             catch (DException ex)
             {
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
             catch (Exception)
             {
@@ -91,29 +94,7 @@ namespace DivvyUp_App.Components.Product
             finally
             {
                 await LoadGrid();
-            }
-        }
-
-        private async Task AddPersonProduct(ProductDto product, bool isNew, bool Divisible)
-        {
-            if (isNew || Divisible == !product.Divisible)
-            {
-                if (!product.Divisible)
-                {
-                    var personId = SelectedPerson.Id;
-                    if (!isNew)
-                    {
-                        var personProduct = await PersonProductService.GetPersonProductsFromProduct(product.Id);
-                        personId = personProduct.FirstOrDefault().PersonId;
-                    }
-                    AddEditPersonProductDto requestPersonproduct = new()
-                    {
-                        PersonId = personId,
-                        Quantity = 1,
-                    };
-
-                    await PersonProductService.Add(requestPersonproduct, product.Id);
-                }
+                SelectedPerson = Persons.FirstOrDefault();
             }
         }
 
@@ -172,10 +153,9 @@ namespace DivvyUp_App.Components.Product
                 await LoadGrid();
         }
 
-        private void OnPersonSet(object personObject)
+        private void OnPersonSet(PersonDto person)
         {
-            if (personObject is PersonDto person)
-                SelectedPerson = person;
+            SelectedPerson = person;
         }
 
         private async Task OnPersonChange(int productId, PersonDto person)
