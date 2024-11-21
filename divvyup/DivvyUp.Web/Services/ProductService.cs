@@ -54,6 +54,7 @@ namespace DivvyUp.Web.Services
 
             _dbContext.Products.Add(newProduct);
             await _dbContext.SaveChangesAsync();
+
             await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
             var productDto = MapProductToDto(newProduct);
             return productDto;

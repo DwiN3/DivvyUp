@@ -70,23 +70,16 @@ namespace DivvyUp_App.Components.Product
             {
                 AddEditProductDto request = new(product.Name, product.Price, product.Divisible, product.MaxQuantity);
 
-                var newProduct = new ProductDto();
-
-                if (product.Id == 0) 
-                    newProduct = await ProductService.Add(request, ReceiptId);
-                
-                else
-                    newProduct = await ProductService.Edit(request, product.Id);
-                
-                if (!product.Divisible && Persons.Count > 0)
+                if (product.Id == 0)
                 {
-                    AddEditPersonProductDto requestPersonproduct = new()
-                    {
-                        PersonId = SelectedPerson.Id,
-                        Quantity = 1,
-                    };
-
-                    await PersonProductService.Add(requestPersonproduct, newProduct.Id);
+                    var newProduct = await ProductService.Add(request, ReceiptId);
+                    await AddPersonProduct(newProduct, true, true);
+                }
+                else
+                {
+                    var productBeforeChanges = await ProductService.GetProduct(product.Id);
+                    var newProduct = await ProductService.Edit(request, product.Id);
+                    await AddPersonProduct(newProduct, false, productBeforeChanges.Divisible);
                 }
             }
             catch (DException ex)
@@ -98,6 +91,29 @@ namespace DivvyUp_App.Components.Product
             finally
             {
                 await LoadGrid();
+            }
+        }
+
+        private async Task AddPersonProduct(ProductDto product, bool isNew, bool Divisible)
+        {
+            if (isNew || Divisible == !product.Divisible)
+            {
+                if (!product.Divisible)
+                {
+                    var personId = SelectedPerson.Id;
+                    if (!isNew)
+                    {
+                        var personProduct = await PersonProductService.GetPersonProductsFromProduct(product.Id);
+                        personId = personProduct.FirstOrDefault().PersonId;
+                    }
+                    AddEditPersonProductDto requestPersonproduct = new()
+                    {
+                        PersonId = personId,
+                        Quantity = 1,
+                    };
+
+                    await PersonProductService.Add(requestPersonproduct, product.Id);
+                }
             }
         }
 

@@ -38,5 +38,7 @@ namespace DivvyUp_Shared.Models
 
         [Column("is_user_account")]
         public bool UserAccount { get; set; }
+
+        public virtual ICollection<PersonProduct> PersonProducts { get; set; }
     }
 }

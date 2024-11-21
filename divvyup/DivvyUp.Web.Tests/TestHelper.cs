@@ -20,6 +20,11 @@ namespace DivvyUp.Web.Tests
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<DuDbContext>();
+                dbContext.PersonProducts.RemoveRange(dbContext.PersonProducts);
+                dbContext.Products.RemoveRange(dbContext.Products);
+                dbContext.Receipts.RemoveRange(dbContext.Receipts);
+                dbContext.Loans.RemoveRange(dbContext.Loans);
+                dbContext.Persons.RemoveRange(dbContext.Persons);
                 dbContext.Users.RemoveRange(dbContext.Users);
                 await dbContext.SaveChangesAsync();
             }
