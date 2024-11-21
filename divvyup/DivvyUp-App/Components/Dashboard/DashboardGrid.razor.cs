@@ -9,11 +9,11 @@ namespace DivvyUp_App.Components.Dashboard
         [Inject]
         private UserAppService UserApp { get; set; }
 
-        private InfoCard Info { get; set; }
         private bool UserView { get; set; } = false;
-        private bool DataAlreadySet { get; set; } = false;
         private int ChartsToLoad { get; set; } = 6;
+        private int TotalCharts { get; set; } = 6;
         private bool IsLoading { get; set; } = true;
+        private double Value { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -29,6 +29,7 @@ namespace DivvyUp_App.Components.Dashboard
         private void OnChartLoaded()
         {
             ChartsToLoad--;
+            Value = Math.Round(((TotalCharts - ChartsToLoad) / (double)TotalCharts) * 100);
             if (ChartsToLoad == 0)
             {
                 IsLoading = false;

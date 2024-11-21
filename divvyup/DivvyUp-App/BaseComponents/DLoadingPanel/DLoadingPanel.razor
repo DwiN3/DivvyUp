@@ -1,10 +1,23 @@
 ﻿<div class="loading-overlay" style="@(IsLoading ? "display: flex;" : "display: none;")">
-    <RadzenProgressBarCircular ProgressBarStyle="ProgressBarStyle.Primary" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+    @if (ValueMode)
+    {
+        <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ProgressBarStyle="ProgressBarStyle.Secondary" Size="@Size" ShowValue="true" Value="@Value"  />
+    }
+    else
+    {
+        <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ProgressBarStyle="ProgressBarStyle.Secondary" Size="@Size" ShowValue="false" />
+    }
 </div>
 
 @code {
     [Parameter] 
-    public bool IsLoading { get; set; }
+    public bool IsLoading { get; set; } = true;
+    [Parameter]
+    public double Value { get; set; }
+    [Parameter] 
+    public bool ValueMode { get; set; } = false;
+    [Parameter] 
+    public ProgressBarCircularSize Size { get; set; } = ProgressBarCircularSize.Large;
 }
 
 <style>
@@ -20,5 +33,10 @@
         align-items: center;
         z-index: 9999;
         pointer-events: none;
+    }
+
+    .rz-progressbar-circular-label{
+        color: #cd3d64;
+        font-weight: bold;
     }
 </style>
