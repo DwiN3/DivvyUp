@@ -3,6 +3,7 @@ using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
+using DivvyUp_Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -26,6 +27,7 @@ namespace DivvyUp_App.Components.Receipt
         private DateOnly DateFrom { get; set; }
         private DateOnly DateTo { get; set; }
         private bool ShowAllReceipts = false;
+        private bool IsLoading => Receipts == null;
 
         protected override async Task OnInitializedAsync()
         {

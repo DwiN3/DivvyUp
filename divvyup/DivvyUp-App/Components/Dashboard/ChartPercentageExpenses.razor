@@ -19,6 +19,9 @@
     [Inject]
     private IChartService ChartService { get; set; }
 
+    [Parameter]
+    public EventCallback OnLoadComplete { get; set; }
+
     private List<ChartDto> PercantageExpenses { get; set; }
     private List<SeriesColorRange> ColorRanges = new List<SeriesColorRange>()
     {
@@ -30,6 +33,7 @@
     protected override async Task OnInitializedAsync()
     {
         PercantageExpenses = await ChartService.GetPercentageExpanses();
+        await OnLoadComplete.InvokeAsync();
     }
 
     string Format(object value)

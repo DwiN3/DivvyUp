@@ -37,8 +37,8 @@
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">
-                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
-                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" Disabled="@IsLoading" />
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" Disabled="@IsLoading" />
                 </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
@@ -87,7 +87,11 @@
             <EditTemplate Context="product">
                 @if (product.Divisible)
                 {
-                    <RadzenNumeric @bind-Value="@product.MaxQuantity" />
+                    if (product.MaxQuantity == 1)
+                    {
+                        product.MaxQuantity = 2;
+                    }
+                    <RadzenNumeric @bind-Value="@product.MaxQuantity" Min="2" />
                 }
                 else
                 {

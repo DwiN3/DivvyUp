@@ -29,6 +29,7 @@ namespace DivvyUp_App.Components.PersonProduct
         private ProductDto Product { get; set; }
         private RadzenDataGrid<PersonProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
+        private bool IsLoading => PersonProducts == null;
 
         protected override async Task OnInitializedAsync()
         {

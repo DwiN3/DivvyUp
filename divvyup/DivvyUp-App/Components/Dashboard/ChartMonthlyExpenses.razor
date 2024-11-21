@@ -26,6 +26,9 @@
     [Inject]
     private IChartService ChartService { get; set; }
 
+    [Parameter]
+    public EventCallback OnLoadComplete { get; set; }
+
     private List<ChartDto> MonthlyTotalExpenses { get; set; } = new();
     private List<ChartDto> MonthlyUserExpenses { get; set; } = new();
     private string TitleChart { get; set; }
@@ -36,6 +39,7 @@
         TitleChart = $"Koszta na rok {year}";
         MonthlyTotalExpenses = await ChartService.GetMonthlyTotalExpenses(year);
         MonthlyUserExpenses = await ChartService.GetMonthlyUserExpenses(year);
+        await OnLoadComplete.InvokeAsync();
     }
 
     string Format(object value)

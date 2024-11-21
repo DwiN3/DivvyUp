@@ -18,11 +18,15 @@
     [Inject]
     private IChartService ChartService { get; set; }
 
+    [Parameter]
+    public EventCallback OnLoadComplete { get; set; }
+
     private List<ChartDto> MonthlyTopProductList { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         MonthlyTopProductList = await ChartService.GetMonthlyTopProducts();
+        await OnLoadComplete.InvokeAsync();
     }
 
     string Format(object value)

@@ -1,5 +1,4 @@
-﻿@using DivvyUp_App.Services.Gui
-@using DivvyUp_Shared.Dtos.Entity
+﻿@using DivvyUp_Shared.Dtos.Entity
 @using DivvyUp_Shared.Interfaces
 
 <RadzenStack Style="margin-left: 6%; margin-top: 4%;">
@@ -13,17 +12,14 @@
     [Inject] 
     private IPersonService PersonService { get; set; } = null!;
 
-    [Parameter] 
-    public UserAppService UserAppService { get; set; } = null!;
-    
+    [Parameter]
+    public EventCallback OnLoadComplete { get; set; }
+
     private PersonDto PersonUser { get; set; } = new();
 
-    public async Task SetInfo()
+    protected override async Task OnInitializedAsync()
     {
-        if (UserAppService != null)
-        {
-            PersonUser = await PersonService.GetUserPerson();
-            StateHasChanged();
-        }
+        PersonUser = await PersonService.GetUserPerson();
+        await OnLoadComplete.InvokeAsync();
     }
 }

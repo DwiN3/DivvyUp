@@ -1,4 +1,5 @@
-﻿using DivvyUp_App.Services.Gui;
+﻿using DivvyUp_App.BaseComponents.DLoadingPanel;
+using DivvyUp_App.Services.Gui;
 using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Components.Dashboard
@@ -11,19 +12,27 @@ namespace DivvyUp_App.Components.Dashboard
         private InfoCard Info { get; set; }
         private bool UserView { get; set; } = false;
         private bool DataAlreadySet { get; set; } = false;
+        private int ChartsToLoad { get; set; } = 6;
+        private bool IsLoading { get; set; } = true;
 
-        protected async override void OnAfterRender(bool firstRender)
+        protected override async Task OnInitializedAsync()
         {
-            if ((UserApp != null) && !DataAlreadySet)
+            await Task.Delay(500);
+            UserView = UserApp.IsLoggedIn();
+            if (!UserView)
             {
-                UserView = UserApp.IsLoggedIn();
-                StateHasChanged();
+                IsLoading = false;
+            }
+            StateHasChanged();
+        }
 
-                if (Info != null && UserView)
-                {
-                    DataAlreadySet = true;
-                    await Info.SetInfo();
-                }
+        private void OnChartLoaded()
+        {
+            ChartsToLoad--;
+            if (ChartsToLoad == 0)
+            {
+                IsLoading = false;
+                StateHasChanged();
             }
         }
     }

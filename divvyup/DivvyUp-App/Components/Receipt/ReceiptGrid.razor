@@ -38,13 +38,13 @@
                 <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(receipt))" />
             </Template>
             <EditTemplate Context="receipt">
-                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(receipt))"/>
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(receipt))" />
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@(async(args) => await CancelEdit(receipt))"/>
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">
-                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
-                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" Disabled="@IsLoading" />
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" Disabled="@IsLoading" />
                 </div>
             </FilterTemplate>
         </RadzenDataGridColumn>

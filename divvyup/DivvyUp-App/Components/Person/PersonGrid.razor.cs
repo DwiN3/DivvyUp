@@ -3,6 +3,7 @@ using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
+using DivvyUp_Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -21,6 +22,7 @@ namespace DivvyUp_App.Components.Person
         private List<PersonDto> Persons { get; set; }
         private RadzenDataGrid<PersonDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
+        private bool IsLoading => Persons == null;
 
         protected override async Task OnInitializedAsync()
         {

@@ -1,4 +1,8 @@
-﻿@if (UserView)
+﻿@using DivvyUp_App.BaseComponents.DLoadingPanel
+
+<DLoadingPanel IsLoading="@IsLoading" />
+
+@if (UserApp != null && UserApp.IsLoggedIn())
 {
     <div class="w-100 h-100 d-flex justify-content-center align-items-center">
         <RadzenStack Orientation="Orientation.Vertical"
@@ -9,23 +13,23 @@
 
             <div class="dashboard-grid">
                 <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x2 highlight-tile">
-                    <InfoCard @ref="@Info" UserAppService="@UserApp" />
+                    <InfoCard OnLoadComplete="@OnChartLoaded" />
                 </RadzenCard>
                 <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
-                       <ChartAmounts />
+                    <ChartAmounts OnLoadComplete="@OnChartLoaded" />
                 </RadzenCard>
-               <RadzenCard Variant="@Variant.Filled" class="grid-item">
-                   <ChartPercentageExpenses />
-               </RadzenCard>
-               <RadzenCard Variant="@Variant.Filled" class="grid-item">
-                   <ChartMonthlyTopProducts />
-               </RadzenCard>
-               <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
-                   <ChartWeeklyExpenses />
-               </RadzenCard>
-               <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
-                   <ChartMonthlyExpenses />
-               </RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item">
+                    <ChartPercentageExpenses OnLoadComplete="@OnChartLoaded" />
+                </RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item">
+                    <ChartMonthlyTopProducts OnLoadComplete="@OnChartLoaded" />
+                </RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
+                    <ChartWeeklyExpenses OnLoadComplete="@OnChartLoaded" />
+                </RadzenCard>
+                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
+                    <ChartMonthlyExpenses OnLoadComplete="@OnChartLoaded" />
+                </RadzenCard>
             </div>
         </RadzenStack>
     </div>
@@ -45,7 +49,6 @@ else
         </RadzenStack>
     </div>
 }
-
 
 <style>
     .dashboard-grid {

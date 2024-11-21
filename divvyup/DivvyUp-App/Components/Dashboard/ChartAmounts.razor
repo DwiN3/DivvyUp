@@ -31,6 +31,9 @@
     [Inject]
     private IChartService ChartService { get; set; }
 
+    [Parameter]
+    public EventCallback OnLoadComplete { get; set; }
+
     private List<ChartDto> ChartUnpaidAmount { get; set; }
     private List<ChartDto> ChartTotalAmount { get; set; }
 
@@ -38,6 +41,7 @@
     {
         ChartUnpaidAmount = await ChartService.GetAmounts(false);
         ChartTotalAmount = await ChartService.GetAmounts(true);
+        await OnLoadComplete.InvokeAsync();
     }
 
     string Format(object value)

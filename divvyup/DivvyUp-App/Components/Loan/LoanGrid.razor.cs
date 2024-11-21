@@ -35,6 +35,7 @@ namespace DivvyUp_App.Components.Loan
         private DateOnly DateFrom { get; set; }
         private DateOnly DateTo { get; set; }
         private bool ShowAllLoans = false;
+        private bool IsLoading => Loans == null;
 
         protected override async Task OnInitializedAsync()
         {
