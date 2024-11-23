@@ -13,6 +13,7 @@ namespace DivvyUp_Shared.Interfaces
         Task SetSettled(int personProductId, bool settled);
         Task SetCompensation(int personProductId);
         Task<PersonProductDto> GetPersonProduct(int personProductId);
+        Task<List<PersonProductDto>> GetPersonProductsFromPerson(int personId);
         Task<List<PersonProductDto>> GetPersonProducts();
         Task<List<PersonProductDto>> GetPersonProductsFromProduct(int productId);
     }

@@ -1,0 +1,69 @@
+﻿@using DivvyUp_App.Components.Person
+@using DivvyUp_Shared.Dtos.Entity
+@using DivvyUp_Shared.Enums
+@inject DialogService DialogService
+ 
+<div class="content-dialog">
+    <PersonGrid GridMode="@PersonGridMode.Select" @bind-SelectedPersons="@SelectedPersons" MaxQuantityInProduct="@MaxQuantity" />
+</div>
+<footer class="footer">
+    <RadzenButton Style="margin-right: 8px;" Text="Zatwierdź" ButtonStyle="ButtonStyle.Success" Click="@(() => OnConfirm())" />
+    <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Danger" Click="@(() => OnCancel())" />
+</footer>
+
+
+@code {
+    [Parameter]
+    public int MaxQuantity { get; set; }
+    [Parameter]
+    public List<PersonDto> SelectedPersons { get; set; }
+
+    private bool _isConfirmed = false;
+    private void OnConfirm()
+    {
+        _isConfirmed = true;
+        DialogService.Close(SelectedPersons);
+    }
+
+    private void OnCancel()
+    {
+        _isConfirmed = false;
+        DialogService.Close(SelectedPersons);
+    }
+}
+
+<style>
+    .rz-dialog-content{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    .content-dialog {
+        flex-grow: 1;
+        padding: 16px;
+        width: 100%;
+        height: 100%;
+        overflow: scroll;
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 10px;
+        background-color: #f0f0f0;
+        width: 100%;
+    }
+
+    .rz-dialog-content {
+        padding: 2px;
+    }
+
+
+    .rz-dialog-wrapper {
+        width: calc(100% - 56px);
+        height: calc(100% - 56px);
+    }
+</style>

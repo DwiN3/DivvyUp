@@ -199,6 +199,30 @@ namespace DivvyUp_App.Services.Api
             }
         }
 
+        public async Task<List<PersonProductDto>> GetPersonProductsFromPerson(int personId)
+        {
+            try
+            {
+                var url = ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCT_FROM_PERSON
+                    .Replace(ApiRoute.ARG_PERSON, personId.ToString());
+                var response = await _dHttpClient.GetAsync(url);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktów osób");
+                return result;
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie pobierania listy produktów osób do tabeli: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task<List<PersonProductDto>> GetPersonProductsFromProduct(int productId)
         {
             try
@@ -227,7 +251,7 @@ namespace DivvyUp_App.Services.Api
         {
             try
             {
-                var url = ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCTS;
+                var url = ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCT_FROM_PERSON;
                 var response = await _dHttpClient.GetAsync(url);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<PersonProductDto>>(jsonResponse);

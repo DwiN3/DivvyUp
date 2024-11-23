@@ -1,0 +1,51 @@
+﻿@using DivvyUp_App.Components.PersonProduct
+@inject DialogService DialogService
+
+<div class="content-dialog">
+    <PersonProductFromPersonGrid PersonId="@PersonId" />
+</div>
+<footer class="footer">
+    <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Info" Click="@(() => DialogService.Close())" />
+</footer>
+
+
+@code {
+    [Parameter] 
+    public int PersonId { get; set; }
+}
+
+<style>
+    .rz-dialog-content{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    .content-dialog {
+        flex-grow: 1;
+        padding: 16px;
+        width: 100%;
+        height: 100%;
+        overflow: scroll;
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 10px;
+        background-color: #f0f0f0;
+        width: 100%;
+    }
+
+    .rz-dialog-content {
+        padding: 2px;
+    }
+
+
+    .rz-dialog-wrapper {
+        width: calc(100% - 56px);
+        height: calc(100% - 56px);
+    }
+</style>

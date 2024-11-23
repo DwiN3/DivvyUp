@@ -200,6 +200,21 @@ namespace DivvyUp.Web.Services
             return personProductDto;
         }
 
+        public async Task<List<PersonProductDto>> GetPersonProductsFromPerson(int personId)
+        {
+            _validator.IsNull(personId, "Brak identyfikatora osoby");
+            var user = await _userContext.GetCurrentUser();
+            var personProducts = await _dbContext.PersonProducts
+                .AsNoTracking()
+                .Include(p => p.Product)
+                .Include(p => p.Person)
+                .Where(p => p.Person.UserId == user.Id && p.PersonId == personId)
+                .ToListAsync();
+
+            var personProductsDto = _mapper.Map<List<PersonProductDto>>(personProducts).ToList();
+            return personProductsDto;
+        }
+
         public async Task<List<PersonProductDto>> GetPersonProducts()
         {
             var user = await _userContext.GetCurrentUser();

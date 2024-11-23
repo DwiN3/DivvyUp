@@ -93,7 +93,7 @@
                     {
                         product.MaxQuantity = 2;
                     }
-                    <RadzenNumeric @bind-Value="@product.MaxQuantity" Min="2" />
+                    <RadzenNumeric @bind-Value="@product.MaxQuantity" Min="@(product.Id == 0 ? MaxQuantityLimit : 2)" />
                 }
                 else
                 {
@@ -139,7 +139,8 @@
                                                 Value="person"
                                                 ValueChanged="async(PersonDto person) => await OnPersonChange(product.Id, person)"
                                                 Data="@Persons"
-                                                TextProperty="@nameof(PersonDto.FullName)" />
+                                                TextProperty="@nameof(PersonDto.FullName)"
+                                                Style="width: 100%;"/>
                 }
             </Template>
             <EditTemplate Context="product">
@@ -149,7 +150,27 @@
                                             Value="@SelectedPerson"
                                             ValueChanged="OnPersonSet"
                                             Data="@Persons"
-                                            TextProperty="@nameof(PersonDto.FullName)" />
+                                            TextProperty="@nameof(PersonDto.FullName)"
+                                            Style="width: 100%;" />
+                }
+                else
+                {
+                    @if (product.Divisible && product.Id == 0)
+                    {
+                        <RadzenButton Click="@(async () => { await SelectPersons(product); })" Style="width: 100%;">
+
+                            <div style="display: flex; flex-direction: column;">
+                                @foreach (var person in SelectedPersons)
+                                {
+                                    <div>@($"{person.Name} {person.Surname}")</div>
+                                }
+                            </div>
+                        </RadzenButton>
+                    }
+                    else
+                    {
+                        <div>-</div>
+                    }
                 }
             </EditTemplate>
         </RadzenDataGridColumn>

@@ -84,6 +84,14 @@ namespace DivvyUp.Web.Controllers
             return Ok(personProduct);
         }
 
+        [HttpGet(ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCTS)]
+        [SwaggerOperation(Summary = "Retrieve all person-product associations for user", Description = "Retrieves all person-product associations related to the logged-in user.")]
+        public async Task<IActionResult> GetPersonProducts()
+        {
+            var personProducts = await _personProductService.GetPersonProducts();
+            return Ok(personProducts);
+        }
+
         [HttpGet(ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCT_FROM_PRODUCT)]
         [SwaggerOperation(Summary = "Retrieve all person-product associations for a product", Description = "Retrieves all person-product associations related to a specific product.")]
         public async Task<IActionResult> GetPersonProductsFromProduct([FromRoute] int productId)
@@ -92,11 +100,11 @@ namespace DivvyUp.Web.Controllers
             return Ok(personProducts);
         }
 
-        [HttpGet(ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCTS)]
+        [HttpGet(ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCT_FROM_PERSON)]
         [SwaggerOperation(Summary = "Retrieve all person-product associations for user", Description = "Retrieves all person-product associations related to the logged-in user.")]
-        public async Task<IActionResult> GetPersonProducts()
+        public async Task<IActionResult> GetPersonProductsFromPerson([FromRoute] int personId)
         {
-            var personProducts = await _personProductService.GetPersonProducts();
+            var personProducts = await _personProductService.GetPersonProductsFromPerson(personId);
             return Ok(personProducts);
         }
     }

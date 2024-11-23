@@ -1,4 +1,9 @@
 ﻿using DivvyUp_App.BaseComponents.DDialog;
+using DivvyUp_App.BaseComponents.DDialog.Loan;
+using DivvyUp_App.BaseComponents.DDialog.Person;
+using DivvyUp_App.BaseComponents.DDialog.PersonProduct;
+using DivvyUp_App.BaseComponents.DDialog.User;
+using DivvyUp_Shared.Dtos.Entity;
 using Radzen;
 
 
@@ -10,7 +15,7 @@ namespace DivvyUp_App.Services.Gui
 
         public DDialogService(DialogService dialogService)
         {
-            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+            _dialogService = dialogService;
         }
 
         public async Task OpenDialog(string title, string content)
@@ -44,7 +49,7 @@ namespace DivvyUp_App.Services.Gui
 
         public async Task<bool> OpenProductPersonDialog(int productId)
         {
-            var result = await _dialogService.OpenAsync<DDialogProductPersonCard>(
+            var result = await _dialogService.OpenAsync<DDialogPersonProductCard>(
                 "Osoby przypisane do produktu",
                 new Dictionary<string, object> { { "ProductId", productId } },
                 new DialogOptions()
@@ -74,7 +79,7 @@ namespace DivvyUp_App.Services.Gui
 
         public async Task<List<int>> OpenProductPersonSelectDialog(int productId, int maxQuantity)
         {
-            var result = await _dialogService.OpenAsync<DDialogProductPersonSelectCard>(
+            var result = await _dialogService.OpenAsync<DDialogPersonProductSelectCard>(
                 "Wybierz osoby, które zostaną przypisane do produktu",
                 new Dictionary<string, object>
                 {
@@ -89,6 +94,40 @@ namespace DivvyUp_App.Services.Gui
             );
 
             return result as List<int>;
+        }
+
+        public async Task<bool> OpenPersonProductDialog(int personId)
+        {
+            var result = await _dialogService.OpenAsync<DDialogPersonProductFromPersonCard>(
+                "Przypisania osoby do produktów",
+                new Dictionary<string, object> { { "PersonId", personId } },
+                new DialogOptions()
+                {
+                    Width = "85%",
+                    Height = "85%"
+                }
+            );
+
+            return result != null && (bool)result;
+        }
+
+        public async Task<List<PersonDto>> OpenPersonSelectDialog(int maxQuantity, List<PersonDto> SelectedPersons)
+        {
+            var result = await _dialogService.OpenAsync<DDialogPersonSelectCard>(
+                "Wybierz osoby które zostaną wpisane do tego produktu",
+                new Dictionary<string, object>
+                {
+                    { "MaxQuantity", maxQuantity },
+                    { "SelectedPersons", SelectedPersons}
+                },
+                new DialogOptions
+                {
+                    Width = "85%",
+                    Height = "85%"
+                }
+            );
+
+            return result as List<PersonDto>;
         }
     }
 }

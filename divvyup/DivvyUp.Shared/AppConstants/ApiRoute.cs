@@ -94,6 +94,7 @@
             public const string SET_COMPENSATION = $"{PERSON_PRODUCT_ROUTE}/set-compensation/{ARG_PERSON_PRODUCT}";
             public const string PERSON_PRODUCT = $"{PERSON_PRODUCT_ROUTE}/{ARG_PERSON_PRODUCT}";
             public const string PERSON_PRODUCTS = $"{PERSON_PRODUCT_ROUTE}/person-products";
+            public const string PERSON_PRODUCT_FROM_PERSON = $"{PERSON_PRODUCT_ROUTE}/person/{ARG_PERSON}";
             public const string PERSON_PRODUCT_FROM_PRODUCT= $"{PERSON_PRODUCT_ROUTE}/product/{ARG_PRODUCT}";
         }
 

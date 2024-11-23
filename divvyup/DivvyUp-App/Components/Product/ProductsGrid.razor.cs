@@ -34,6 +34,9 @@ namespace DivvyUp_App.Components.Product
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private PersonDto SelectedPerson { get; set; } = new();
         private bool IsLoading => Products == null;
+        private int MaxQuantityLimit => SelectedPersons.Count() > 0 ? SelectedPersons.Count() : 2;
+
+        private List<PersonDto> SelectedPersons { get; set; } = new List<PersonDto>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -51,6 +54,7 @@ namespace DivvyUp_App.Components.Product
 
         private async Task InsertRow()
         {
+            SelectedPersons = new List<PersonDto>();
             var product = new ProductDto();
             Products.Add(product);
             await Grid.InsertRow(product);
@@ -58,6 +62,7 @@ namespace DivvyUp_App.Components.Product
 
         private async Task EditRow(ProductDto product)
         {
+            SelectedPersons = new List<PersonDto>();
             if (!product.isNew && !product.Divisible)
             {
                 SelectedPerson = product.Persons.FirstOrDefault();
@@ -79,7 +84,19 @@ namespace DivvyUp_App.Components.Product
 
                 if (product.isNew)
                 {
-                    await ProductService.AddWithPerson(request, ReceiptId, SelectedPerson.Id);
+                    if (product.Divisible && SelectedPersons.Count() > 0) 
+                    {
+                        var newProduct = await ProductService.Add(request, ReceiptId);
+                        foreach (var person in SelectedPersons)
+                        {
+                            AddEditPersonProductDto requestPersonProduct = new(person.Id,1);
+                            await PersonProductService.Add(requestPersonProduct, newProduct.Id);
+                        }
+                    }
+                    else
+                    {
+                        await ProductService.AddWithPerson(request, ReceiptId, SelectedPerson.Id);
+                    }
                 }
                 else
                 {
@@ -111,6 +128,7 @@ namespace DivvyUp_App.Components.Product
                         await ProductService.EditWithPerson(request, product.Id, SelectedPerson.Id);
                     }
                 }
+                SelectedPersons = new List<PersonDto>();
             }
             catch (DException ex)
             {
@@ -179,6 +197,18 @@ namespace DivvyUp_App.Components.Product
             var result = await DDialogService.OpenProductPersonDialog(productId);
             if (!result)
                 await LoadGrid();
+        }
+
+        private async Task SelectPersons(ProductDto product)
+        {
+            SelectedPersons = await DDialogService.OpenPersonSelectDialog(product.MaxQuantity, SelectedPersons);
+            if (SelectedPersons.Count() > 0)
+            {
+                if (SelectedPersons.Count() > product.MaxQuantity)
+                {
+                    product.MaxQuantity = SelectedPersons.Count();
+                }
+            }
         }
 
         private void OnPersonSet(PersonDto person)

@@ -18,7 +18,10 @@
                 PagerHorizontalAlign="HorizontalAlign.Center"
                 ShowPagingSummary="true"
                 EditMode="DataGridEditMode.Single"
-                GridLines="DataGridGridLines.Both">
+                GridLines="DataGridGridLines.Both"
+                SelectionMode="DataGridSelectionMode.Multiple"
+                @bind-Value="@SelectedPersonsList"
+                AllowRowSelectOnRowClick="false">
     <HeaderTemplate>
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
     </HeaderTemplate>
@@ -28,8 +31,10 @@
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="person">
-                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(person))" />
-                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(person))" Visible="@(!person.UserAccount)" />
+                <RadzenCheckBox class="button" TabIndex="-1" TriState="false" Value="@(SelectedPersons != null && SelectedPersons.Contains(person))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
+                                TValue="bool" Change=@(async(bool value) => { await ChangeSelected(person, value); }) Visible="@(!NormalView)" />
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(person))" Visible="@NormalView"/>
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(person))" Visible="@(!person.UserAccount && NormalView)"/>
             </Template>
             <EditTemplate Context="person">
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(person))" />
@@ -37,8 +42,8 @@
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">
-                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
-                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" Visible="@NormalView" />
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" Visible="@NormalView" />
                 </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
@@ -52,7 +57,7 @@
                 <RadzenTextBox @bind-value="@person.Surname" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.LoanBalance)" Title="Bilans pożyczek" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.LoanBalance)" Title="Bilans pożyczek" Width="13%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
             <Template Context="person">
                 @if (!person.UserAccount)
                 {
@@ -65,15 +70,20 @@
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.UnpaidAmount)" Title="Kwota aktualna" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.UnpaidAmount)" Title="Kwota aktualna" Width="13%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
             <Template Context="person">
                 <b style="color: @(person.UnpaidAmount > 0 ? "red" : "green")"> @person.UnpaidAmount.ToString(Format.PriceFormat)</b>
+                @*
+                    <RadzenButton ButtonStyle="@(person.UnpaidAmount >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" Click="async () => { await ManagePersonProduct(person.Id); }">
+                       @person.UnpaidAmount.ToString(Format.PriceFormat)
+                    </RadzenButton>
+                *@
             </Template>
             <EditTemplate>
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.TotalAmount)" Title="Kwota łączna" Width="13%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.TotalAmount)" Title="Kwota łączna" Width="13%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
             <Template Context="person">
                 <b>@person.TotalAmount.ToString(Format.PriceFormat)</b>
             </Template>

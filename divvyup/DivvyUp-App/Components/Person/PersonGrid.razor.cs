@@ -1,9 +1,9 @@
 ﻿using DivvyUp_App.Services.Gui;
 using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
+using DivvyUp_Shared.Enums;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
-using DivvyUp_Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -19,10 +19,21 @@ namespace DivvyUp_App.Components.Person
         [Inject]
         private DDialogService DDialogService { get; set; }
 
+        [Parameter] 
+        public PersonGridMode GridMode { get; set; } = PersonGridMode.Normal;
+        [Parameter]
+        public int MaxQuantityInProduct { get; set; }
+        [Parameter]
+        public List<PersonDto> SelectedPersons { get; set; } = new List<PersonDto>();
+        [Parameter]
+        public EventCallback<List<PersonDto>> SelectedPersonsChanged { get; set; }
+
         private List<PersonDto> Persons { get; set; }
         private RadzenDataGrid<PersonDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private bool IsLoading => Persons == null;
+        private bool NormalView => GridMode == PersonGridMode.Normal;
+        private IList<PersonDto> SelectedPersonsList { get; set; } = new List<PersonDto>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -106,6 +117,28 @@ namespace DivvyUp_App.Components.Person
             var result = await DDialogService.OpenLoanDialog(personId);
             if (!result)
                 await LoadGrid();
+        }
+
+        private async Task ManagePersonProduct(int personId)
+        {
+            var result = await DDialogService.OpenPersonProductDialog(personId);
+            if (!result)
+                await LoadGrid();
+        }
+
+        private async Task ChangeSelected(PersonDto person, bool isChecked)
+        {
+            if (isChecked)
+            {
+                SelectedPersonsList.Add(person);
+            }
+            else
+            {
+                SelectedPersonsList.Remove(person);
+            }
+
+            SelectedPersons = SelectedPersonsList.ToList();
+            await SelectedPersonsChanged.InvokeAsync(SelectedPersons);
         }
     }
 }
