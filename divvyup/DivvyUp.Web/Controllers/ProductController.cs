@@ -1,6 +1,8 @@
 ﻿using DivvyUp_Shared.AppConstants;
+using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Interfaces;
+using DivvyUp_Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -41,6 +43,14 @@ namespace DivvyUp.Web.Controllers
         public async Task<IActionResult> AddWidthPerson([FromBody] AddEditProductDto request, [FromRoute] int receiptId, [FromRoute] int personId)
         {
             await _productService.AddWithPerson(request, receiptId, personId);
+            return Ok();
+        }
+
+        [HttpPost(ApiRoute.PRODUCT_ROUTES.ADD_WIDTH_PERSONS)]
+        [SwaggerOperation(Summary = "Add a product and assign it to a person", Description = "Adds a product to a receipt and associates it with a specific person. This allows tracking who is responsible for the product.")]
+        public async Task<IActionResult> AddWidthPersons([FromBody] AddEditProductDto request, [FromRoute] int receiptId, [FromQuery] List<int> personIds)
+        {
+            await _productService.AddWithPersons(request, receiptId, personIds);
             return Ok();
         }
 

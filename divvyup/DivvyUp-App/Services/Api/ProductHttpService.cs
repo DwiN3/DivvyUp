@@ -93,6 +93,28 @@ namespace DivvyUp_App.Services.Api
             }
         }
 
+        public async Task AddWithPersons(AddEditProductDto request, int receiptId, List<int> personIds)
+        {
+            try
+            {
+                var query = string.Join("&", personIds.Select(id => $"personIds={id}"));
+                var url = $"{ApiRoute.PRODUCT_ROUTES.ADD_WIDTH_PERSONS
+                    .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString())}?{query}";
+                var response = await _dHttpClient.PostAsync(url, request);
+                await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie dodawania produktu: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task EditWithPerson(AddEditProductDto request, int productId, int personId)
         {
             try

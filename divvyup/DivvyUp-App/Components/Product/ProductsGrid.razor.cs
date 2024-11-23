@@ -86,12 +86,8 @@ namespace DivvyUp_App.Components.Product
                 {
                     if (product.Divisible && SelectedPersons.Count() > 0) 
                     {
-                        var newProduct = await ProductService.Add(request, ReceiptId);
-                        foreach (var person in SelectedPersons)
-                        {
-                            AddEditPersonProductDto requestPersonProduct = new(person.Id,1);
-                            await PersonProductService.Add(requestPersonProduct, newProduct.Id);
-                        }
+                        var personIds = SelectedPersons.Select(person => person.Id).ToList();
+                        await ProductService.AddWithPersons(request, ReceiptId, personIds);
                     }
                     else
                     {

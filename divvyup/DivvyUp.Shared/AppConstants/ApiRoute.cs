@@ -74,6 +74,7 @@
             public const string ADD = $"{PRODUCT_ROUTE}/{ARG_RECEIPT}/add";
             public const string EDIT = $"{PRODUCT_ROUTE}/edit/{ARG_PRODUCT}";
             public const string ADD_WIDTH_PERSON = $"{PRODUCT_ROUTE}/{ARG_RECEIPT}/add/{ARG_PERSON}";
+            public const string ADD_WIDTH_PERSONS = $"{PRODUCT_ROUTE}/{ARG_RECEIPT}/add/persons";
             public const string EDIT_WIDTH_PERSON = $"{PRODUCT_ROUTE}/{ARG_PRODUCT}/edit/{ARG_PERSON}";
             public const string REMOVE = $"{PRODUCT_ROUTE}/remove/{ARG_PRODUCT}";
             public const string SET_SETTLED = $"{PRODUCT_ROUTE}/set-settled/{ARG_PRODUCT}/{ARG_SETTLED}";

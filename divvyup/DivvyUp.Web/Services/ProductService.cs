@@ -140,6 +140,53 @@ namespace DivvyUp.Web.Services
             await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
         }
 
+        public async Task AddWithPersons(AddEditProductDto request, int receiptId, List<int> personIds)
+        {
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
+            _validator.IsNull(request.Price, "Cena jest wymagana");
+            _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
+            _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
+            _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+            var user = await _userContext.GetCurrentUser();
+            var receipt = await _validator.GetReceipt(user, receiptId);
+
+            var newProduct = new Product()
+            {
+                Receipt = receipt,
+                Name = request.Name,
+                Price = request.Price,
+                Divisible = true,
+                MaxQuantity = request.MaxQuantity,
+                AvailableQuantity = request.MaxQuantity,
+                CompensationPrice = request.Price,
+                Settled = false,
+            };
+
+            _dbContext.Products.Add(newProduct);
+            await _dbContext.SaveChangesAsync();
+
+            var product = _dbContext.Products.Where(p => p == newProduct).FirstOrDefault();
+            foreach (var personId in personIds)
+            {
+                var newPersonProduct = new PersonProduct()
+                {
+                    PersonId = personId,
+                    ProductId = product.Id,
+                    Compensation = false,
+                    PartOfPrice = CalculatePartOfPrice(product, 1),
+                    Quantity = 1,
+                    Settled = product.Settled,
+                };
+                _dbContext.PersonProducts.Add(newPersonProduct);
+            }
+
+            await _dbContext.SaveChangesAsync();
+            await _entityUpdateService.UpdatePartPricesPersonProduct(product);
+            await _entityUpdateService.UpdateProductDetails(product);
+            await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
+        }
+
         public async Task EditWithPerson(AddEditProductDto request, int productId, int personId)
         {
             _validator.IsNull(request, "Nie przekazano danych");
@@ -298,9 +345,9 @@ namespace DivvyUp.Web.Services
             return productDto;
         }
 
-        private async Task AddPersonProduct(Product product, int personId)
+        private decimal CalculatePartOfPrice(Product product, int quantity)
         {
-
+            return product.Divisible ? (product.Price / product.MaxQuantity) * quantity : product.Price;
         }
     }
 }

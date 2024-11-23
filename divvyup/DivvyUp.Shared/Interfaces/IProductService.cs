@@ -8,6 +8,7 @@ namespace DivvyUp_Shared.Interfaces
         Task<ProductDto> Add(AddEditProductDto request, int receiptId);
         Task<ProductDto> Edit(AddEditProductDto request, int productId);
         Task AddWithPerson(AddEditProductDto request, int receiptId, int personId);
+        Task AddWithPersons(AddEditProductDto request, int receiptId, List<int> personIds);
         Task EditWithPerson(AddEditProductDto request, int productId, int personId);
         Task Remove(int productId);
         Task SetSettled(int productId, bool settled);
