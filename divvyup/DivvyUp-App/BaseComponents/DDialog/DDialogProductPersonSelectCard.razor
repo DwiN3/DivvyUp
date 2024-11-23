@@ -5,7 +5,7 @@
     <PersonProductSelectGrid ProductId="@ProductId" @bind-PersonProductsUnSelectedIds="@PersonProductsUnSelectedIds" MaxQuantity="@MaxQuantity" />
 </div>
 <footer class="footer">
-    <RadzenButton Text="Zatwierdź" ButtonStyle="ButtonStyle.Success" Click="@(() => OnConfirm())" />
+    <RadzenButton Style="margin-right: 8px;" Text="Zatwierdź" ButtonStyle="ButtonStyle.Success" Click="@(() => OnConfirm())" />
     <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Danger" Click="@(() => OnCancel())" />
 </footer>
 

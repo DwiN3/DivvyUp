@@ -81,7 +81,7 @@
                 </div>
             </Template>
             <EditTemplate Context="loan">
-                <RadzenNumeric @bind-Value="@loan.Amount" Style="width: 100%;" Format="@Format.PriceFormat" />
+                <RadzenNumeric @bind-Value="@loan.Amount" Style="width: 100%;" Format="@Format.PriceFormat" Min="0" />
             </EditTemplate>
         </RadzenDataGridColumn>
         @if (GridMode == LoanGridMode.All)

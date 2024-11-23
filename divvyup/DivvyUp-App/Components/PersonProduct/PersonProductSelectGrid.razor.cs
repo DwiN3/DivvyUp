@@ -55,9 +55,18 @@ namespace DivvyUp_App.Components.PersonProduct
 
         private async Task ChangeSelected(PersonProductDto personProduct, bool isChecked)
         {
-            if (SelectedPersonProducts.Count() < MaxQuantity || !isChecked)
+            var totalQuantity = SelectedPersonProducts.Sum(p => p.Quantity);
+
+            if ((totalQuantity + personProduct.Quantity <= MaxQuantity || !isChecked))
             {
-                Grid.SelectRow(personProduct);
+                if (isChecked)
+                {
+                    SelectedPersonProducts.Add(personProduct);
+                }
+                else
+                {
+                    SelectedPersonProducts.Remove(personProduct);
+                }
             }
 
             var allProductIds = PersonProducts.Select(p => p.Id).ToList();

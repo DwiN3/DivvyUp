@@ -64,7 +64,7 @@
                 </div>
             </Template>
             <EditTemplate Context="product">
-                <RadzenNumeric @bind-Value="@product.Price" Style="width: 100%;" Format="@Format.PriceFormat" />
+                <RadzenNumeric @bind-Value="@product.Price" Style="width: 100%;" Format="@Format.PriceFormat" Min="0" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ProductDto.Divisible)" Title="Podzielność" Width="7%" TextAlign="TextAlign.Center" Frozen="true">

@@ -68,7 +68,7 @@
                     {
                         personProduct.Quantity = @Product.AvailableQuantity;
                     }
-                    <RadzenNumeric @bind-Value="@personProduct.Quantity" Min="1" Max="@Product.AvailableQuantity" />
+                    <RadzenNumeric @bind-Value="@personProduct.Quantity" Min="1" Max="@(Product.AvailableQuantity + personProduct.Quantity)" />
                 </EditTemplate>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.PartOfPrice)" Title="Cena" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
