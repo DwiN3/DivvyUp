@@ -13,7 +13,7 @@ namespace DivvyUp.Web.Services
         private readonly UserContext _userContext;
 
         private static readonly string[] MonthNames = { "Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru" };
-        private static readonly string[] WeekNames = { "Pon", "Wt", "Śr", "Czw", "Pt", "Sb", "Ndz" };
+        private static readonly string[] WeekNames = { "Niedz", "Pon", "Wt", "Śr", "Czw", "Pt", "Sb" };
 
         public ChartService(DuDbContext dbContext, UserContext userContext)
         {
@@ -150,39 +150,34 @@ namespace DivvyUp.Web.Services
 
         public async Task<List<ChartDto>> GetWeeklyTotalExpenses()
         {
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            var startOfWeek = today.AddDays(-((int)today.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7); // Poprawiona linia
+            var endOfWeek = startOfWeek.AddDays(6);
+
             var user = await _userContext.GetCurrentUser();
+
             var receipts = await _dbContext.Receipts
                 .AsNoTracking()
-                .Where(r => r.UserId == user.Id).ToListAsync();
+                .Where(r => r.UserId == user.Id && r.Date >= startOfWeek && r.Date <= endOfWeek)
+                .ToListAsync();
 
             var dailyTotals = new Dictionary<DayOfWeek, decimal>();
-            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
-            {
-                dailyTotals[day] = 0;
-            }
-
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
-            var endOfWeek = startOfWeek.AddDays(6);
 
             foreach (var receipt in receipts)
             {
-                var date = receipt.Date;
-
-                if (date >= startOfWeek && date <= endOfWeek)
-                {
-                    var dayOfWeek = date.DayOfWeek;
-                    dailyTotals[dayOfWeek] += receipt.TotalPrice;
-                }
+                var dayOfWeek = receipt.Date.DayOfWeek;
+                dailyTotals[dayOfWeek] = dailyTotals.GetValueOrDefault(dayOfWeek, 0.0m) + receipt.TotalPrice;
             }
 
             var responseList = new List<ChartDto>();
-            foreach (var day in Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>())
+
+            for (int i = 0; i < 7; i++)
             {
-                decimal total = dailyTotals[day];
+                var currentDay = startOfWeek.AddDays(i);
+                var total = dailyTotals.GetValueOrDefault(currentDay.DayOfWeek, 0.0m);
                 responseList.Add(new ChartDto
                 {
-                    Name = WeekNames[(int)day],
+                    Name = WeekNames[(int)currentDay.DayOfWeek],
                     Value = total
                 });
             }
@@ -190,9 +185,16 @@ namespace DivvyUp.Web.Services
             return responseList;
         }
 
+
+
         public async Task<List<ChartDto>> GetWeeklyUserExpenses()
         {
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            var startOfWeek = today.AddDays(-((int)today.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7);
+            var endOfWeek = startOfWeek.AddDays(6);
+
             var user = await _userContext.GetCurrentUser();
+
             var persons = await _dbContext.Persons
                 .AsNoTracking()
                 .Where(p => p.UserId == user.Id)
@@ -200,14 +202,6 @@ namespace DivvyUp.Web.Services
             var userAccountPersons = persons.Where(p => p.UserAccount).ToList();
 
             var dailyTotals = new Dictionary<DayOfWeek, decimal>();
-            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
-            {
-                dailyTotals[day] = 0;
-            }
-
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
-            var endOfWeek = startOfWeek.AddDays(6);
 
             foreach (var person in userAccountPersons)
             {
@@ -223,29 +217,31 @@ namespace DivvyUp.Web.Services
                     if (personProduct?.Product?.Receipt != null)
                     {
                         var date = personProduct.Product.Receipt.Date;
-
                         if (date >= startOfWeek && date <= endOfWeek)
                         {
                             var dayOfWeek = date.DayOfWeek;
-                            dailyTotals[dayOfWeek] += personProduct.PartOfPrice;
+                            dailyTotals[dayOfWeek] = dailyTotals.GetValueOrDefault(dayOfWeek, 0.0m) + personProduct.PartOfPrice;
                         }
                     }
                 }
             }
 
             var responseList = new List<ChartDto>();
-            foreach (var day in Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>())
+
+            for (int i = 0; i < 7; i++)
             {
-                decimal total = dailyTotals[day];
+                var currentDay = startOfWeek.AddDays(i);
+                var total = dailyTotals.GetValueOrDefault(currentDay.DayOfWeek, 0.0m);
                 responseList.Add(new ChartDto
                 {
-                    Name = WeekNames[(int)day],
+                    Name = WeekNames[(int)currentDay.DayOfWeek],
                     Value = total
                 });
             }
 
             return responseList;
         }
+
 
         public async Task<List<ChartDto>> GetMonthlyTopProducts()
         {
