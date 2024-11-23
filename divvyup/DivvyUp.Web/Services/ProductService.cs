@@ -177,6 +177,12 @@ namespace DivvyUp.Web.Services
                 _dbContext.PersonProducts.Add(personProduct);
                 await _dbContext.SaveChangesAsync();
             }
+            else if (!previousDivisible && request.Divisible)
+            {
+                var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == product.Id).ToListAsync();
+                _dbContext.PersonProducts.RemoveRange(personProducts);
+                await _dbContext.SaveChangesAsync();
+            }
             else if (!request.Divisible)
             {
                 var personProducts = await _dbContext.PersonProducts

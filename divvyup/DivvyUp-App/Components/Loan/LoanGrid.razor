@@ -54,8 +54,8 @@
             <Template Context="loan">
                 <RadzenCheckBox class="button" @bind-Value="@loan.Settled" Change="@(async (bool Check) => await ChangeSettled(loan.Id, loan.Settled))" />
             </Template>
-            <EditTemplate Context="receipt">
-                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@receipt.Settled" ReadOnly="true" />
+            <EditTemplate Context="loan">
+                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@loan.Settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.Date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
@@ -68,7 +68,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.Lent)" Title="Pożyczka" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="loan">
-                <RadzenButton ButtonStyle="@(loan.Lent ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="@(loan.Lent ? "north_east" : "south_west")" Click="@(async() => { await ChangeLent(loan.Id, !loan.Lent); await LoadGrid(); })" />
+                <RadzenButton ButtonStyle="@(loan.Lent ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="@(loan.Lent ? "north_east" : "south_west")" Click="@(async () => await ChangeLent(loan.Id, !loan.Lent))" Disabled="true" />
             </Template>
             <EditTemplate Context="loan">
                 <RadzenButton ButtonStyle="@(loan.Lent ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="@(loan.Lent ? "north_east" : "south_west")" Click="@(() => { loan.Lent = !loan.Lent; })" />
@@ -81,7 +81,7 @@
                 </div>
             </Template>
             <EditTemplate Context="loan">
-                <RadzenNumeric @bind-Value="@loan.Amount" Style="width: 100%;" />
+                <RadzenNumeric @bind-Value="@loan.Amount" Style="width: 100%;" Format="@Format.PriceFormat" />
             </EditTemplate>
         </RadzenDataGridColumn>
         @if (GridMode == LoanGridMode.All)

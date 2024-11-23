@@ -83,6 +83,21 @@ namespace DivvyUp_App.Components.Product
                 }
                 else
                 {
+                    /*
+                     var productBeforeEdit = await ProductService.GetProduct(product.Id);
+                       if (productBeforeEdit.Divisible && !product.Divisible)
+                       {
+                           var result = await DDialogService.OpenYesNoDialog("Zmiana podzielności", "Czy chcesz zmienić podzielność produktu który ma przypisane osoby?");
+                           if (result)
+                           {
+                               await ProductService.EditWithPerson(request, product.Id, SelectedPerson.Id);
+                           }
+                       }
+                       else
+                       {
+                           await ProductService.EditWithPerson(request, product.Id, SelectedPerson.Id);
+                       }
+                     */
                     await ProductService.EditWithPerson(request, product.Id, SelectedPerson.Id);
                 }
             }

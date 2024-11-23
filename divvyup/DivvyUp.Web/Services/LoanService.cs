@@ -67,6 +67,7 @@ namespace DivvyUp.Web.Services
             loan.Date = request.Date;
             loan.Person = person;
             loan.Amount = request.Amount;
+            loan.Lent = request.Lent;
 
             _dbContext.Loans.Update(loan);
             await _dbContext.SaveChangesAsync();

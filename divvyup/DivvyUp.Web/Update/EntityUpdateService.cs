@@ -64,9 +64,10 @@ namespace DivvyUp.Web.Update
 
         public async Task<bool> AreAllProductsSettled(Receipt receipt)
         {
-            return await _dbContext.Products
-                .Where(p => p.ReceiptId == receipt.Id)
-                .AllAsync(p => p.Settled);
+            var products = await _dbContext.Products
+                .Where(p => p.Receipt.Id == receipt.Id)
+                .ToListAsync();
+            return products.All(p => p.Settled);
         }
 
         public async Task UpdateProductDetails(Product product)
@@ -88,9 +89,10 @@ namespace DivvyUp.Web.Update
 
         public async Task<bool> AreAllPersonProductsSettled(Product product)
         {
-            return await _dbContext.PersonProducts
-                .Where(pp => pp.ProductId == product.Id)
-                .AllAsync(pp => pp.Settled);
+            var personProducts = await _dbContext.PersonProducts
+                .Where(pp => pp.Product.Id == product.Id)
+                .ToListAsync();
+            return personProducts.All(pp => pp.Settled);
         }
 
         public async Task UpdatePartPricesPersonProduct(Product product)
