@@ -29,7 +29,7 @@
         <Columns>
             <RadzenDataGridColumn Title="Zarządzanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
-                    <RadzenCheckBox TabIndex="-1" TriState="false" Value="@(SelectedPersonProducts != null && SelectedPersonProducts.Contains(personProduct))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
+                    <RadzenCheckBox class="button" TabIndex="-1" TriState="false" Value="@(SelectedPersonProducts != null && SelectedPersonProducts.Contains(personProduct))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
                                     TValue="bool" Change=@(async(bool value) => { await ChangeSelected(personProduct, value); }) />
                 </Template>
                 <FilterTemplate>
@@ -38,16 +38,6 @@
                     </div>
                 </FilterTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Settled)" Title="Rozliczono" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
-                <Template Context="personProduct">
-                    <RadzenCheckBox class="button" @bind-Value="@personProduct.Settled" Change="@(async (bool check) => await ChangeSettled(personProduct.Id, personProduct.Settled))" ReadOnly="true" />
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Compensation)" Title="Wyrównanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
-                <Template Context="personProduct">
-                    <RadzenCheckBox class="button" @bind-Value="@personProduct.Compensation" Change="@(async (bool check) => await ChangeCompensation(personProduct.Id))" ReadOnly="true"/>
-                </Template>
-            </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Ilość" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
                     @($"{personProduct.Quantity}/{Product.MaxQuantity}")
@@ -55,20 +45,12 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.PartOfPrice)" Title="Cena" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
-                    <div style="color: @(personProduct.Settled ? "green" : "red")">
-                        <b>@personProduct.PartOfPrice.ToString(Format.PriceFormat)</b>
-                    </div>
+                    @personProduct.PartOfPrice.ToString(Format.PriceFormat)
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.PersonId)" Title="Osoba" Width="25%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
-                    <RadzenDropDownDataGrid TValue="int"
-                                            Value="@personProduct.PersonId"
-                                            ValueChanged="async (int personId) => await OnPersonChange(personProduct, personId)"
-                                            Data="@Persons"
-                                            TextProperty="@nameof(PersonDto.FullName)"
-                                            ValueProperty="@nameof(PersonDto.Id)"
-                                            Disabled="true"/>
+                    @personProduct.Person.FullName
                 </Template>
             </RadzenDataGridColumn>
 

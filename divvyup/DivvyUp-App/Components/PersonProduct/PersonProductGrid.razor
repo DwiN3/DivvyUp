@@ -51,14 +51,16 @@
                     <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.Settled" ReadOnly="true" />
                 </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Compensation)" Title="Wyrównanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
-                <Template Context="personProduct">
-                    <RadzenCheckBox class="button" @bind-Value="@personProduct.Compensation" Change="@(async (bool check) => await ChangeCompensation(personProduct.Id))"/>
-                </Template>
-                <EditTemplate Context="personProduct">
-                    <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.Compensation" ReadOnly="true" />
-                </EditTemplate>
-            </RadzenDataGridColumn>
+            @*
+                <RadzenDataGridColumn Property="@nameof(PersonProductDto.Compensation)" Title="Wyrównanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+                       <Template Context="personProduct">
+                           <RadzenCheckBox class="button" @bind-Value="@personProduct.Compensation" Change="@(async (bool check) => await ChangeCompensation(personProduct.Id))"/>
+                       </Template>
+                       <EditTemplate Context="personProduct">
+                           <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.Compensation" ReadOnly="true" />
+                       </EditTemplate>
+                </RadzenDataGridColumn>
+            *@
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Ilość" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
                     @($"{personProduct.Quantity}/{Product.MaxQuantity}")

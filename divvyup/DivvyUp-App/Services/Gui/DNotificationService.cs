@@ -22,5 +22,17 @@ namespace DivvyUp_App.Services.Gui
                 Style = "width: 100%;"
             });
         }
+
+        public void ShowNotification(string message, NotificationSeverity notificationType, double? time)
+        {
+            _notificationService.Notify(new NotificationMessage
+            {
+                Detail = message,
+                Severity = notificationType,
+                CloseOnClick = true,
+                Duration = time,
+                Style = "width: 100%;"
+            });
+        }
     }
 }

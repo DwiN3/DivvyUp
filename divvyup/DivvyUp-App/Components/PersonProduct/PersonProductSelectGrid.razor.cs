@@ -68,6 +68,10 @@ namespace DivvyUp_App.Components.PersonProduct
                     SelectedPersonProducts.Remove(personProduct);
                 }
             }
+            else
+            {
+                DNotificationService.ShowNotification("Przekroczono możliwą ilość przypisań do osób", NotificationSeverity.Error, 1500);
+            }
 
             var allProductIds = PersonProducts.Select(p => p.Id).ToList();
             PersonProductsUnSelectedIds = allProductIds
