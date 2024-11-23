@@ -83,22 +83,33 @@ namespace DivvyUp_App.Components.Product
                 }
                 else
                 {
-                    /*
-                     var productBeforeEdit = await ProductService.GetProduct(product.Id);
-                       if (productBeforeEdit.Divisible && !product.Divisible)
-                       {
-                           var result = await DDialogService.OpenYesNoDialog("Zmiana podzielności", "Czy chcesz zmienić podzielność produktu który ma przypisane osoby?");
-                           if (result)
-                           {
-                               await ProductService.EditWithPerson(request, product.Id, SelectedPerson.Id);
-                           }
-                       }
-                       else
-                       {
-                           await ProductService.EditWithPerson(request, product.Id, SelectedPerson.Id);
-                       }
-                     */
-                    await ProductService.EditWithPerson(request, product.Id, SelectedPerson.Id);
+                    var productBeforeEdit = await ProductService.GetProduct(product.Id);
+                    if (product.Divisible && productBeforeEdit.Divisible)
+                    {
+                        var currentEntries = productBeforeEdit.MaxQuantity - productBeforeEdit.AvailableQuantity;
+                        if (productBeforeEdit.MaxQuantity > product.MaxQuantity && currentEntries > product.MaxQuantity)
+                        {
+                            var personProductIds = await DDialogService.OpenProductPersonSelectDialog(product.Id, product.MaxQuantity);
+
+                            if (personProductIds != null)
+                            {
+                                await PersonProductService.RemoveList(product.Id, personProductIds);
+                                await ProductService.Edit(request, product.Id);
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            await ProductService.Edit(request, product.Id);
+                        }
+                    }
+                    else
+                    {
+                        await ProductService.EditWithPerson(request, product.Id, SelectedPerson.Id);
+                    }
                 }
             }
             catch (DException ex)
@@ -166,7 +177,7 @@ namespace DivvyUp_App.Components.Product
         private async Task ManagePerson(int productId)
         {
             var result = await DDialogService.OpenProductPersonDialog(productId);
-            if (!result) 
+            if (!result)
                 await LoadGrid();
         }
 
@@ -182,7 +193,7 @@ namespace DivvyUp_App.Components.Product
             try
             {
                 await PersonProductService.SetPerson(personProduct.Id, person.Id);
-                
+
             }
             catch (DException ex)
             {

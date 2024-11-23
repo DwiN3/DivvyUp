@@ -44,6 +44,14 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
+        [HttpDelete(ApiRoute.PERSON_PRODUCT_ROUTES.REMOVE_LIST)]
+        [SwaggerOperation(Summary = "Remove person-product associations", Description = "Removes associations between a person and a product by their IDs.")]
+        public async Task<IActionResult> RemoveList([FromRoute] int productId, [FromQuery] List<int> personProductIds)
+        {
+            await _personProductService.RemoveList(productId, personProductIds);
+            return Ok();
+        }
+
         [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.SET_PERSON)]
         [SwaggerOperation(Summary = "Set person in person-product", Description = "Changes the person in an existing person-product association.")]
         public async Task<IActionResult> SetPerson([FromRoute] int personProductId, [FromRoute] int personId)

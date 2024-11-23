@@ -101,6 +101,23 @@ namespace DivvyUp.Web.Services
             await _entityUpdateService.UpdatePerson(user, false);
         }
 
+        public async Task RemoveList(int productId, List<int> personProductIds)
+        {
+            _validator.IsNull(personProductIds, "Brak identyfikatora powiązania produkt - osoba");
+            var user = await _userContext.GetCurrentUser();
+            var product = await _validator.GetProduct(user, productId);
+
+            foreach (var personProductId in personProductIds)
+            {
+                var personProduct = await _validator.GetPersonProduct(user, personProductId);
+                _dbContext.PersonProducts.Remove(personProduct);
+            }
+
+            await _dbContext.SaveChangesAsync();
+            await _entityUpdateService.UpdateProductDetails(product);
+            await _entityUpdateService.UpdatePerson(user, false);
+        }
+
         public async Task SetPerson(int personProductId, int personId)
         {
             _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");

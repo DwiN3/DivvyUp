@@ -8,6 +8,7 @@ namespace DivvyUp_Shared.Interfaces
         Task Add(AddEditPersonProductDto request, int productId);
         Task Edit(AddEditPersonProductDto request, int personProductId);
         Task Remove(int personProductId);
+        Task RemoveList(int productId, List<int> personProductIds);
         Task SetPerson(int personProductId, int personId);
         Task SetSettled(int personProductId, bool settled);
         Task SetCompensation(int personProductId);

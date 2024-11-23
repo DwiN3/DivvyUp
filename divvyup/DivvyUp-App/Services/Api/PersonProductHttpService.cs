@@ -85,6 +85,30 @@ namespace DivvyUp_App.Services.Api
             }
         }
 
+        public async Task RemoveList(int productId, List<int> personProductIds)
+        {
+            try
+            {
+                var query = string.Join("&", personProductIds.Select(id => $"personProductIds={id}"));
+                var url = $"{ApiRoute.PERSON_PRODUCT_ROUTES.REMOVE_LIST
+                    .Replace(ApiRoute.ARG_PRODUCT, productId.ToString())}?{query}";
+
+                var response = await _dHttpClient.DeleteAsync(url);
+                await EnsureCorrectResponse(response, "Błąd w czasie usuwania produktu osób");
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie usuwania produktu osób: {Message}", ex.Message);
+                throw;
+            }
+        }
+
+
         public async Task SetPerson(int personProductId, int personId)
         {
             try

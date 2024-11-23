@@ -88,6 +88,7 @@
             public const string ADD = $"{PERSON_PRODUCT_ROUTE}/{ARG_PRODUCT}/add";
             public const string EDIT = $"{PERSON_PRODUCT_ROUTE}/edit/{ARG_PERSON_PRODUCT}";
             public const string REMOVE = $"{PERSON_PRODUCT_ROUTE}/remove/{ARG_PERSON_PRODUCT}";
+            public const string REMOVE_LIST = $"{PERSON_PRODUCT_ROUTE}/remove/list/{ARG_PRODUCT}";
             public const string SET_PERSON = $"{PERSON_PRODUCT_ROUTE}/set-person/{ARG_PERSON_PRODUCT}/{ARG_PERSON}";
             public const string SET_SETTLED = $"{PERSON_PRODUCT_ROUTE}/set-settled/{ARG_PERSON_PRODUCT}/{ARG_SETTLED}";
             public const string SET_COMPENSATION = $"{PERSON_PRODUCT_ROUTE}/set-compensation/{ARG_PERSON_PRODUCT}";

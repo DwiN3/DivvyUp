@@ -1,0 +1,93 @@
+﻿@using DivvyUp_Shared.AppConstants
+@using DivvyUp_Shared.Dtos.Entity
+@using DivvyUp_App.BaseComponents.DLoadingPanel
+
+<div class="h-100 w-100">
+    <DLoadingPanel IsLoading="@IsLoading" Size="ProgressBarCircularSize.Medium"/>
+    <RadzenDataGrid @ref="@Grid"
+                    Data="@PersonProducts"
+                    TItem="PersonProductDto"
+                    AllowSorting="true"
+                    AllowAlternatingRows="true"
+                    FilterMode="FilterMode.Simple"
+                    AllowFiltering="true"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    AllowPaging="true"
+                    PagerAlwaysVisible="true"
+                    PageSize="10"
+                    PageSizeOptions="@PageSizeOptions"
+                    PagerHorizontalAlign="HorizontalAlign.Center"
+                    ShowPagingSummary="true"
+                    EditMode="DataGridEditMode.Single"
+                    GridLines="DataGridGridLines.Both"
+                    SelectionMode="DataGridSelectionMode.Multiple"
+                    @bind-Value="@SelectedPersonProducts"
+                    AllowRowSelectOnRowClick="false">
+        <EmptyTemplate>
+            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>
+        </EmptyTemplate>
+        <Columns>
+            <RadzenDataGridColumn Title="Zarządzanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+                <Template Context="personProduct">
+                    <RadzenCheckBox TabIndex="-1" TriState="false" Value="@(SelectedPersonProducts != null && SelectedPersonProducts.Contains(personProduct))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
+                                    TValue="bool" Change=@(async(bool value) => { await ChangeSelected(personProduct, value); }) />
+                </Template>
+                <FilterTemplate>
+                    <div class="rz-cell-data">
+                        <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                    </div>
+                </FilterTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Settled)" Title="Rozliczono" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+                <Template Context="personProduct">
+                    <RadzenCheckBox class="button" @bind-Value="@personProduct.Settled" Change="@(async (bool check) => await ChangeSettled(personProduct.Id, personProduct.Settled))" ReadOnly="true" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Compensation)" Title="Wyrównanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+                <Template Context="personProduct">
+                    <RadzenCheckBox class="button" @bind-Value="@personProduct.Compensation" Change="@(async (bool check) => await ChangeCompensation(personProduct.Id))" ReadOnly="true"/>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Ilość" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+                <Template Context="personProduct">
+                    @($"{personProduct.Quantity}/{Product.MaxQuantity}")
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Property="@nameof(PersonProductDto.PartOfPrice)" Title="Cena" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+                <Template Context="personProduct">
+                    <div style="color: @(personProduct.Settled ? "green" : "red")">
+                        <b>@personProduct.PartOfPrice.ToString(Format.PriceFormat)</b>
+                    </div>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Property="@nameof(PersonProductDto.PersonId)" Title="Osoba" Width="25%" TextAlign="TextAlign.Center" Frozen="true">
+                <Template Context="personProduct">
+                    <RadzenDropDownDataGrid TValue="int"
+                                            Value="@personProduct.PersonId"
+                                            ValueChanged="async (int personId) => await OnPersonChange(personProduct, personId)"
+                                            Data="@Persons"
+                                            TextProperty="@nameof(PersonDto.FullName)"
+                                            ValueProperty="@nameof(PersonDto.Id)"
+                                            Disabled="true"/>
+                </Template>
+            </RadzenDataGridColumn>
+
+        </Columns>
+    </RadzenDataGrid>
+</div>          
+
+<style>
+    .button {
+        width: 36px;
+        height: 36px;
+    }
+
+    .rz-cell-filter-content {
+        display: flex;
+        justify-content: center
+    }
+
+    .rz-data-grid {
+        height: 100%;
+    }
+</style>

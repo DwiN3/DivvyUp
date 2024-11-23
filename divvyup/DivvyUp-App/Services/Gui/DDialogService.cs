@@ -71,5 +71,24 @@ namespace DivvyUp_App.Services.Gui
 
             return result != null && (bool)result;
         }
+
+        public async Task<List<int>> OpenProductPersonSelectDialog(int productId, int maxQuantity)
+        {
+            var result = await _dialogService.OpenAsync<DDialogProductPersonSelectCard>(
+                "Wybierz osoby, które zostaną przypisane do produktu",
+                new Dictionary<string, object>
+                {
+                    { "ProductId", productId },
+                    { "MaxQuantity", maxQuantity }
+                },
+                new DialogOptions
+                {
+                    Width = "85%",
+                    Height = "85%"
+                }
+            );
+
+            return result as List<int>;
+        }
     }
 }
