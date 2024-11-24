@@ -1,8 +1,9 @@
 ﻿@using DivvyUp_App.Components.PersonProduct
+@using DivvyUp_Shared.Enums
 @inject DialogService DialogService
 
 <div class="content-dialog">
-    <PersonProductSelectGrid ProductId="@ProductId" @bind-PersonProductsUnSelectedIds="@PersonProductsUnSelectedIds" MaxQuantity="@MaxQuantity" />
+    <PersonProductGrid ProductId="@ProductId" @bind-PersonProductsUnSelectedIds="@PersonProductsUnSelectedIds" MaxQuantity="@MaxQuantity" GridMode="@GridMode.Select" />
 </div>
 <footer class="footer">
     <RadzenButton Style="margin-right: 8px;" Text="Zatwierdź" ButtonStyle="ButtonStyle.Success" Click="@(() => OnConfirm())" />

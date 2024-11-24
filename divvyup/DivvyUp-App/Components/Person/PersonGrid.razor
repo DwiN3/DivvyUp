@@ -31,7 +31,7 @@
     <Columns>
         <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="person">
-                <RadzenCheckBox class="button" TabIndex="-1" TriState="false" Value="@(SelectedPersons != null && SelectedPersons.Contains(person))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
+                <RadzenCheckBox class="grid-button" TabIndex="-1" TriState="false" Value="@(SelectedPersons != null && SelectedPersons.Contains(person))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
                                 TValue="bool" Change=@(async(bool value) => { await ChangeSelected(person, value); }) Visible="@(!NormalView)" />
                 <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(person))" Visible="@NormalView"/>
                 <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(person))" Visible="@(!person.UserAccount && NormalView)"/>
@@ -93,19 +93,3 @@
         </RadzenDataGridColumn>
     </Columns>
 </RadzenDataGrid>
-
-<style>
-    .button {
-        width: 36px;
-        height: 36px;
-    }
-
-    .rz-cell-filter-content {
-        display: flex;
-        justify-content: center;
-    }
-
-    .rz-data-grid {
-        height: 100%;
-    }
-</style>

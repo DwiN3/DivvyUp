@@ -6,6 +6,7 @@ using Radzen.Blazor;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
 using Radzen;
+using DivvyUp_Shared.Enums;
 
 namespace DivvyUp_App.Components.PersonProduct
 {
@@ -21,7 +22,15 @@ namespace DivvyUp_App.Components.PersonProduct
         private DNotificationService DNotificationService { get; set; }
 
         [Parameter]
+        public GridMode GridMode { get; set; } = GridMode.Normal;
+        [Parameter]
         public int ProductId { get; set; }
+        [Parameter]
+        public int MaxQuantity { get; set; }
+        [Parameter]
+        public List<int> PersonProductsUnSelectedIds { get; set; }
+        [Parameter]
+        public EventCallback<List<int>> PersonProductsUnSelectedIdsChanged { get; set; }
 
         private List<PersonDto> Persons { get; set; }
         private List<PersonDto> PeopleAvailable { get; set; }
@@ -30,6 +39,8 @@ namespace DivvyUp_App.Components.PersonProduct
         private RadzenDataGrid<PersonProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private bool IsLoading => PersonProducts == null;
+        private bool NormalView => GridMode == GridMode.Normal;
+        private IList<PersonProductDto> SelectedPersonProducts = new List<PersonProductDto>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -181,6 +192,34 @@ namespace DivvyUp_App.Components.PersonProduct
             }
 
             return "-";
+        }
+
+        private async Task ChangeSelected(PersonProductDto personProduct, bool isChecked)
+        {
+            var totalQuantity = SelectedPersonProducts.Sum(p => p.Quantity);
+
+            if ((totalQuantity + personProduct.Quantity <= MaxQuantity || !isChecked))
+            {
+                if (isChecked)
+                {
+                    SelectedPersonProducts.Add(personProduct);
+                }
+                else
+                {
+                    SelectedPersonProducts.Remove(personProduct);
+                }
+            }
+            else
+            {
+                DNotificationService.ShowNotification("Przekroczono możliwą ilość przypisań do osób", NotificationSeverity.Error, 1500);
+            }
+
+            var allProductIds = PersonProducts.Select(p => p.Id).ToList();
+            PersonProductsUnSelectedIds = allProductIds
+                .Except(SelectedPersonProducts.Select(p => p.Id))
+                .ToList();
+
+            await PersonProductsUnSelectedIdsChanged.InvokeAsync(PersonProductsUnSelectedIds);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace DivvyUp_App.Components.Person
         private DDialogService DDialogService { get; set; }
 
         [Parameter] 
-        public PersonGridMode GridMode { get; set; } = PersonGridMode.Normal;
+        public GridMode GridMode { get; set; } = GridMode.Normal;
         [Parameter]
         public int MaxQuantityInProduct { get; set; }
         [Parameter]
@@ -32,7 +32,7 @@ namespace DivvyUp_App.Components.Person
         private RadzenDataGrid<PersonDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private bool IsLoading => Persons == null;
-        private bool NormalView => GridMode == PersonGridMode.Normal;
+        private bool NormalView => GridMode == GridMode.Normal;
         private IList<PersonDto> SelectedPersonsList { get; set; } = new List<PersonDto>();
 
         protected override async Task OnInitializedAsync()

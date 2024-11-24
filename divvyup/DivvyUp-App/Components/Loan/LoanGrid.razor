@@ -52,10 +52,10 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.Settled)" Title="Rozliczono" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="loan">
-                <RadzenCheckBox class="button" @bind-Value="@loan.Settled" Change="@(async (bool Check) => await ChangeSettled(loan.Id, loan.Settled))" />
+                <RadzenCheckBox class="grid-button" @bind-Value="@loan.Settled" Change="@(async (bool Check) => await ChangeSettled(loan.Id, loan.Settled))" />
             </Template>
             <EditTemplate Context="loan">
-                <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@loan.Settled" ReadOnly="true" />
+                <RadzenCheckBox style="opacity: 0.6; " class="grid-button" Value="@loan.Settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.Date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
@@ -113,23 +113,3 @@
         }
     </Columns>
 </RadzenDataGrid>
-
-<style>
-    .button {
-        width: 36px;
-        height: 36px;
-    }
-
-    .rz-cell-filter-content {
-        display: flex;
-        justify-content: center
-    }
-
-    .rz-data-grid {
-        height: 100%;
-    }
-
-    .rz-inputtext {
-        height: 36px !important;
-    }
-</style>

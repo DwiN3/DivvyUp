@@ -4,7 +4,7 @@
 @inject DialogService DialogService
  
 <div class="content-dialog">
-    <PersonGrid GridMode="@PersonGridMode.Select" @bind-SelectedPersons="@SelectedPersons" MaxQuantityInProduct="@MaxQuantity" />
+    <PersonGrid GridMode="@GridMode.Select" @bind-SelectedPersons="@SelectedPersons" MaxQuantityInProduct="@MaxQuantity" />
 </div>
 <footer class="footer">
     <RadzenButton Style="margin-right: 8px;" Text="Zatwierdź" ButtonStyle="ButtonStyle.Success" Click="@(() => OnConfirm())" />
@@ -28,7 +28,7 @@
     private void OnCancel()
     {
         _isConfirmed = false;
-        DialogService.Close(SelectedPersons);
+        DialogService.Close(new List<PersonDto>());
     }
 }
 

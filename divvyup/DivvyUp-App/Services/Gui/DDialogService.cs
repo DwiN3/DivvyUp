@@ -18,8 +18,8 @@ namespace DivvyUp_App.Services.Gui
             _dialogService = dialogService;
         }
 
-        private const string DialogHeight = "100%";
-        private const string DialogWidth = "100%";
+        private const string DialogHeight = "90%";
+        private const string DialogWidth = "90%";
 
         public async Task OpenDialog(string title, string content)
         {
@@ -123,7 +123,10 @@ namespace DivvyUp_App.Services.Gui
                 new DialogOptions
                 {
                     Width = DialogWidth,
-                    Height = DialogHeight
+                    Height = DialogHeight,
+                    CloseDialogOnEsc = false,
+                    CloseDialogOnOverlayClick = false,
+                    ShowClose = false,
                 }
             );
 

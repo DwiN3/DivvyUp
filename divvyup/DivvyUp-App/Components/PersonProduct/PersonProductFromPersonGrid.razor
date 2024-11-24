@@ -43,7 +43,7 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.Settled)" Title="Rozliczono" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
-                    <RadzenCheckBox class="button" @bind-Value="@personProduct.Settled" Change="@(async (bool check) => await ChangeSettled(personProduct.Id, personProduct.Settled))" />
+                    <RadzenCheckBox class="grid-button" @bind-Value="@personProduct.Settled" Change="@(async (bool check) => await ChangeSettled(personProduct.Id, personProduct.Settled))" />
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Ilość" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
@@ -62,20 +62,4 @@
             </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
-</div>          
-
-<style>
-    .button {
-        width: 36px;
-        height: 36px;
-    }
-
-    .rz-cell-filter-content {
-        display: flex;
-        justify-content: center
-    }
-
-    .rz-data-grid {
-        height: 100%;
-    }
-</style>
+</div>
