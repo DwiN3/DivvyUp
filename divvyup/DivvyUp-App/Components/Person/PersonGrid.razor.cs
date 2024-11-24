@@ -114,16 +114,14 @@ namespace DivvyUp_App.Components.Person
 
         private async Task ManageLoanPerson(int personId)
         {
-            var result = await DDialogService.OpenLoanDialog(personId);
-            if (!result)
-                await LoadGrid();
+            await DDialogService.OpenLoanDialog(personId);
+            await LoadGrid();
         }
 
         private async Task ManagePersonProduct(int personId)
         {
-            var result = await DDialogService.OpenPersonProductDialog(personId);
-            if (!result)
-                await LoadGrid();
+            await DDialogService.OpenPersonProductDialog(personId);
+            await LoadGrid();
         }
 
         private async Task ChangeSelected(PersonDto person, bool isChecked)

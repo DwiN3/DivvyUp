@@ -190,9 +190,8 @@ namespace DivvyUp_App.Components.Product
 
         private async Task ManagePerson(int productId)
         {
-            var result = await DDialogService.OpenProductPersonDialog(productId);
-            if (!result)
-                await LoadGrid();
+            await DDialogService.OpenProductPersonDialog(productId);
+            await LoadGrid();
         }
 
         private async Task SelectPersons(ProductDto product)

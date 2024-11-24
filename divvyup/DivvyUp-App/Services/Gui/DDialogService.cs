@@ -18,6 +18,9 @@ namespace DivvyUp_App.Services.Gui
             _dialogService = dialogService;
         }
 
+        private const string DialogHeight = "100%";
+        private const string DialogWidth = "100%";
+
         public async Task OpenDialog(string title, string content)
         {
             await _dialogService.OpenAsync<DDialogCard>(
@@ -47,34 +50,30 @@ namespace DivvyUp_App.Services.Gui
             );
         }
 
-        public async Task<bool> OpenProductPersonDialog(int productId)
+        public async Task OpenProductPersonDialog(int productId)
         {
             var result = await _dialogService.OpenAsync<DDialogPersonProductCard>(
                 "Osoby przypisane do produktu",
                 new Dictionary<string, object> { { "ProductId", productId } },
                 new DialogOptions()
                 {
-                    Width = "85%",
-                    Height = "85%"
+                    Width = DialogWidth,
+                    Height = DialogHeight
                 }
             );
-
-            return result != null && (bool)result;
         }
 
-        public async Task<bool> OpenLoanDialog(int personId)
+        public async Task OpenLoanDialog(int personId)
         {
             var result = await _dialogService.OpenAsync<DDialogLoanCard>(
                 "Pożyczki osoby",
                 new Dictionary<string, object> { { "PersonId", personId } },
                 new DialogOptions()
                 {
-                    Width = "85%",
-                    Height = "85%"
+                    Width = DialogWidth,
+                    Height = DialogHeight
                 }
             );
-
-            return result != null && (bool)result;
         }
 
         public async Task<List<int>> OpenProductPersonSelectDialog(int productId, int maxQuantity)
@@ -88,27 +87,28 @@ namespace DivvyUp_App.Services.Gui
                 },
                 new DialogOptions
                 {
-                    Width = "85%",
-                    Height = "85%"
+                    Width = DialogWidth,
+                    Height = DialogHeight,
+                    CloseDialogOnEsc = false,
+                    CloseDialogOnOverlayClick = false,
+                    ShowClose = false,
                 }
             );
 
             return result as List<int>;
         }
 
-        public async Task<bool> OpenPersonProductDialog(int personId)
+        public async Task OpenPersonProductDialog(int personId)
         {
             var result = await _dialogService.OpenAsync<DDialogPersonProductFromPersonCard>(
                 "Przypisania osoby do produktów",
                 new Dictionary<string, object> { { "PersonId", personId } },
                 new DialogOptions()
                 {
-                    Width = "85%",
-                    Height = "85%"
+                    Width = DialogWidth,
+                    Height = DialogHeight
                 }
             );
-
-            return result != null && (bool)result;
         }
 
         public async Task<List<PersonDto>> OpenPersonSelectDialog(int maxQuantity, List<PersonDto> SelectedPersons)
@@ -122,8 +122,8 @@ namespace DivvyUp_App.Services.Gui
                 },
                 new DialogOptions
                 {
-                    Width = "85%",
-                    Height = "85%"
+                    Width = DialogWidth,
+                    Height = DialogHeight
                 }
             );
 
