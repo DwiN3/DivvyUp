@@ -21,6 +21,11 @@ namespace DivvyUp.Web.Tests
                 builder.UseEnvironment("Testing");
                 builder.ConfigureServices(services =>
                 {
+                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<DivvyUpDBContext>));
+                    if (descriptor != null)
+                    {
+                        services.Remove(descriptor);
+                    }
                     services.AddLogging();
 
                     services.AddDbContext<DivvyUpDBContext>(options =>

@@ -1,13 +1,10 @@
-﻿using System.Security.Claims;
-using DivvyUp.Web.Data;
+﻿using DivvyUp.Web.Data;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dtos.Request;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace DivvyUp.Web.Tests
 {
@@ -31,18 +28,15 @@ namespace DivvyUp.Web.Tests
                     {
                         services.Remove(descriptor);
                     }
+                    services.AddLogging();
 
                     services.AddDbContext<DivvyUpDBContext>(options =>
-                    {
-                        options.UseInMemoryDatabase("SharedInMemoryTestDatabase");
-                    });
+                        options.UseInMemoryDatabase("TestDatabase"));
 
                     var serviceProvider = services.BuildServiceProvider();
-                    using (var scope = serviceProvider.CreateScope())
-                    {
-                        var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
-                        dbContext.Database.EnsureCreated();
-                    }
+                    var scopedServices = serviceProvider.CreateScope().ServiceProvider;
+                    var db = scopedServices.GetRequiredService<DivvyUpDBContext>();
+                    db.Database.EnsureCreated();
                 });
             });
 
@@ -64,7 +58,6 @@ namespace DivvyUp.Web.Tests
             await _testHelper.RegisterUserAsync(_client, _testUser);
             _userToken = await _testHelper.LoginAndGetTokenAsync(_client, _testUser.Username, _testUser.Password);
         }
-
 
         [Fact]
         public async Task AddPerson_ShouldAddNewPerson()

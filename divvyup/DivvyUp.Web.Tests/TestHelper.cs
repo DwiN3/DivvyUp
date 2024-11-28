@@ -1,13 +1,11 @@
 ﻿using DivvyUp.Web.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Text;
-using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using DivvyUp_Shared.AppConstants;
 using DivvyUp_Shared.Dtos.Request;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore;
 
 namespace DivvyUp.Web.Tests
 {
