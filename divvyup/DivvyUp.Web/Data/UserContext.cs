@@ -8,9 +8,9 @@ namespace DivvyUp.Web.Data
     public class UserContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly DuDbContext _dbContext;
+        private readonly DivvyUpDBContext _dbContext;
 
-        public UserContext(IHttpContextAccessor httpContextAccessor, DuDbContext dbContext)
+        public UserContext(IHttpContextAccessor httpContextAccessor, DivvyUpDBContext dbContext)
         {
             _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;

@@ -15,13 +15,13 @@ namespace DivvyUp.Web.Services
 {
     public class LoanService : ILoanService
     {
-        private readonly DuDbContext _dbContext;
+        private readonly DivvyUpDBContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly DuValidator _validator;
+        private readonly DValidator _validator;
         private readonly EntityUpdateService _entityUpdateService;
         private readonly UserContext _userContext;
 
-        public LoanService(DuDbContext dbContext, IMapper mapper, DuValidator validator, EntityUpdateService entityUpdateService, UserContext userContext)
+        public LoanService(DivvyUpDBContext dbContext, IMapper mapper, DValidator validator, EntityUpdateService entityUpdateService, UserContext userContext)
         {
             _dbContext = dbContext;
             _mapper = mapper;

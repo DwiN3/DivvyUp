@@ -14,7 +14,7 @@ namespace DivvyUp.Web.Configuration
         {
             services.AddControllers();
             services.AddScoped<UserContext>();
-            services.AddScoped<DuValidator>();
+            services.AddScoped<DValidator>();
             services.AddScoped<EntityUpdateService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPersonService, PersonService>();

@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DivvyUp.Web.Migrations
 {
-    [DbContext(typeof(DuDbContext))]
+    [DbContext(typeof(DivvyUpDBContext))]
     partial class MyDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

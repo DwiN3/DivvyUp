@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DivvyUp.Web.Migrations
 {
-    [DbContext(typeof(DuDbContext))]
+    [DbContext(typeof(DivvyUpDBContext))]
     [Migration("20241114122839_ChangeDateTimeToDateOnly")]
     partial class ChangeDateTimeToDateOnly
     {

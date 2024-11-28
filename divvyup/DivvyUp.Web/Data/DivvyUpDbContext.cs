@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DivvyUp.Web.Data
 {
-    public class DuDbContext : DbContext
+    public class DivvyUpDBContext : DbContext
     {
-        public DuDbContext(DbContextOptions<DuDbContext> options) : base(options)
+        public DivvyUpDBContext(DbContextOptions<DivvyUpDBContext> options) : base(options)
         {
 
         }
@@ -19,7 +19,6 @@ namespace DivvyUp.Web.Data
             modelBuilder.Entity<Loan>().ToTable("loan");
             modelBuilder.Entity<Product>().ToTable("product");
             modelBuilder.Entity<PersonProduct>().ToTable("person_product");
-
             base.OnModelCreating(modelBuilder);
         }
 

@@ -1,11 +1,17 @@
-﻿<div class="loading-overlay" style="@(IsLoading ? "display: flex;" : "display: none;")">
-    @if (ValueMode)
+﻿@using DivvyUp_Shared.Enums
+
+<div class="loading-overlay" style="@(IsLoading ? "display: flex;" : "display: none;")">
+    @if (ValueMode == LoadingPanelMode.FadeValue)
     {
         <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ProgressBarStyle="ProgressBarStyle.Secondary" Size="@Size" ShowValue="true" Value="@Value"  />
     }
-    else
+    else if (ValueMode == LoadingPanelMode.Fade)
     {
         <RadzenProgressBarCircular Mode="ProgressBarMode.Indeterminate" ProgressBarStyle="ProgressBarStyle.Secondary" Size="@Size" ShowValue="false" />
+    }
+    else if (ValueMode == LoadingPanelMode.FullScreen)
+    {
+        <RadzenProgressBarCircular Style="position: fixed; height: 100vh; width: 100vw; top: 0; left: 0; z-index: 1000;" Mode="ProgressBarMode.Indeterminate" ProgressBarStyle="ProgressBarStyle.Secondary" Size="@Size" ShowValue="false" />
     }
 </div>
 
@@ -15,7 +21,7 @@
     [Parameter]
     public double Value { get; set; }
     [Parameter] 
-    public bool ValueMode { get; set; } = false;
+    public LoadingPanelMode ValueMode { get; set; } = LoadingPanelMode.Fade;
     [Parameter] 
     public ProgressBarCircularSize Size { get; set; } = ProgressBarCircularSize.Large;
 }

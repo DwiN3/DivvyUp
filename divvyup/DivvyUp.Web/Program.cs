@@ -17,12 +17,12 @@ namespace DivvyUp.Web
 
             if (builder.Environment.IsEnvironment("Testing"))
             {
-                builder.Services.AddDbContext<DuDbContext>(options =>
+                builder.Services.AddDbContext<DivvyUpDBContext>(options =>
                     options.UseInMemoryDatabase("TestDatabase"));
             }
             else
             {
-                builder.Services.AddDbContext<DuDbContext>(options =>
+                builder.Services.AddDbContext<DivvyUpDBContext>(options =>
                     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
             }
 

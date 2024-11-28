@@ -23,12 +23,12 @@ namespace DivvyUp.Web.Tests
                 {
                     services.AddLogging();
 
-                    services.AddDbContext<DuDbContext>(options =>
+                    services.AddDbContext<DivvyUpDBContext>(options =>
                         options.UseInMemoryDatabase("TestDatabase"));
 
                     var serviceProvider = services.BuildServiceProvider();
                     var scopedServices = serviceProvider.CreateScope().ServiceProvider;
-                    var db = scopedServices.GetRequiredService<DuDbContext>();
+                    var db = scopedServices.GetRequiredService<DivvyUpDBContext>();
                     db.Database.EnsureCreated();
                 });
             });
@@ -59,7 +59,7 @@ namespace DivvyUp.Web.Tests
 
             using (var scope = _factory.Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DuDbContext>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
                 var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == newUser.Email);
 
                 Assert.NotNull(user);

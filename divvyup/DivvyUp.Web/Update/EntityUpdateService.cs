@@ -6,9 +6,9 @@ namespace DivvyUp.Web.Update
 {
     public class EntityUpdateService
     {
-        private readonly DuDbContext _dbContext;
+        private readonly DivvyUpDBContext _dbContext;
 
-        public EntityUpdateService(DuDbContext dbContext)
+        public EntityUpdateService(DivvyUpDBContext dbContext)
         {
             _dbContext = dbContext;
         }

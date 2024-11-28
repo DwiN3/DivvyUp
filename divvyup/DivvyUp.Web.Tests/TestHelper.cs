@@ -19,7 +19,7 @@ namespace DivvyUp.Web.Tests
         {
             using (var scope = _factory.Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DuDbContext>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
                 dbContext.PersonProducts.RemoveRange(dbContext.PersonProducts);
                 dbContext.Products.RemoveRange(dbContext.Products);
                 dbContext.Receipts.RemoveRange(dbContext.Receipts);

@@ -9,13 +9,13 @@ namespace DivvyUp.Web.Services
 {
     public class ChartService : IChartService
     {
-        private readonly DuDbContext _dbContext;
+        private readonly DivvyUpDBContext _dbContext;
         private readonly UserContext _userContext;
 
         private static readonly string[] MonthNames = { "Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru" };
         private static readonly string[] WeekNames = { "Niedz", "Pon", "Wt", "Śr", "Czw", "Pt", "Sb" };
 
-        public ChartService(DuDbContext dbContext, UserContext userContext)
+        public ChartService(DivvyUpDBContext dbContext, UserContext userContext)
         {
             _dbContext = dbContext;
             _userContext = userContext;

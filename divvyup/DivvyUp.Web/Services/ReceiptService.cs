@@ -16,17 +16,17 @@ namespace DivvyUp.Web.Services
 {
     public class ReceiptService : IReceiptService
     {
-        private readonly DuDbContext _dbContext;
+        private readonly DivvyUpDBContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly DuValidator _validator;
+        private readonly DValidator _validator;
         private readonly EntityUpdateService _entityUpdateService;
         private readonly UserContext _userContext;
 
         public ReceiptService(
             UserContext userContext,
-            DuDbContext dbContext,
+            DivvyUpDBContext dbContext,
             IMapper mapper,
-            DuValidator validator,
+            DValidator validator,
             EntityUpdateService entityUpdateService)
         {
             _userContext = userContext;

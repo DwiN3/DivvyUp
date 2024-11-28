@@ -7,11 +7,11 @@ using DivvyUp_Shared.Models;
 
 namespace DivvyUp.Web.Validation
 {
-    public class DuValidator
+    public class DValidator
     {
-        private readonly DuDbContext _dbContext;
+        private readonly DivvyUpDBContext _dbContext;
 
-        public DuValidator(DuDbContext dbContext)
+        public DValidator(DivvyUpDBContext dbContext)
         {
             _dbContext = dbContext;
         }

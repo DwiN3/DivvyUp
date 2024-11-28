@@ -31,7 +31,6 @@ namespace DivvyUp_App
             
             builder.Services.AddHttpClient();
             builder.Services.AddMauiBlazorWebView();
-            //builder.Services.AddFluentUIComponents();
             builder.Services.AddBlazorBootstrap();
             builder.Services.AddRadzenComponents();
             builder.Services.AddBlazoredLocalStorage();
