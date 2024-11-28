@@ -1,10 +1,4 @@
-﻿using DivvyUp.Web.Data;
-using DivvyUp.Web.Mappers;
-using DivvyUp.Web.Middlewares;
-using DivvyUp.Web.Services;
-using DivvyUp.Web.Update;
-using DivvyUp.Web.Validation;
-using DivvyUp_Shared.Interfaces;
+﻿using DivvyUp.Web.Mappers;
 
 namespace DivvyUp.Web.Configuration
 {
@@ -18,7 +12,6 @@ namespace DivvyUp.Web.Configuration
             services.AddAutoMapper(typeof(ReceiptToReceiptDtoMapping));
             services.AddAutoMapper(typeof(ProductToProductDtoMapping));
             services.AddAutoMapper(typeof(PersonProductToPersonProductDtoMapping));
-
         }
     }
 }
