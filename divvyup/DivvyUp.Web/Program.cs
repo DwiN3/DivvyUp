@@ -10,8 +10,8 @@ namespace DivvyUp.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             builder.Services.AddServices();
+            builder.Services.AddMapper();
             builder.Services.AddSwaggerGenConfiguration();
             builder.Services.AddAuthenticationServices(builder.Configuration);
 
@@ -27,7 +27,6 @@ namespace DivvyUp.Web
             }
 
             var app = builder.Build();
-
             app.UseMiddleware<ExceptionMiddleware>();
 
             if (app.Environment.IsDevelopment())
@@ -38,9 +37,7 @@ namespace DivvyUp.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapControllers();
-
             app.Run();
         }
     }

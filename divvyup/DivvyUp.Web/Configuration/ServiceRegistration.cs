@@ -23,7 +23,6 @@ namespace DivvyUp.Web.Configuration
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IPersonProductService, PersonProductService>();
             services.AddScoped<IChartService, ChartService>();
-            services.AddAutoMapper(typeof(MappingProfile));
             services.AddHttpContextAccessor();
             services.AddTransient<ExceptionMiddleware>();
         }
