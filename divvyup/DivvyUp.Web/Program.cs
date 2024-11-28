@@ -1,16 +1,7 @@
-using System.Text;
+using DivvyUp.Web.Configuration;
 using DivvyUp.Web.Data;
-using DivvyUp.Web.Mappers;
 using DivvyUp.Web.Middlewares;
-using DivvyUp.Web.Middlewares;
-using DivvyUp.Web.Services;
-using DivvyUp.Web.Services;
-using DivvyUp.Web.Update;
-using DivvyUp.Web.Validation;
-using DivvyUp_Shared.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace DivvyUp.Web
 {
@@ -20,51 +11,9 @@ namespace DivvyUp.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
-            builder.Services.AddScoped<UserContext>();
-            builder.Services.AddScoped<DuValidator>();
-            builder.Services.AddScoped<EntityUpdateService>();
-
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IPersonService, PersonService>();
-            builder.Services.AddScoped<IReceiptService, ReceiptService>();
-            builder.Services.AddScoped<ILoanService, LoanService>();
-            builder.Services.AddScoped<IProductService, ProductService>();
-            builder.Services.AddScoped<IPersonProductService, PersonProductService>();
-            builder.Services.AddScoped<IChartService, ChartService>();
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
-            builder.Services.AddHttpContextAccessor();
-
-            builder.Services.AddTransient<ExceptionMiddleware>();
-            builder.Services.AddTransient<BearerTokenMiddleware>();
-
-
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.EnableAnnotations();
-                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-                {
-                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-                    Description = "Please enter the token into the field",
-                    Name = "Authorization",
-                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey
-                });
-                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-            {
-                {
-                    new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-                    {
-                        Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                        {
-                            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    new string[] {}
-                }
-            });
-            });
+            builder.Services.AddServices();
+            builder.Services.AddSwaggerGenConfiguration();
+            builder.Services.AddAuthenticationServices(builder.Configuration);
 
             if (builder.Environment.IsEnvironment("Testing"))
             {
@@ -77,29 +26,9 @@ namespace DivvyUp.Web
                     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
             }
 
-
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-                };
-            });
-
             var app = builder.Build();
 
             app.UseMiddleware<ExceptionMiddleware>();
-            app.UseMiddleware<BearerTokenMiddleware>();
 
             if (app.Environment.IsDevelopment())
             {
