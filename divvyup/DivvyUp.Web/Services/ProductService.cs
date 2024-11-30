@@ -167,14 +167,14 @@ namespace DivvyUp.Web.Services
             await _dbContext.SaveChangesAsync();
 
             var product = _dbContext.Products.Where(p => p == newProduct).FirstOrDefault();
-            foreach (var personId in personIds)
+            for (int i = 0; i < personIds.Count; i++)
             {
                 var newPersonProduct = new PersonProduct()
                 {
-                    PersonId = personId,
+                    PersonId = personIds[i],
                     ProductId = product.Id,
-                    Compensation = false,
-                    PartOfPrice = CalculatePartOfPrice(product, 1),
+                    Compensation = (i == 0),
+                    PartOfPrice = await _entityUpdateService.CalculatePartOfPrice(1, request.MaxQuantity, request.Price),
                     Quantity = 1,
                     Settled = product.Settled,
                 };
@@ -343,11 +343,6 @@ namespace DivvyUp.Web.Services
 
             productDto.Persons = personProducts.Select(pp => _mapper.Map<PersonDto>(pp.Person)).ToList();
             return productDto;
-        }
-
-        private decimal CalculatePartOfPrice(Product product, int quantity)
-        {
-            return product.Divisible ? (product.Price / product.MaxQuantity) * quantity : product.Price;
         }
     }
 }

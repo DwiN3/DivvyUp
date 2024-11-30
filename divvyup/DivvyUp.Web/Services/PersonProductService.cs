@@ -58,7 +58,7 @@ namespace DivvyUp.Web.Services
                 Product = product,
                 Quantity = request.Quantity,
                 Compensation = isPersonProductCompensation == null ? true : false,
-                PartOfPrice = CalculatePartOfPrice(product, request.Quantity),
+                PartOfPrice = await _entityUpdateService.CalculatePartOfPrice(request.Quantity,product.MaxQuantity, product.Price),
                 Settled = false,
             };
             _dbContext.PersonProducts.Add(newPersonProduct);
@@ -81,7 +81,7 @@ namespace DivvyUp.Web.Services
 
             personProduct.Quantity = request.Quantity;
             personProduct.Person = person;
-            personProduct.PartOfPrice = CalculatePartOfPrice(product, request.Quantity);
+            personProduct.PartOfPrice = await _entityUpdateService.CalculatePartOfPrice(request.Quantity, product.MaxQuantity, product.Price);
             _dbContext.PersonProducts.Update(personProduct);
 
             await _dbContext.SaveChangesAsync();
@@ -94,20 +94,21 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
             var user = await _userContext.GetCurrentUser();
             var personProduct = await _validator.GetPersonProduct(user, personProductId);
-            _dbContext.PersonProducts.Remove(personProduct);
 
             var productWithCompensation = await _dbContext.PersonProducts
-                .FirstOrDefaultAsync(pp => pp.ProductId == personProduct.ProductId && pp.Compensation);
+                .FirstOrDefaultAsync(pp => pp.ProductId == personProduct.ProductId && pp.Id != personProduct.Id && pp.Compensation);
             if (personProduct.Compensation && productWithCompensation == null)
             {
-                var nexProduct = await _dbContext.PersonProducts.FirstOrDefaultAsync(pp => pp.ProductId == personProduct.ProductId);
+                var nexProduct = await _dbContext.PersonProducts
+                    .FirstOrDefaultAsync(pp => pp.ProductId == personProduct.ProductId && pp.Id != personProduct.Id);
                 if (nexProduct != null)
                 {
                     nexProduct.Compensation = true;
-                    _dbContext.PersonProducts.Update(personProduct);
+                    _dbContext.PersonProducts.Update(nexProduct);
                 }
             }
 
+            _dbContext.PersonProducts.Remove(personProduct);
             await _dbContext.SaveChangesAsync();
             await _entityUpdateService.UpdateProductDetails(personProduct.Product);
             await _entityUpdateService.UpdatePerson(user, false);
@@ -279,15 +280,6 @@ namespace DivvyUp.Web.Services
         private async Task<bool> IsPersonProductExists(Product product, Person person)
         {
             return await _dbContext.PersonProducts.AnyAsync(pp => pp.ProductId == product.Id && pp.PersonId == person.Id);
-        }
-
-        private decimal CalculatePartOfPrice(Product product, int quantity)
-        {
-            decimal result = product.Divisible
-                ? (product.Price / product.MaxQuantity) * quantity
-                : product.Price;
-
-            return Math.Floor(result * 100) / 100;
         }
 
         private async Task<IEnumerable<PersonProduct>> GetOtherCompensations(int productId, int excludeId)

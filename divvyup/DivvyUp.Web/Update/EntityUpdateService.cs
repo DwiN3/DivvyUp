@@ -33,6 +33,7 @@ namespace DivvyUp.Web.Update
                 person.ProductsCount = personProducts.Count;
                 person.TotalAmount = personProducts.Sum(pp => pp.PartOfPrice + (pp.Compensation ? pp.Product.CompensationPrice : 0));
                 person.UnpaidAmount = personProducts.Where(pp => !pp.Settled).Sum(pp => pp.PartOfPrice + (pp.Compensation ? pp.Product.CompensationPrice : 0));
+                person.CompensationAmount = personProducts.Sum(pp => pp.Compensation ? pp.Product.CompensationPrice : 0);
 
                 if (updateBalance)
                 {
@@ -105,7 +106,7 @@ namespace DivvyUp.Web.Update
 
             foreach (var personProduct in personProducts)
             {
-                var newPartOfPrice = await CalculatePartPrice(personProduct.Quantity, product.MaxQuantity, product.Price);
+                var newPartOfPrice = await CalculatePartOfPrice(personProduct.Quantity, product.MaxQuantity, product.Price);
                 if (personProduct.PartOfPrice != newPartOfPrice)
                 {
                     personProduct.PartOfPrice = newPartOfPrice;
@@ -120,9 +121,11 @@ namespace DivvyUp.Web.Update
             }
         }
 
-        private Task<decimal> CalculatePartPrice(int quantity, int maxQuantity, decimal price)
+        public Task<decimal> CalculatePartOfPrice(int quantity, int maxQuantity, decimal price)
         {
-            return Task.FromResult(((decimal)quantity / maxQuantity) * price);
+            decimal result = price / maxQuantity * quantity;
+            decimal roundedResult = Math.Floor(result * 100) / 100;
+            return Task.FromResult(roundedResult);
         }
     }
 }

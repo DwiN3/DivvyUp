@@ -9,6 +9,7 @@
         public int ProductsCount { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal UnpaidAmount { get; set; }
+        public decimal CompensationAmount { get; set; }
         public decimal LoanBalance { get; set; }
         public bool UserAccount { get; set; }
 
@@ -24,10 +25,11 @@
             TotalAmount = 0;
             UnpaidAmount = 0;
             LoanBalance = 0;
+            CompensationAmount = 0;
             UserAccount = false;
         }
 
-        public PersonDto(int id, string name, string surname, int receiptsCount, int productsCount, decimal totalAmount, decimal unpaidAmount, decimal loanBalance, bool userAccount)
+        public PersonDto(int id, string name, string surname, int receiptsCount, int productsCount, decimal totalAmount, decimal compensationAmount, decimal unpaidAmount, decimal loanBalance, bool userAccount)
         {
             Id = id;
             Name = name;
@@ -36,6 +38,7 @@
             ProductsCount = productsCount;
             TotalAmount = totalAmount;
             UnpaidAmount = unpaidAmount;
+            CompensationAmount = compensationAmount;
             LoanBalance = loanBalance;
             UserAccount = userAccount;
         }

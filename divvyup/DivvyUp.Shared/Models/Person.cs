@@ -32,6 +32,8 @@ namespace DivvyUp_Shared.Models
 
         [Column("unpaid_amount")]
         public decimal UnpaidAmount { get; set; }
+        [Column("compensation_amount")]
+        public decimal CompensationAmount { get; set; }
 
         [Column("loan_balance")]
         public decimal LoanBalance { get; set; }
