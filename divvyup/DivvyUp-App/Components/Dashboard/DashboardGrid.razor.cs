@@ -15,15 +15,34 @@ namespace DivvyUp_App.Components.Dashboard
         private bool IsLoading { get; set; } = true;
         private double Value { get; set; }
 
+        // DO Poprawki
         protected override async Task OnInitializedAsync()
         {
-            await Task.Delay(500);
-            UserView = UserApp.IsLoggedIn();
-            if (!UserView)
+            await InitializeUserApp();
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            if (UserApp != null && UserApp.IsLoggedIn())
             {
-                IsLoading = false;
+                IsLoading = true;
+                await InitializeUserApp();
             }
-            StateHasChanged();
+        }
+
+        private async Task InitializeUserApp()
+        {
+            if (UserApp != null)
+            {
+                await Task.Delay(500);
+                UserView = UserApp.IsLoggedIn();
+                if (!UserView)
+                {
+                    IsLoading = false;
+                }
+
+                StateHasChanged();
+            }
         }
 
         private void OnChartLoaded()

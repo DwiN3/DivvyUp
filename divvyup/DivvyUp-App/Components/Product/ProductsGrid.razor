@@ -106,7 +106,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ProductDto.CompensationPrice)" Title="Wyrównanie" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
-                @if (product.Divisible)
+                @if (product.Divisible && product.CompensationPrice != 0)
                 {
                     @product.CompensationPrice.ToString(Format.PriceFormat)
                 }

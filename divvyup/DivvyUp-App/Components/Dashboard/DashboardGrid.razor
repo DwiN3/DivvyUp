@@ -1,9 +1,9 @@
 ﻿@using DivvyUp_App.BaseComponents.DLoadingPanel
 @using DivvyUp_Shared.Enums
 
-<DLoadingPanel IsLoading="@IsLoading" Value="@Value" ValueMode="LoadingPanelMode.Fade" />
+<DLoadingPanel IsLoading="@IsLoading" Value="@Value" ValueMode="LoadingPanelMode.FadeValue" />
 
-@if (UserApp != null && UserApp.IsLoggedIn())
+@if (UserView)
 {
     <div class="w-100 h-100 d-flex justify-content-center align-items-center">
         <RadzenStack Orientation="Orientation.Vertical"
