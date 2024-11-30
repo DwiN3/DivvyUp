@@ -25,26 +25,29 @@
                     AllowRowSelectOnRowClick="false">
         <HeaderTemplate>
             <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
+            <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="calculate" Text="Ustaw wyrównanie odpowiedniej osobie" Click="@SetAutoCompensation" Visible="@NormalView" />
         </HeaderTemplate>
         <EmptyTemplate>
             <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>
         </EmptyTemplate>
         <Columns>
-            <RadzenDataGridColumn Title="Zarządzanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+            <RadzenDataGridColumn Title="Zarządzanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true" Sortable="false">
+                <HeaderTemplate>
+                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" Visible="@NormalView" />
+                </HeaderTemplate>
                 <Template Context="personProduct">
-                    <RadzenCheckBox class="grid-button" TabIndex="-1" TriState="false" Value="@(SelectedPersonProducts != null && SelectedPersonProducts.Contains(personProduct))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
-                                    TValue="bool" Change=@(async(bool value) => { await ChangeSelected(personProduct, value); }) Visible="@(!NormalView)" />
-                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(personProduct))" Visible="@NormalView" />
-                    <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct))" Visible="@NormalView" />
+                    <RadzenCheckBox class="grid-button" TabIndex="-1" TriState="false" Value="@(SelectedPersonProducts != null && SelectedPersonProducts.Contains(personProduct))" InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "Select item" } })"
+                                    TValue="bool" Change=@(async (bool value) => { await ChangeSelected(personProduct, value); }) Visible="@(!NormalView)"/>
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(personProduct))" Visible="@NormalView"/>
+                    <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(personProduct))" Visible="@NormalView"/>
                 </Template>
                 <EditTemplate Context="personProduct">
-                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(personProduct))" />
-                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@(async(args) => await CancelEdit(personProduct))" />
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(personProduct))"/>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@(async (args) => await CancelEdit(personProduct))"/>
                 </EditTemplate>
                 <FilterTemplate>
                     <div class="rz-cell-data">
-                        <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" Visible="@NormalView" />
-                        <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                        <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })"/>
                     </div>
                 </FilterTemplate>
             </RadzenDataGridColumn>
@@ -56,7 +59,7 @@
                     <RadzenCheckBox style="opacity: 0.6; " class="grid-button" Value="@personProduct.Settled" ReadOnly="true" />
                 </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Compensation)" Title="Wyrównanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Compensation)" Title="Wyrównanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true" Visible="@NormalView">
                    <Template Context="personProduct">
                         <RadzenCheckBox class="grid-button" @bind-Value="@personProduct.Compensation" Change="@(async (bool check) => await ChangeCompensation(personProduct.Id))" ReadOnly="@(personProduct.Compensation)" />
                     </Template>
@@ -99,7 +102,9 @@
                                             TextProperty="@nameof(PersonDto.FullName)"
                                             ValueProperty="@nameof(PersonDto.Id)"
                                             Style="width: 100%;" 
-                                            Disabled="@(!NormalView)" />
+                                            Disabled="@(!NormalView)" 
+                                            SearchTextPlaceholder="Nazwa"
+                                            EmptyText="Brak dostępnych osób" />
                 </Template>
                 <EditTemplate Context="personProduct">
                     @{
@@ -122,7 +127,9 @@
                             TextProperty="@nameof(PersonDto.FullName)"
                             ValueProperty="@nameof(PersonDto.Id)"
                             Style="width: 100%;"
-                            Disabled="@(!NormalView)"/>
+                            Disabled="@(!NormalView)"
+                            SearchTextPlaceholder="Nazwa"
+                            EmptyText="Brak dostępnych osób"/>
                     }
                 </EditTemplate>
             </RadzenDataGridColumn>

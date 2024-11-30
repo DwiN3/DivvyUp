@@ -93,6 +93,7 @@
             public const string SET_PERSON = $"{PERSON_PRODUCT_ROUTE}/set-person/{ARG_PERSON_PRODUCT}/{ARG_PERSON}";
             public const string SET_SETTLED = $"{PERSON_PRODUCT_ROUTE}/set-settled/{ARG_PERSON_PRODUCT}/{ARG_SETTLED}";
             public const string SET_COMPENSATION = $"{PERSON_PRODUCT_ROUTE}/set-compensation/{ARG_PERSON_PRODUCT}";
+            public const string SET_AUTO_COMPENSATION = $"{PERSON_PRODUCT_ROUTE}/set-auto-compensation/{ARG_PRODUCT}";
             public const string PERSON_PRODUCT = $"{PERSON_PRODUCT_ROUTE}/{ARG_PERSON_PRODUCT}";
             public const string PERSON_PRODUCTS = $"{PERSON_PRODUCT_ROUTE}/person-products";
             public const string PERSON_PRODUCT_FROM_PERSON = $"{PERSON_PRODUCT_ROUTE}/person/{ARG_PERSON}";

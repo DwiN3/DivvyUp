@@ -120,11 +120,14 @@ namespace DivvyUp.Web.Services
             var user = await _userContext.GetCurrentUser();
             var product = await _validator.GetProduct(user, productId);
 
+            var personProductsToRemove = new List<PersonProduct>();
             foreach (var personProductId in personProductIds)
             {
                 var personProduct = await _validator.GetPersonProduct(user, personProductId);
-                _dbContext.PersonProducts.Remove(personProduct);
+                personProductsToRemove.Add(personProduct);
             }
+            _dbContext.PersonProducts.RemoveRange(personProductsToRemove);
+            await _dbContext.SaveChangesAsync();
 
             var productWithCompensation = await _dbContext.PersonProducts
                 .FirstOrDefaultAsync(pp => pp.ProductId == product.Id && pp.Compensation);
@@ -212,6 +215,41 @@ namespace DivvyUp.Web.Services
 
             personProduct.Compensation = true;
             _dbContext.PersonProducts.Update(personProduct);
+            await _dbContext.SaveChangesAsync();
+            await _entityUpdateService.UpdatePerson(user, false);
+        }
+
+        public async Task SetAutoCompensation(int productId)
+        {
+            var user = await _userContext.GetCurrentUser();
+            var personProducts = await _dbContext.PersonProducts
+                .Include(p => p.Person)
+                .Where(pp => pp.ProductId == productId).ToListAsync();
+            if (personProducts.Count == 0)
+            {
+                throw new DException(HttpStatusCode.NotFound, "Brak przypisań do produktu");
+            }
+
+            var personWithLowestCompensation = personProducts
+                .OrderBy(pp => pp.Person.CompensationAmount)
+                .FirstOrDefault();
+
+            if (personWithLowestCompensation == null)
+            {
+                throw new DException(HttpStatusCode.NotFound, "Brak osób z wyrównaniem");
+            }
+
+            foreach (var personProduct in personProducts)
+            {
+                if (personProduct.Person.Id != personWithLowestCompensation.Person.Id)
+                {
+                    personProduct.Compensation = false;
+                    _dbContext.PersonProducts.Update(personProduct);
+                }
+            }
+            personWithLowestCompensation.Compensation = true;
+            _dbContext.PersonProducts.Update(personWithLowestCompensation);
+
             await _dbContext.SaveChangesAsync();
             await _entityUpdateService.UpdatePerson(user, false);
         }

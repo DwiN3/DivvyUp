@@ -7,6 +7,7 @@ using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
 using Radzen;
 using DivvyUp_Shared.Enums;
+using DivvyUp_Shared.Models;
 
 namespace DivvyUp_App.Components.PersonProduct
 {
@@ -54,6 +55,25 @@ namespace DivvyUp_App.Components.PersonProduct
             PersonProducts = await PersonProductService.GetPersonProductsFromProduct(ProductId);
             LoadAvailablePersons();
             StateHasChanged();
+        }
+
+        private async Task SetAutoCompensation()
+        {
+            try
+            {
+                await PersonProductService.SetAutoCompensation(ProductId);
+            }
+            catch (DException ex)
+            {
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                await LoadGrid();
+            }
         }
 
         private void LoadAvailablePersons()

@@ -33,20 +33,22 @@
         <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>
     </EmptyTemplate>
     <Columns>
-        <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Title="Zarządzanie" Width="12%" TextAlign="TextAlign.Center" Frozen="true" Sortable="false">
+            <HeaderTemplate>
+                <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
+            </HeaderTemplate>
             <Template Context="receipt">
-                <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Click="@((args) => OpenProductsList(receipt.Id))" />
-                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(receipt))" />
-                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(receipt))" />
+                <RadzenButton Icon="play_arrow" ButtonStyle="ButtonStyle.Primary" Click="@((args) => OpenProductsList(receipt.Id))"/>
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => EditRow(receipt))"/>
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@((args) => RemoveRow(receipt))"/>
             </Template>
             <EditTemplate Context="receipt">
-                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(receipt))" />
-                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@(async(args) => await CancelEdit(receipt))"/>
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Click="@((args) => SaveRow(receipt))"/>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Danger" Click="@(async (args) => await CancelEdit(receipt))"/>
             </EditTemplate>
             <FilterTemplate>
                 <div class="rz-cell-data">
-                    <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Click="@InsertRow" />
-                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })" />
+                    <RadzenButton Icon="filter_alt_off" ButtonStyle="ButtonStyle.Dark" Click="@(args => { Grid.Reset(); })"/>
                 </div>
             </FilterTemplate>
         </RadzenDataGridColumn>

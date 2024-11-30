@@ -76,6 +76,14 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
+        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.SET_AUTO_COMPENSATION)]
+        [SwaggerOperation(Summary = "Set person-product as compensation automatically", Description = "Automatically sets compensation for the person-product association, selecting the person with the lowest compensation value.")]
+        public async Task<IActionResult> SetAutoCompensation([FromRoute] int productId)
+        {
+            await _personProductService.SetAutoCompensation(productId);
+            return Ok();
+        }
+
         [HttpGet(ApiRoute.PERSON_PRODUCT_ROUTES.PERSON_PRODUCT)]
         [SwaggerOperation(Summary = "Retrieve person-product association", Description = "Retrieves the details of a person-product association by its ID.")]
         public async Task<IActionResult> GetPersonProduct([FromRoute] int personProductId)

@@ -175,6 +175,27 @@ namespace DivvyUp_App.Services.Api
             }
         }
 
+        public async Task SetAutoCompensation(int productId)
+        {
+            try
+            {
+                var url = ApiRoute.PERSON_PRODUCT_ROUTES.SET_AUTO_COMPENSATION
+                    .Replace(ApiRoute.ARG_PRODUCT, productId.ToString());
+                var response = await _dHttpClient.PutAsync(url);
+                await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
+            }
+            catch (DException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd w czasie edycji produktu osoby: {Message}", ex.Message);
+                throw;
+            }
+        }
+
         public async Task<PersonProductDto> GetPersonProduct(int personProductId)
         {
             try
