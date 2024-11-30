@@ -56,16 +56,14 @@
                     <RadzenCheckBox style="opacity: 0.6; " class="grid-button" Value="@personProduct.Settled" ReadOnly="true" />
                 </EditTemplate>
             </RadzenDataGridColumn>
-            @*
-                <RadzenDataGridColumn Property="@nameof(PersonProductDto.Compensation)" Title="Wyrównanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
-                       <Template Context="personProduct">
-                           <RadzenCheckBox class="button" @bind-Value="@personProduct.Compensation" Change="@(async (bool check) => await ChangeCompensation(personProduct.Id))"/>
-                       </Template>
-                       <EditTemplate Context="personProduct">
-                           <RadzenCheckBox style="opacity: 0.6; " class="button" Value="@personProduct.Compensation" ReadOnly="true" />
-                       </EditTemplate>
-                </RadzenDataGridColumn>
-            *@
+            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Compensation)" Title="Wyrównanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+                   <Template Context="personProduct">
+                        <RadzenCheckBox class="grid-button" @bind-Value="@personProduct.Compensation" Change="@(async (bool check) => await ChangeCompensation(personProduct.Id))" ReadOnly="@(personProduct.Compensation)" />
+                    </Template>
+                   <EditTemplate Context="personProduct">
+                       <RadzenCheckBox style="opacity: 0.6; " class="grid-button" Value="@personProduct.Compensation" ReadOnly="true" Visible="@NormalView"/>
+                   </EditTemplate>
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Ilość" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
                     @($"{personProduct.Quantity}/{Product.MaxQuantity}")
@@ -80,8 +78,12 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.PartOfPrice)" Title="Cena" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
-                    <div style="color: @(personProduct.Settled ? "green" : "red")">
+                    <div style="color: @(personProduct.Settled ? "green" : "red"); display: inline-block;">
                         <b>@personProduct.PartOfPrice.ToString(Format.PriceFormat)</b>
+                        @if (personProduct.Compensation && Product.CompensationPrice != 0)
+                        {
+                            <div style="display: inline;"><b> + @Product.CompensationPrice.ToString(Format.PriceFormat)</b></div>
+                        }
                     </div>
                 </Template>
                 <EditTemplate Context="personProduct">

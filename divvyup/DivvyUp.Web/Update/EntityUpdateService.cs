@@ -31,8 +31,8 @@ namespace DivvyUp.Web.Update
 
                 person.ReceiptsCount = receipts.Count;
                 person.ProductsCount = personProducts.Count;
-                person.TotalAmount = personProducts.Sum(pp => pp.PartOfPrice);
-                person.UnpaidAmount = personProducts.Where(pp => !pp.Settled).Sum(pp => pp.PartOfPrice);
+                person.TotalAmount = personProducts.Sum(pp => pp.PartOfPrice + (pp.Compensation ? pp.Product.CompensationPrice : 0));
+                person.UnpaidAmount = personProducts.Where(pp => !pp.Settled).Sum(pp => pp.PartOfPrice + (pp.Compensation ? pp.Product.CompensationPrice : 0));
 
                 if (updateBalance)
                 {

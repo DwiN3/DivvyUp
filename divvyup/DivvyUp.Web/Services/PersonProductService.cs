@@ -44,20 +44,20 @@ namespace DivvyUp.Web.Services
             if (totalQuantity + request.Quantity > product.MaxQuantity)
                 throw new DException(HttpStatusCode.BadRequest, "Przekroczono maksymalną ilość produktu.");
 
-            var isFirstPersonProduct = await _dbContext.PersonProducts
-                .FirstOrDefaultAsync(pp => pp.ProductId == product.Id);
-
             var existingPerson = await _dbContext.PersonProducts
                 .FirstOrDefaultAsync(pp => pp.ProductId == product.Id && pp.Person.Id == person.Id);
             if(existingPerson != null)
                 throw new DException(HttpStatusCode.Conflict, "Osoba jest już przypisana.");
+
+            var isPersonProductCompensation = await _dbContext.PersonProducts
+                .FirstOrDefaultAsync(pp => pp.ProductId == product.Id && pp.Compensation);
 
             var newPersonProduct = new PersonProduct()
             {
                 Person = person,
                 Product = product,
                 Quantity = request.Quantity,
-                Compensation = isFirstPersonProduct == null ? true : false,
+                Compensation = isPersonProductCompensation == null ? true : false,
                 PartOfPrice = CalculatePartOfPrice(product, request.Quantity),
                 Settled = false,
             };
@@ -83,8 +83,8 @@ namespace DivvyUp.Web.Services
             personProduct.Person = person;
             personProduct.PartOfPrice = CalculatePartOfPrice(product, request.Quantity);
             _dbContext.PersonProducts.Update(personProduct);
-            await _dbContext.SaveChangesAsync();
 
+            await _dbContext.SaveChangesAsync();
             await _entityUpdateService.UpdateProductDetails(product);
             await _entityUpdateService.UpdatePerson(user, false);
         }
@@ -94,8 +94,20 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
             var user = await _userContext.GetCurrentUser();
             var personProduct = await _validator.GetPersonProduct(user, personProductId);
-
             _dbContext.PersonProducts.Remove(personProduct);
+
+            var productWithCompensation = await _dbContext.PersonProducts
+                .FirstOrDefaultAsync(pp => pp.ProductId == personProduct.ProductId && pp.Compensation);
+            if (personProduct.Compensation && productWithCompensation == null)
+            {
+                var nexProduct = await _dbContext.PersonProducts.FirstOrDefaultAsync(pp => pp.ProductId == personProduct.ProductId);
+                if (nexProduct != null)
+                {
+                    nexProduct.Compensation = true;
+                    _dbContext.PersonProducts.Update(personProduct);
+                }
+            }
+
             await _dbContext.SaveChangesAsync();
             await _entityUpdateService.UpdateProductDetails(personProduct.Product);
             await _entityUpdateService.UpdatePerson(user, false);
@@ -111,6 +123,18 @@ namespace DivvyUp.Web.Services
             {
                 var personProduct = await _validator.GetPersonProduct(user, personProductId);
                 _dbContext.PersonProducts.Remove(personProduct);
+            }
+
+            var productWithCompensation = await _dbContext.PersonProducts
+                .FirstOrDefaultAsync(pp => pp.ProductId == product.Id && pp.Compensation);
+            if (productWithCompensation == null)
+            {
+                var nexProduct = await _dbContext.PersonProducts.FirstOrDefaultAsync(pp => pp.ProductId == product.Id);
+                if (nexProduct != null)
+                {
+                    nexProduct.Compensation = true;
+                    _dbContext.PersonProducts.Update(nexProduct);
+                }
             }
 
             await _dbContext.SaveChangesAsync();
@@ -259,7 +283,11 @@ namespace DivvyUp.Web.Services
 
         private decimal CalculatePartOfPrice(Product product, int quantity)
         {
-            return product.Divisible ? (product.Price / product.MaxQuantity) * quantity : product.Price;
+            decimal result = product.Divisible
+                ? (product.Price / product.MaxQuantity) * quantity
+                : product.Price;
+
+            return Math.Floor(result * 100) / 100;
         }
 
         private async Task<IEnumerable<PersonProduct>> GetOtherCompensations(int productId, int excludeId)
