@@ -94,22 +94,15 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(personProductId, "Brak identyfikatora powiązania produkt - osoba");
             var user = await _userContext.GetCurrentUser();
             var personProduct = await _validator.GetPersonProduct(user, personProductId);
-
-            var productWithCompensation = await _dbContext.PersonProducts
-                .FirstOrDefaultAsync(pp => pp.ProductId == personProduct.ProductId && pp.Id != personProduct.Id && pp.Compensation);
-            if (personProduct.Compensation && productWithCompensation == null)
-            {
-                var nexProduct = await _dbContext.PersonProducts
-                    .FirstOrDefaultAsync(pp => pp.ProductId == personProduct.ProductId && pp.Id != personProduct.Id);
-                if (nexProduct != null)
-                {
-                    nexProduct.Compensation = true;
-                    _dbContext.PersonProducts.Update(nexProduct);
-                }
-            }
-
             _dbContext.PersonProducts.Remove(personProduct);
             await _dbContext.SaveChangesAsync();
+
+            if (personProduct.Compensation)
+            {
+                var nexProduct = await _entityUpdateService.GetPersonWithLowestCompensation(personProduct.ProductId);
+                await _entityUpdateService.UpdateCompensationFlags(personProduct.ProductId, nexProduct);
+            }
+
             await _entityUpdateService.UpdateProductDetails(personProduct.Product);
             await _entityUpdateService.UpdatePerson(user, false);
         }
@@ -133,15 +126,10 @@ namespace DivvyUp.Web.Services
                 .FirstOrDefaultAsync(pp => pp.ProductId == product.Id && pp.Compensation);
             if (productWithCompensation == null)
             {
-                var nexProduct = await _dbContext.PersonProducts.FirstOrDefaultAsync(pp => pp.ProductId == product.Id);
-                if (nexProduct != null)
-                {
-                    nexProduct.Compensation = true;
-                    _dbContext.PersonProducts.Update(nexProduct);
-                }
+                var nexProduct = await _entityUpdateService.GetPersonWithLowestCompensation(productId);
+                await _entityUpdateService.UpdateCompensationFlags(productId, nexProduct);
             }
 
-            await _dbContext.SaveChangesAsync();
             await _entityUpdateService.UpdateProductDetails(product);
             await _entityUpdateService.UpdatePerson(user, false);
         }
@@ -205,52 +193,20 @@ namespace DivvyUp.Web.Services
         {
             var user = await _userContext.GetCurrentUser();
             var personProduct = await _validator.GetPersonProduct(user, personProductId);
-            var otherCompensations = await GetOtherCompensations(personProduct.ProductId, personProductId);
-
-            foreach (var compensation in otherCompensations)
-            {
-                compensation.Compensation = false;
-                _dbContext.PersonProducts.Update(compensation);
-            }
-
-            personProduct.Compensation = true;
-            _dbContext.PersonProducts.Update(personProduct);
-            await _dbContext.SaveChangesAsync();
+            await _entityUpdateService.UpdateCompensationFlags(personProduct.ProductId, personProduct);
             await _entityUpdateService.UpdatePerson(user, false);
         }
 
         public async Task SetAutoCompensation(int productId)
         {
             var user = await _userContext.GetCurrentUser();
-            var personProducts = await _dbContext.PersonProducts
-                .Include(p => p.Person)
-                .Where(pp => pp.ProductId == productId).ToListAsync();
-            if (personProducts.Count == 0)
+
+            var personProductWithLowestCompensation = await _entityUpdateService.GetPersonWithLowestCompensation(productId);
+            if (personProductWithLowestCompensation == null)
             {
                 throw new DException(HttpStatusCode.NotFound, "Brak przypisań do produktu");
             }
-
-            var personWithLowestCompensation = personProducts
-                .OrderBy(pp => pp.Person.CompensationAmount)
-                .FirstOrDefault();
-
-            if (personWithLowestCompensation == null)
-            {
-                throw new DException(HttpStatusCode.NotFound, "Brak osób z wyrównaniem");
-            }
-
-            foreach (var personProduct in personProducts)
-            {
-                if (personProduct.Person.Id != personWithLowestCompensation.Person.Id)
-                {
-                    personProduct.Compensation = false;
-                    _dbContext.PersonProducts.Update(personProduct);
-                }
-            }
-            personWithLowestCompensation.Compensation = true;
-            _dbContext.PersonProducts.Update(personWithLowestCompensation);
-
-            await _dbContext.SaveChangesAsync();
+            await _entityUpdateService.UpdateCompensationFlags(productId, personProductWithLowestCompensation);
             await _entityUpdateService.UpdatePerson(user, false);
         }
 

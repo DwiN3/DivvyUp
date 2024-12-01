@@ -167,24 +167,28 @@ namespace DivvyUp.Web.Services
             await _dbContext.SaveChangesAsync();
 
             var product = _dbContext.Products.Where(p => p == newProduct).FirstOrDefault();
-            for (int i = 0; i < personIds.Count; i++)
+            foreach (var personId in personIds)
             {
                 var newPersonProduct = new PersonProduct()
                 {
-                    PersonId = personIds[i],
+                    PersonId = personId,
                     ProductId = product.Id,
-                    Compensation = (i == 0),
+                    Compensation = false,
                     PartOfPrice = await _entityUpdateService.CalculatePartOfPrice(1, request.MaxQuantity, request.Price),
                     Quantity = 1,
                     Settled = product.Settled,
                 };
                 _dbContext.PersonProducts.Add(newPersonProduct);
             }
-
             await _dbContext.SaveChangesAsync();
+
+            var nexProduct = await _entityUpdateService.GetPersonWithLowestCompensation(product.Id);
+            await _entityUpdateService.UpdateCompensationFlags(product.Id, nexProduct);
+            
             await _entityUpdateService.UpdatePartPricesPersonProduct(product);
             await _entityUpdateService.UpdateProductDetails(product);
             await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
+            await _entityUpdateService.UpdatePerson(user, false);
         }
 
         public async Task EditWithPerson(AddEditProductDto request, int productId, int personId)

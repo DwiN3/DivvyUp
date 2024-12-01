@@ -1,6 +1,8 @@
 ﻿using DivvyUp.Web.Data;
+using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace DivvyUp.Web.Update
 {
@@ -126,6 +128,42 @@ namespace DivvyUp.Web.Update
             decimal result = price / maxQuantity * quantity;
             decimal roundedResult = Math.Floor(result * 100) / 100;
             return Task.FromResult(roundedResult);
+        }
+
+        public async Task<PersonProduct> GetPersonWithLowestCompensation(int productId)
+        {
+            var personProducts = await _dbContext.PersonProducts
+                .Include(p => p.Person)
+                .Where(pp => pp.ProductId == productId).ToListAsync();
+
+            if (!personProducts.Any())
+            {
+                return null;
+            }
+
+            var personWithLowestCompensation = personProducts
+                .OrderBy(pp => pp.Person.CompensationAmount)
+                .FirstOrDefault();
+
+            return personWithLowestCompensation;
+        }
+
+        public async Task UpdateCompensationFlags(int productId, PersonProduct personWithLowestCompensation)
+        {
+            var personProducts = await _dbContext.PersonProducts
+                .Where(pp => pp.ProductId == productId).ToListAsync();
+            if (personWithLowestCompensation == null || personProducts == null)
+            {
+                return;
+            }
+
+            foreach (var personProduct in personProducts)
+            {
+                personProduct.Compensation = personProduct.PersonId == personWithLowestCompensation.PersonId;
+                _dbContext.PersonProducts.Update(personProduct);
+            }
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
