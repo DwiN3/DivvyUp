@@ -3,6 +3,7 @@ using DivvyUp_App.Services.Gui;
 using DivvyUp_Shared.HttpClients;
 using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 namespace DivvyUp_App.Layout
 {
@@ -23,11 +24,12 @@ namespace DivvyUp_App.Layout
 
         private bool SidebarExpanded { get; set; } = false;
         private string Header { get; set; } = string.Empty;
-        private bool IsUserLoggedIn { get; set; }
+        private bool IsLogged = false;
 
         protected override async void OnInitialized()
         {
             Navigation.LocationChanged += OnLocationChanged;
+            UserStateProvider.OnUserStateChanged += OnUserStateChanged;
             await SetUser();
             SetHeader(Navigation.Uri);
             StateHasChanged();
@@ -36,8 +38,7 @@ namespace DivvyUp_App.Layout
         private async Task SetUser()
         {
             var token = await UserStateProvider.GetTokenAsync();
-            await UserStateProvider.SetTokenAsync(string.Empty);
-            IsUserLoggedIn = true;
+            await UserStateProvider.ClearTokenAsync();
 
             if (!string.IsNullOrEmpty(token))
             {
@@ -46,19 +47,16 @@ namespace DivvyUp_App.Layout
                     bool isValid = await UserService.ValidToken(token);
                     if (isValid)
                     {
-                        IsUserLoggedIn = true;
                         await UserStateProvider.SetTokenAsync(token);
                     }
                 }
                 catch (HttpRequestException)
                 {
-                    IsUserLoggedIn = true;
                     await UserStateProvider.ClearTokenAsync();
                     StateHasChanged();
                 }
                 catch (Exception)
                 {
-                    IsUserLoggedIn = true;
                     await UserStateProvider.ClearTokenAsync();
                     StateHasChanged();
                 }
@@ -72,6 +70,12 @@ namespace DivvyUp_App.Layout
             StateHasChanged();
         }
 
+        private async void OnUserStateChanged()
+        {
+            IsLogged = await UserStateProvider.IsLoggedInAsync();
+            StateHasChanged();
+        }
+
         private void SetHeader(string url)
         {
             Header = HeaderService.GetHeader(url);
@@ -81,12 +85,13 @@ namespace DivvyUp_App.Layout
         {
             await UserStateProvider.ClearTokenAsync();
             StateHasChanged();
-            Navigation.NavigateTo("/", true);
+            Navigation.NavigateTo("/");
         }
 
         public void Dispose()
         {
             Navigation.LocationChanged -= OnLocationChanged;
+            UserStateProvider.OnUserStateChanged -= OnUserStateChanged;
         }
     }
 }

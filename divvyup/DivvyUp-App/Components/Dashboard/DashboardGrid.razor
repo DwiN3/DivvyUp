@@ -3,64 +3,66 @@
 
 <DLoadingPanel IsLoading="@IsLoading" Value="@Value" ValueMode="LoadingPanelMode.FadeValue" />
 
-@if (UserView)
+@if (DataIsReady)
 {
-    <div class="w-100 h-100 d-flex justify-content-center align-items-center">
-        <RadzenStack Orientation="Orientation.Vertical"
-                     JustifyContent="JustifyContent.Start"
-                     AlignItems="AlignItems.Stretch"
-                     Wrap="FlexWrap.NoWrap"
-                     Style="width: 100%; height: 100%;">
+    if (IsLogged)
+    {
+        <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+            <RadzenStack Orientation="Orientation.Vertical"
+                         JustifyContent="JustifyContent.Start"
+                         AlignItems="AlignItems.Stretch"
+                         Wrap="FlexWrap.NoWrap"
+                         Style="width: 100%; height: 100%;">
 
-            <div class="dashboard-grid">
-                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x2 info-container">
-                    <InfoCard OnLoadComplete="@OnChartLoaded" />
-                </RadzenCard>
-                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
-                    <ChartAmounts OnLoadComplete="@OnChartLoaded" />
-                </RadzenCard>
-                <RadzenCard Variant="@Variant.Filled" class="grid-item">
-                    <ChartPercentageExpenses OnLoadComplete="@OnChartLoaded" />
-                </RadzenCard>
-                <RadzenCard Variant="@Variant.Filled" class="grid-item">
-                    <ChartMonthlyTopProducts OnLoadComplete="@OnChartLoaded" />
-                </RadzenCard>
-                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
-                    <ChartWeeklyExpenses OnLoadComplete="@OnChartLoaded" />
-                </RadzenCard>
-                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
-                    <ChartMonthlyExpenses OnLoadComplete="@OnChartLoaded" />
-                </RadzenCard>
-            </div>
-        </RadzenStack>
-    </div>
-}
-else
-{
-    <div class="w-100 h-100 d-flex justify-content-center align-items-center">
-        <RadzenStack Orientation="Orientation.Vertical"
-                     JustifyContent="JustifyContent.Start"
-                     AlignItems="AlignItems.Stretch"
-                     Wrap="FlexWrap.NoWrap"
-                     Style="width: 100%; height: 100%;">
-            <RadzenCard Variant="@Variant.Filled" class="highlight-tile" style="width:100%; height: 100%; text-align: center;">
-                <h1 class="welcome-title">Zarządzaj swoimi finansami z DivvyUp!</h1>
-                <p class="description-text">
-                    Chcesz mieć pełną kontrolę nad swoimi wydatkami grupowymi? Załóż konto w aplikacji DivvyUp i zacznij śledzić rachunki, zarządzać wydatkami i poznawaj statystyki swoich finansów. 
-                </p>
-                <div style="display: flex; align-items: center; justify-content: space-around; gap: 20px; text-align: center;">
-                    <div style="display: flex; justify-content: center; align-items: center;">
-                        <img src="/icons/divvyup_icon.png" class="app-icon">
-                    </div>
-                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                        <p class="call-to-action">Zarejestruj się teraz i zacznij oszczędzać!</p>
-                        <RadzenButton class="register-btn" ButtonStyle="ButtonStyle.Secondary" Style="margin-top: 20px;" Click="@(() => { Navigation.NavigateTo("/register"); })">Załóż konto</RadzenButton>
-                    </div>
+                <div class="dashboard-grid">
+                    <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x2 info-container">
+                        <InfoCard OnLoadComplete="@OnChartLoaded" />
+                    </RadzenCard>
+                    <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
+                        <ChartAmounts OnLoadComplete="@OnChartLoaded" />
+                    </RadzenCard>
+                    <RadzenCard Variant="@Variant.Filled" class="grid-item">
+                        <ChartPercentageExpenses OnLoadComplete="@OnChartLoaded" />
+                    </RadzenCard>
+                    <RadzenCard Variant="@Variant.Filled" class="grid-item">
+                        <ChartMonthlyTopProducts OnLoadComplete="@OnChartLoaded" />
+                    </RadzenCard>
+                    <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
+                        <ChartWeeklyExpenses OnLoadComplete="@OnChartLoaded" />
+                    </RadzenCard>
+                    <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
+                        <ChartMonthlyExpenses OnLoadComplete="@OnChartLoaded" />
+                    </RadzenCard>
                 </div>
-            </RadzenCard>
-        </RadzenStack>
-    </div>
-
+            </RadzenStack>
+        </div>
+    }
+    else
+    {
+        <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+            <RadzenStack Orientation="Orientation.Vertical"
+                         JustifyContent="JustifyContent.Start"
+                         AlignItems="AlignItems.Stretch"
+                         Wrap="FlexWrap.NoWrap"
+                         Style="width: 100%; height: 100%;">
+                <RadzenCard Variant="@Variant.Filled" class="highlight-tile" style="width:100%; height: 100%; text-align: center;">
+                    <h1 class="welcome-title">Zarządzaj swoimi finansami z DivvyUp!</h1>
+                    <p class="description-text">
+                        Chcesz mieć pełną kontrolę nad swoimi wydatkami grupowymi? Załóż konto w aplikacji DivvyUp i zacznij śledzić rachunki, zarządzać wydatkami i poznawaj statystyki swoich finansów.
+                    </p>
+                    <div style="display: flex; align-items: center; justify-content: space-around; gap: 20px; text-align: center;">
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <img src="/icons/divvyup_icon.png" class="app-icon">
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <p class="call-to-action">Zarejestruj się teraz i zacznij oszczędzać!</p>
+                            <RadzenButton class="register-btn" ButtonStyle="ButtonStyle.Secondary" Style="margin-top: 20px;" Click="@(() => { Navigation.NavigateTo("/register"); })">Załóż konto</RadzenButton>
+                        </div>
+                    </div>
+                </RadzenCard>
+            </RadzenStack>
+        </div>
+    }
 }
 
 <style>

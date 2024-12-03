@@ -15,13 +15,13 @@
     <RadzenSidebar Responsive="true" Style="width: max-content">
         <RadzenPanelMenu DisplayStyle="@(SidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
             <RadzenPanelMenuItem Text="Główny panel" Path="@AppPath.DASHBOARD" Icon="dashboard" />
-            <RadzenPanelMenuItem Text="Rachunki" Path="@AppPath.RECEIPT" Icon="receipt_long" Visible="@(IsUserLoggedIn)" />
-            <RadzenPanelMenuItem Text="Pożyczki" Path="@AppPath.LOAN" Icon="payments" Visible="@(IsUserLoggedIn)" />
-            <RadzenPanelMenuItem Text="Osoby" Path="@AppPath.PERSON" Icon="diversity_3" Visible="@(IsUserLoggedIn)" />
-            <RadzenPanelMenuItem Text="Konto" Path="@AppPath.ACCOUT_MANAGER" Icon="manage_accounts" Visible="@(IsUserLoggedIn)" />
-            <RadzenPanelMenuItem Text="Logowanie" Path="@AppPath.LOGIN" Icon="login" Visible="@(!IsUserLoggedIn)" />
-            <RadzenPanelMenuItem Text="Rejestracja" Path="@AppPath.REGISTER" Icon="input" Visible="@(!IsUserLoggedIn)" />
-            <RadzenPanelMenuItem Text="Wyloguj się" Icon="logout" Click="@Logout" Visible="@(IsUserLoggedIn)" />
+            <RadzenPanelMenuItem Text="Rachunki" Path="@AppPath.RECEIPT" Icon="receipt_long" Visible="@(IsLogged)" />
+            <RadzenPanelMenuItem Text="Pożyczki" Path="@AppPath.LOAN" Icon="payments" Visible="@(IsLogged)" />
+            <RadzenPanelMenuItem Text="Osoby" Path="@AppPath.PERSON" Icon="diversity_3" Visible="@(IsLogged)" />
+            <RadzenPanelMenuItem Text="Konto" Path="@AppPath.ACCOUT_MANAGER" Icon="manage_accounts" Visible="@(IsLogged)" />
+            <RadzenPanelMenuItem Text="Logowanie" Path="@AppPath.LOGIN" Icon="login" Visible="@(!IsLogged)" />
+            <RadzenPanelMenuItem Text="Rejestracja" Path="@AppPath.REGISTER" Icon="input" Visible="@(!IsLogged)" />
+            <RadzenPanelMenuItem Text="Wyloguj się" Icon="logout" Click="@Logout" Visible="@(IsLogged)" />
         </RadzenPanelMenu>
     </RadzenSidebar>
     <RadzenBody>

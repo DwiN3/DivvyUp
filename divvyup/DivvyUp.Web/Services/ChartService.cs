@@ -255,11 +255,11 @@ namespace DivvyUp.Web.Services
                 .Where(p => p.Receipt.UserId == user.Id &&
                             p.Receipt.Date.Month == currentMonth &&
                             p.Receipt.Date.Year == currentYear)
-                .Select(p => new { p.Name, p.Price }) // Wybieramy tylko nazwę i cenę
-                .Distinct() // Usuwamy duplikaty na poziomie nazwy i ceny
-                .OrderByDescending(p => p.Price) // Sortowanie po cenie malejąco
-                .Take(3) // Pobieramy tylko 3 produkty
-                .Select(p => new ChartDto(p.Name, p.Price)) // Mapowanie na ChartDto
+                .Select(p => new { p.Name, p.Price })
+                .Distinct()
+                .OrderByDescending(p => p.Price)
+                .Take(3)
+                .Select(p => new ChartDto(p.Name, p.Price))
                 .ToListAsync();
 
             return topProducts;

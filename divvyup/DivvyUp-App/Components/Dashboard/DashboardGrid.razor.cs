@@ -4,38 +4,44 @@ using Microsoft.AspNetCore.Components;
 
 namespace DivvyUp_App.Components.Dashboard
 {
-    partial class DashboardGrid
+    partial class DashboardGrid : IDisposable
     {
         [Inject]
         private UserStateProvider UserStateProvider { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
 
-        private bool UserView { get; set; }
+        private bool DataIsReady { get; set; } = false; 
+        private bool IsLogged { get; set; }
         private int ChartsToLoad { get; set; } = 6;
         private int TotalCharts { get; set; } = 6;
-        private bool IsLoading { get; set; } = true;
+        private bool IsLoading { get; set; } = false;
         private double Value { get; set; }
-
 
         protected override async Task OnInitializedAsync()
         {
-            await InitializeUserApp();
+            IsLogged = await UserStateProvider.IsLoggedInAsync();
+            if (IsLogged)
+            {
+                IsLoading = true;
+            }
+            DataIsReady = true;
+            UserStateProvider.OnUserStateChanged += OnUserStateChanged;
+            StateHasChanged();
         }
 
-        private async Task InitializeUserApp()
+        private async void OnUserStateChanged()
         {
-            if (UserStateProvider != null)
+            IsLogged = await UserStateProvider.IsLoggedInAsync();
+            if (IsLogged)
             {
-                await Task.Delay(500);
-                UserView = await UserStateProvider.IsLoggedInAsync();
-                if (!UserView)
-                {
-                    IsLoading = false;
-                }
-
-                StateHasChanged();
+                IsLoading = true;
             }
+            else
+            {
+                IsLoading = false;
+            }
+            StateHasChanged();
         }
 
         private void OnChartLoaded()
@@ -47,6 +53,11 @@ namespace DivvyUp_App.Components.Dashboard
                 IsLoading = false;
                 StateHasChanged();
             }
+        }
+
+        public void Dispose()
+        {
+            UserStateProvider.OnUserStateChanged -= OnUserStateChanged;
         }
     }
 }
