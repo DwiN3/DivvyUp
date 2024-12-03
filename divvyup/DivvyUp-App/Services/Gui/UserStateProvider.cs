@@ -10,6 +10,7 @@ namespace DivvyUp_App.Services.Gui
         private readonly ILocalStorageService _localStorageService;
         private readonly DHttpClient _httpClient;
         public event Action OnUserStateChanged;
+        public bool StartUpRun { get; set; } = true;
 
         public UserStateProvider(ILocalStorageService localStorageService, DHttpClient httpClient)
         {
@@ -26,6 +27,7 @@ namespace DivvyUp_App.Services.Gui
         {
             await _localStorageService.SetItemAsync(UserTokenKey, token);
             UpdateHttpClientHeader(token);
+            StartUpRun = false;
             NotifyUserStateChanged();
         }
 
@@ -33,14 +35,21 @@ namespace DivvyUp_App.Services.Gui
         {
             await _localStorageService.RemoveItemAsync(UserTokenKey);
             UpdateHttpClientHeader(string.Empty);
+            StartUpRun = false;
             NotifyUserStateChanged();
         }
 
         public async Task<bool> IsLoggedInAsync()
         {
             var token = await GetTokenAsync();
-            return !string.IsNullOrEmpty(token);
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+
+            return !StartUpRun;
         }
+
 
         private void UpdateHttpClientHeader(string token)
         {

@@ -49,19 +49,19 @@ namespace DivvyUp_App.Layout
                     {
                         await UserStateProvider.SetTokenAsync(token);
                     }
-                }
-                catch (HttpRequestException)
-                {
-                    await UserStateProvider.ClearTokenAsync();
-                    StateHasChanged();
+                    else
+                    {
+                        await UserStateProvider.ClearTokenAsync();
+                    }
                 }
                 catch (Exception)
                 {
                     await UserStateProvider.ClearTokenAsync();
-                    StateHasChanged();
                 }
             }
+            StateHasChanged();
         }
+
 
 
         private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
