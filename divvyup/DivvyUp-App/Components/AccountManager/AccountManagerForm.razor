@@ -1,25 +1,20 @@
 ﻿<RadzenStack JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" class="w-100 h-100">
-    <RadzenCard Variant="Variant.Filled" Style="width: 65%;">
-        @*
-            <RadzenFieldset Text="Zdjęcie profilu" class="form" Style="max-height: 300px;">
-               <RadzenFileInput @bind-Value="@Avatar" TValue="string" Style="width: 100%" InputAttributes="@(new Dictionary<string, object>() { { "aria-label", "Wybierz obraz" } })" ChooseText="Wybierz obraz"/>
-           </RadzenFieldset>
-        *@
+    <RadzenCard Variant="Variant.Filled" Style="width: 60%; max-width: 600px; background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 12px;">
         <RadzenFieldset Text="Informacje o koncie" class="form">
             <div class="section">
                 <b class="name-section">Nazwa</b>
-                <RadzenTextBox class="section-input" @bind-Value="@EditData.Username" />
+                <RadzenTextBox class="section-input" @bind-Value="@EditData.Username" Style="padding: 12px;" />
             </div>
             <div class="section">
                 <b class="name-section">Email</b>
-                <RadzenTextBox class="section-input" @bind-Value="@EditData.Email" />
+                <RadzenTextBox class="section-input" @bind-Value="@EditData.Email" Style="padding: 12px;" />
             </div>
-            <div class="section" style="justify-content: space-evenly">
-                <RadzenButton Style="margin-top: 20px; width: 40%;" Text="Zmień hasło" ButtonStyle="ButtonStyle.Light" Click="ChangePassword"/>
-                <RadzenButton Style="margin-top: 20px; width: 40%;" Text="Usuń konto" ButtonStyle="ButtonStyle.Danger" Click="RemoveUser"/>
+            <div class="button-section">
+                <RadzenButton class="du-button" Style="margin-top: 20px; width: 48%; background-color: #6a11cb; color: white; border-radius: 8px;" Text="Zmień hasło" ButtonStyle="ButtonStyle.Light" Click="ChangePassword" />
+                <RadzenButton class="du-button" Style="margin-top: 20px; width: 48%; background-color: #d32f2f; color: white; border-radius: 8px;" Text="Usuń konto" ButtonStyle="ButtonStyle.Danger" Click="RemoveUser" />
             </div>
-            <div class="section" style="justify-content: center">
-                <RadzenButton Style="margin-top: 20px; width: 87%;" Text="Zapisz" ButtonStyle="ButtonStyle.Success" Click="SaveChanges"/>
+            <div class="button-section" style="justify-content: center;">
+                <RadzenButton class="du-button" Style="margin-top: 20px; width: 87%; background-color: #4caf50; color: white; border-radius: 8px;" Text="Zapisz" ButtonStyle="ButtonStyle.Success" Click="SaveChanges" />
             </div>
         </RadzenFieldset>
     </RadzenCard>
@@ -28,25 +23,52 @@
 <style>
     .form {
         width: 100%;
-        padding: 10px 80px;
+        padding: 20px;
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: 20px;
     }
 
     .section {
         display: flex;
         flex-direction: row;
         align-items: center;
-        margin-bottom: 10px; 
+        justify-content: space-between;
+        margin-bottom: 15px;
     }
 
     .name-section {
-        width: 25%;
         font-weight: bold;
+        color: #6a11cb;
+        font-size: 1.2rem;
+        width: 30%;
     }
 
     .section-input {
-        width: 75%;
+        width: 70%;
+        font-size: 1rem;
+    }
+
+    .button-section {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .button-section RadzenButton {
+        width: 48%;
+    }
+
+    .section input {
+        border-radius: 8px;
+        padding: 12px;
+        border: 1px solid #dcdcdc;
+        background-color: #f8f8f8;
+    }
+
+    .section input:focus {
+        border-color: #6a11cb;
+        background-color: #ffffff;
     }
 </style>

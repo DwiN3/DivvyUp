@@ -21,7 +21,7 @@
         </div>
         <div class="info-row">
             <span>Kwota nieopłacona:</span>
-            <b>@PersonUser.UnpaidAmount.ToString(Format.PriceFormat)</b>
+            <b style="color: @(PersonUser.UnpaidAmount > 0 ? "red" : "#00e676")">@PersonUser.UnpaidAmount.ToString(Format.PriceFormat)</b>
         </div>
         <div class="info-row">
             <span>Kwota łączna:</span>

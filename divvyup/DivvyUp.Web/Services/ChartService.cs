@@ -151,7 +151,7 @@ namespace DivvyUp.Web.Services
         public async Task<List<ChartDto>> GetWeeklyTotalExpenses()
         {
             var today = DateOnly.FromDateTime(DateTime.Today);
-            var startOfWeek = today.AddDays(-((int)today.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7); // Poprawiona linia
+            var startOfWeek = today.AddDays(-((int)today.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7);
             var endOfWeek = startOfWeek.AddDays(6);
 
             var user = await _userContext.GetCurrentUser();
