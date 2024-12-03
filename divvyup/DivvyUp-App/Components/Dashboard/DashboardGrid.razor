@@ -13,7 +13,7 @@
                      Style="width: 100%; height: 100%;">
 
             <div class="dashboard-grid">
-                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x2 highlight-tile">
+                <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x2 info-container">
                     <InfoCard OnLoadComplete="@OnChartLoaded" />
                 </RadzenCard>
                 <RadzenCard Variant="@Variant.Filled" class="grid-item grid-item-2x1">
@@ -43,12 +43,24 @@ else
                      AlignItems="AlignItems.Stretch"
                      Wrap="FlexWrap.NoWrap"
                      Style="width: 100%; height: 100%;">
-
-            <RadzenCard Variant="@Variant.Filled" style="width:100%; height: 100%;">
-                <h1>Zaloguj się lub załóż konto :)</h1>
+            <RadzenCard Variant="@Variant.Filled" class="highlight-tile" style="width:100%; height: 100%; text-align: center;">
+                <h1 class="welcome-title">Zarządzaj swoimi finansami z DivvyUp!</h1>
+                <p class="description-text">
+                    Chcesz mieć pełną kontrolę nad swoimi wydatkami grupowymi? Załóż konto w aplikacji DivvyUp i zacznij śledzić rachunki, zarządzać wydatkami i poznawaj statystyki swoich finansów. 
+                </p>
+                <div style="display: flex; align-items: center; justify-content: space-around; gap: 20px; text-align: center;">
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <img src="/icons/divvyup_icon.png" class="app-icon">
+                    </div>
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <p class="call-to-action">Zarejestruj się teraz i zacznij oszczędzać!</p>
+                        <RadzenButton class="register-btn" ButtonStyle="ButtonStyle.Secondary" Style="margin-top: 20px;" Click="@(() => { Navigation.NavigateTo("/register"); })">Załóż konto</RadzenButton>
+                    </div>
+                </div>
             </RadzenCard>
         </RadzenStack>
     </div>
+
 }
 
 <style>
@@ -95,16 +107,94 @@ else
         background-color: #f0f0f5;
     }
 
-    .highlight-tile {
+    .info-container {
+        height: 100%;
         background-image: linear-gradient(to right, #6a11cb, #2575fc);
         background-color: #f0f0f5;
-        color: white;
     }
 
-    .tile-title {
-        font-size: 2rem;
-        font-weight: 600;
-        margin-bottom: 10px;
+    .highlight-tile {
+        background-image: linear-gradient(to right, #6a11cb, #2575fc);
+        color: white;
+        padding: 5vw 10vw;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+    .highlight-tile h1 {
+        font-size: 3vw;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 2vh;
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .highlight-tile p {
+        font-size: 2vw;
+        color: white;
+        margin-top: 1vh;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #f0f0f5;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .description-text {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 30px;
+        line-height: 1.6;
+        padding: 0 20px;
+    }
+
+    .call-to-action {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #ffeb3b;
+        margin-top: 20px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .app-icon {
+        width: 15vw;
+        height: 15vw;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+        .app-icon img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+    .app-icon:hover {
+        transform: scale(1.1);
+    }
+
+
+    .register-btn {
+        font-size: 1.2rem;
+        padding: 12px 30px;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .app-icon:hover {
+        transform: scale(1.1);
     }
 
 </style>

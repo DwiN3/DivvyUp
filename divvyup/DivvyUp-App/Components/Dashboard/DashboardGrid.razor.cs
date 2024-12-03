@@ -8,6 +8,8 @@ namespace DivvyUp_App.Components.Dashboard
     {
         [Inject]
         private UserAppService UserApp { get; set; }
+        [Inject]
+        private NavigationManager Navigation { get; set; }
 
         private bool UserView { get; set; } = false;
         private int ChartsToLoad { get; set; } = 6;
