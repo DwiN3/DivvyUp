@@ -6,7 +6,7 @@ namespace DivvyUp_Shared.HttpClients
 {
     public class DHttpClient
     {
-        private readonly HttpClient _httpClient;
+        public readonly HttpClient _httpClient;
         private string _token;
 
         public DHttpClient(HttpClient httpClient)

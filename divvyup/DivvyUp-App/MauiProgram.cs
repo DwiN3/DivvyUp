@@ -35,13 +35,14 @@ namespace DivvyUp_App
             builder.Services.AddRadzenComponents();
             builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services.AddSingleton<UserAppService>();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<DDialogService>();
             builder.Services.AddScoped<NotificationService>();
             builder.Services.AddScoped<DNotificationService>();
             builder.Services.AddSingleton<DAlertService>();
             builder.Services.AddScoped<HeaderService>();
+            builder.Services.AddScoped<UserStateProvider>();
+
 
             builder.Services.AddTransient<IUserService, UserHttpService>();
             builder.Services.AddTransient<IPersonService, PersonHttpService>();

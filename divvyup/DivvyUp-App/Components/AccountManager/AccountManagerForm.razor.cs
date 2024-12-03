@@ -1,4 +1,5 @@
 ﻿using DivvyUp_App.Services.Gui;
+using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.HttpClients;
@@ -13,7 +14,7 @@ namespace DivvyUp_App.Components.AccountManager
         [Inject]
         private IUserService UserService { get; set; }
         [Inject]
-        private UserAppService UserAppService { get; set; }
+        private UserStateProvider UserStateProvider { get; set; }
         [Inject]
         private DHttpClient DHttpClient { get; set; }
         [Inject]
@@ -24,19 +25,21 @@ namespace DivvyUp_App.Components.AccountManager
         private DNotificationService DNotificationService { get; set; }
 
         private EditUserDto EditData { get; set; } = new();
+        private UserDto User { get; set; }
         private string FileName { get; set; }
         private long? FileSize { get; set; }
         private string Avatar;
 
         protected override async Task OnInitializedAsync()
         {
+            User = await UserService.GetUser();
             SetUserData();
         }
 
         private void SetUserData()
         {
-            EditData.Username = UserAppService.GetUser().username;
-            EditData.Email = UserAppService.GetUser().email;
+            EditData.Username = User.Username;
+            EditData.Email = User.Email;
         }
 
         private async Task SaveChanges()
@@ -44,8 +47,7 @@ namespace DivvyUp_App.Components.AccountManager
             try
             {
                 var token = await UserService.Edit(EditData);
-                DHttpClient.setToken(token);
-                UserAppService.SetUser(EditData.Username, EditData.Email, token, true);
+                await UserStateProvider.SetTokenAsync(token);
                 DNotificationService.ShowNotification("Zapisano zmiany", NotificationSeverity.Success);
             }
             catch (DException ex)
@@ -80,8 +82,7 @@ namespace DivvyUp_App.Components.AccountManager
                 if (result)
                 {
                     await UserService.Remove();
-                    UserAppService.ClearUser();
-                    DHttpClient.setToken(string.Empty);
+                    await UserStateProvider.ClearTokenAsync();
                     StateHasChanged();
                     Navigation.NavigateTo("/");
                 }

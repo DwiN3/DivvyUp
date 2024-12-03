@@ -18,7 +18,7 @@ namespace DivvyUp_App.Components.Login
         [Inject]
         private DHttpClient DHttpClient { get; set; }
         [Inject]
-        private UserAppService UserAppService { get; set; }
+        private UserStateProvider UserStateProvider { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
 
@@ -29,9 +29,7 @@ namespace DivvyUp_App.Components.Login
             try
             {
                 var token = await UserService.Login(LoginData);
-                DHttpClient.setToken(token);
-                UserDto user = await UserService.GetUser();
-                UserAppService.SetUser(user.Username, user.Email, token, true);
+                await UserStateProvider.SetTokenAsync(token);
                 Navigation.NavigateTo("/");
             }
             catch (DException ex)

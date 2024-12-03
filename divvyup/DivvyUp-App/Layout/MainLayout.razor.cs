@@ -1,4 +1,5 @@
-﻿using DivvyUp_App.Services.Gui;
+﻿using Blazored.LocalStorage;
+using DivvyUp_App.Services.Gui;
 using DivvyUp_Shared.HttpClients;
 using DivvyUp_Shared.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -14,12 +15,15 @@ namespace DivvyUp_App.Layout
         [Inject]
         private DHttpClient DHttpClient { get; set; }
         [Inject]
-        private UserAppService UserAppService { get; set; }
+        private HeaderService HeaderService { get; set; }
         [Inject]
-        private HeaderService HeaderService { get; set; } 
+        private ILocalStorageService LocalStorageService {get; set; }
+        [Inject]
+        private UserStateProvider UserStateProvider { get; set; }
 
         private bool SidebarExpanded { get; set; } = false;
         private string Header { get; set; } = string.Empty;
+        private bool IsUserLoggedIn { get; set; }
 
         protected override async void OnInitialized()
         {
@@ -31,34 +35,36 @@ namespace DivvyUp_App.Layout
 
         private async Task SetUser()
         {
-            var user = UserAppService.GetUser();
-            UserAppService.SetLoggedIn(false);
+            var token = await UserStateProvider.GetTokenAsync();
+            await UserStateProvider.SetTokenAsync(string.Empty);
+            IsUserLoggedIn = true;
 
-            if (!string.IsNullOrEmpty(user.token))
+            if (!string.IsNullOrEmpty(token))
             {
                 try
                 {
-                    bool isValid = await UserService.ValidToken(user.token);
+                    bool isValid = await UserService.ValidToken(token);
                     if (isValid)
                     {
-                        UserAppService.SetLoggedIn(true);
-                        DHttpClient.setToken(user.token);
+                        IsUserLoggedIn = true;
+                        await UserStateProvider.SetTokenAsync(token);
                     }
                 }
                 catch (HttpRequestException)
                 {
-                    UserAppService.ClearUser();
-                    DHttpClient.setToken(string.Empty);
+                    IsUserLoggedIn = true;
+                    await UserStateProvider.ClearTokenAsync();
                     StateHasChanged();
                 }
                 catch (Exception)
                 {
-                    UserAppService.ClearUser();
-                    DHttpClient.setToken(string.Empty);
+                    IsUserLoggedIn = true;
+                    await UserStateProvider.ClearTokenAsync();
                     StateHasChanged();
                 }
             }
         }
+
 
         private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
         {
@@ -73,7 +79,7 @@ namespace DivvyUp_App.Layout
 
         private async Task Logout()
         {
-            UserAppService.ClearUser();
+            await UserStateProvider.ClearTokenAsync();
             StateHasChanged();
             Navigation.NavigateTo("/", true);
         }
