@@ -2,14 +2,32 @@
 @using DivvyUp_Shared.Dtos.Entity
 @using DivvyUp_Shared.Interfaces
 
-<RadzenStack Style="margin-left: 6%; margin-top: 4%;">
-    <h1 class="tile-title">Witaj, <b>@PersonUser.Name</b></h1>
-    <h3>Liczba rachunków: <b>@PersonUser.ReceiptsCount.ToString()</b></h3>
-    <h3>Liczba produktów: <b>@PersonUser.ProductsCount.ToString()</b></h3>
-    <h3>Kwota wyrównań: <b>@PersonUser.CompensationAmount.ToString(Format.PriceFormat)</b></h3>
-    <h3>Łączna kwota: <b>@PersonUser.TotalAmount.ToString(Format.PriceFormat)</b></h3>
-    <h3>Aktualny bilans pożyczek: <b>@PersonUser.LoanBalance.ToString(Format.PriceFormat)</b></h3>
-    @* <h3>Ostatni rachunek utworzono: <b>00.00.0000</b></h3> *@
+<RadzenStack Style="color: white; overflow: auto; padding: 20px; height: 100%;">
+    <h1 class="tile-title" style="margin-bottom: 20px;">
+        Witaj, <span style="font-weight: bold; color: #ffeb3b;">@PersonUser.Name</span>
+    </h1>
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div class="info-row">
+            <span>Liczba rachunków:</span>
+            <b>@PersonUser.ReceiptsCount.ToString()</b>
+        </div>
+        <div class="info-row">
+            <span>Liczba produktów:</span>
+            <b>@PersonUser.ProductsCount.ToString()</b>
+        </div>
+        <div class="info-row">
+            <span>Kwota wyrównań:</span>
+            <b>@PersonUser.CompensationAmount.ToString(Format.PriceFormat)</b>
+        </div>
+        <div class="info-row">
+            <span>Kwota nieopłacona:</span>
+            <b>@PersonUser.UnpaidAmount.ToString(Format.PriceFormat)</b>
+        </div>
+        <div class="info-row">
+            <span>Kwota łączna:</span>
+            <b>@PersonUser.TotalAmount.ToString(Format.PriceFormat)</b>
+        </div>
+    </div>
 </RadzenStack>
 
 @code {
@@ -27,3 +45,26 @@
         await OnLoadComplete.InvokeAsync();
     }
 }
+
+<style>
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.2rem;
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 10px 15px;
+        border-radius: 8px;
+    }
+
+    .info-row b {
+        font-weight: bold;
+        color: #00e676;
+    }
+
+    .tile-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+</style>

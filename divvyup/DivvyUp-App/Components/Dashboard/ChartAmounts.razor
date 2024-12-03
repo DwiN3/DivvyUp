@@ -2,30 +2,31 @@
 @using DivvyUp_Shared.Dtos.Entity
 @using DivvyUp_Shared.Interfaces
 
-<RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start" Orientation="Orientation.Horizontal">
-    <RadzenChart Style="max-height: 110%; width: 50%;">
-        <RadzenPieSeries Data="@ChartUnpaidAmount" Title="Kwota nieopłacona" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
-            <RadzenSeriesDataLabels Visible="false" />
-            <RadzenLegend Visible="false" />
-            <RadzenValueAxis Formatter="@Format">
-                <RadzenGridLines Visible="true" />
-            </RadzenValueAxis>
-        </RadzenPieSeries>
-    </RadzenChart>
-    <RadzenChart Style="max-height: 110%; width: 50%;">
-        <RadzenPieSeries Data="@ChartTotalAmount" Title="Kwota łączna" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
-            <RadzenSeriesDataLabels Visible="false" />
-            <RadzenLegend Visible="true" />
-            <RadzenValueAxis Formatter="@Format">
-                <RadzenGridLines Visible="true" />
-            </RadzenValueAxis>
-        </RadzenPieSeries>
-    </RadzenChart>
-</RadzenStack>
-
-
-
-
+<div class="main-container">
+    <div class="chart-title">
+        Podsumowanie Kwot
+    </div>
+    <RadzenStack class="chart-container" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start" Orientation="Orientation.Horizontal">
+        <RadzenChart Style="max-height: 110%; width: 50%;">
+            <RadzenPieSeries Data="@ChartUnpaidAmount" Title="Kwota nieopłacona" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+                <RadzenSeriesDataLabels Visible="false" />
+                <RadzenLegend Visible="false" />
+                <RadzenValueAxis Formatter="@Format">
+                    <RadzenGridLines Visible="true" />
+                </RadzenValueAxis>
+            </RadzenPieSeries>
+        </RadzenChart>
+        <RadzenChart Style="max-height: 110%; width: 50%;">
+            <RadzenPieSeries Data="@ChartTotalAmount" Title="Kwota łączna" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+                <RadzenSeriesDataLabels Visible="false" />
+                <RadzenLegend Visible="true" />
+                <RadzenValueAxis Formatter="@Format">
+                    <RadzenGridLines Visible="true" />
+                </RadzenValueAxis>
+            </RadzenPieSeries>
+        </RadzenChart>
+    </RadzenStack>
+</div>
 
 @code {
     [Inject]
@@ -49,3 +50,26 @@
         return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("pl-PL"));
     }
 }
+
+<style>
+    .main-container{
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .chart-title{
+        position: absolute;
+        top: -15px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 15px;
+        z-index: 10;
+        pointer-events: none;
+    }
+    .chart-container{
+        width: 100%;
+        height: 100%;
+        margin-top: 7px;
+    }
+</style>

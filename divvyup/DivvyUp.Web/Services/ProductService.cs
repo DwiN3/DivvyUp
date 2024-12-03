@@ -188,7 +188,7 @@ namespace DivvyUp.Web.Services
             await _entityUpdateService.UpdatePartPricesPersonProduct(product);
             await _entityUpdateService.UpdateProductDetails(product);
             await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
-            await _entityUpdateService.UpdatePerson(user, false);
+            await _entityUpdateService.UpdatePerson(user, false); 
         }
 
         public async Task EditWithPerson(AddEditProductDto request, int productId, int personId)
