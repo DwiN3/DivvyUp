@@ -2,25 +2,30 @@
 @using DivvyUp_Shared.Dtos.Entity
 @using DivvyUp_Shared.Interfaces
 
-<RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-    <RadzenChart Style="min-height: 100%; width: 100%;">
-        <RadzenLegend Visible="false" />
-        <RadzenChartTooltipOptions Shared="true"/>
-        <RadzenLineSeries Smooth="false" Data="@WeeklyTotalExpenses" Title="Koszt wszystkich osób" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
-            <RadzenMarkers Visible="false" MarkerType="MarkerType.Circle"/>
-            <RadzenSeriesDataLabels Visible="false"/>
-        </RadzenLineSeries>
-        <RadzenLineSeries Smooth="false" Data="@WeeklyUserExpenses" Title="Koszt właściciela konta" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
-            <RadzenMarkers Visible="false" MarkerType="MarkerType.Circle"/>
-            <RadzenSeriesDataLabels Visible="false"/>
-        </RadzenLineSeries>
-        <RadzenCategoryAxis Padding="20"/>
-        <RadzenValueAxis Formatter="@Format">
-            <RadzenGridLines Visible="true"/>
-            <RadzenAxisTitle Text="@TitleChart"/>
-        </RadzenValueAxis>
-    </RadzenChart>
-</RadzenStack>
+<div class="main-container">
+    <div class="chart-title">
+        @TitleChart
+    </div>
+    <RadzenStack class="chart-container" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+        <RadzenChart Style="min-height: 100%; width: 100%;">
+            <RadzenLegend Visible="false" />
+            <RadzenChartTooltipOptions Shared="true"/>
+            <RadzenLineSeries Smooth="false" Data="@WeeklyTotalExpenses" Title="Koszt wszystkich osób" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+                <RadzenMarkers Visible="false" MarkerType="MarkerType.Circle"/>
+                <RadzenSeriesDataLabels Visible="false"/>
+            </RadzenLineSeries>
+            <RadzenLineSeries Smooth="false" Data="@WeeklyUserExpenses" Title="Koszt właściciela konta" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+                <RadzenMarkers Visible="false" MarkerType="MarkerType.Circle"/>
+                <RadzenSeriesDataLabels Visible="false"/>
+            </RadzenLineSeries>
+            <RadzenCategoryAxis Padding="20"/>
+            <RadzenValueAxis Formatter="@Format">
+                <RadzenGridLines Visible="true"/>
+                @*<RadzenAxisTitle Text="@TitleChart"/>*@
+            </RadzenValueAxis>
+        </RadzenChart>
+    </RadzenStack>
+</div>
 
 @code {
     [Inject]
@@ -46,3 +51,26 @@
         return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("pl-PL"));
     }
 }
+
+<style>
+    .main-container{
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .chart-title{
+        position: absolute;
+        top: -15px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 15px;
+        z-index: 10;
+        pointer-events: none;
+    }
+    .chart-container{
+        width: 100%;
+        height: 100%;
+        margin-top: 7px;
+    }
+</style>

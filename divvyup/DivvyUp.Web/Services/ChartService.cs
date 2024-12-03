@@ -242,48 +242,25 @@ namespace DivvyUp.Web.Services
             return responseList;
         }
 
-
         public async Task<List<ChartDto>> GetMonthlyTopProducts()
         {
             var user = await _userContext.GetCurrentUser();
-            var persons = await _dbContext.Persons.Where(p => p.UserId == user.Id).ToListAsync();
-
-            var allPersonProducts = new List<PersonProduct>();
-            foreach (var person in persons)
-            {
-                var personProducts = await _dbContext.PersonProducts
-                    .AsNoTracking()
-                    .Include(pp => pp.Product)
-                    .Include(pp => pp.Product.Receipt)
-                    .Where(pp => pp.PersonId == person.Id)
-                    .ToListAsync();
-                allPersonProducts.AddRange(personProducts);
-            }
 
             var now = DateTime.Now;
             var currentMonth = now.Month;
             var currentYear = now.Year;
 
-            var productValues = new Dictionary<string, decimal>();
-
-            foreach (var personProduct in allPersonProducts)
-            {
-                var productDate = personProduct.Product.Receipt.Date;
-                if (productDate.Month == currentMonth && productDate.Year == currentYear)
-                {
-                    productValues[personProduct.Product.Name] = productValues.GetValueOrDefault(personProduct.Product.Name, 0.0m) + personProduct.PartOfPrice;
-                }
-            }
-
-            var topProducts = productValues
-                .OrderByDescending(entry => entry.Value)
-                .Take(3)
-                .Select(entry => new ChartDto
-                {
-                    Name = entry.Key,
-                    Value = entry.Value
-                })
-                .ToList();
+            var topProducts = await _dbContext.Products
+                .Include(p => p.Receipt)
+                .Where(p => p.Receipt.UserId == user.Id &&
+                            p.Receipt.Date.Month == currentMonth &&
+                            p.Receipt.Date.Year == currentYear)
+                .Select(p => new { p.Name, p.Price }) // Wybieramy tylko nazwę i cenę
+                .Distinct() // Usuwamy duplikaty na poziomie nazwy i ceny
+                .OrderByDescending(p => p.Price) // Sortowanie po cenie malejąco
+                .Take(3) // Pobieramy tylko 3 produkty
+                .Select(p => new ChartDto(p.Name, p.Price)) // Mapowanie na ChartDto
+                .ToListAsync();
 
             return topProducts;
         }

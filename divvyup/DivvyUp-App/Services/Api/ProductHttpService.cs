@@ -23,7 +23,7 @@ namespace DivvyUp_App.Services.Api
             _logger = logger;
         }
 
-        public async Task<ProductDto> Add(AddEditProductDto product, int receiptId)
+        public async Task Add(AddEditProductDto product, int receiptId)
         {
             try
             {
@@ -31,9 +31,6 @@ namespace DivvyUp_App.Services.Api
                     .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString());
                 var response = await _dHttpClient.PostAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<ProductDto>(jsonResponse);
-                return result;
             }
             catch (DException ex)
             {
@@ -47,7 +44,7 @@ namespace DivvyUp_App.Services.Api
             }
         }
 
-        public async Task<ProductDto> Edit(AddEditProductDto product, int productId)
+        public async Task Edit(AddEditProductDto product, int productId)
         {
             try
             {
@@ -55,9 +52,6 @@ namespace DivvyUp_App.Services.Api
                     .Replace(ApiRoute.ARG_PRODUCT, productId.ToString());
                 var response = await _dHttpClient.PutAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<ProductDto>(jsonResponse);
-                return result;
             }
             catch (DException ex)
             {

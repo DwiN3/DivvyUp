@@ -26,16 +26,16 @@ namespace DivvyUp.Web.Controllers
         [SwaggerOperation(Summary = "Add a product to a receipt", Description = "Adds a new product to a specific receipt.")]
         public async Task<IActionResult> Add([FromBody] AddEditProductDto request, [FromRoute] int receiptId)
         {
-            var product = await _productService.Add(request, receiptId);
-            return Ok(product);
+            await _productService.Add(request, receiptId);
+            return Ok();
         }
 
         [HttpPut(ApiRoute.PRODUCT_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit a product", Description = "Edits the details of an existing product by its ID.")]
         public async Task<IActionResult> Edit([FromBody] AddEditProductDto request, [FromRoute] int productId)
         {
-            var product = await _productService.Edit(request, productId);
-            return Ok(product);
+            await _productService.Edit(request, productId);
+            return Ok();
         }
 
         [HttpPost(ApiRoute.PRODUCT_ROUTES.ADD_WIDTH_PERSON)]

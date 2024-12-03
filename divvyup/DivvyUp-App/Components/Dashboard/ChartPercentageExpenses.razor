@@ -1,19 +1,24 @@
 ﻿@using DivvyUp_Shared.Dtos.Entity
 @using DivvyUp_Shared.Interfaces
 
-<RadzenStack Style="width: 100%; height: 100%;" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
-    <RadzenChart Style="min-height: 100%; width: 100%;">
-        <RadzenColumnSeries Data="@PercantageExpenses" Title="Rzetelność osoby" FillRange="@ColorRanges" LineType="LineType.Dashed" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
-            <RadzenSeriesDataLabels Visible="false" />
-            <RadzenColumnOptions Radius="5" />
-            <RadzenLegend Visible="false" />
-            <RadzenValueAxis Formatter="@Format" Min="0" Max="100">
-                <RadzenGridLines Visible="true" /> 
-                @* <RadzenAxisTitle Text="Procent rozliczenia" />  *@
-            </RadzenValueAxis>
-        </RadzenColumnSeries>
-    </RadzenChart>
-</RadzenStack>
+<div class="main-container">
+    <div class="chart-title">
+        Status rzetelności osób
+    </div>
+    <RadzenStack class="chart-container" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Start">
+        <RadzenChart Style="min-height: 100%; width: 100%;">
+            <RadzenColumnSeries Data="@PercantageExpenses" Title="Rzetelność osoby" FillRange="@ColorRanges" LineType="LineType.Dashed" CategoryProperty="@nameof(ChartDto.Name)" ValueProperty="@nameof(ChartDto.Value)">
+                <RadzenSeriesDataLabels Visible="false" />
+                <RadzenColumnOptions Radius="5" />
+                <RadzenLegend Visible="false" />
+                <RadzenValueAxis Formatter="@Format" Min="0" Max="100">
+                    <RadzenGridLines Visible="true" /> 
+                    @* <RadzenAxisTitle Text="Procent rozliczenia" />  *@
+                </RadzenValueAxis>
+            </RadzenColumnSeries>
+        </RadzenChart>
+    </RadzenStack>
+</div>
 
 @code {
     [Inject]
@@ -41,3 +46,26 @@
         return $"{((double)value):N0}%";
     }
 }
+
+<style>
+    .main-container{
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .chart-title{
+        position: absolute;
+        top: -15px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 15px;
+        z-index: 10;
+        pointer-events: none;
+    }
+    .chart-container{
+        width: 100%;
+        height: 100%;
+        margin-top: 7px;
+    }
+</style>

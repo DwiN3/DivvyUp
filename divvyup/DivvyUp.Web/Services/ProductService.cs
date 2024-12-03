@@ -29,7 +29,7 @@ namespace DivvyUp.Web.Services
         }
 
 
-        public async Task<ProductDto> Add(AddEditProductDto request, int receiptId)
+        public async Task Add(AddEditProductDto request, int receiptId)
         {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
@@ -54,13 +54,10 @@ namespace DivvyUp.Web.Services
 
             _dbContext.Products.Add(newProduct);
             await _dbContext.SaveChangesAsync();
-
             await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
-            var productDto = MapProductToDto(newProduct);
-            return productDto;
         }
 
-        public async Task<ProductDto> Edit(AddEditProductDto request, int productId)
+        public async Task Edit(AddEditProductDto request, int productId)
         {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
@@ -91,8 +88,6 @@ namespace DivvyUp.Web.Services
             await _entityUpdateService.UpdateProductDetails(product);
             await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
             await _entityUpdateService.UpdatePerson(user, false);
-            var productDto = MapProductToDto(product);
-            return productDto;
         }
 
         public async Task AddWithPerson(AddEditProductDto request, int receiptId, int personId)
@@ -138,6 +133,7 @@ namespace DivvyUp.Web.Services
             }
 
             await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
+            await _entityUpdateService.UpdatePerson(user, false);
         }
 
         public async Task AddWithPersons(AddEditProductDto request, int receiptId, List<int> personIds)
