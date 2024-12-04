@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UnitTests\" />
+    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>

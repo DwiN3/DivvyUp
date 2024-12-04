@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DivvyUp.Web.Tests
+namespace DivvyUp.Web.Tests.IntegrationTests
 {
     public class PersonControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {

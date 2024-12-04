@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DivvyUp.Web.Tests
+namespace DivvyUp.Web.Tests.IntegrationTests
 {
     public class PersonProductControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {

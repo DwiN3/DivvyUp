@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 
-namespace DivvyUp.Web.Tests
+namespace DivvyUp.Web.Tests.IntegrationTests
 {
     public class UserControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {
@@ -99,7 +99,7 @@ namespace DivvyUp.Web.Tests
 
             var duplicateContent = _testHelper.CreateJsonContent(duplicateUser);
             var duplicateResponse = await _client.PostAsync(ApiRoute.USER_ROUTES.REGISTER, duplicateContent);
-            
+
             // Assert
             Assert.Equal(409, (int)duplicateResponse.StatusCode);
             var responseContent = await duplicateResponse.Content.ReadAsStringAsync();
