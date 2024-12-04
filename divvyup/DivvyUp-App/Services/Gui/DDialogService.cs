@@ -53,7 +53,7 @@ namespace DivvyUp_App.Services.Gui
         public async Task OpenProductPersonDialog(int productId)
         {
             var result = await _dialogService.OpenAsync<DDialogPersonProductCard>(
-                "Osoby przypisane do produktu",
+                "Przydział osób do produktu",
                 new Dictionary<string, object> { { "ProductId", productId } },
                 new DialogOptions()
                 {

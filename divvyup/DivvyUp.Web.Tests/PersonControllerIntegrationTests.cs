@@ -42,10 +42,10 @@ namespace DivvyUp.Web.Tests
 
             _client = _factory.CreateClient();
             _testHelper = new TestHelper(_factory);
-            InitializeTestUserAsync().GetAwaiter().GetResult();
+            SetupTestEnvironmentAsync().GetAwaiter().GetResult();
         }
 
-        private async Task InitializeTestUserAsync()
+        private async Task SetupTestEnvironmentAsync()
         {
             await _testHelper.ClearDatabaseAsync();
             _testUser = new RegisterUserDto
@@ -68,6 +68,7 @@ namespace DivvyUp.Web.Tests
                 Name = "John",
                 Surname = "Doe"
             };
+
             var requestMessage = _testHelper.CreateRequestWithToken(ApiRoute.PERSON_ROUTES.ADD, _userToken, HttpMethod.Post, addPersonRequest);
 
             // Act
@@ -88,6 +89,25 @@ namespace DivvyUp.Web.Tests
                 Assert.Equal(addPersonRequest.Surname, addedPerson.Surname);
                 Assert.Equal(_testUser.Username, addedPerson.User.Username);
             }
+        }
+
+        [Fact]
+        public async Task AddPersonWithoutName_ShouldReturnBadRequest()
+        {
+            // Arrange
+            var addPersonRequest = new AddEditPersonDto
+            {
+                Name = ""
+            };
+            var requestMessage = _testHelper.CreateRequestWithToken(ApiRoute.PERSON_ROUTES.ADD, _userToken, HttpMethod.Post, addPersonRequest);
+
+            // Act
+            var addPersonResponse = await _client.SendAsync(requestMessage);
+
+            // Assert
+            Assert.Equal(400, (int)addPersonResponse.StatusCode);
+            var responseContent = await addPersonResponse.Content.ReadAsStringAsync();
+            Assert.Contains("Nazwa osoby jest wymagana", responseContent);
         }
     }
 }

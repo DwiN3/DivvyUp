@@ -27,7 +27,7 @@ namespace DivvyUp_App.Services.Api
             try
             {
                 var url = ApiRoute.PERSON_PRODUCT_ROUTES.ADD
-                    .Replace(ApiRoute.ARG_PRODUCT, productId.ToString()); ;
+                    .Replace(ApiRoute.ARG_PRODUCT, productId.ToString());
                 var response = await _dHttpClient.PostAsync(url, personProduct);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania produktu osób");
             }
