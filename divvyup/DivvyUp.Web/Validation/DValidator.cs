@@ -32,6 +32,14 @@ namespace DivvyUp.Web.Validation
             }
         }
 
+        public void IsMinusValue(decimal obj, string message)
+        {
+            if (obj < 0)
+            {
+                throw new DException(HttpStatusCode.BadRequest, message);
+            }
+        }
+
         public async Task<Person> GetPerson(User user, int personId)
         {
             var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.Id == personId);

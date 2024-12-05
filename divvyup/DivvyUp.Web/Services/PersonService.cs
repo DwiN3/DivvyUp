@@ -33,6 +33,14 @@ namespace DivvyUp.Web.Services
             _validator.IsEmpty(request.Name, "Nazwa osoby jest wymagana");
             var user = await _userContext.GetCurrentUser();
 
+            var exitingPerson = await _dbContext.Persons
+                .Where(pp => pp.Name.Equals(request.Name) && pp.Surname.Equals(request.Surname) && pp.UserId == user.Id)
+                .ToListAsync();
+            if (exitingPerson.Any())
+            {
+                throw new DException(HttpStatusCode.Conflict, "Taka osoba jest już dodana do konta");
+            }
+
             var newPerson = new Person()
             {
                 User = user,

@@ -56,5 +56,18 @@ namespace DivvyUp.Web.Tests
                 Settled = false
             };
         }
+
+        public static PersonProduct CreatePersonProduct(int personId, int productId, int quantity)
+        {
+            return new PersonProduct()
+            {
+                PersonId = personId,
+                ProductId = productId,
+                PartOfPrice = 0.0m,
+                Quantity = quantity,
+                Compensation = false,
+                Settled = false
+            };
+        }
     }
 }
