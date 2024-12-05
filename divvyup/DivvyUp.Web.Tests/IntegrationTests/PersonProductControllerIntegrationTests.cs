@@ -61,14 +61,11 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             _productTest = DataFactory.CreateProduct(_receiptTest.Id, "TestProduct", 10.0m, 2);
             _productTest2 = DataFactory.CreateProduct(_receiptTest.Id, "TestProduct2", 15.0m, 5);
             _productTest3 = DataFactory.CreateProduct(_receiptTest.Id, "TestProduct3", 15.97m, 3);
-            _productTest3.CompensationPrice = 0.01m;
             dbContext.Products.AddRange(_productTest, _productTest2, _productTest3);
             await dbContext.SaveChangesAsync();
 
             _personTest = DataFactory.CreatePerson("TestPerson", userId);
-            _personTest.CompensationAmount = 0.0m;
             _personTest2 = DataFactory.CreatePerson("TestPerson2", userId);
-            _personTest2.CompensationAmount = 0.03m;
             dbContext.Persons.AddRange(_personTest, _personTest2);
             await dbContext.SaveChangesAsync();
 
@@ -170,15 +167,20 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task CalculateAndSetAutoCompensation_WithValidData_ShouldBehaveAsExpected()
+        public async Task AutoCompensation_WithValidData_ShouldBehaveAsExpected()
         {
             // Arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+
                 _personTest.CompensationAmount = 0.00m;
                 _personTest2.CompensationAmount = 0.01m;
-                dbContext.Persons.AddRange(_personTest, _personTest2);
+                dbContext.Persons.UpdateRange(_personTest, _personTest2);
+
+                _productTest3.CompensationPrice = 0.01m;
+                dbContext.Products.Update(_productTest3);
+                await dbContext.SaveChangesAsync();
             }
             var url = ApiRoute.PERSON_PRODUCT_ROUTES.SET_AUTO_COMPENSATION
                 .Replace(ApiRoute.ARG_PRODUCT, _productTest3.Id.ToString());

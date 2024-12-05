@@ -4,9 +4,11 @@ using DivvyUp.Web.Update;
 using DivvyUp.Web.Validation;
 using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
+using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
 using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 
 namespace DivvyUp.Web.Services
@@ -34,11 +36,21 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
+            _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
             var user = await _userContext.GetCurrentUser();
             var receipt = await _validator.GetReceipt(user, receiptId);
+
+            if (!request.Divisible && request.MaxQuantity > 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być równa 1 gdy produkt jest niepodzielny");
+            }
+            if (request.Divisible && request.MaxQuantity == 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być większa od 1 gdy produkt jest podzielny");
+            }
 
             var newProduct = new Product()
             {
@@ -62,11 +74,21 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
+            _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(productId, "Brak identyfikatora produktu");
             var user = await _userContext.GetCurrentUser();
             var product = await _validator.GetProduct(user, productId);
+
+            if (!request.Divisible && request.MaxQuantity > 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być równa 1 gdy produkt jest niepodzielny");
+            }
+            if (request.Divisible && request.MaxQuantity == 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być większa od 1 gdy produkt jest podzielny");
+            }
 
             bool previousDivisible = product.Divisible;
 
@@ -95,11 +117,21 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
+            _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
             var user = await _userContext.GetCurrentUser();
             var receipt = await _validator.GetReceipt(user, receiptId);
+
+            if (!request.Divisible && request.MaxQuantity > 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być równa 1 gdy produkt jest niepodzielny");
+            }
+            if (request.Divisible && request.MaxQuantity == 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być większa od 1 gdy produkt jest podzielny");
+            }
 
             var newProduct = new Product()
             {
@@ -140,12 +172,22 @@ namespace DivvyUp.Web.Services
         {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
+            _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
             _validator.IsNull(request.Price, "Cena jest wymagana");
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
             var user = await _userContext.GetCurrentUser();
             var receipt = await _validator.GetReceipt(user, receiptId);
+
+            if (!request.Divisible && request.MaxQuantity > 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być równa 1 gdy produkt jest niepodzielny");
+            }
+            if (request.Divisible && request.MaxQuantity == 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być większa od 1 gdy produkt jest podzielny");
+            }
 
             var newProduct = new Product()
             {
@@ -192,11 +234,21 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
+            _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(productId, "Brak identyfikatora produktu");
             var user = await _userContext.GetCurrentUser();
             var product = await _validator.GetProduct(user, productId);
+
+            if (!request.Divisible && request.MaxQuantity > 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być równa 1 gdy produkt jest niepodzielny");
+            }
+            if (request.Divisible && request.MaxQuantity == 1)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być większa od 1 gdy produkt jest podzielny");
+            }
 
             bool previousDivisible = product.Divisible;
 
