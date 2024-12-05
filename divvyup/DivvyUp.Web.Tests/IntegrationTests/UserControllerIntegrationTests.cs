@@ -33,7 +33,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task RegisterUser_WithValidData_ShouldAddUserToDatabase()
+        public async Task RegisterUser_WithValidData_ShouldSucceed()
         {
             // Arrange
             await _testHelper.ClearDatabaseAsync();

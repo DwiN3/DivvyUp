@@ -129,7 +129,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task CalculatePartPrice_WithValidData_ShouldBehaveAsExpected()
+        public async Task CalculatePartPrice_WithValidData_ShouldSucceed()
         {
             // Arrange
             var addRequest1 = new AddEditPersonProductDto { PersonId = _personTest.Id, Quantity = 2 };
@@ -167,7 +167,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task AutoCompensation_WithValidData_ShouldBehaveAsExpected()
+        public async Task AutoCompensation_WithValidData_ShouldSucceed()
         {
             // Arrange
             using (var scope = _factory.Services.CreateScope())

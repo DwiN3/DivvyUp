@@ -20,7 +20,7 @@ namespace DivvyUp.Web.Tests.UnitTests
         }
 
         [Fact]
-        public void IsNull_ShouldThrowException_WhenObjectIsNull()
+        public void IsNull_WhenObjectIsNull_ShouldThrowException()
         {
             // Arrange
             object obj = null;
@@ -34,7 +34,7 @@ namespace DivvyUp.Web.Tests.UnitTests
         }
 
         [Fact]
-        public void IsEmpty_ShouldThrowException_WhenObjectIsNull()
+        public void IsEmpty_WhenStringIsEmpty_ShouldThrowException()
         {
             // Arrange
             var str = string.Empty;
@@ -48,7 +48,7 @@ namespace DivvyUp.Web.Tests.UnitTests
         }
 
         [Fact]
-        public void IsMinusValue_ShouldThrowException_WhenObjectIsNull()
+        public void IsMinusValue_WhenValueIsMinus_ShouldThrowException()
         {
             // Arrange
             var value = -10.00m;

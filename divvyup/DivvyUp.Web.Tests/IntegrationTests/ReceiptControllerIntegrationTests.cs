@@ -66,7 +66,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task SetSettledInReceipt_WithValid_ShouldBehaveAsExpected()
+        public async Task SetSettledInReceipt_WithValid_ShouldSucceed()
         {
             // Arrange
             bool settled = true;
@@ -117,7 +117,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task RemoveReceiptWithProduct_WithValid_ShouldBehaveAsExpected()
+        public async Task RemoveReceiptWithProduct_WithValid_ShouldSucceed()
         {
             // Arrange
             var url = ApiRoute.RECEIPT_ROUTES.REMOVE
