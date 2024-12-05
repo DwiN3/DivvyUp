@@ -5,6 +5,8 @@ using DivvyUp_Shared.AppConstants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Net;
 
 namespace DivvyUp.Web.Tests.IntegrationTests
 {
@@ -21,20 +23,8 @@ namespace DivvyUp.Web.Tests.IntegrationTests
                 builder.UseEnvironment("Testing");
                 builder.ConfigureServices(services =>
                 {
-                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<DivvyUpDBContext>));
-                    if (descriptor != null)
-                    {
-                        services.Remove(descriptor);
-                    }
-                    services.AddLogging();
-
-                    services.AddDbContext<DivvyUpDBContext>(options =>
-                        options.UseInMemoryDatabase("TestDatabase"));
-
-                    var serviceProvider = services.BuildServiceProvider();
-                    var scopedServices = serviceProvider.CreateScope().ServiceProvider;
-                    var db = scopedServices.GetRequiredService<DivvyUpDBContext>();
-                    db.Database.EnsureCreated();
+                    services.RemoveAll(typeof(DbContextOptions<DivvyUpDBContext>));
+                    services.AddDbContext<DivvyUpDBContext>(options => options.UseInMemoryDatabase("TestDatabase"));
                 });
             });
 
@@ -43,7 +33,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task Register_NewUser_ShouldAddUserToDatabase()
+        public async Task RegisterUser_WithValidData_ShouldAddUserToDatabase()
         {
             // Arrange
             await _testHelper.ClearDatabaseAsync();
@@ -54,10 +44,10 @@ namespace DivvyUp.Web.Tests.IntegrationTests
                 Email = "dbtestuser@example.com",
                 Password = "TestPassword123",
             };
+            var request = _testHelper.CreateRequest(ApiRoute.USER_ROUTES.REGISTER, HttpMethod.Post, newUser);
 
             // Act
-            var content = _testHelper.CreateJsonContent(newUser);
-            var response = await _client.PostAsync(ApiRoute.USER_ROUTES.REGISTER, content);
+            var response = await _client.SendAsync(request);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -73,7 +63,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task Register_User_WithDuplicateUsername_ShouldReturnConflictStatusCode()
+        public async Task RegisterUser_WithDuplicateUsername_ShouldReturnConflict()
         {
             // Arrange
             await _testHelper.ClearDatabaseAsync();
@@ -85,11 +75,6 @@ namespace DivvyUp.Web.Tests.IntegrationTests
                 Password = "TestPassword123"
             };
 
-            // Act
-            var content = _testHelper.CreateJsonContent(existingUser);
-            var firstResponse = await _client.PostAsync(ApiRoute.USER_ROUTES.REGISTER, content);
-            firstResponse.EnsureSuccessStatusCode();
-
             var duplicateUser = new
             {
                 Username = "DBTest",
@@ -97,11 +82,17 @@ namespace DivvyUp.Web.Tests.IntegrationTests
                 Password = "AnotherPassword123",
             };
 
-            var duplicateContent = _testHelper.CreateJsonContent(duplicateUser);
-            var duplicateResponse = await _client.PostAsync(ApiRoute.USER_ROUTES.REGISTER, duplicateContent);
+            // Act
+            var firstRequest = _testHelper.CreateRequest(ApiRoute.USER_ROUTES.REGISTER, HttpMethod.Post, existingUser);
+            var firstResponse = await _client.SendAsync(firstRequest);
+
+            var duplicateRequest = _testHelper.CreateRequest(ApiRoute.USER_ROUTES.REGISTER, HttpMethod.Post, duplicateUser);
+            var duplicateResponse = await _client.SendAsync(duplicateRequest);
 
             // Assert
-            Assert.Equal(409, (int)duplicateResponse.StatusCode);
+            firstResponse.EnsureSuccessStatusCode();
+
+            Assert.Equal(HttpStatusCode.Conflict, duplicateResponse.StatusCode);
             var responseContent = await duplicateResponse.Content.ReadAsStringAsync();
             Assert.Contains("Użytkownik o takich danych istnieje", responseContent);
         }

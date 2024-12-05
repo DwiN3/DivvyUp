@@ -1,6 +1,6 @@
-﻿using DivvyUp.Web.Data;
+﻿using System.Net;
+using DivvyUp.Web.Data;
 using DivvyUp_Shared.AppConstants;
-using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -45,7 +45,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
 
             var (user, token) = await _testHelper.SetupUserWithTokenAsync(_client);
             _userToken = token;
-
+            
             using var scope = _factory.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
             var userId = dbContext.Users.First(u => u.Email == user.Email).Id;
@@ -65,7 +65,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task AddPersonProduct_ShouldAddNewPersonProduct()
+        public async Task AddPersonProduct_WithValidData_ShouldSucceed()
         {
             // Arrange
             var addRequest = new AddEditPersonProductDto { PersonId = _personTest.Id, Quantity = 1 };
@@ -77,12 +77,17 @@ namespace DivvyUp.Web.Tests.IntegrationTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            using var scope = _factory.Services.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
-            var addedProduct = dbContext.PersonProducts
-                .FirstOrDefault(pp => pp.PersonId == _personTest.Id && pp.ProductId == _productTest.Id);
 
-            Assert.NotNull(addedProduct);
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+                var addedPersonProduct = dbContext.PersonProducts
+                    .FirstOrDefault(pp => pp.PersonId == _personTest.Id && pp.ProductId == _productTest.Id);
+
+                Assert.NotNull(addedPersonProduct);
+                Assert.Equal(addedPersonProduct.PersonId, addRequest.PersonId);
+                Assert.Equal(addedPersonProduct.Quantity, addRequest.Quantity);
+            }
         }
 
         [Theory]
@@ -106,9 +111,9 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             }
             else
             {
-                Assert.Equal(400, (int)response.StatusCode);
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
                 var responseContent = await response.Content.ReadAsStringAsync();
-                Assert.Contains("Przekroczono maksymalną ilość produktu.", responseContent);
+                Assert.Contains("Przekroczono maksymalną ilość produktu", responseContent);
             }
         }
     }

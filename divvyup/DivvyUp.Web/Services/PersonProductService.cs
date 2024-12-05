@@ -42,12 +42,12 @@ namespace DivvyUp.Web.Services
 
             var totalQuantity = await GetTotalQuantityByProduct(product.Id);
             if (totalQuantity + request.Quantity > product.MaxQuantity)
-                throw new DException(HttpStatusCode.BadRequest, "Przekroczono maksymalną ilość produktu.");
+                throw new DException(HttpStatusCode.BadRequest, "Przekroczono maksymalną ilość produktu");
 
             var existingPerson = await _dbContext.PersonProducts
                 .FirstOrDefaultAsync(pp => pp.ProductId == product.Id && pp.Person.Id == person.Id);
             if(existingPerson != null)
-                throw new DException(HttpStatusCode.Conflict, "Osoba jest już przypisana.");
+                throw new DException(HttpStatusCode.Conflict, "Osoba jest już przypisana");
 
             var isPersonProductCompensation = await _dbContext.PersonProducts
                 .FirstOrDefaultAsync(pp => pp.ProductId == product.Id && pp.Compensation);

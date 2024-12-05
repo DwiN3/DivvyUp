@@ -26,7 +26,7 @@ namespace DivvyUp.Web.Validation
 
         public void IsEmpty(string str, string message)
         {
-            if (str.IsNullOrEmpty())
+            if (str.IsNullOrEmpty() || str.Equals(""))
             {
                 throw new DException(HttpStatusCode.BadRequest, message);
             }

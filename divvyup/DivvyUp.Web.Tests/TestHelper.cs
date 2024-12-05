@@ -63,6 +63,15 @@ namespace DivvyUp.Web.Tests
             return responseContent.Trim('"');
         }
 
+        public HttpRequestMessage CreateRequest(string url, HttpMethod method, object data = null)
+        {
+            var request = new HttpRequestMessage(method, url)
+            {
+                Content = data != null ? CreateJsonContent(data) : null
+            };
+            return request;
+        }
+
         public HttpRequestMessage CreateRequestWithToken(string url, string token, HttpMethod method, object data = null)
         {
             var request = new HttpRequestMessage(method, url)

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Net;
 
 namespace DivvyUp.Web.Tests.IntegrationTests
 {
@@ -13,7 +15,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         private readonly WebApplicationFactory<Program> _factory;
         private readonly HttpClient _client;
         private readonly TestHelper _testHelper;
-        private RegisterUserDto _testUser;
+        private int userId;
         private string _userToken;
 
         public PersonControllerIntegrationTests(WebApplicationFactory<Program> factory)
@@ -23,20 +25,8 @@ namespace DivvyUp.Web.Tests.IntegrationTests
                 builder.UseEnvironment("Testing");
                 builder.ConfigureServices(services =>
                 {
-                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<DivvyUpDBContext>));
-                    if (descriptor != null)
-                    {
-                        services.Remove(descriptor);
-                    }
-                    services.AddLogging();
-
-                    services.AddDbContext<DivvyUpDBContext>(options =>
-                        options.UseInMemoryDatabase("TestDatabase"));
-
-                    var serviceProvider = services.BuildServiceProvider();
-                    var scopedServices = serviceProvider.CreateScope().ServiceProvider;
-                    var db = scopedServices.GetRequiredService<DivvyUpDBContext>();
-                    db.Database.EnsureCreated();
+                    services.RemoveAll(typeof(DbContextOptions<DivvyUpDBContext>));
+                    services.AddDbContext<DivvyUpDBContext>(options => options.UseInMemoryDatabase("TestDatabase"));
                 });
             });
 
@@ -48,66 +38,53 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         private async Task SetupTestEnvironmentAsync()
         {
             await _testHelper.ClearDatabaseAsync();
-            _testUser = new RegisterUserDto
-            {
-                Username = "TestUserForPerson",
-                Email = "testuser@example.com",
-                Password = "TestPassword123",
-            };
 
-            await _testHelper.RegisterUserAsync(_client, _testUser);
-            _userToken = await _testHelper.LoginAndGetTokenAsync(_client, _testUser.Username, _testUser.Password);
+            var (user, token) = await _testHelper.SetupUserWithTokenAsync(_client);
+            _userToken = token;
+
+            using var scope = _factory.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+            userId = dbContext.Users.First(u => u.Email == user.Email).Id;
+            await dbContext.SaveChangesAsync();
         }
 
-        [Fact]
-        public async Task AddPerson_ShouldAddNewPerson()
+        [Theory]
+        [InlineData("John", "Doe", true)]
+        [InlineData("John", "", true)]
+        [InlineData("", "Doe", false)]
+        public async Task AddPerson_WithValidOrInvalidInput_ShouldBehaveAsExpected(string name, string surname, bool shouldSucceed)
         {
             // Arrange
-            var addPersonRequest = new AddEditPersonDto
-            {
-                Name = "John",
-                Surname = "Doe"
-            };
-
+            var addPersonRequest = new AddEditPersonDto { Name = name, Surname = surname };
             var requestMessage = _testHelper.CreateRequestWithToken(ApiRoute.PERSON_ROUTES.ADD, _userToken, HttpMethod.Post, addPersonRequest);
 
             // Act
             var addPersonResponse = await _client.SendAsync(requestMessage);
 
             // Assert
-            addPersonResponse.EnsureSuccessStatusCode();
-            using (var scope = _factory.Services.CreateScope())
+            if (shouldSucceed)
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
-                var persons = dbContext.Persons.Include(p => p.User).ToList();
+                addPersonResponse.EnsureSuccessStatusCode();
+                using (var scope = _factory.Services.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+                    var persons = dbContext.Persons.Include(p => p.User).ToList();
 
-                Assert.Equal(2, persons.Count);
+                    Assert.Equal(2, persons.Count);
 
-                var addedPerson = persons.FirstOrDefault(p => p.Name == addPersonRequest.Name && p.Surname == addPersonRequest.Surname);
-                Assert.NotNull(addedPerson);
-                Assert.Equal(addPersonRequest.Name, addedPerson.Name);
-                Assert.Equal(addPersonRequest.Surname, addedPerson.Surname);
-                Assert.Equal(_testUser.Username, addedPerson.User.Username);
+                    var addedPerson = persons.FirstOrDefault(p => p.Name == addPersonRequest.Name && p.Surname == addPersonRequest.Surname);
+                    Assert.NotNull(addedPerson);
+                    Assert.Equal(addPersonRequest.Name, addedPerson.Name);
+                    Assert.Equal(addPersonRequest.Surname, addedPerson.Surname);
+                    Assert.Equal(userId, addedPerson.UserId);
+                }
             }
-        }
-
-        [Fact]
-        public async Task AddPersonWithoutName_ShouldReturnBadRequest()
-        {
-            // Arrange
-            var addPersonRequest = new AddEditPersonDto
+            else
             {
-                Name = ""
-            };
-            var requestMessage = _testHelper.CreateRequestWithToken(ApiRoute.PERSON_ROUTES.ADD, _userToken, HttpMethod.Post, addPersonRequest);
-
-            // Act
-            var addPersonResponse = await _client.SendAsync(requestMessage);
-
-            // Assert
-            Assert.Equal(400, (int)addPersonResponse.StatusCode);
-            var responseContent = await addPersonResponse.Content.ReadAsStringAsync();
-            Assert.Contains("Nazwa osoby jest wymagana", responseContent);
+                Assert.Equal(HttpStatusCode.BadRequest, addPersonResponse.StatusCode);
+                var responseContent = await addPersonResponse.Content.ReadAsStringAsync();
+                Assert.Contains("Nazwa osoby jest wymagana", responseContent);
+            }
         }
     }
 }
