@@ -66,7 +66,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task SetSettled_WithValid_ShouldBehaveAsExpected()
+        public async Task SetSettledInReceipt_WithValid_ShouldBehaveAsExpected()
         {
             // Arrange
             bool settled = true;
@@ -114,6 +114,35 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             Assert.Equal(HttpStatusCode.NotFound, getReceiptResponse.StatusCode);
             var responseContent = await getReceiptResponse.Content.ReadAsStringAsync();
             Assert.Contains("Rachunek nie znaleziony", responseContent);
+        }
+
+        [Fact]
+        public async Task RemoveReceiptWithProduct_WithValid_ShouldBehaveAsExpected()
+        {
+            // Arrange
+            var url = ApiRoute.RECEIPT_ROUTES.REMOVE
+                .Replace(ApiRoute.ARG_RECEIPT, _receiptTest.Id.ToString());
+            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Delete);
+
+            // Act
+            var removeReceiptResponse = await _client.SendAsync(requestMessage);
+
+            // Assert
+            removeReceiptResponse.EnsureSuccessStatusCode();
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+                var receipt = dbContext.Receipts
+                    .Where(p => p.Id == _receiptTest.Id)
+                    .FirstOrDefault();
+
+                var product = dbContext.Products
+                    .Where(p => p.Id == _productTest.Id)
+                    .FirstOrDefault();
+
+                Assert.Null(receipt);
+                Assert.Null(product);
+            }
         }
     }
 }
