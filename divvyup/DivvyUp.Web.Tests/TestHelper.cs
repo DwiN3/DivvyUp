@@ -20,23 +20,29 @@ namespace DivvyUp.Web.Tests
 
         public async Task ClearDatabaseAsync()
         {
-            using (var scope = _factory.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
-                dbContext.PersonProducts.RemoveRange(dbContext.PersonProducts);
-                dbContext.Products.RemoveRange(dbContext.Products);
-                dbContext.Receipts.RemoveRange(dbContext.Receipts);
-                dbContext.Loans.RemoveRange(dbContext.Loans);
-                dbContext.Persons.RemoveRange(dbContext.Persons);
-                dbContext.Users.RemoveRange(dbContext.Users);
-                await dbContext.SaveChangesAsync();
-            }
+            using var scope = _factory.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+            dbContext.PersonProducts.RemoveRange(dbContext.PersonProducts);
+            dbContext.Products.RemoveRange(dbContext.Products);
+            dbContext.Receipts.RemoveRange(dbContext.Receipts);
+            dbContext.Loans.RemoveRange(dbContext.Loans);
+            dbContext.Persons.RemoveRange(dbContext.Persons);
+            dbContext.Users.RemoveRange(dbContext.Users);
+            await dbContext.SaveChangesAsync();
         }
 
         public StringContent CreateJsonContent(object data)
         {
             var serializedData = JsonConvert.SerializeObject(data);
             return new StringContent(serializedData, Encoding.UTF8, "application/json");
+        }
+
+        public async Task<(RegisterUserDto, string)> SetupUserWithTokenAsync(HttpClient client, string username = "TestUser", string email = "testuser@example.com", string password = "TestPassword123")
+        {
+            var userDto = new RegisterUserDto { Username = username, Email = email, Password = password };
+            await RegisterUserAsync(client, userDto);
+            var token = await LoginAndGetTokenAsync(client, username, password);
+            return (userDto, token);
         }
 
         public async Task RegisterUserAsync(HttpClient client, RegisterUserDto registerUserDto)
@@ -53,13 +59,8 @@ namespace DivvyUp.Web.Tests
             var response = await client.PostAsync(ApiRoute.USER_ROUTES.LOGIN, loginContent);
 
             var responseContent = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new HttpRequestException($"Login failed with status code {response.StatusCode}: {responseContent}");
-            }
-
-            var token = responseContent.Trim('"');
-            return token;
+            response.EnsureSuccessStatusCode();
+            return responseContent.Trim('"');
         }
 
         public HttpRequestMessage CreateRequestWithToken(string url, string token, HttpMethod method, object data = null)

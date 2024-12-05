@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace DivvyUp.Web.Tests.IntegrationTests
 {
@@ -15,12 +16,11 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         private readonly WebApplicationFactory<Program> _factory;
         private readonly HttpClient _client;
         private readonly TestHelper _testHelper;
-        private RegisterUserDto _testUser;
         private string _userToken;
+        private Receipt _receiptTest;
         private Person _personTest;
-        private Receipt _receipt;
+        private Person _personTest2;
         private Product _productTest;
-        private User _userTest;
 
         public PersonProductControllerIntegrationTests(WebApplicationFactory<Program> factory)
         {
@@ -29,22 +29,8 @@ namespace DivvyUp.Web.Tests.IntegrationTests
                 builder.UseEnvironment("Testing");
                 builder.ConfigureServices(services =>
                 {
-                    var descriptor =
-                        services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<DivvyUpDBContext>));
-                    if (descriptor != null)
-                    {
-                        services.Remove(descriptor);
-                    }
-
-                    services.AddLogging();
-
-                    services.AddDbContext<DivvyUpDBContext>(options =>
-                        options.UseInMemoryDatabase("TestDatabase"));
-
-                    var serviceProvider = services.BuildServiceProvider();
-                    var scopedServices = serviceProvider.CreateScope().ServiceProvider;
-                    var db = scopedServices.GetRequiredService<DivvyUpDBContext>();
-                    db.Database.EnsureCreated();
+                    services.RemoveAll(typeof(DbContextOptions<DivvyUpDBContext>));
+                    services.AddDbContext<DivvyUpDBContext>(options => options.UseInMemoryDatabase("TestDatabase"));
                 });
             });
 
@@ -56,93 +42,73 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         private async Task SetupTestEnvironmentAsync()
         {
             await _testHelper.ClearDatabaseAsync();
-            _testUser = new RegisterUserDto
-            {
-                Username = "TestUserForPersonProduct",
-                Email = "testuser@example.com",
-                Password = "TestPassword123",
-            };
 
-            await _testHelper.RegisterUserAsync(_client, _testUser);
-            _userToken = await _testHelper.LoginAndGetTokenAsync(_client, _testUser.Username, _testUser.Password);
+            var (user, token) = await _testHelper.SetupUserWithTokenAsync(_client);
+            _userToken = token;
 
-            using (var scope = _factory.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
-                _userTest = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == _testUser.Email);
+            using var scope = _factory.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+            var userId = dbContext.Users.First(u => u.Email == user.Email).Id;
 
-                _personTest = new Person
-                {
-                    UserId = 1,
-                    Name = "TestUserForPersonProduct",
-                    Surname = "",
-                    ReceiptsCount = 1,
-                    ProductsCount = 0,
-                    TotalAmount = 0,
-                    UnpaidAmount = 0,
-                    CompensationAmount = 0,
-                    LoanBalance = 0,
-                    UserAccount = true
-                };
+            _receiptTest = DataFactory.CreateReceipt(userId, "TestReceipt", 20.0m);
+            dbContext.Receipts.Add(_receiptTest);
+            await dbContext.SaveChangesAsync();
 
-                _receipt = new Receipt
-                {
-                    UserId = 1,
-                    Name = "TestReceipt",
-                    Date = DateOnly.FromDateTime(DateTime.Now),
-                    TotalPrice = 15.99m,
-                    Settled = false
-                };
+            _productTest = DataFactory.CreateProduct(_receiptTest.Id, "TestProduct", 10.0m, 2);
+            dbContext.Products.Add(_productTest);
+            await dbContext.SaveChangesAsync();
 
-                _productTest = new Product
-                {
-                    ReceiptId = 1,
-                    Name = "TestProduct",
-                    Price = 15.99m,
-                    AdditionalPrice = 0,
-                    Divisible = true,
-                    MaxQuantity = 2,
-                    AvailableQuantity = 2,
-                    CompensationPrice = 15.99m,
-                    Settled = false
-                };
-
-                dbContext.Persons.Add(_personTest);
-                dbContext.Receipts.Add(_receipt);
-                dbContext.Products.Add(_productTest);
-                await dbContext.SaveChangesAsync();
-            }
+            _personTest = DataFactory.CreatePerson("TestPerson", userId);
+            _personTest2 = DataFactory.CreatePerson("TestPerson2", userId);
+            dbContext.Persons.AddRange(_personTest, _personTest2);
+            await dbContext.SaveChangesAsync();
         }
-
 
         [Fact]
         public async Task AddPersonProduct_ShouldAddNewPersonProduct()
         {
             // Arrange
-            var addPersonProductRequest = new AddEditPersonProductDto()
-            {
-                PersonId = 1,
-                Quantity = 1
-            };
+            var addRequest = new AddEditPersonProductDto { PersonId = _personTest.Id, Quantity = 1 };
             var url = ApiRoute.PERSON_PRODUCT_ROUTES.ADD.Replace(ApiRoute.ARG_PRODUCT, _productTest.Id.ToString());
-            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addPersonProductRequest);
+            var request = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addRequest);
 
             // Act
-            var addPersonResponse = await _client.SendAsync(requestMessage);
+            var response = await _client.SendAsync(request);
 
             // Assert
-            addPersonResponse.EnsureSuccessStatusCode();
-            using (var scope = _factory.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
-                var personProducts = dbContext.PersonProducts
-                    .Include(p => p.Product)
-                    .Include(p => p.Person)
-                    .Where(p => p.Person.UserId == _userTest.Id && p.ProductId == _productTest.Id);
+            response.EnsureSuccessStatusCode();
+            using var scope = _factory.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+            var addedProduct = dbContext.PersonProducts
+                .FirstOrDefault(pp => pp.PersonId == _personTest.Id && pp.ProductId == _productTest.Id);
 
-                Assert.Equal(1, personProducts.Count());
-                var addedPersonResponse = personProducts.FirstOrDefault(p => p.PersonId == addPersonProductRequest.PersonId);
-                Assert.NotNull(addedPersonResponse);
+            Assert.NotNull(addedProduct);
+        }
+
+        [Theory]
+        [InlineData(1, true)]
+        [InlineData(3, false)]
+        public async Task AddPersonProduct_QuantityValidation_ShouldBehaveAsExpected(int quantity, bool shouldSucceed)
+        {
+            // Arrange
+            var personId = quantity == 1 ? _personTest.Id : _personTest2.Id;
+            var addRequest = new AddEditPersonProductDto { PersonId = personId, Quantity = quantity };
+            var url = ApiRoute.PERSON_PRODUCT_ROUTES.ADD.Replace(ApiRoute.ARG_PRODUCT, _productTest.Id.ToString());
+            var request = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addRequest);
+
+            // Act
+            var response = await _client.SendAsync(request);
+
+            // Assert
+            if (shouldSucceed)
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            else
+            {
+                Assert.Equal(400, (int)response.StatusCode);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                Assert.Contains("Przekroczono maksymalną ilość produktu.", responseContent);
             }
         }
     }
