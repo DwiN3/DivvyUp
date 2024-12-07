@@ -1,7 +1,5 @@
-﻿using DivvyUp.Web.Data;
-using DivvyUp.Web.Validation;
+﻿using DivvyUp.Web.Validation;
 using DivvyUp_Shared.Exceptions;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace DivvyUp.Web.Tests.UnitTests
@@ -12,11 +10,7 @@ namespace DivvyUp.Web.Tests.UnitTests
 
         public DValidatorUnitTests()
         {
-            var options = new DbContextOptionsBuilder<DivvyUpDBContext>()
-                .UseInMemoryDatabase("TestDatabase")
-                .Options;
-            var dbContext = new DivvyUpDBContext(options);
-            _validator = new DValidator(dbContext);
+            _validator = new DValidator();
         }
 
         [Fact]
@@ -59,6 +53,21 @@ namespace DivvyUp.Web.Tests.UnitTests
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, exception.Status);
             Assert.Equal("Value is minus", exception.Message);
+        }
+
+        [Fact]
+        public void IsCorrectDataRange_WhenValueIsMinus_ShouldThrowException()
+        {
+            // Arrange
+            DateOnly dateFrom = new DateOnly(2024, 12, 24);
+            DateOnly dateTo = new DateOnly(2024, 12, 7);
+
+            // Act
+            var exception = Assert.Throws<DException>(() => _validator.IsCorrectDataRange(dateFrom, dateTo));
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, exception.Status);
+            Assert.Equal("Zakres dat jest źle ustawiony", exception.Message);
         }
     }
 }

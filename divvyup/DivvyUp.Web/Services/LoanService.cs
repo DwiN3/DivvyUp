@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using AutoMapper;
 using DivvyUp.Web.Data;
-using DivvyUp.Web.Update;
+using DivvyUp.Web.EntityManager;
 using DivvyUp.Web.Validation;
 using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
@@ -10,24 +10,21 @@ using DivvyUp_Shared.Interfaces;
 using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace DivvyUp.Web.Services
 {
     public class LoanService : ILoanService
     {
         private readonly DivvyUpDBContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly EntityManagementService _managementService;
         private readonly DValidator _validator;
-        private readonly EntityUpdateService _entityUpdateService;
-        private readonly UserContext _userContext;
+        private readonly IMapper _mapper;
 
-        public LoanService(DivvyUpDBContext dbContext, IMapper mapper, DValidator validator, EntityUpdateService entityUpdateService, UserContext userContext)
+        public LoanService(DivvyUpDBContext dbContext, EntityManagementService managementService, DValidator validator, IMapper mapper)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
+            _managementService = managementService;
             _validator = validator;
-            _entityUpdateService = entityUpdateService;
-            _userContext = userContext;
+            _mapper = mapper;
         }
 
         public async Task Add(AddEditLoanDto request)
@@ -36,8 +33,8 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request.PersonId, "Osoba jest wymagana");
             _validator.IsNull(request.Amount, "Ilość jest wymagana");
             _validator.IsNull(request.Date, "Data jest wymagana");
-            var user = await _userContext.GetCurrentUser();
-            var person = await _validator.GetPerson(user, request.PersonId);
+            var user = await _managementService.GetUser();
+            var person = await _managementService.GetPerson(user, request.PersonId);
 
             var newLoan = new Loan()
             {
@@ -50,7 +47,7 @@ namespace DivvyUp.Web.Services
 
             _dbContext.Loans.Add(newLoan);
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePerson(user, true);
+            await _managementService.UpdatePerson(user, true);
         }
 
         public async Task Edit(AddEditLoanDto request, int loanId)
@@ -60,9 +57,9 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request.Amount, "Ilość jest wymagana");
             _validator.IsNull(request.Date, "Data jest wymagana");
             _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
-            var user = await _userContext.GetCurrentUser();
-            var loan = await _validator.GetLoan(user, loanId);
-            var person = await _validator.GetPerson(user, request.PersonId);
+            var user = await _managementService.GetUser();
+            var loan = await _managementService.GetLoan(user, loanId);
+            var person = await _managementService.GetPerson(user, request.PersonId);
 
             loan.Date = request.Date;
             loan.Person = person;
@@ -71,75 +68,75 @@ namespace DivvyUp.Web.Services
 
             _dbContext.Loans.Update(loan);
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePerson(user, true);
+            await _managementService.UpdatePerson(user, true);
         }
 
         public async Task Remove(int loanId)
         {
             _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
-            var user = await _userContext.GetCurrentUser();
-            var loan = await _validator.GetLoan(user, loanId);
+            var user = await _managementService.GetUser();
+            var loan = await _managementService.GetLoan(user, loanId);
 
             _dbContext.Loans.Remove(loan);
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePerson(user, true);
+            await _managementService.UpdatePerson(user, true);
         }
 
         public async Task SetPerson(int loanId, int personId)
         {
             _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
             _validator.IsNull(personId, "Brak identyfikatora osoby");
-            var user = await _userContext.GetCurrentUser();
-            var loan = await _validator.GetLoan(user, loanId);
-            var person = await _validator.GetPerson(user, personId);
+            var user = await _managementService.GetUser();
+            var loan = await _managementService.GetLoan(user, loanId);
+            var person = await _managementService.GetPerson(user, personId);
 
             loan.Person = person;
 
             _dbContext.Loans.Update(loan);
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePerson(user, true);
+            await _managementService.UpdatePerson(user, true);
         }
 
         public async Task SetSettled(int loanId, bool settled)
         {
             _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
             _validator.IsNull(settled, "Brak decyzji rozliczenia");
-            var user = await _userContext.GetCurrentUser();
-            var loan = await _validator.GetLoan(user, loanId);
+            var user = await _managementService.GetUser();
+            var loan = await _managementService.GetLoan(user, loanId);
 
             loan.Settled = settled;
 
             _dbContext.Loans.Update(loan);
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePerson(user, true);
+            await _managementService.UpdatePerson(user, true);
         }
 
         public async Task SetLent(int loanId, bool lent)
         {
             _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
             _validator.IsNull(lent, "Brak decyzji o pożyczce");
-            var user = await _userContext.GetCurrentUser();
-            var loan = await _validator.GetLoan(user, loanId);
+            var user = await _managementService.GetUser();
+            var loan = await _managementService.GetLoan(user, loanId);
 
             loan.Lent = lent;
             _dbContext.Loans.Update(loan);
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePerson(user, true);
+            await _managementService.UpdatePerson(user, true);
         }
 
         public async Task<LoanDto> GetLoan(int loanId)
         {
             _validator.IsNull(loanId, "Brak identyfikatora pożyczki");
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
-            var loan = await _validator.GetLoan(user, loanId);
+            var loan = await _managementService.GetLoan(user, loanId);
             var loanDto = _mapper.Map<LoanDto>(loan);
             return loanDto;
         }
 
         public async Task<List<LoanDto>> GetLoans()
         {
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             var loans = await _dbContext.Loans
                 .AsNoTracking()
@@ -155,7 +152,7 @@ namespace DivvyUp.Web.Services
         {
             _validator.IsNull(personId, "Brak identyfikatora osoby");
 
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
             var loans = await _dbContext.Loans
                     .AsNoTracking()
                     .Include(p => p.Person)
@@ -170,7 +167,7 @@ namespace DivvyUp.Web.Services
         {
             _validator.IsNull(from, "Brak daty od");
             _validator.IsNull(to, "Brak daty do");
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             if (from > to)
             {

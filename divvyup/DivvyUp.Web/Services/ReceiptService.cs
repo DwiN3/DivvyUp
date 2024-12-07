@@ -1,8 +1,7 @@
-﻿using System.Globalization;
-using System.Net;
+﻿using System.Net;
 using AutoMapper;
 using DivvyUp.Web.Data;
-using DivvyUp.Web.Update;
+using DivvyUp.Web.EntityManager;
 using DivvyUp.Web.Validation;
 using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
@@ -11,29 +10,21 @@ using DivvyUp_Shared.Interfaces;
 using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace DivvyUp.Web.Services
 {
     public class ReceiptService : IReceiptService
     {
         private readonly DivvyUpDBContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly EntityManagementService _managementService;
         private readonly DValidator _validator;
-        private readonly EntityUpdateService _entityUpdateService;
-        private readonly UserContext _userContext;
+        private readonly IMapper _mapper;
 
-        public ReceiptService(
-            UserContext userContext,
-            DivvyUpDBContext dbContext,
-            IMapper mapper,
-            DValidator validator,
-            EntityUpdateService entityUpdateService)
+        public ReceiptService(DivvyUpDBContext dbContext, EntityManagementService managementService, DValidator validator, IMapper mapper)
         {
-            _userContext = userContext;
             _dbContext = dbContext;
-            _mapper = mapper;
+            _managementService = managementService;
             _validator = validator;
-            _entityUpdateService = entityUpdateService;
+            _mapper = mapper;
         }
 
         public async Task Add(AddEditReceiptDto request)
@@ -41,7 +32,7 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsNull(request.Date, "Data jet wymagana");
             _validator.IsEmpty(request.Name, "Nazwa jest wymagana");
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             var newReceipt = new Receipt()
             {
@@ -62,8 +53,8 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request.Date, "Data jet wymagana");
             _validator.IsEmpty(request.Name, "Nazwa jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
-            var user = await _userContext.GetCurrentUser();
-            var receipt = await _validator.GetReceipt(user, receiptId);
+            var user = await _managementService.GetUser();
+            var receipt = await _managementService.GetReceipt(user, receiptId);
 
             receipt.Name = request.Name;
             receipt.Date = request.Date;
@@ -76,8 +67,8 @@ namespace DivvyUp.Web.Services
         public async Task Remove(int receiptId)
         {
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
-            var user = await _userContext.GetCurrentUser();
-            var receipt = await _validator.GetReceipt(user, receiptId);
+            var user = await _managementService.GetUser();
+            var receipt = await _managementService.GetReceipt(user, receiptId);
 
             var products = await _dbContext.Products
                 .Where(p => p.ReceiptId == receiptId)
@@ -99,14 +90,14 @@ namespace DivvyUp.Web.Services
             _dbContext.Receipts.Remove(receipt);
 
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePerson(user, false);
+            await _managementService.UpdatePerson(user, false);
         }
 
         public async Task SetSettled(int receiptId, bool settled)
         {
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
-            var user = await _userContext.GetCurrentUser();
-            var receipt = await _validator.GetReceipt(user, receiptId);
+            var user = await _managementService.GetUser();
+            var receipt = await _managementService.GetReceipt(user, receiptId);
 
             receipt.Settled = settled;
 
@@ -130,21 +121,21 @@ namespace DivvyUp.Web.Services
             _dbContext.Receipts.Update(receipt);
             _dbContext.Products.UpdateRange(products);
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePerson(user, false);
+            await _managementService.UpdatePerson(user, false);
         }
 
         public async Task<ReceiptDto> GetReceipt(int receiptId)
         {
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
-            var user = await _userContext.GetCurrentUser();
-            var receipt = await _validator.GetReceipt(user, receiptId);
+            var user = await _managementService.GetUser();
+            var receipt = await _managementService.GetReceipt(user, receiptId);
             var receiptDto = _mapper.Map<ReceiptDto>(receipt);
             return receiptDto;
         }
 
         public async Task<List<ReceiptDto>> GetReceipts()
         {
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
             var receipts = await _dbContext.Receipts
                 .AsNoTracking()
                 .Where(p => p.UserId == user.Id)
@@ -158,7 +149,7 @@ namespace DivvyUp.Web.Services
         {
             _validator.IsNull(from, "Brak daty od");
             _validator.IsNull(to, "Brak daty do");
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             if (from > to)
             {

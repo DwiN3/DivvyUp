@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DivvyUp.Web.Data;
-using DivvyUp.Web.Update;
+using DivvyUp.Web.EntityManager;
 using DivvyUp.Web.Validation;
 using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
@@ -10,26 +10,22 @@ using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
-
 namespace DivvyUp.Web.Services
 {
     public class ProductService : IProductService
     {
         private readonly DivvyUpDBContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly EntityManagementService _managementService;
         private readonly DValidator _validator;
-        private readonly EntityUpdateService _entityUpdateService;
-        private readonly UserContext _userContext;
+        private readonly IMapper _mapper;
 
-        public ProductService(DivvyUpDBContext dbContext, IMapper mapper, DValidator validator, EntityUpdateService entityUpdateService, UserContext userContext)
+        public ProductService(DivvyUpDBContext dbContext, EntityManagementService managementService, DValidator validator, IMapper mapper)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
+            _managementService = managementService;
             _validator = validator;
-            _entityUpdateService = entityUpdateService;
-            _userContext = userContext;
+            _mapper = mapper;
         }
-
 
         public async Task Add(AddEditProductDto request, int receiptId)
         {
@@ -40,8 +36,8 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
-            var user = await _userContext.GetCurrentUser();
-            var receipt = await _validator.GetReceipt(user, receiptId);
+            var user = await _managementService.GetUser();
+            var receipt = await _managementService.GetReceipt(user, receiptId);
 
             if (!request.Divisible && request.MaxQuantity > 1)
             {
@@ -66,7 +62,7 @@ namespace DivvyUp.Web.Services
 
             _dbContext.Products.Add(newProduct);
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
+            await _managementService.UpdateTotalPriceReceipt(receipt);
         }
 
         public async Task Edit(AddEditProductDto request, int productId)
@@ -78,8 +74,8 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(productId, "Brak identyfikatora produktu");
-            var user = await _userContext.GetCurrentUser();
-            var product = await _validator.GetProduct(user, productId);
+            var user = await _managementService.GetUser();
+            var product = await _managementService.GetProduct(user, productId);
 
             if (!request.Divisible && request.MaxQuantity > 1)
             {
@@ -106,10 +102,10 @@ namespace DivvyUp.Web.Services
 
             _dbContext.Products.Update(product);
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePartPricesPersonProduct(product);
-            await _entityUpdateService.UpdateProductDetails(product);
-            await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
-            await _entityUpdateService.UpdatePerson(user, false);
+            await _managementService.UpdatePartPricesPersonProduct(product);
+            await _managementService.UpdateProductDetails(product);
+            await _managementService.UpdateTotalPriceReceipt(product.Receipt);
+            await _managementService.UpdatePerson(user, false);
         }
 
         public async Task AddWithPerson(AddEditProductDto request, int receiptId, int personId)
@@ -121,8 +117,8 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
-            var user = await _userContext.GetCurrentUser();
-            var receipt = await _validator.GetReceipt(user, receiptId);
+            var user = await _managementService.GetUser();
+            var receipt = await _managementService.GetReceipt(user, receiptId);
 
             if (!request.Divisible && request.MaxQuantity > 1)
             {
@@ -164,8 +160,8 @@ namespace DivvyUp.Web.Services
                 await _dbContext.SaveChangesAsync();
             }
 
-            await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
-            await _entityUpdateService.UpdatePerson(user, false);
+            await _managementService.UpdateTotalPriceReceipt(receipt);
+            await _managementService.UpdatePerson(user, false);
         }
 
         public async Task AddWithPersons(AddEditProductDto request, int receiptId, List<int> personIds)
@@ -177,8 +173,8 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
-            var user = await _userContext.GetCurrentUser();
-            var receipt = await _validator.GetReceipt(user, receiptId);
+            var user = await _managementService.GetUser();
+            var receipt = await _managementService.GetReceipt(user, receiptId);
 
             if (!request.Divisible && request.MaxQuantity > 1)
             {
@@ -212,7 +208,7 @@ namespace DivvyUp.Web.Services
                     PersonId = personId,
                     ProductId = product.Id,
                     Compensation = false,
-                    PartOfPrice = await _entityUpdateService.CalculatePartOfPrice(1, request.MaxQuantity, request.Price),
+                    PartOfPrice = await _managementService.CalculatePartOfPrice(1, request.MaxQuantity, request.Price),
                     Quantity = 1,
                     Settled = product.Settled,
                 };
@@ -220,13 +216,13 @@ namespace DivvyUp.Web.Services
             }
             await _dbContext.SaveChangesAsync();
 
-            var nexProduct = await _entityUpdateService.GetPersonWithLowestCompensation(product.Id);
-            await _entityUpdateService.UpdateCompensationFlags(product.Id, nexProduct);
+            var nexProduct = await _managementService.GetPersonWithLowestCompensation(product.Id);
+            await _managementService.UpdateCompensationFlags(product.Id, nexProduct);
             
-            await _entityUpdateService.UpdatePartPricesPersonProduct(product);
-            await _entityUpdateService.UpdateProductDetails(product);
-            await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
-            await _entityUpdateService.UpdatePerson(user, false); 
+            await _managementService.UpdatePartPricesPersonProduct(product);
+            await _managementService.UpdateProductDetails(product);
+            await _managementService.UpdateTotalPriceReceipt(product.Receipt);
+            await _managementService.UpdatePerson(user, false); 
         }
 
         public async Task EditWithPerson(AddEditProductDto request, int productId, int personId)
@@ -238,8 +234,8 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(productId, "Brak identyfikatora produktu");
-            var user = await _userContext.GetCurrentUser();
-            var product = await _validator.GetProduct(user, productId);
+            var user = await _managementService.GetUser();
+            var product = await _managementService.GetProduct(user, productId);
 
             if (!request.Divisible && request.MaxQuantity > 1)
             {
@@ -296,35 +292,35 @@ namespace DivvyUp.Web.Services
                 }
             }
 
-            await _entityUpdateService.UpdatePartPricesPersonProduct(product);
-            await _entityUpdateService.UpdateProductDetails(product);
-            await _entityUpdateService.UpdateTotalPriceReceipt(product.Receipt);
-            await _entityUpdateService.UpdatePerson(user, false);
+            await _managementService.UpdatePartPricesPersonProduct(product);
+            await _managementService.UpdateProductDetails(product);
+            await _managementService.UpdateTotalPriceReceipt(product.Receipt);
+            await _managementService.UpdatePerson(user, false);
         }
 
         public async Task Remove(int productId)
         {
             _validator.IsNull(productId, "Brak identyfikatora produktu");
-            var user = await _userContext.GetCurrentUser();
-            var product = await _validator.GetProduct(user, productId);
-            var receipt = await _validator.GetReceipt(user, product.ReceiptId);
+            var user = await _managementService.GetUser();
+            var product = await _managementService.GetProduct(user, productId);
+            var receipt = await _managementService.GetReceipt(user, product.ReceiptId);
 
             var personProducts = await _dbContext.PersonProducts.Where(pp => pp.ProductId == productId).ToListAsync();
             _dbContext.PersonProducts.RemoveRange(personProducts);
             _dbContext.Products.Remove(product);
             await _dbContext.SaveChangesAsync();
 
-            await _entityUpdateService.UpdateTotalPriceReceipt(receipt);
-            await _entityUpdateService.UpdatePerson(user, false);
+            await _managementService.UpdateTotalPriceReceipt(receipt);
+            await _managementService.UpdatePerson(user, false);
         }
 
         public async Task SetSettled(int productId, bool settled)
         {
             _validator.IsNull(productId, "Brak identyfikatora produktu");
             _validator.IsNull(settled, "Brak decyzji rozliczenia");
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
-            var product = await _validator.GetProduct(user, productId);
+            var product = await _managementService.GetProduct(user, productId);
 
             product.Settled = settled;
             _dbContext.Products.Update(product);
@@ -337,19 +333,19 @@ namespace DivvyUp.Web.Services
             }
 
             var receipt = product.Receipt;
-            bool allSettled = await _entityUpdateService.AreAllProductsSettled(receipt);
+            bool allSettled = await _managementService.AreAllProductsSettled(receipt.Id);
             receipt.Settled = allSettled;
             _dbContext.Receipts.Update(receipt);
 
             await _dbContext.SaveChangesAsync();
-            await _entityUpdateService.UpdatePerson(user, false);
+            await _managementService.UpdatePerson(user, false);
         }
 
         public async Task<ProductDto> GetProduct(int productId)
         {
             _validator.IsNull(productId, "Brak identyfikatora produktu");
-            var user = await _userContext.GetCurrentUser();
-            var product = await _validator.GetProduct(user, productId);
+            var user = await _managementService.GetUser();
+            var product = await _managementService.GetProduct(user, productId);
             var productDto = MapProductToDto(product);
             return productDto;
         }
@@ -357,7 +353,7 @@ namespace DivvyUp.Web.Services
 
         public async Task<List<ProductDto>> GetProducts()
         {
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
             var products = await _dbContext.Products
                 .AsNoTracking()
                 .Include(p => p.Receipt)
@@ -373,7 +369,7 @@ namespace DivvyUp.Web.Services
         {
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
 
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
             var products = await _dbContext.Products
                 .AsNoTracking()
                 .Include(p => p.Receipt)

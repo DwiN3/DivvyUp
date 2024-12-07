@@ -4,15 +4,85 @@ using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
-namespace DivvyUp.Web.Update
+namespace DivvyUp.Web.EntityManager
 {
-    public class EntityUpdateService
+    public class EntityManagementService
     {
         private readonly DivvyUpDBContext _dbContext;
+        private readonly UserContext _userContext;
 
-        public EntityUpdateService(DivvyUpDBContext dbContext)
+        public EntityManagementService(DivvyUpDBContext dbContext, UserContext userContext)
         {
             _dbContext = dbContext;
+            _userContext = userContext;
+        }
+
+        public async Task<User> GetUser()
+        {
+            var user = await _userContext.GetCurrentUser();
+            return user;
+        }
+
+        public async Task<Person> GetPerson(User user, int personId)
+        {
+            var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.Id == personId);
+            if (person == null)
+                throw new DException(HttpStatusCode.NotFound, "Osoba nie znaleziona");
+            if (person.UserId != user.Id)
+                throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do osoby: " + person.Id);
+
+            return person;
+        }
+
+        public async Task<Loan> GetLoan(User user, int loanId)
+        {
+            var loan = await _dbContext.Loans
+                .Include(p => p.Person)
+                .FirstOrDefaultAsync(p => p.Id == loanId);
+            if (loan == null)
+                throw new DException(HttpStatusCode.NotFound, "Pożyczka nie znaleziona");
+            if (loan.Person.UserId != user.Id)
+                throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do pożyczki: " + loan.Id);
+
+            return loan;
+        }
+
+        public async Task<Receipt> GetReceipt(User user, int receiptId)
+        {
+            var receipt = await _dbContext.Receipts.FirstOrDefaultAsync(p => p.Id == receiptId);
+            if (receipt == null)
+                throw new DException(HttpStatusCode.NotFound, "Rachunek nie znaleziony");
+            if (receipt.UserId != user.Id)
+                throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do rachunku: " + receipt.Id);
+
+            return receipt;
+        }
+
+        public async Task<Product> GetProduct(User user, int productId)
+        {
+            var product = await _dbContext.Products
+                .Include(p => p.Receipt)
+                .FirstOrDefaultAsync(p => p.Id == productId);
+            if (product == null)
+                throw new DException(HttpStatusCode.NotFound, "Produkt nie znaleziony");
+            if (product.Receipt.UserId != user.Id)
+                throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do produktu: " + product.Id);
+
+            return product;
+        }
+
+        public async Task<PersonProduct> GetPersonProduct(User user, int personProductId)
+        {
+            var personProduct = await _dbContext.PersonProducts
+                .Include(p => p.Product)
+                .Include(p => p.Person)
+                .FirstOrDefaultAsync(p => p.Id == personProductId);
+            if (personProduct == null)
+                throw new DException(HttpStatusCode.NotFound, "Przypis osoby z produktem nie znaleziony");
+            if (personProduct.Person.UserId != user.Id)
+                throw new DException(HttpStatusCode.Unauthorized, "Brak dostępu do przypisu produktu z osobą: " + personProductId);
+
+            return personProduct;
         }
 
         public async Task UpdatePerson(User user, bool updateBalance)
@@ -65,10 +135,10 @@ namespace DivvyUp.Web.Update
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<bool> AreAllProductsSettled(Receipt receipt)
+        public async Task<bool> AreAllProductsSettled(int receiptId)
         {
             var products = await _dbContext.Products
-                .Where(p => p.Receipt.Id == receipt.Id)
+                .Where(p => p.ReceiptId == receiptId)
                 .ToListAsync();
             return products.All(p => p.Settled);
         }
@@ -90,10 +160,10 @@ namespace DivvyUp.Web.Update
         }
 
 
-        public async Task<bool> AreAllPersonProductsSettled(Product product)
+        public async Task<bool> AreAllPersonProductsSettled(int productId)
         {
             var personProducts = await _dbContext.PersonProducts
-                .Where(pp => pp.Product.Id == product.Id)
+                .Where(pp => pp.ProductId == productId)
                 .ToListAsync();
             return personProducts.All(pp => pp.Settled);
         }
@@ -148,18 +218,18 @@ namespace DivvyUp.Web.Update
             return personWithLowestCompensation;
         }
 
-        public async Task UpdateCompensationFlags(int productId, PersonProduct personWithLowestCompensation)
+        public async Task UpdateCompensationFlags(int productId, PersonProduct selectedPersonProduct)
         {
             var personProducts = await _dbContext.PersonProducts
                 .Where(pp => pp.ProductId == productId).ToListAsync();
-            if (personWithLowestCompensation == null || personProducts == null)
+            if (selectedPersonProduct == null || personProducts == null)
             {
                 return;
             }
 
             foreach (var personProduct in personProducts)
             {
-                personProduct.Compensation = personProduct.PersonId == personWithLowestCompensation.PersonId;
+                personProduct.Compensation = personProduct.PersonId == selectedPersonProduct.PersonId;
                 _dbContext.PersonProducts.Update(personProduct);
             }
 

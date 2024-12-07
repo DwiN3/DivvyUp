@@ -1,29 +1,28 @@
 ﻿using DivvyUp.Web.Data;
+using DivvyUp.Web.EntityManager;
 using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Interfaces;
-using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace DivvyUp.Web.Services
 {
     public class ChartService : IChartService
     {
         private readonly DivvyUpDBContext _dbContext;
-        private readonly UserContext _userContext;
+        private readonly EntityManagementService _managementService;
 
         private static readonly string[] MonthNames = { "Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru" };
         private static readonly string[] WeekNames = { "Niedz", "Pon", "Wt", "Śr", "Czw", "Pt", "Sb" };
 
-        public ChartService(DivvyUpDBContext dbContext, UserContext userContext)
+        public ChartService(DivvyUpDBContext dbContext, EntityManagementService managementService)
         {
             _dbContext = dbContext;
-            _userContext = userContext;
+            _managementService = managementService;
         }
 
         public async Task<List<ChartDto>> GetAmounts(bool isTotalAmounts)
         {
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
             var persons = await _dbContext.Persons.Where(p => p.UserId == user.Id).ToListAsync();
 
             var responseList = new List<ChartDto>();
@@ -44,7 +43,7 @@ namespace DivvyUp.Web.Services
 
         public async Task<List<ChartDto>> GetPercentageExpanses()
         {
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
             var persons = await _dbContext.Persons
                 .AsNoTracking()
                 .Where(p => p.UserId == user.Id).ToListAsync();
@@ -70,7 +69,7 @@ namespace DivvyUp.Web.Services
         public async Task<List<ChartDto>> GetMonthlyTotalExpenses(int year)
         {
 
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             var receipts = await _dbContext.Receipts
                 .AsNoTracking()
@@ -101,7 +100,7 @@ namespace DivvyUp.Web.Services
 
         public async Task<List<ChartDto>> GetMonthlyUserExpenses(int year)
         {
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
             var persons = await _dbContext.Persons
                 .AsNoTracking()
                 .Where(p => p.UserId == user.Id)
@@ -154,7 +153,7 @@ namespace DivvyUp.Web.Services
             var startOfWeek = today.AddDays(-((int)today.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7);
             var endOfWeek = startOfWeek.AddDays(6);
 
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             var receipts = await _dbContext.Receipts
                 .AsNoTracking()
@@ -193,7 +192,7 @@ namespace DivvyUp.Web.Services
             var startOfWeek = today.AddDays(-((int)today.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7);
             var endOfWeek = startOfWeek.AddDays(6);
 
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             var persons = await _dbContext.Persons
                 .AsNoTracking()
@@ -244,7 +243,7 @@ namespace DivvyUp.Web.Services
 
         public async Task<List<ChartDto>> GetMonthlyTopProducts()
         {
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             var now = DateTime.Now;
             var currentMonth = now.Month;

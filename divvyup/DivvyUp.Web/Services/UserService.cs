@@ -12,24 +12,25 @@ using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Interfaces;
 using DivvyUp_Shared.Models;
+using DivvyUp.Web.EntityManager;
 
 namespace DivvyUp.Web.Services
 {
     public class UserService : IUserService
     {
         private readonly DivvyUpDBContext _dbContext;
-        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly EntityManagementService _managementService;
         private readonly DValidator _validator;
-        private readonly UserContext _userContext;
+        private readonly IMapper _mapper;
 
-        public UserService(DivvyUpDBContext dbContext, IMapper mapper, IConfiguration configuration, DValidator validator, UserContext userContext)
+        public UserService(DivvyUpDBContext dbContext, IConfiguration configuration, EntityManagementService managementService, DValidator validator, IMapper mapper)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
             _configuration = configuration;
+            _managementService = managementService;
             _validator = validator;
-            _userContext = userContext;
+            _mapper = mapper;
         }
 
         public async Task Register(RegisterUserDto request)
@@ -78,7 +79,7 @@ namespace DivvyUp.Web.Services
             _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
             _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
 
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             var existingUser = await _dbContext.Users.FirstOrDefaultAsync(p => (p.Username == request.Username || p.Email == request.Email) && p.Id != user.Id);
             if (existingUser != null)
@@ -105,7 +106,7 @@ namespace DivvyUp.Web.Services
 
         public async Task Remove()
         {
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             var persons = await _dbContext.Persons
                 .Where(p => p.UserId == user.Id)
@@ -170,18 +171,18 @@ namespace DivvyUp.Web.Services
 
         public async Task<UserDto> GetUser()
         {
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
             var userDto = _mapper.Map<UserDto>(user);
             return userDto;
         }
 
         public async Task ChangePassword(ChangePasswordUserDto request)
         {
-                _validator.IsNull(request, "Nie przekazano danych");
-                _validator.IsEmpty(request.Password, "Hasło jest wymagane");
-                _validator.IsEmpty(request.NewPassword, "Nowe hasło jest wymagane");
+            _validator.IsNull(request, "Nie przekazano danych");
+            _validator.IsEmpty(request.Password, "Hasło jest wymagane");
+            _validator.IsEmpty(request.NewPassword, "Nowe hasło jest wymagane");
 
-            var user = await _userContext.GetCurrentUser();
+            var user = await _managementService.GetUser();
 
             if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
                     throw new DException(HttpStatusCode.Unauthorized,"Błędne hasło");
