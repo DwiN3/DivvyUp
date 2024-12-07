@@ -19,13 +19,13 @@
 
     <body>
         <div class="status-bar-safe-area"></div>
-    <div id="splash_screen" style="width: 100vw; height: 100vh; background-color: white;">
-        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <img src="/icons/divvyup_icon.png" alt="divvyup_logo" style="max-width: 200px; margin-bottom: 20px;" />
-            <div class="h2 spinner-border" style="color: #4340D2"></div>
-            <div style="color: #4340D2; font-weight: 600;">Trwa Ładowanie</div>
+        <div id="splash_screen" style="width: 100vw; height: 100vh; background-color: white;">
+            <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <img src="/icons/divvyup_logo.png" title="Statement icons created by Icon home - Flaticon" style="max-width: 200px; margin-bottom: 20px;">
+                <div class="h1 spinner-border" style="color: #4340D2"></div>
+                <div style="color: #4340D2; font-weight: 600;">Trwa Ładowanie</div>
+            </div>
         </div>
-    </div>
         <div id="app" style="display: none;">
         </div>
         <div id="blazor-error-ui">
@@ -51,6 +51,11 @@
             }, 1500);
         </script>
 
-    </body>
+        <style>
+            :root {
+                --rz-primary: #686868;
+            }
+        </style>
 
+    </body>
 </html>
