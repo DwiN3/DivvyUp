@@ -4,9 +4,9 @@ using DivvyUp_Shared.Models;
 
 namespace DivvyUp.Web.Mappers
 {
-    public class ReceiptToReceiptDtoMapping : Profile
+    public class ReceiptToReceiptDtoProfile : Profile
     {
-        public ReceiptToReceiptDtoMapping()
+        public ReceiptToReceiptDtoProfile()
         {
             CreateMap<Receipt, ReceiptDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

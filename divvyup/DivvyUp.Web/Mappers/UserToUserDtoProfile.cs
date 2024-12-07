@@ -4,9 +4,9 @@ using DivvyUp_Shared.Models;
 
 namespace DivvyUp.Web.Mappers
 {
-    public class UserToUserDtoMapping : Profile
+    public class UserToUserDtoProfile : Profile
     {
-        public UserToUserDtoMapping()
+        public UserToUserDtoProfile()
         {
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

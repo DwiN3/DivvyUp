@@ -4,9 +4,9 @@ using DivvyUp_Shared.Models;
 
 namespace DivvyUp.Web.Mappers
 {
-    public class LoanToLoanDtoMapping : Profile
+    public class LoanToLoanDtoProfile : Profile
     {
-        public LoanToLoanDtoMapping()
+        public LoanToLoanDtoProfile()
         {
             CreateMap<Loan, LoanDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
