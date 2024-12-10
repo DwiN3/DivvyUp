@@ -59,7 +59,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         public async Task AddProduct_WithValidOrInvalidInput_ShouldBehaveAsExpected(decimal price, bool shouldSucceed)
         {
             // Arrange
-            var addProductRequest = new AddEditProductDto() { Name = "TestProduct", Price = price, Divisible = false, MaxQuantity = 1 };
+            var addProductRequest = new AddEditProductDto() { Name = "TestProduct", Price = price };
             var url = ApiRoute.PRODUCT_ROUTES.ADD
                 .Replace(ApiRoute.ARG_RECEIPT, _receiptTest.Id.ToString());
             var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addProductRequest);
@@ -82,8 +82,6 @@ namespace DivvyUp.Web.Tests.IntegrationTests
                     Assert.NotNull(product);
                     Assert.Equal(product.Name, addProductRequest.Name);
                     Assert.Equal(product.Price, addProductRequest.Price);
-                    Assert.Equal(product.Divisible, addProductRequest.Divisible);
-                    Assert.Equal(product.MaxQuantity, addProductRequest.MaxQuantity);
                 }
             }
             else

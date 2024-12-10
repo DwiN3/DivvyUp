@@ -198,5 +198,54 @@ namespace DivvyUp.Web.Tests.UnitTests
             Assert.Equal(50m, updatedPersonProduct1.PartOfPrice);
             Assert.Equal(80m, updatedPersonProduct2.PartOfPrice);
         }
+
+        [Fact]
+        public async Task UpdateTotalPriceReceipt_ShouldUpdateTotalPriceCorecly()
+        {
+            // Arrange
+            var receipt = new Receipt(){ Id = 1, Name = "TestReceipt", TotalPrice = 0.0m };
+            _dbContext.Receipts.Add(receipt);
+
+            var product1 = new Product() { Id = 1, Name = "TestProduct1", Price = 15.99m, ReceiptId = receipt.Id};
+            var product2 = new Product() { Id = 2, Name = "TestProduct2", Price = 5.21m, ReceiptId = receipt.Id };
+            var product3 = new Product() { Id = 3, Name = "TestProduct3", Price = 8.55m, ReceiptId = receipt.Id };
+            _dbContext.Products.AddRange(product1, product2, product3);
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            await _service.UpdateTotalPriceReceipt(receipt);
+
+            // Assert
+            var updatedReceipt = await _dbContext.Receipts.FirstOrDefaultAsync(pp => pp.Id == receipt.Id);
+            Assert.NotNull(updatedReceipt);
+
+            var totalPrice = product1.Price + product2.Price + product3.Price;
+            Assert.Equal(totalPrice, updatedReceipt.TotalPrice);
+        }
+
+        [Fact]
+        public async Task UpdateProductDetails_ShouldUpdateProductCorecly()
+        {
+            // Arrange
+
+            var product = new Product() { Id = 1, Name = "TestProduct1", Price = 10.00m, Divisible = true, MaxQuantity = 10, AvailableQuantity = 10};
+            _dbContext.Products.Add(product);
+
+            var personProduct = new PersonProduct { PersonId = 1, ProductId = product.Id, Quantity = 2, PartOfPrice = 20.00m};
+            _dbContext.PersonProducts.Add(personProduct);
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            await _service.UpdateProductDetails(product);
+
+            // Assert
+            var updatedProduct = await _dbContext.Products.FirstOrDefaultAsync(pp => pp.Id == product.Id);
+            Assert.NotNull(updatedProduct);
+
+            var availableQuantity = product.MaxQuantity - personProduct.Quantity;
+            var compensationPrice = product.Price - personProduct.PartOfPrice;
+            Assert.Equal(availableQuantity, updatedProduct.AvailableQuantity);
+            Assert.Equal(compensationPrice, updatedProduct.CompensationPrice);
+        }
     }
 }

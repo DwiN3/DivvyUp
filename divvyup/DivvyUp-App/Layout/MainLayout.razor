@@ -75,4 +75,33 @@
         transform: scale(1.05);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
+
+    :root {
+        --rz-primary: #686868;
+        --rz-primary-gradient:  linear-gradient(to right, #4f4f4f, #808080);
+        --rz-panel-menu-item-active-background-color: rgba(230, 230, 230, 0.7);
+        --rz-panel-menu-item-active-color: #000000;
+        --rz-checkbox-checked-hover-background-color: #555555;
+        --rz-checkbox-checked-disabled-background-color: transparent;
+    }
+
+
+    .rz-navigation-item-link-active.active:hover {
+        background-color: rgba(200, 200, 200, 0.5);
+        color: var(--rz-panel-menu-item-active-color);
+    }
+
+    .rz-navigation-item-link:hover {
+        background-color: rgba(200, 200, 200, 0.5);
+        color: var(--rz-panel-menu-item-active-color);
+    }
+
+    .rz-sidebar-toggle:hover {
+        background: linear-gradient(to right, #5a5a5a, #909090);
+        color: rgba(255, 255, 255, 0.9);
+        border-radius: 4px;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+
 </style>
