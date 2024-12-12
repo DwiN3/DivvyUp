@@ -10,7 +10,7 @@ namespace DivvyUp_App.Services.Gui
         private readonly ILocalStorageService _localStorageService;
         private readonly DHttpClient _httpClient;
         public event Action OnUserStateChanged;
-        public bool StartUpRun { get; set; } = true;
+        public bool AfterValidation { get; set; } = false;
 
         public UserStateProvider(ILocalStorageService localStorageService, DHttpClient httpClient)
         {
@@ -27,7 +27,7 @@ namespace DivvyUp_App.Services.Gui
         {
             await _localStorageService.SetItemAsync(UserTokenKey, token);
             UpdateHttpClientHeader(token);
-            StartUpRun = false;
+            AfterValidation = true;
             NotifyUserStateChanged();
         }
 
@@ -35,7 +35,7 @@ namespace DivvyUp_App.Services.Gui
         {
             await _localStorageService.RemoveItemAsync(UserTokenKey);
             UpdateHttpClientHeader(string.Empty);
-            StartUpRun = false;
+            AfterValidation = true;
             NotifyUserStateChanged();
         }
 
@@ -47,7 +47,7 @@ namespace DivvyUp_App.Services.Gui
                 return false;
             }
 
-            return !StartUpRun;
+            return AfterValidation;
         }
 
 

@@ -18,8 +18,6 @@ namespace DivvyUp_App.Layout
         [Inject]
         private HeaderService HeaderService { get; set; }
         [Inject]
-        private ILocalStorageService LocalStorageService {get; set; }
-        [Inject]
         private UserStateProvider UserStateProvider { get; set; }
 
         private bool SidebarExpanded { get; set; } = false;
@@ -49,19 +47,14 @@ namespace DivvyUp_App.Layout
                     {
                         await UserStateProvider.SetTokenAsync(token);
                     }
-                    else
-                    {
-                        await UserStateProvider.ClearTokenAsync();
-                    }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    await UserStateProvider.ClearTokenAsync();
+                    System.Diagnostics.Debug.Print(ex.Message);
                 }
             }
             StateHasChanged();
         }
-
 
 
         private void OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
