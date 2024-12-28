@@ -121,7 +121,7 @@ namespace DivvyUp.Web.EntityManager
         {
             return await _dbContext.Loans
                 .Where(l => l.PersonId == person.Id && !l.Settled)
-                .SumAsync(l => l.Lent ? l.Amount : -l.Amount);
+                .SumAsync(l => !l.Lent ? l.Amount : - l.Amount);
         }
 
 

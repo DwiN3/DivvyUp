@@ -1,4 +1,5 @@
-﻿using DivvyUp_App.Services.Gui;
+﻿using Blazored.LocalStorage;
+using DivvyUp_App.Services.Gui;
 using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Exceptions;
@@ -15,6 +16,8 @@ namespace DivvyUp_App.Components.Receipt
         [Inject]
         private IReceiptService ReceiptService { get; set; }
         [Inject]
+        private ILocalStorageService LocalStorageService { get; set; }
+        [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]
         private DDialogService DDialogService { get; set; }
@@ -29,9 +32,33 @@ namespace DivvyUp_App.Components.Receipt
         private bool ShowAllReceipts = false;
         private bool IsLoading => Receipts == null;
 
+        private const string DateFromKey = "ReceiptGrid_DateFrom";
+        private const string DateToKey = "ReceiptGrid_DateTo";
+        private const string ShowAllReceiptsKey = "ReceiptGrid_ShowAllReceipts";
+
         protected override async Task OnInitializedAsync()
         {
-            await SetCurrentMonth();
+            await LoadSettingsFromLocalStorage();
+            await LoadGrid();
+        }
+
+        private async Task LoadSettingsFromLocalStorage()
+        {
+            var dateFrom = await LocalStorageService.GetItemAsync<string>(DateFromKey);
+            var dateTo = await LocalStorageService.GetItemAsync<string>(DateToKey);
+            var showAllReceipts = await LocalStorageService.GetItemAsync<bool?>(ShowAllReceiptsKey);
+
+            if (dateFrom != null && dateTo != null)
+            {
+                DateFrom = DateOnly.Parse(dateFrom);
+                DateTo = DateOnly.Parse(dateTo);
+            }
+            else
+            {
+                await SetCurrentMonth();
+            }
+
+            ShowAllReceipts = showAllReceipts ?? false;
         }
 
         private async Task LoadGrid()
@@ -149,7 +176,15 @@ namespace DivvyUp_App.Components.Receipt
             DateFrom = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1);
             int dayInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
             DateTo = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, dayInMonth);
+            await SaveSettingsToLocalStorage();
             await LoadGrid();
+        }
+
+        private async Task SaveSettingsToLocalStorage()
+        {
+            await LocalStorageService.SetItemAsync(DateFromKey, DateFrom.ToString());
+            await LocalStorageService.SetItemAsync(DateToKey, DateTo.ToString());
+            await LocalStorageService.SetItemAsync(ShowAllReceiptsKey, ShowAllReceipts);
         }
     }
 }

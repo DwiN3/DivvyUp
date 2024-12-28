@@ -55,14 +55,19 @@
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ProductDto.Name)" Title="Nazwa" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
+            <Template Context="product">
+                <div style="@(product.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
+                    @product.Name
+                </div>
+            </Template>
             <EditTemplate Context="product">
-                <RadzenTextBox @bind-value="@product.Name" Style="width: 100%;" />
+                <RadzenTextBox @bind-value="@product.Name" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ProductDto.Price)" Title="Kwota" Width="12%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="product">
-                <div style="color: @(product.Settled ? "green" : "red")">
-                    <b>@product.Price.ToString((Format.PriceFormat))</b>
+                <div style="@(product.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
+                    @product.Price.ToString(Format.PriceFormat)
                 </div>
             </Template>
             <EditTemplate Context="product">
@@ -81,7 +86,9 @@
             <Template Context="product">
                 @if (product.Divisible)
                 {
-                    @product.MaxQuantity
+                    <div style="@(product.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
+                        @product.MaxQuantity
+                    </div>
                 }
                 else
                 {
@@ -108,7 +115,9 @@
             <Template Context="product">
                 @if (product.Divisible && product.CompensationPrice != 0)
                 {
-                    @product.CompensationPrice.ToString(Format.PriceFormat)
+                    <div style="@(product.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
+                        @product.CompensationPrice.ToString(Format.PriceFormat)
+                    </div>
                 }
                 else
                 {

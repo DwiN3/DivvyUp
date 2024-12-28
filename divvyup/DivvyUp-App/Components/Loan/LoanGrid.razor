@@ -24,11 +24,11 @@
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid"/>
         @if (!ShowAllLoans && GridMode == LoanGridMode.All)
         {
-            <RadzenDatePicker TValue="DateOnly" @bind-Value="@DateFrom" Name="Data od" DateFormat="@Format.DateFormat"/>
-            <RadzenDatePicker TValue="DateOnly" @bind-Value="@DateTo" Name="Data do" DateFormat="@Format.DateFormat"/>
+            <RadzenDatePicker TValue="DateOnly" Value="@DateFrom" ValueChanged="@(async(DateOnly date) => { DateFrom = date; await SaveSettingsToLocalStorage(); })" Name="Data od" DateFormat="@Format.DateFormat" />
+            <RadzenDatePicker TValue="DateOnly" Value="@DateTo" ValueChanged="@(async(DateOnly date) => { DateTo = date; await SaveSettingsToLocalStorage(); })" Name="Data do" DateFormat="@Format.DateFormat" />
             <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async () => await SetCurrentMonth())"/>
         }
-        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="attach_money" Text="Pokaż wszystkie pożyczki" Click="@(async () => { ShowAllLoans = !ShowAllLoans; await LoadGrid(); })" Visible="@(GridMode == LoanGridMode.All)"/>
+        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="attach_money" Text="Pokaż wszystkie pożyczki" Click="@(async () => { ShowAllLoans = !ShowAllLoans; await SaveSettingsToLocalStorage(); await LoadGrid(); })" Visible="@(GridMode == LoanGridMode.All)" />
     </HeaderTemplate>
     <EmptyTemplate>
         <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>
@@ -62,7 +62,9 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.Date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
             <Template Context="loan">
-                @loan.Date.ToString(Format.DateFormat)
+                <div style="@(loan.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle);">
+                    @loan.Date.ToString(Format.DateFormat)
+                </div>
             </Template>
             <EditTemplate Context="loan">
                 <RadzenDatePicker @bind-Value="@loan.Date" ShowCalendarWeek DateFormat="@Format.DateFormat" Style="width: 100%;" />
@@ -70,15 +72,22 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.Lent)" Title="Pożyczka" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="loan">
-                <RadzenButton ButtonStyle="@(loan.Lent ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="@(loan.Lent ? "north_east" : "south_west")" Click="@(async () => await ChangeLent(loan.Id, !loan.Lent))" Disabled="true" />
+                <RadzenButton ButtonStyle="@(loan.Lent ? ButtonStyle.Danger : ButtonStyle.Success)" 
+                              Icon="@(loan.Lent ? "attach_money south_west" : "attach_money north_east")" 
+                              Click="@(async () => await ChangeLent(loan.Id, !loan.Lent))"
+                              Style="width: 100%;"
+                              Disabled="true" />
             </Template>
             <EditTemplate Context="loan">
-                <RadzenButton ButtonStyle="@(loan.Lent ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="@(loan.Lent ? "north_east" : "south_west")" Click="@(() => { loan.Lent = !loan.Lent; })" />
+                <RadzenButton ButtonStyle="@(loan.Lent ? ButtonStyle.Danger : ButtonStyle.Success)"
+                              Icon="@(loan.Lent ? "attach_money south_west" : "attach_money north_east")"
+                              Style="width: 100%;"
+                              Click="@(() => { loan.Lent = !loan.Lent; })" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(LoanDto.Amount)" Title="Kwota" Width="12%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="loan">
-                <div style="color: @(loan.Lent ? "green" : "red"); text-decoration: @(loan.Settled ? "line-through" : "none");">
+                <div style="@(loan.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle); @(loan.Lent ? Format.IsLentBalanceLoanStyle : Format.IsNotLentBalanceLoanStyle)">
                     <b>@loan.Amount.ToString((Format.PriceFormat))</b>
                 </div>
             </Template>

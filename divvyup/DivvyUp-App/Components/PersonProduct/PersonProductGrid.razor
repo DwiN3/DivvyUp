@@ -24,8 +24,16 @@
                     @bind-Value="@SelectedPersonProducts"
                     AllowRowSelectOnRowClick="false">
         <HeaderTemplate>
-            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
-            <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="calculate" Text="Ustaw wyrównanie odpowiedniej osobie" Click="@SetAutoCompensation" Visible="@NormalView" />
+            <div style="display: flex; align-items: center;">
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="calculate" Text="Ustaw wyrównanie odpowiedniej osobie" Click="@SetAutoCompensation" Visible="@NormalView"/>
+                @if (NormalView)
+                {
+                    <div style="position: absolute; right: 10px;">
+                        Kwota wyrównania: <b> @Product?.CompensationPrice.ToString(Format.PriceFormat) </b>
+                    </div>
+                }
+            </div>
         </HeaderTemplate>
         <EmptyTemplate>
             <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>
@@ -69,7 +77,9 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Ilość" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
-                    @($"{personProduct.Quantity}/{Product.MaxQuantity}")
+                    <div style="@(personProduct.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
+                        @($"{personProduct.Quantity}/{Product.MaxQuantity}")
+                    </div>
                 </Template>
                 <EditTemplate Context="personProduct">
                     @if (personProduct.Quantity == 0)
@@ -81,7 +91,8 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.PartOfPrice)" Title="Cena" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
-                    <div style="color: @(personProduct.Settled ? "green" : "red"); display: inline-block;">
+
+                    <div style="@(personProduct.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle); display: inline-block;">
                         <b>@personProduct.PartOfPrice.ToString(Format.PriceFormat)</b>
                         @if (personProduct.Compensation && Product.CompensationPrice != 0)
                         {
@@ -133,7 +144,6 @@
                     }
                 </EditTemplate>
             </RadzenDataGridColumn>
-
         </Columns>
     </RadzenDataGrid>
 </div>

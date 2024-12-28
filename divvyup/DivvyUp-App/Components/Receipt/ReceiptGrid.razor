@@ -23,11 +23,11 @@
         <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
         @if (!ShowAllReceipts)
         {
-            <RadzenDatePicker TValue="DateOnly" @bind-Value="@DateFrom" Name="Data od" DateFormat="@Format.DateFormat" />
-            <RadzenDatePicker TValue="DateOnly" @bind-Value="@DateTo" Name="Data do" DateFormat="@Format.DateFormat" />
+            <RadzenDatePicker TValue="DateOnly" Value="@DateFrom" ValueChanged="@(async(DateOnly date) => { DateFrom = date; await SaveSettingsToLocalStorage(); })" Name="Data od" DateFormat="@Format.DateFormat" />
+            <RadzenDatePicker TValue="DateOnly" Value="@DateTo" ValueChanged="@(async(DateOnly date) => { DateTo = date; await SaveSettingsToLocalStorage(); })" Name="Data do" DateFormat="@Format.DateFormat" />
             <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async() => await SetCurrentMonth())" />
         }
-        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllReceipts ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="receipt" Text="Pokaż wszystkie rachunki" Click="@(async() => { ShowAllReceipts = !ShowAllReceipts; await LoadGrid();})" />
+        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllReceipts ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="receipt" Text="Pokaż wszystkie rachunki" Click="@(async() => { ShowAllReceipts = !ShowAllReceipts; await SaveSettingsToLocalStorage(); await LoadGrid();})" />
     </HeaderTemplate>
     <EmptyTemplate>
         <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>
@@ -61,13 +61,20 @@
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.Name)" Title="Nazwa" Width="30%" TextAlign="TextAlign.Start" Frozen="true">
+            <Template Context="receipt">
+                <div style="@(receipt.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
+                    @receipt.Name
+                </div>
+            </Template>
             <EditTemplate Context="receipt">
                 <RadzenTextBox @bind-value="@receipt.Name" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.Date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
             <Template Context="receipt">
-                @receipt.Date.ToString(@Format.DateFormat)
+                <div style="@(receipt.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
+                    @receipt.Date.ToString(Format.DateFormat)
+                </div>
             </Template>
             <EditTemplate Context="receipt">
                 <RadzenDatePicker @bind-Value="@receipt.Date" ShowCalendarWeek DateFormat="@Format.DateFormat" Style="width: 100%;" />
@@ -75,7 +82,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.TotalPrice)" Title="Kwota" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="receipt">                
-                <div style="color: @(receipt.Settled ? "green" : "red")">
+                <div style="@(receipt.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
                     <b>@receipt.TotalPrice.ToString(Format.PriceFormat)</b>
                 </div>
             </Template>

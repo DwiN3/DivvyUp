@@ -1,10 +1,10 @@
-﻿using DivvyUp_App.Services.Gui;
+﻿using Blazored.LocalStorage;
+using DivvyUp_App.Services.Gui;
 using DivvyUp_Shared.Dtos.Entity;
 using DivvyUp_Shared.Dtos.Request;
 using DivvyUp_Shared.Enums;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
-using DivvyUp_Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -17,6 +17,8 @@ namespace DivvyUp_App.Components.Loan
         private ILoanService LoanService { get; set; }
         [Inject]
         private IPersonService PersonService { get; set; }
+        [Inject]
+        private ILocalStorageService LocalStorageService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
         [Inject]
@@ -37,9 +39,14 @@ namespace DivvyUp_App.Components.Loan
         private bool ShowAllLoans = false;
         private bool IsLoading => Loans == null;
 
+
+        private const string DateFromKey = "LoanGrid_DateFrom";
+        private const string DateToKey = "LoanGrid_DateTo";
+        private const string ShowAllLoansKey = "LoanGrid_ShowAllReceipts";
+
         protected override async Task OnInitializedAsync()
         {
-            await SetCurrentMonth();
+            await LoadSettingsFromLocalStorage();
             if (GridMode == LoanGridMode.All)
             {
                 Persons = await PersonService.GetPersons();
@@ -49,6 +56,25 @@ namespace DivvyUp_App.Components.Loan
                     SelectedPerson = Persons.First();
             }
             await LoadGrid();
+        }
+
+        private async Task LoadSettingsFromLocalStorage()
+        {
+            var dateFrom = await LocalStorageService.GetItemAsync<string>(DateFromKey);
+            var dateTo = await LocalStorageService.GetItemAsync<string>(DateToKey);
+            var showAllLoans = await LocalStorageService.GetItemAsync<bool?>(ShowAllLoansKey);
+
+            if (dateFrom != null && dateTo != null)
+            {
+                DateFrom = DateOnly.Parse(dateFrom);
+                DateTo = DateOnly.Parse(dateTo);
+            }
+            else
+            {
+                await SetCurrentMonth();
+            }
+
+            ShowAllLoans = showAllLoans ?? false;
         }
 
         private async Task LoadGrid()
@@ -202,7 +228,15 @@ namespace DivvyUp_App.Components.Loan
             DateFrom = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, 1);
             int dayInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
             DateTo = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, dayInMonth);
+            await SaveSettingsToLocalStorage();
             await LoadGrid();
+        }
+
+        private async Task SaveSettingsToLocalStorage()
+        {
+            await LocalStorageService.SetItemAsync(DateFromKey, DateFrom.ToString());
+            await LocalStorageService.SetItemAsync(DateToKey, DateTo.ToString());
+            await LocalStorageService.SetItemAsync(ShowAllLoansKey, ShowAllLoans);
         }
     }
 }

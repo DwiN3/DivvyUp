@@ -49,17 +49,17 @@
                 </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.Name)" Title="Imie" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.Name)" Title="Imie" Width="18%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="person">
                 <RadzenTextBox @bind-value="@person.Name" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.Surname)" Title="Nazwisko" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.Surname)" Title="Nazwisko" Width="18%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="person">
                 <RadzenTextBox @bind-value="@person.Surname" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.LoanBalance)" Title="Bilans pożyczek" Width="13%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.LoanBalance)" Title="Bilans pożyczek" Width="10%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
             <Template Context="person">
                 @if (!person.UserAccount)
                 {
@@ -72,7 +72,7 @@
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.UnpaidAmount)" Title="Kwota aktualna" Width="13%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.UnpaidAmount)" Title="Kwota aktualna" Width="10%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
             <Template Context="person">
                 <b style="color: @(person.UnpaidAmount > 0 ? "red" : "green")"> @person.UnpaidAmount.ToString(Format.PriceFormat)</b>
                 @*
@@ -85,9 +85,17 @@
                 -
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.TotalAmount)" Title="Kwota łączna" Width="13%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.TotalAmount)" Title="Kwota łączna" Width="10%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
             <Template Context="person">
                 <b>@person.TotalAmount.ToString(Format.PriceFormat)</b>
+            </Template>
+            <EditTemplate>
+                -
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(PersonDto.CompensationAmount)" Title="Kwota wyrównania" Width="10%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
+            <Template Context="person">
+                <b>@person.CompensationAmount.ToString(Format.PriceFormat)</b>
             </Template>
             <EditTemplate>
                 -
