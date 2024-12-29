@@ -46,7 +46,7 @@
                     <RadzenCheckBox class="grid-button" @bind-Value="@personProduct.Settled" Change="@(async (bool check) => await ChangeSettled(personProduct.Id, personProduct.Settled))" />
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Ilość" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Liczba części" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
                     @*
                         @($"{personProduct.Quantity}/{personProduct.MaxQuantity}")

@@ -62,7 +62,7 @@
                 <RadzenCheckBox style="opacity: 0.6; " class="grid-button" Value="@loan.Settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(LoanDto.Date)" Title="Data" Width="20%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
+        <RadzenDataGridColumn Property="@nameof(LoanDto.Date)" Title="Data" Width="15%" TextAlign="TextAlign.Start" Frozen="true" FilterMode="FilterMode.SimpleWithMenu" >
             <Template Context="loan">
                 <div style="@(loan.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle);">
                     @loan.Date.ToString(Format.DateFormat)
@@ -72,7 +72,7 @@
                 <RadzenDatePicker @bind-Value="@loan.Date" ShowCalendarWeek DateFormat="@Format.DateFormat" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(LoanDto.Lent)" Title="Pożyczka" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(LoanDto.Lent)" Title="Pożyczka" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="loan">
                 <RadzenButton ButtonStyle="@(loan.Lent ? ButtonStyle.Danger : ButtonStyle.Success)" 
                               Icon="@(loan.Lent ? "attach_money south_west" : "attach_money north_east")" 
@@ -106,7 +106,8 @@
                                             ValueChanged="async (int personId) => await OnPersonChange(loan, personId)"
                                             Data="@Persons"
                                             TextProperty="@nameof(PersonDto.FullName)"
-                                            ValueProperty="@nameof(PersonDto.Id)" />
+                                            ValueProperty="@nameof(PersonDto.Id)"
+                                            Style="width: 100%;" />
                 </Template>
                 <EditTemplate Context="loan">
                     @{
@@ -120,7 +121,8 @@
                         @bind-Value="loan.PersonId"
                         Data="@Persons"
                         TextProperty="@nameof(PersonDto.FullName)"
-                        ValueProperty="@nameof(PersonDto.Id)"/>
+                        ValueProperty="@nameof(PersonDto.Id)"
+                        Style="width: 100%;" />
                 </EditTemplate>
             </RadzenDataGridColumn>            
         }

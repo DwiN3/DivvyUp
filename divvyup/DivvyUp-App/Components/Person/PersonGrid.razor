@@ -49,12 +49,12 @@
                 </div>
             </FilterTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.Name)" Title="Imie" Width="18%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.Name)" Title="Imie" Width="14%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="person">
                 <RadzenTextBox @bind-value="@person.Name" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(PersonDto.Surname)" Title="Nazwisko" Width="18%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(PersonDto.Surname)" Title="Nazwisko" Width="14%" TextAlign="TextAlign.Start" Frozen="true">
             <EditTemplate Context="person">
                 <RadzenTextBox @bind-value="@person.Surname" Style="width: 100%;" />
             </EditTemplate>

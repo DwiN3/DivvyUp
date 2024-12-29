@@ -84,7 +84,7 @@
                 <RadzenButton ButtonStyle="@(ButtonStyle.Base)" Icon="@(product.Divisible ? "groups" : "person")" Click="@(() => { product.Divisible = !product.Divisible; })" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.MaxQuantity)" Title="Ilość częsci" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.MaxQuantity)" Title="Liczba częsci" Width="8%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="product">
                 @if (product.Divisible)
                 {

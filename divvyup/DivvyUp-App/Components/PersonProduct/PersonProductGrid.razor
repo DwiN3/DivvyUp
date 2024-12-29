@@ -30,6 +30,7 @@
                 @if (NormalView)
                 {
                     <div style="position: absolute; right: 10px;">
+                        @* Pozostałe części: <b> @Product?.AvailableQuantity </b> *@
                         Kwota wyrównania: <b> @Product?.CompensationPrice.ToString(Format.PriceFormat) </b>
                     </div>
                 }
@@ -76,7 +77,7 @@
                        <RadzenCheckBox style="opacity: 0.6; " class="grid-button" Value="@personProduct.Compensation" ReadOnly="true" Visible="@NormalView"/>
                    </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Ilość" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
+            <RadzenDataGridColumn Property="@nameof(PersonProductDto.Quantity)" Title="Liczba części" Width="15%" TextAlign="TextAlign.Center" Frozen="true">
                 <Template Context="personProduct">
                     <div style="@(personProduct.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
                         @($"{personProduct.Quantity}/{Product.MaxQuantity}")
