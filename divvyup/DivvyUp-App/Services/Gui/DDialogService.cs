@@ -6,7 +6,6 @@ using DivvyUp_App.BaseComponents.DDialog.User;
 using DivvyUp_Shared.Dtos.Entity;
 using Radzen;
 
-
 namespace DivvyUp_App.Services.Gui
 {
     public class DDialogService
@@ -63,10 +62,10 @@ namespace DivvyUp_App.Services.Gui
             );
         }
 
-        public async Task OpenLoanDialog(int personId)
+        public async Task OpenLoanDialog(int personId, string personName)
         {
             var result = await _dialogService.OpenAsync<DDialogLoanCard>(
-                "Pożyczki osoby",
+                $"Pożyczki osoby: {personName}",
                 new Dictionary<string, object> { { "PersonId", personId } },
                 new DialogOptions()
                 {

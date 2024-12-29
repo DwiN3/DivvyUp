@@ -24,9 +24,9 @@
                     @bind-Value="@SelectedPersonProducts"
                     AllowRowSelectOnRowClick="false">
         <HeaderTemplate>
-            <div style="display: flex; align-items: center;">
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid"/>
-                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="calculate" Text="Ustaw wyrównanie odpowiedniej osobie" Click="@SetAutoCompensation" Visible="@NormalView"/>
+            <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid" />
+                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="calculate" Text="Ustaw wyrównanie odpowiedniej osobie" Click="@SetAutoCompensation" Visible="@NormalView" />
                 @if (NormalView)
                 {
                     <div style="position: absolute; right: 10px;">
@@ -34,6 +34,7 @@
                     </div>
                 }
             </div>
+
         </HeaderTemplate>
         <EmptyTemplate>
             <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>

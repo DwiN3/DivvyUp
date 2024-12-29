@@ -63,7 +63,7 @@
             <Template Context="person">
                 @if (!person.UserAccount)
                 {
-                    <RadzenButton ButtonStyle="@(person.LoanBalance >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" Click="async () => { await ManageLoanPerson(person.Id); }">
+                    <RadzenButton ButtonStyle="@(person.LoanBalance >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" style="width: 100%; text-align: left !important; text-transform: lowercase !important;" Click="async () => { await ManageLoanPerson(person.Id, person.FullName); }">
                         @person.LoanBalance.ToString(Format.PriceFormat)
                     </RadzenButton>
                 }

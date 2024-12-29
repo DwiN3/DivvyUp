@@ -112,9 +112,9 @@ namespace DivvyUp_App.Components.Person
             }
         }
 
-        private async Task ManageLoanPerson(int personId)
+        private async Task ManageLoanPerson(int personId, string personName)
         {
-            await DDialogService.OpenLoanDialog(personId);
+            await DDialogService.OpenLoanDialog(personId, personName);
             await LoadGrid();
         }
 

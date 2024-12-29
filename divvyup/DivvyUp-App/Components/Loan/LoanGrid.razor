@@ -21,14 +21,16 @@
                 EditMode="DataGridEditMode.Single"
                 GridLines="DataGridGridLines.Both">
     <HeaderTemplate>
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid"/>
-        @if (!ShowAllLoans && GridMode == LoanGridMode.All)
-        {
-            <RadzenDatePicker TValue="DateOnly" Value="@DateFrom" ValueChanged="@(async(DateOnly date) => { DateFrom = date; await SaveSettingsToLocalStorage(); })" Name="Data od" DateFormat="@Format.DateFormat" />
-            <RadzenDatePicker TValue="DateOnly" Value="@DateTo" ValueChanged="@(async(DateOnly date) => { DateTo = date; await SaveSettingsToLocalStorage(); })" Name="Data do" DateFormat="@Format.DateFormat" />
-            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async () => await SetCurrentMonth())"/>
-        }
-        <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="attach_money" Text="Pokaż wszystkie pożyczki" Click="@(async () => { ShowAllLoans = !ShowAllLoans; await SaveSettingsToLocalStorage(); await LoadGrid(); })" Visible="@(GridMode == LoanGridMode.All)" />
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="refresh" Text="Odśwież" Click="@LoadGrid"/>
+            @if (!ShowAllLoans && GridMode == LoanGridMode.All)
+            {
+                <RadzenDatePicker TValue="DateOnly" Value="@DateFrom" ValueChanged="@(async (DateOnly date) => { DateFrom = date; await SaveSettingsToLocalStorage(); })" Name="Data od" DateFormat="@Format.DateFormat"/>
+                <RadzenDatePicker TValue="DateOnly" Value="@DateTo" ValueChanged="@(async (DateOnly date) => { DateTo = date; await SaveSettingsToLocalStorage(); })" Name="Data do" DateFormat="@Format.DateFormat"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="calendar_month" Text="Obecny miesiąc" Click="@(async () => await SetCurrentMonth())"/>
+            }
+            <RadzenButton Style="position: absolute; right: 10px;" ButtonStyle="@(ShowAllLoans ? ButtonStyle.Success : ButtonStyle.Danger)" Icon="attach_money" Text="Pokaż wszystkie pożyczki" Click="@(async () => { ShowAllLoans = !ShowAllLoans; await SaveSettingsToLocalStorage(); await LoadGrid(); })" Visible="@(GridMode == LoanGridMode.All)"/>
+        </div>
     </HeaderTemplate>
     <EmptyTemplate>
         <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Brak wpisów</p>
