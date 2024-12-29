@@ -27,7 +27,7 @@ namespace DivvyUp_App.Services.Api
             try
             {
                 var url = ApiRoute.LOAN_ROUTES.ADD;
-                var response = await _dHttpClient.PostAsync(url, loan);
+                var response = await _dHttpClient.PutAsync(url, loan);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawaniu pożyczki");
             }
             catch (DException ex)
@@ -48,7 +48,7 @@ namespace DivvyUp_App.Services.Api
             {
                 var url = ApiRoute.LOAN_ROUTES.EDIT
                     .Replace(ApiRoute.ARG_LOAN, loanId.ToString());
-                var response = await _dHttpClient.PutAsync(url, loan);
+                var response = await _dHttpClient.PatchAsync(url, loan);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji pożyczki");
             }
             catch (DException ex)
@@ -91,7 +91,7 @@ namespace DivvyUp_App.Services.Api
                 var url = ApiRoute.LOAN_ROUTES.SET_PERSON
                     .Replace(ApiRoute.ARG_LOAN, loadId.ToString())
                     .Replace(ApiRoute.ARG_PERSON, personId.ToString());
-                var response = await _dHttpClient.PutAsync(url);
+                var response = await _dHttpClient.PatchAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji pożyczki");
             }
             catch (DException ex)
@@ -113,7 +113,7 @@ namespace DivvyUp_App.Services.Api
                 var url = ApiRoute.LOAN_ROUTES.SET_LENT
                     .Replace(ApiRoute.ARG_LOAN, loanId.ToString())
                     .Replace(ApiRoute.ARG_LENT, lent.ToString());
-                var response = await _dHttpClient.PutAsync(url);
+                var response = await _dHttpClient.PatchAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji");
             }
             catch (DException ex)
@@ -135,7 +135,7 @@ namespace DivvyUp_App.Services.Api
                 var url = ApiRoute.LOAN_ROUTES.SET_SETTLED
                     .Replace(ApiRoute.ARG_LOAN, loanId.ToString())
                     .Replace(ApiRoute.ARG_SETTLED, isSettled.ToString());
-                var response = await _dHttpClient.PutAsync(url);
+                var response = await _dHttpClient.PatchAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji");
             }
             catch (DException ex)

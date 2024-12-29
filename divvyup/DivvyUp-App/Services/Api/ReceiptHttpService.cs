@@ -27,7 +27,7 @@ namespace DivvyUp_App.Services.Api
             try
             {
                 var url = ApiRoute.RECEIPT_ROUTES.ADD;
-                var response = await _dHttpClient.PostAsync(url, receipt);
+                var response = await _dHttpClient.PutAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania rachunku");
             }
             catch (DException ex)
@@ -48,7 +48,7 @@ namespace DivvyUp_App.Services.Api
             {
                 var url = ApiRoute.RECEIPT_ROUTES.EDIT
                     .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString());
-                var response = await _dHttpClient.PutAsync(url, receipt);
+                var response = await _dHttpClient.PatchAsync(url, receipt);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
             catch (DException ex)
@@ -91,7 +91,7 @@ namespace DivvyUp_App.Services.Api
                 var url = ApiRoute.RECEIPT_ROUTES.SET_SETTLED
                     .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString())
                     .Replace(ApiRoute.ARG_SETTLED, settled.ToString());
-                var response = await _dHttpClient.PutAsync(url);
+                var response = await _dHttpClient.PatchAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji rachunku");
             }
             catch (DException ex)

@@ -20,7 +20,7 @@ namespace DivvyUp.Web.Controllers
             _personService = personService;
         }
 
-        [HttpPost(ApiRoute.PERSON_ROUTES.ADD)]
+        [HttpPut(ApiRoute.PERSON_ROUTES.ADD)]
         [SwaggerOperation(Summary = "Add a new person", Description = "Adds a new person to the system.")]
         public async Task<IActionResult> Add([FromBody] AddEditPersonDto request)
         {
@@ -28,7 +28,7 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
-        [HttpPut(ApiRoute.PERSON_ROUTES.EDIT)]
+        [HttpPatch(ApiRoute.PERSON_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit a person", Description = "Edits the details of an existing person by their ID.")]
         public async Task<IActionResult> Edit([FromBody] AddEditPersonDto request, [FromRoute] int personId)
         {

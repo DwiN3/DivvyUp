@@ -79,7 +79,7 @@ namespace DivvyUp_App.Services.Api
             try
             {
                 var url = ApiRoute.USER_ROUTES.EDIT;
-                var response = await _dHttpClient.PutAsync(url, request);
+                var response = await _dHttpClient.PatchAsync(url, request);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji użytkownika"); 
                 var result = await response.Content.ReadAsStringAsync();
                 return result;
@@ -106,7 +106,7 @@ namespace DivvyUp_App.Services.Api
             try
             {
                 var url = ApiRoute.USER_ROUTES.CHANGE_PASSWORD;
-                var response = await _dHttpClient.PutAsync(url, request);
+                var response = await _dHttpClient.PatchAsync(url, request);
                 await EnsureCorrectResponse(response, "Błąd w czasie zmieniania hasła");
             }
             catch(DException ex)

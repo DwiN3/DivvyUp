@@ -39,6 +39,18 @@ namespace DivvyUp_Shared.HttpClients
             return await _httpClient.PutAsync(url, null);
         }
 
+        public async Task<HttpResponseMessage> PatchAsync(string url)
+        {
+            return await _httpClient.PatchAsync(url, null);
+        }
+
+        public async Task<HttpResponseMessage> PatchAsync<T>(string url, T data)
+        {
+            var jsonData = JsonConvert.SerializeObject(data);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            return await _httpClient.PatchAsync(url, content);
+        }
+
         public async Task<HttpResponseMessage> DeleteAsync(string url)
         {
             return await _httpClient.DeleteAsync(url);

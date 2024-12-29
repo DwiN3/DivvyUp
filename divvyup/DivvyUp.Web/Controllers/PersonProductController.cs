@@ -20,7 +20,7 @@ namespace DivvyUp.Web.Controllers
             _personProductService = personProductService;
         }
 
-        [HttpPost(ApiRoute.PERSON_PRODUCT_ROUTES.ADD)]
+        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.ADD)]
         [SwaggerOperation(Summary = "Add person to product", Description = "Associates a person with a specific product.")]
         public async Task<IActionResult> Add([FromBody] AddEditPersonProductDto request, [FromRoute] int productId)
         {
@@ -28,7 +28,7 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
-        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.EDIT)]
+        [HttpPatch(ApiRoute.PERSON_PRODUCT_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit person-product association", Description = "Edits the details of an existing person-product association by its ID.")]
         public async Task<IActionResult> Edit([FromBody] AddEditPersonProductDto request, [FromRoute] int personProductId)
         {
@@ -52,7 +52,7 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
-        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.SET_PERSON)]
+        [HttpPatch(ApiRoute.PERSON_PRODUCT_ROUTES.SET_PERSON)]
         [SwaggerOperation(Summary = "Set person in person-product", Description = "Changes the person in an existing person-product association.")]
         public async Task<IActionResult> SetPerson([FromRoute] int personProductId, [FromRoute] int personId)
         {
@@ -60,7 +60,7 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
-        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.SET_SETTLED)]
+        [HttpPatch(ApiRoute.PERSON_PRODUCT_ROUTES.SET_SETTLED)]
         [SwaggerOperation(Summary = "Set person-product as settled", Description = "Marks a person-product association as settled.")]
         public async Task<IActionResult> SetSettled([FromRoute] int personProductId, [FromRoute] bool settled)
         {
@@ -68,7 +68,7 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
-        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.SET_COMPENSATION)]
+        [HttpPatch(ApiRoute.PERSON_PRODUCT_ROUTES.SET_COMPENSATION)]
         [SwaggerOperation(Summary = "Set person-product as compensation", Description = "Marks a person-product association as compensation.")]
         public async Task<IActionResult> SetCompensation([FromRoute] int personProductId)
         {
@@ -76,7 +76,7 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
-        [HttpPut(ApiRoute.PERSON_PRODUCT_ROUTES.SET_AUTO_COMPENSATION)]
+        [HttpPatch(ApiRoute.PERSON_PRODUCT_ROUTES.SET_AUTO_COMPENSATION)]
         [SwaggerOperation(Summary = "Set person-product as compensation automatically", Description = "Automatically sets compensation for the person-product association, selecting the person with the lowest compensation value.")]
         public async Task<IActionResult> SetAutoCompensation([FromRoute] int productId)
         {

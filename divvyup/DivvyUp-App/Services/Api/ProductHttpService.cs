@@ -29,7 +29,7 @@ namespace DivvyUp_App.Services.Api
             {
                 var url = ApiRoute.PRODUCT_ROUTES.ADD
                     .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString());
-                var response = await _dHttpClient.PostAsync(url, product);
+                var response = await _dHttpClient.PutAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
             }
             catch (DException ex)
@@ -50,7 +50,7 @@ namespace DivvyUp_App.Services.Api
             {
                 var url = ApiRoute.PRODUCT_ROUTES.EDIT
                     .Replace(ApiRoute.ARG_PRODUCT, productId.ToString());
-                var response = await _dHttpClient.PutAsync(url, product);
+                var response = await _dHttpClient.PatchAsync(url, product);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (DException ex)
@@ -72,7 +72,7 @@ namespace DivvyUp_App.Services.Api
                 var url = ApiRoute.PRODUCT_ROUTES.ADD_WIDTH_PERSON
                     .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString())
                     .Replace(ApiRoute.ARG_PERSON, personId.ToString());
-                var response = await _dHttpClient.PostAsync(url, request);
+                var response = await _dHttpClient.PutAsync(url, request);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
             }
             catch (DException ex)
@@ -94,7 +94,7 @@ namespace DivvyUp_App.Services.Api
                 var query = string.Join("&", personIds.Select(id => $"personIds={id}"));
                 var url = $"{ApiRoute.PRODUCT_ROUTES.ADD_WIDTH_PERSONS
                     .Replace(ApiRoute.ARG_RECEIPT, receiptId.ToString())}?{query}";
-                var response = await _dHttpClient.PostAsync(url, request);
+                var response = await _dHttpClient.PutAsync(url, request);
                 await EnsureCorrectResponse(response, "Błąd w czasie pobieranie produktu");
             }
             catch (DException ex)
@@ -116,7 +116,7 @@ namespace DivvyUp_App.Services.Api
                 var url = ApiRoute.PRODUCT_ROUTES.EDIT_WIDTH_PERSON
                     .Replace(ApiRoute.ARG_PRODUCT, productId.ToString())
                     .Replace(ApiRoute.ARG_PERSON, personId.ToString());
-                var response = await _dHttpClient.PutAsync(url, request);
+                var response = await _dHttpClient.PatchAsync(url, request);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (DException ex)
@@ -159,7 +159,7 @@ namespace DivvyUp_App.Services.Api
                 var url = ApiRoute.PRODUCT_ROUTES.SET_SETTLED
                     .Replace(ApiRoute.ARG_PRODUCT, productId.ToString())
                     .Replace(ApiRoute.ARG_SETTLED, settled.ToString());
-                var response = await _dHttpClient.PutAsync(url);
+                var response = await _dHttpClient.PatchAsync(url);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji produktu");
             }
             catch (DException ex)

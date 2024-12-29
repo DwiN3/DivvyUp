@@ -33,7 +33,7 @@ namespace DivvyUp.Web.Services
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
             _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
-            _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
+            _validator.IsNull(request.MaxQuantity, "Maksymalna liczba części jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
             var user = await _managementService.GetUser();
@@ -41,11 +41,11 @@ namespace DivvyUp.Web.Services
 
             if (!request.Divisible && request.MaxQuantity > 1)
             {
-                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być równa 1 gdy produkt jest niepodzielny");
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna liczba podzielności produktu musi być równa 1 gdy produkt jest niepodzielny");
             }
             if (request.Divisible && request.MaxQuantity == 1)
             {
-                throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być większa od 1 gdy produkt jest podzielny");
+                throw new DException(HttpStatusCode.BadRequest, "Maksymalna liczba podzielności produktu musi być większa od 1 gdy produkt jest podzielny");
             }
 
             var newProduct = new Product()
@@ -71,7 +71,7 @@ namespace DivvyUp.Web.Services
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
             _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
-            _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
+            _validator.IsNull(request.MaxQuantity, "Maksymalna liczba części jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(productId, "Brak identyfikatora produktu");
             var user = await _managementService.GetUser();

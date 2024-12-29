@@ -26,7 +26,7 @@ namespace DivvyUp_App.Services.Api
             try
             {
                 var url = ApiRoute.PERSON_ROUTES.ADD;
-                var response = await _dHttpClient.PostAsync(url, person);
+                var response = await _dHttpClient.PutAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie dodawania osoby");
             }
             catch (DException ex)
@@ -47,7 +47,7 @@ namespace DivvyUp_App.Services.Api
             {
                 var url = ApiRoute.PERSON_ROUTES.EDIT
                     .Replace(ApiRoute.ARG_PERSON, personId.ToString());
-                var response = await _dHttpClient.PutAsync(url, person);
+                var response = await _dHttpClient.PatchAsync(url, person);
                 await EnsureCorrectResponse(response, "Błąd w czasie edycji osoby");
             }
             catch (DException ex)

@@ -36,7 +36,7 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
-        [HttpPut(ApiRoute.USER_ROUTES.EDIT)]
+        [HttpPatch(ApiRoute.USER_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit user account", Description = "Edits the details of the currently authenticated user.")]
         public async Task<IActionResult> Edit([FromBody] EditUserDto request)
         {
@@ -71,7 +71,7 @@ namespace DivvyUp.Web.Controllers
         }
 
         [Authorize]
-        [HttpPut("change-password")]
+        [HttpPatch("change-password")]
         [SwaggerOperation(Summary = "Change user password", Description = "Changes the password for the currently authenticated user.")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordUserDto request)
         {

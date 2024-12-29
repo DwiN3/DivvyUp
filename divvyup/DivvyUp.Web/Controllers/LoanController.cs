@@ -20,7 +20,7 @@ namespace DivvyUp.Web.Controllers
             _loanService = loanService;
         }
 
-        [HttpPost(ApiRoute.LOAN_ROUTES.ADD)]
+        [HttpPut(ApiRoute.LOAN_ROUTES.ADD)]
         [SwaggerOperation(Summary = "Add a new loan", Description = "Adds a new loan to the system.")]
         public async Task<IActionResult> Add([FromBody] AddEditLoanDto request)
         {
@@ -28,7 +28,7 @@ namespace DivvyUp.Web.Controllers
            return Ok();
         }
 
-        [HttpPut(ApiRoute.LOAN_ROUTES.EDIT)]
+        [HttpPatch(ApiRoute.LOAN_ROUTES.EDIT)]
         [SwaggerOperation(Summary = "Edit a loan", Description = "Edits the details of an existing loan by its ID.")]
         public async Task<IActionResult> Edit([FromBody] AddEditLoanDto request, [FromRoute] int loanId)
         {
@@ -44,7 +44,7 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
-        [HttpPut(ApiRoute.LOAN_ROUTES.SET_PERSON)]
+        [HttpPatch(ApiRoute.LOAN_ROUTES.SET_PERSON)]
         [SwaggerOperation(Summary = "Set person in loan", Description = "Changes the person in an existing loan.")]
         public async Task<IActionResult> SetPerson([FromRoute] int loanId, [FromRoute] int personId)
         {
@@ -52,7 +52,7 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
-        [HttpPut(ApiRoute.LOAN_ROUTES.SET_SETTLED)]
+        [HttpPatch(ApiRoute.LOAN_ROUTES.SET_SETTLED)]
         [SwaggerOperation(Summary = "Set loan as settled", Description = "Marks a loan as settled by its ID.")]
         public async Task<IActionResult> SetSettled([FromRoute] int loanId, [FromRoute] bool settled)
         {
@@ -60,7 +60,7 @@ namespace DivvyUp.Web.Controllers
             return Ok();
         }
 
-        [HttpPut(ApiRoute.LOAN_ROUTES.SET_LENT)]
+        [HttpPatch(ApiRoute.LOAN_ROUTES.SET_LENT)]
         [SwaggerOperation(Summary = "Set loan as lent", Description = "Marks a loan as lent by its ID.")]
         public async Task<IActionResult> SetLent([FromRoute] int loanId, [FromRoute] bool lent)
         {
