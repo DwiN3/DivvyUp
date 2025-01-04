@@ -37,6 +37,8 @@ namespace DivvyUp.Web.Services
         {
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
+            _validator.IsEmpty(request.Name, "Imie jest wymagana");
+            _validator.IsEmpty(request.Username, "Nazwa użytkownika jest wymagana");
             _validator.IsEmpty(request.Email, "Email użytkownika jest wymagana");
             _validator.IsEmpty(request.Password, "Hasło jest wymagane");
 
@@ -48,6 +50,8 @@ namespace DivvyUp.Web.Services
             var newUser = new User
             {
                 Username = request.Username,
+                Name = request.Name,
+                Surname = request.Surname,
                 Email = request.Email,
                 Password = hashedPassword
             };
@@ -87,15 +91,17 @@ namespace DivvyUp.Web.Services
                 throw new DException(HttpStatusCode.Conflict, "Użytkownik o takich danych istnieje");
             }
 
-            if (!user.Username.Equals(request.Username))
+            if (!user.Name.Equals(request.Name) || !user.Surname.Equals(request.Surname))
             {
                 var person = await _dbContext.Persons.FirstOrDefaultAsync(p => p.UserId == user.Id && p.UserAccount);
-                person.Name = request.Username;
+                person.Name = request.Name;
+                person.Surname = request.Surname;
                 _dbContext.Persons.Update(person);
-                
             }
 
             user.Username = request.Username;
+            user.Name = request.Name;
+            user.Surname = request.Surname;
             user.Email = request.Email;
 
             _dbContext.Users.Update(user);
@@ -198,8 +204,8 @@ namespace DivvyUp.Web.Services
             var newPerson = new Person()
             {
                 User = user,
-                Name = user.Username,
-                Surname = string.Empty,
+                Name = user.Name,
+                Surname = user.Surname,
                 ReceiptsCount = 0,
                 ProductsCount = 0,
                 TotalAmount = 0,

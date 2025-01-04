@@ -69,6 +69,13 @@ namespace DivvyUp.Web.Services
             person.Surname = request.Surname;
             _dbContext.Persons.Update(person);
 
+            if (person.UserAccount)
+            {
+                user.Name = request.Name;
+                user.Surname = request.Surname;
+                _dbContext.Users.Update(user);
+            }
+
             await _dbContext.SaveChangesAsync();
         }
 

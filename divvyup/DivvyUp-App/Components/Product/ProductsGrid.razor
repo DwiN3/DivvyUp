@@ -93,7 +93,14 @@
             <EditTemplate Context="product">
                 <RadzenButton Click="@(async () => await OpenDetails(true, product))" Style="width: 100%; text-align: left !important; text-transform: lowercase !important;">
                     <div style="@(product.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
-                        <b>@product.TotalPrice.ToString(Format.PriceFormat)</b>
+                        @if (product.isNew)
+                        {
+                            <b>-</b>
+                        }
+                        else
+                        {
+                            <b>@product.TotalPrice.ToString(Format.PriceFormat)</b>
+                        }
                     </div>
                 </RadzenButton>
             </EditTemplate>

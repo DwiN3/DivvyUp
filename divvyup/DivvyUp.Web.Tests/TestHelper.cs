@@ -39,7 +39,7 @@ namespace DivvyUp.Web.Tests
 
         public async Task<(RegisterUserDto, string)> SetupUserWithTokenAsync(HttpClient client, string username = "TestUser", string email = "testuser@example.com", string password = "TestPassword123")
         {
-            var userDto = new RegisterUserDto { Username = username, Email = email, Password = password };
+            var userDto = new RegisterUserDto { Username = username, Name = "TestUserName", Email = email, Password = password };
             await RegisterUserAsync(client, userDto);
             var token = await LoginAndGetTokenAsync(client, username, password);
             return (userDto, token);

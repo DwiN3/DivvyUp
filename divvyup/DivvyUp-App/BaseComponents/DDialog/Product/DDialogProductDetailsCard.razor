@@ -21,7 +21,7 @@
     </div>
 </div>
 <footer class="footer">
-    <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Primary" Click="@(() => DialogService.Close())" />
+    <RadzenButton Text="@(Editable ? "Zapisz" : "Zamnij")" ButtonStyle="@(Editable ? ButtonStyle.Success : ButtonStyle.Primary)" Click="@(() => DialogService.Close())" />
 </footer>
 
 @code {

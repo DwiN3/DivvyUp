@@ -39,6 +39,8 @@ namespace DivvyUp_App.Components.AccountManager
         private void SetUserData()
         {
             EditData.Username = User.Username;
+            EditData.Name = User.Name;
+            EditData.Surname = User.Surname;
             EditData.Email = User.Email;
         }
 

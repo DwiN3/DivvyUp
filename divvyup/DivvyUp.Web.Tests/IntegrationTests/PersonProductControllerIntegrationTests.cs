@@ -59,7 +59,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             await dbContext.SaveChangesAsync();
 
             _productTest = DataFactory.CreateProduct(_receiptTest.Id, "TestProduct", 10.0m, 2);
-            _productTest2 = DataFactory.CreateProduct(_receiptTest.Id, "TestProduct2", 15.0m, 5);
+            _productTest2 = DataFactory.CreateProduct(_receiptTest.Id, "TestProduct2", 15.0m,  5);
             _productTest3 = DataFactory.CreateProduct(_receiptTest.Id, "TestProduct3", 15.97m, 3);
             dbContext.Products.AddRange(_productTest, _productTest2, _productTest3);
             await dbContext.SaveChangesAsync();
@@ -81,7 +81,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             // Arrange
             var addRequest = new AddEditPersonProductDto { PersonId = _personTest.Id, Quantity = 1 };
             var url = ApiRoute.PERSON_PRODUCT_ROUTES.ADD.Replace(ApiRoute.ARG_PRODUCT, _productTest.Id.ToString());
-            var request = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addRequest);
+            var request = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put, addRequest);
 
             // Act
             var response = await _client.SendAsync(request);
@@ -110,7 +110,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             var personId = quantity == 1 ? _personTest.Id : _personTest2.Id;
             var addRequest = new AddEditPersonProductDto { PersonId = personId, Quantity = quantity };
             var url = ApiRoute.PERSON_PRODUCT_ROUTES.ADD.Replace(ApiRoute.ARG_PRODUCT, _productTest.Id.ToString());
-            var request = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addRequest);
+            var request = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put, addRequest);
 
             // Act
             var response = await _client.SendAsync(request);
@@ -136,8 +136,8 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             var addRequest2 = new AddEditPersonProductDto { PersonId = _personTest2.Id, Quantity = 3 };
 
             var url = ApiRoute.PERSON_PRODUCT_ROUTES.ADD.Replace(ApiRoute.ARG_PRODUCT, _productTest2.Id.ToString());
-            var request1 = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addRequest1);
-            var request2 = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addRequest2);
+            var request1 = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put, addRequest1);
+            var request2 = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put, addRequest2);
 
             // Act
             var response1 = await _client.SendAsync(request1);
@@ -184,7 +184,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             }
             var url = ApiRoute.PERSON_PRODUCT_ROUTES.SET_AUTO_COMPENSATION
                 .Replace(ApiRoute.ARG_PRODUCT, _productTest3.Id.ToString());
-            var request = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put);
+            var request = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Patch);
 
             // Act
             var response = await _client.SendAsync(request);

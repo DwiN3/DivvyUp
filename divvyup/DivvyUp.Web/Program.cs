@@ -15,10 +15,16 @@ namespace DivvyUp.Web
             builder.Services.AddSwaggerGenConfiguration();
             builder.Services.AddAuthenticationServices(builder.Configuration);
 
-            
+            if (builder.Environment.IsEnvironment("Testing"))
+            {
+                builder.Services.AddDbContext<DivvyUpDBContext>(options =>
+                    options.UseInMemoryDatabase("TestDatabase"));
+            }
+            else
+            {
                 builder.Services.AddDbContext<DivvyUpDBContext>(options =>
                     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
-            
+            }
 
             var app = builder.Build();
             app.UseMiddleware<ExceptionMiddleware>();

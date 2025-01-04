@@ -27,7 +27,7 @@ namespace DivvyUp.Web.Tests.UnitTests
         public async Task GetReceipt_ShouldReturnReceipt_WhenValidUserAndReceiptId()
         {
             // Arrange
-            var user = new User { Id = 1, Username = "TestUser", Email = "testuser@example.com", Password = "TestPassword123" };
+            var user = new User { Id = 1, Username = "TestUser", Name = "TestUserName", Surname = string.Empty, Email = "testuser@example.com", Password = "TestPassword123" };
             _dbContext.Users.Add(user);
 
             var receipt = new Receipt { Id = 1, UserId = user.Id, Name = "Test Receipt", TotalPrice = 100.00m };
@@ -48,7 +48,7 @@ namespace DivvyUp.Web.Tests.UnitTests
         public async Task GetReceipt_ShouldThrowNotFoundException_WhenReceiptDoesNotExist()
         {
             // Arrange
-            var user = new User { Id = 1, Username = "TestUser", Email = "testuser@example.com", Password = "TestPassword123" };
+            var user = new User { Id = 1, Username = "TestUser", Name = "TestUserName", Surname = string.Empty, Email = "testuser@example.com", Password = "TestPassword123" };
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
 
@@ -62,8 +62,8 @@ namespace DivvyUp.Web.Tests.UnitTests
         public async Task GetReceipt_ShouldThrowUnauthorizedException_WhenUserDoesNotOwnReceipt()
         {
             // Arrange
-            var user1 = new User { Id = 1, Username = "TestUser", Email = "testuser@example.com", Password = "TestPassword123" };
-            var user2 = new User { Id = 2, Username = "TestUser2", Email = "testuser2@example.com", Password = "TestPassword123" };
+            var user1 = new User { Id = 1, Username = "TestUser", Name = "TestUserName", Surname = string.Empty, Email = "testuser@example.com", Password = "TestPassword123" };
+            var user2 = new User { Id = 2, Username = "TestUser2", Name = "TestUserName", Surname = string.Empty, Email = "testuser2@example.com", Password = "TestPassword123" };
             _dbContext.Users.AddRange(user1, user2);
 
             var receipt = new Receipt { Id = 1, UserId = user1.Id, Name = "Test Receipt", TotalPrice = 100.00m };
@@ -175,10 +175,10 @@ namespace DivvyUp.Web.Tests.UnitTests
         public async Task UpdatePartPricesPersonProduct_ShouldUpdatePersonProductPrices_WhenValidProductIsPassed()
         {
             // Arrange
-            var product = new Product { Id = 1, Price = 100m, MaxQuantity = 10 };
+            var product = new Product { Id = 1, Price = 100m, TotalPrice = 100m, MaxQuantity = 10 };
 
-            var person1 = new Person { Id = 1, UserId = 1, Name = "Person 1", Surname = "" };
-            var person2 = new Person { Id = 2, UserId = 2, Name = "Person 2", Surname = "" };
+            var person1 = new Person { Id = 1, UserId = 1, Name = "Person 1", Surname = string.Empty };
+            var person2 = new Person { Id = 2, UserId = 2, Name = "Person 2", Surname = string.Empty };
             _dbContext.Persons.AddRange(person1, person2);
 
             var personProduct1 = new PersonProduct { PersonId = person1.Id, ProductId = product.Id, Quantity = 5, PartOfPrice = 0 };
@@ -200,15 +200,15 @@ namespace DivvyUp.Web.Tests.UnitTests
         }
 
         [Fact]
-        public async Task UpdateTotalPriceReceipt_ShouldUpdateTotalPriceCorecly()
+        public async Task UpdateTotalPriceReceipt_ShouldUpdateTotalPriceCorrectly()
         {
             // Arrange
             var receipt = new Receipt(){ Id = 1, Name = "TestReceipt", TotalPrice = 0.0m };
             _dbContext.Receipts.Add(receipt);
 
-            var product1 = new Product() { Id = 1, Name = "TestProduct1", Price = 15.99m, ReceiptId = receipt.Id};
-            var product2 = new Product() { Id = 2, Name = "TestProduct2", Price = 5.21m, ReceiptId = receipt.Id };
-            var product3 = new Product() { Id = 3, Name = "TestProduct3", Price = 8.55m, ReceiptId = receipt.Id };
+            var product1 = new Product() { Id = 1, Name = "TestProduct1", Price = 15.99m, TotalPrice = 15.99m, ReceiptId = receipt.Id};
+            var product2 = new Product() { Id = 2, Name = "TestProduct2", Price = 5.21m, TotalPrice = 5.21m, ReceiptId = receipt.Id };
+            var product3 = new Product() { Id = 3, Name = "TestProduct3", Price = 8.55m, TotalPrice = 8.55m, ReceiptId = receipt.Id };
             _dbContext.Products.AddRange(product1, product2, product3);
             await _dbContext.SaveChangesAsync();
 
@@ -224,11 +224,11 @@ namespace DivvyUp.Web.Tests.UnitTests
         }
 
         [Fact]
-        public async Task UpdateProductDetails_ShouldUpdateProductCorecly()
+        public async Task UpdateProductDetails_ShouldUpdateProductCorrectly()
         {
             // Arrange
 
-            var product = new Product() { Id = 1, Name = "TestProduct1", Price = 10.00m, Divisible = true, MaxQuantity = 10, AvailableQuantity = 10};
+            var product = new Product() { Id = 1, Name = "TestProduct1", Price = 10.00m, TotalPrice = 10.00m, Divisible = true, MaxQuantity = 10 };
             _dbContext.Products.Add(product);
 
             var personProduct = new PersonProduct { PersonId = 1, ProductId = product.Id, Quantity = 2, PartOfPrice = 20.00m};

@@ -41,6 +41,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             var newUser = new RegisterUserDto
             {
                 Username = "DBTest",
+                Name = "DBTestName",
                 Email = "dbtestuser@example.com",
                 Password = "TestPassword123",
             };
@@ -71,6 +72,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             var existingUser = new RegisterUserDto
             {
                 Username = "DBTest",
+                Name = "DBTestName",
                 Email = "dbtestuser@example.com",
                 Password = "TestPassword123"
             };
@@ -78,6 +80,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             var duplicateUser = new
             {
                 Username = "DBTest",
+                Name = "DBTestName2",
                 Email = "dbtestuser2@example.com",
                 Password = "AnotherPassword123",
             };

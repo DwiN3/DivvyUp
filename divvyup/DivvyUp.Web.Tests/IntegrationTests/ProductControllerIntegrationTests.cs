@@ -62,7 +62,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             var addProductRequest = new AddEditProductDto() { Name = "TestProduct", Price = price };
             var url = ApiRoute.PRODUCT_ROUTES.ADD
                 .Replace(ApiRoute.ARG_RECEIPT, _receiptTest.Id.ToString());
-            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addProductRequest);
+            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put, addProductRequest);
 
             // Act
             var addProductResponse = await _client.SendAsync(requestMessage);
@@ -99,7 +99,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             var addProductRequest = new AddEditProductDto() { Name = "TestProduct", Price = 10, Divisible = false, MaxQuantity = 2 };
             var url = ApiRoute.PRODUCT_ROUTES.ADD
                 .Replace(ApiRoute.ARG_RECEIPT, _receiptTest.Id.ToString());
-            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Post, addProductRequest);
+            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put, addProductRequest);
 
             // Act
             var addProductResponse = await _client.SendAsync(requestMessage);
@@ -107,7 +107,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, addProductResponse.StatusCode);
             var responseContent = await addProductResponse.Content.ReadAsStringAsync();
-            Assert.Contains("Maksymalna ilość musi być równa 1 gdy produkt jest niepodzielny", responseContent);
+            Assert.Contains("Maksymalna liczba podzielności produktu musi być równa 1 gdy produkt jest niepodzielny", responseContent);
         }
     }
 }

@@ -4,11 +4,13 @@ namespace DivvyUp.Web.Tests
 {
     public static class DataFactory
     {
-        public static User CreateUser(string username, string email, string password)
+        public static User CreateUser(string username, string name, string email, string password)
         {
             return new User
             {
                 Username = username,
+                Name = name,
+                Surname = string.Empty,
                 Email = email,
                 Password = password
             };
@@ -40,7 +42,11 @@ namespace DivvyUp.Web.Tests
                 Price = price,
                 MaxQuantity = maxQuantity,
                 AvailableQuantity = maxQuantity,
+                AdditionalPrice = 0,
+                DiscountPercentage = 0,
+                PurchasedQuantity = 0,
                 Divisible = true,
+                TotalPrice = price,
                 Settled = false
             };
         }
@@ -53,6 +59,7 @@ namespace DivvyUp.Web.Tests
                 Name = name,
                 Date = DateOnly.FromDateTime(DateTime.Now),
                 TotalPrice = totalPrice,
+                DiscountPercentage = 0,
                 Settled = false
             };
         }

@@ -136,7 +136,7 @@ namespace DivvyUp_App.Services.Gui
 
         public async Task OpenReceiptDetailsDialog(bool edit,ReceiptDto receipt)
         {
-            var result = await _dialogService.OpenAsync<DDialogReceiptDetailsCard>(
+            await _dialogService.OpenAsync<DDialogReceiptDetailsCard>(
                 "Rabat do rachunku",
                 new Dictionary<string, object>
                 {
@@ -157,8 +157,8 @@ namespace DivvyUp_App.Services.Gui
 
         public async Task OpenProductDetailsDialog(bool edit, ProductDto product)
         {
-            var result = await _dialogService.OpenAsync<DDialogProductDetailsCard>(
-                "Detale produktu",
+           await _dialogService.OpenAsync<DDialogProductDetailsCard>(
+                "Szczegóły produktu",
                 new Dictionary<string, object>
                 {
                     { "Editable", edit },

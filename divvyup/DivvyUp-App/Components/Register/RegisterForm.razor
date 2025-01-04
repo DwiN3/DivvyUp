@@ -1,8 +1,14 @@
 ﻿<div style="height: 100%; display: flex; justify-content: center; align-items: center; background-color: #f0f0f5;">
     <div style="width: 100%; max-width: 400px; padding: 20px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
         <h2 style="text-align: center; font-size: 2.5rem; color: #686868; margin-bottom: 30px; font-weight: bold;">Zarejestruj się</h2>
-        <RadzenFormField class="input" Text="Nazwa">
+        <RadzenFormField class="input" Text="Nazwa użytkownika">
             <RadzenTextBox @bind-Value="@RegisterData.Username" Style="border-radius: 8px; padding: 12px; width: 100%; box-sizing: border-box;" />
+        </RadzenFormField>
+        <RadzenFormField class="input" Text="Imie">
+            <RadzenTextBox @bind-Value="@RegisterData.Name" Style="border-radius: 8px; padding: 12px; width: 100%; box-sizing: border-box;" />
+        </RadzenFormField>
+        <RadzenFormField class="input" Text="Nazwisko">
+            <RadzenTextBox @bind-Value="@RegisterData.Surname" Style="border-radius: 8px; padding: 12px; width: 100%; box-sizing: border-box;" />
         </RadzenFormField>
         <RadzenFormField class="input" Text="Email">
             <RadzenTextBox @bind-Value="@RegisterData.Email" Style="border-radius: 8px; padding: 12px; width: 100%; box-sizing: border-box;" />

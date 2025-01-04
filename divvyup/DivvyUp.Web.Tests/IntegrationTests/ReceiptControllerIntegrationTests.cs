@@ -66,7 +66,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             var url = ApiRoute.RECEIPT_ROUTES.SET_SETTLED
                 .Replace(ApiRoute.ARG_RECEIPT, _receiptTest.Id.ToString())
                 .Replace(ApiRoute.ARG_SETTLED, settled.ToString());
-            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put);
+            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Patch);
 
             // Act
             var setSettledResponse = await _client.SendAsync(requestMessage);

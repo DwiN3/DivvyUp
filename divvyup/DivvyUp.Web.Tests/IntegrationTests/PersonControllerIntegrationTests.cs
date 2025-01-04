@@ -56,7 +56,7 @@ namespace DivvyUp.Web.Tests.IntegrationTests
         {
             // Arrange
             var addPersonRequest = new AddEditPersonDto { Name = name, Surname = surname };
-            var requestMessage = _testHelper.CreateRequestWithToken(ApiRoute.PERSON_ROUTES.ADD, _userToken, HttpMethod.Post, addPersonRequest);
+            var requestMessage = _testHelper.CreateRequestWithToken(ApiRoute.PERSON_ROUTES.ADD, _userToken, HttpMethod.Put, addPersonRequest);
 
             // Act
             var addPersonResponse = await _client.SendAsync(requestMessage);

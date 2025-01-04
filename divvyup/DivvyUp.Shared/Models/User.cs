@@ -13,6 +13,13 @@ namespace DivvyUp_Shared.Models
         public string Username { get; set; }
 
         [Required]
+        [Column("name")]
+        public string Name { get; set; }
+
+        [Column("surname")]
+        public string Surname { get; set; }
+
+        [Required]
         [EmailAddress]
         [Column("email")]
         public string Email { get; set; }
