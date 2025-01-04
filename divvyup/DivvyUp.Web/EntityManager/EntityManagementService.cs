@@ -129,7 +129,7 @@ namespace DivvyUp.Web.EntityManager
         {
             receipt.TotalPrice = await _dbContext.Products
                 .Where(p => p.ReceiptId == receipt.Id)
-                .SumAsync(p => p.Price);
+                .SumAsync(p => p.TotalPrice);
 
             _dbContext.Receipts.Update(receipt);
             await _dbContext.SaveChangesAsync();
@@ -149,7 +149,7 @@ namespace DivvyUp.Web.EntityManager
                 .Where(pp => pp.ProductId == product.Id)
                 .ToListAsync();
 
-            var compensationPrice = product.Price - personProducts.Sum(pp => pp.PartOfPrice);
+            var compensationPrice = product.TotalPrice - personProducts.Sum(pp => pp.PartOfPrice);
             product.CompensationPrice = compensationPrice;
 
             var availableQuantity = product.MaxQuantity - personProducts.Sum(pp => pp.Quantity);
@@ -159,6 +159,33 @@ namespace DivvyUp.Web.EntityManager
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task UpdateProductDetails(List<Product> products)
+        {
+            var productIds = products.Select(p => p.Id).ToList();
+            var personProducts = await _dbContext.PersonProducts
+                .Where(pp => productIds.Contains(pp.ProductId))
+                .ToListAsync();
+
+            var productMap = products.ToDictionary(p => p.Id, p => p);
+
+            foreach (var personProduct in personProducts)
+            {
+                var product = productMap[personProduct.ProductId];
+
+                var compensationPrice = product.TotalPrice - personProducts
+                    .Where(pp => pp.ProductId == product.Id)
+                    .Sum(pp => pp.PartOfPrice);
+                product.CompensationPrice = compensationPrice;
+
+                var availableQuantity = product.MaxQuantity - personProducts
+                    .Where(pp => pp.ProductId == product.Id)
+                    .Sum(pp => pp.Quantity);
+                product.AvailableQuantity = availableQuantity;
+            }
+
+            _dbContext.Products.UpdateRange(products);
+            await _dbContext.SaveChangesAsync();
+        }
 
         public async Task<bool> AreAllPersonProductsSettled(int productId)
         {
@@ -178,7 +205,37 @@ namespace DivvyUp.Web.EntityManager
 
             foreach (var personProduct in personProducts)
             {
-                var newPartOfPrice = await CalculatePartOfPrice(personProduct.Quantity, product.MaxQuantity, product.Price);
+                var newPartOfPrice = await CalculatePartOfPrice(personProduct.Quantity, product.MaxQuantity, product.TotalPrice);
+                if (personProduct.PartOfPrice != newPartOfPrice)
+                {
+                    personProduct.PartOfPrice = newPartOfPrice;
+                    isUpdated = true;
+                }
+            }
+
+            if (isUpdated)
+            {
+                _dbContext.PersonProducts.UpdateRange(personProducts);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdatePartPricesPersonProduct(List<Product> products)
+        {
+            var productIds = products.Select(p => p.Id).ToList();
+            var personProducts = await _dbContext.PersonProducts
+                .Where(pp => productIds.Contains(pp.ProductId))
+                .ToListAsync();
+
+            bool isUpdated = false;
+
+            var productMap = products.ToDictionary(p => p.Id, p => p);
+
+            foreach (var personProduct in personProducts)
+            {
+                var product = productMap[personProduct.ProductId];
+                var newPartOfPrice = await CalculatePartOfPrice(personProduct.Quantity, product.MaxQuantity, product.TotalPrice);
+
                 if (personProduct.PartOfPrice != newPartOfPrice)
                 {
                     personProduct.PartOfPrice = newPartOfPrice;
@@ -198,6 +255,20 @@ namespace DivvyUp.Web.EntityManager
             decimal result = price / maxQuantity * quantity;
             decimal roundedResult = Math.Floor(result * 100) / 100;
             return Task.FromResult(roundedResult);
+        }
+
+        public decimal CalculateTotalPrice(decimal price, int purchasedQuantity, decimal additionalPrice, decimal? discountPercentage)
+        {
+            var basePrice = price * purchasedQuantity;
+
+            decimal discountAmount = 0;
+            if (discountPercentage != 0)
+            {
+                discountAmount = basePrice * (discountPercentage.Value / 100);
+            }
+
+            var totalPrice = (basePrice - discountAmount) + additionalPrice;
+            return totalPrice;
         }
 
         public async Task<PersonProduct> GetPersonWithLowestCompensation(int productId)

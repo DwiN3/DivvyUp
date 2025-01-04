@@ -1,0 +1,110 @@
+﻿@using DivvyUp_Shared.AppConstants
+@using DivvyUp_Shared.Dtos.Entity
+@inject DialogService DialogService
+
+<div class="content-dialog">
+    <div class="form-container">
+        <div class="form-section">
+            <div class="section">
+                <b class="name-section">Ilość sztuk</b>
+                <RadzenNumeric @bind-Value="@Product.PurchasedQuantity" Min="0" ReadOnly="@(!Editable)" Format="@Format.PurchasedQuantityFormat" />
+            </div>
+            <div class="section">
+                <b class="name-section">Dodatkowa opłata</b>
+                <RadzenNumeric @bind-Value="@Product.AdditionalPrice" Min="0" ReadOnly="@(!Editable)" Format="@Format.PriceFormat" />
+            </div>
+            <div class="section">
+                <b class="name-section">Wartość rabatu</b>
+                <RadzenNumeric @bind-Value="@Product.DiscountPercentage" Min="0" Max="100" Name="Rabat" ReadOnly="@(!Editable)" Format="@Format.ProcFormat" />
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <RadzenButton Text="Zamknij" ButtonStyle="ButtonStyle.Primary" Click="@(() => DialogService.Close())" />
+</footer>
+
+@code {
+    [Parameter]
+    public ProductDto Product { get; set; }
+    [Parameter]
+    public bool Editable { get; set; }
+}
+
+<style>
+    .rz-dialog-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    .content-dialog {
+        display: flex;
+        justify-content: center;
+        flex-grow: 1;
+        padding: 16px;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        box-sizing: border-box;
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 10px;
+        background-color: #f0f0f0;
+        width: 100%;
+    }
+
+    .rz-dialog-content {
+        padding: 2px;
+    }
+
+    .rz-dialog-wrapper {
+        width: calc(100% - 56px);
+        height: calc(100% - 56px);
+    }
+
+    .section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .name-section {
+        width: 30%;
+        font-weight: bold;
+    }
+
+    .section-input {
+        width: 35px;
+        height: 35px;
+    }
+
+    .input {
+        width: 70%;
+    }
+
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 600px;
+        height: 100%;
+        overflow: auto;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .form-section {
+        margin-bottom: 24px;
+    }
+</style>

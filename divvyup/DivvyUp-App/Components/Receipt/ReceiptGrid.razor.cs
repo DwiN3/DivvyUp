@@ -103,7 +103,7 @@ namespace DivvyUp_App.Components.Receipt
         {
             try
             {
-                AddEditReceiptDto request = new(receipt.Name, receipt.Date);
+                AddEditReceiptDto request = new(receipt.Name, receipt.Date, receipt.DiscountPercentage);
 
                 if (receipt.Id == 0)
                 {
@@ -178,6 +178,11 @@ namespace DivvyUp_App.Components.Receipt
             DateTo = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, dayInMonth);
             await SaveSettingsToLocalStorage();
             await LoadGrid();
+        }
+
+        private async Task OpenDetails(bool edit, ReceiptDto receipt)
+        {
+            await DDialogService.OpenReceiptDetailsDialog(edit, receipt);
         }
 
         private async Task SaveSettingsToLocalStorage()

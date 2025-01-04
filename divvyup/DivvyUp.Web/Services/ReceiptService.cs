@@ -40,6 +40,7 @@ namespace DivvyUp.Web.Services
                 Name = request.Name,
                 Date = request.Date,
                 TotalPrice = 0,
+                DiscountPercentage = request.DiscountPercentage,
                 Settled = false,
             };
 
@@ -50,18 +51,46 @@ namespace DivvyUp.Web.Services
         public async Task Edit(AddEditReceiptDto request, int receiptId)
         {
             _validator.IsNull(request, "Nie przekazano danych");
-            _validator.IsNull(request.Date, "Data jet wymagana");
+            _validator.IsNull(request.Date, "Data jest wymagana");
             _validator.IsEmpty(request.Name, "Nazwa jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+
             var user = await _managementService.GetUser();
             var receipt = await _managementService.GetReceipt(user, receiptId);
 
             receipt.Name = request.Name;
             receipt.Date = request.Date;
 
-            _dbContext.Receipts.Update(receipt);
+            var discountPercentageChanged = receipt.DiscountPercentage != request.DiscountPercentage;
+            if (discountPercentageChanged)
+            {
+                var products = await _dbContext.Products
+                    .Where(c => c.ReceiptId == receiptId)
+                    .ToListAsync();
+                foreach (var product in products)
+                {
+                    var totalPrice = _managementService.CalculateTotalPrice(product.Price, product.PurchasedQuantity, product.AdditionalPrice, request.DiscountPercentage);
+                    product.DiscountPercentage = request.DiscountPercentage;
+                    product.TotalPrice = totalPrice;
+                }
 
+                _dbContext.UpdateRange(products);
+                await _dbContext.SaveChangesAsync();
+
+                await _managementService.UpdatePartPricesPersonProduct(products);
+                await _managementService.UpdateProductDetails(products);
+                await _managementService.UpdateTotalPriceReceipt(receipt);
+            }
+
+            receipt.DiscountPercentage = request.DiscountPercentage;
+
+            _dbContext.Receipts.Update(receipt);
             await _dbContext.SaveChangesAsync();
+
+            if (discountPercentageChanged)
+            {
+                await _managementService.UpdatePerson(user, false);
+            }
         }
 
         public async Task Remove(int receiptId)

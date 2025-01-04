@@ -18,6 +18,7 @@ namespace DivvyUp_App.Components.Product
         private IPersonService PersonService { get; set; }
         [Inject]
         private IPersonProductService PersonProductService { get; set; }
+        [Inject] IReceiptService ReceiptService { get; set; }
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
@@ -33,6 +34,7 @@ namespace DivvyUp_App.Components.Product
         private RadzenDataGrid<ProductDto> Grid { get; set; }
         private IEnumerable<int> PageSizeOptions = new int[] { 5, 10, 25, 50, 100 };
         private PersonDto SelectedPerson { get; set; } = new();
+        private ReceiptDto Receipt { get; set; }
         private bool IsLoading => Products == null;
         private int MaxQuantityLimit => SelectedPersons.Count() > 0 ? SelectedPersons.Count() : 2;
 
@@ -40,6 +42,7 @@ namespace DivvyUp_App.Components.Product
 
         protected override async Task OnInitializedAsync()
         {
+            Receipt = await ReceiptService.GetReceipt(ReceiptId);
             await LoadGrid();
             Persons = await PersonService.GetPersons();
             if (Persons != null && Persons.Count > 0)
@@ -56,6 +59,7 @@ namespace DivvyUp_App.Components.Product
         {
             SelectedPersons = new List<PersonDto>();
             var product = new ProductDto();
+            product.DiscountPercentage = Receipt.DiscountPercentage;
             Products.Add(product);
             await Grid.InsertRow(product);
         }
@@ -80,7 +84,7 @@ namespace DivvyUp_App.Components.Product
         {
             try
             {
-                AddEditProductDto request = new(product.Name, product.Price, product.Divisible, product.MaxQuantity);
+                AddEditProductDto request = new(product.Name, product.Price, product.Divisible, product.MaxQuantity, product.AdditionalPrice, product.PurchasedQuantity, product.DiscountPercentage, product.TotalPrice);
 
                 if (product.isNew)
                 {
@@ -230,6 +234,11 @@ namespace DivvyUp_App.Components.Product
             {
                 await LoadGrid();
             }
+        }
+
+        private async Task OpenDetails(bool edit, ProductDto product)
+        {
+            await DDialogService.OpenProductDetailsDialog(edit, product);
         }
     }
 }

@@ -25,6 +25,9 @@ namespace DivvyUp_Shared.Models
         [Column("total_price")]
         public decimal TotalPrice { get; set; }
 
+        [Column("discount_percentage")]
+        public int DiscountPercentage { get; set; }
+
         [Column("is_settled")]
         public bool Settled { get; set; }
     }

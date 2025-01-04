@@ -48,6 +48,8 @@ namespace DivvyUp.Web.Services
                 throw new DException(HttpStatusCode.BadRequest, "Maksymalna liczba podzielności produktu musi być większa od 1 gdy produkt jest podzielny");
             }
 
+            var totalPrice = _managementService.CalculateTotalPrice(request.Price, request.PurchasedQuantity, request.AdditionalPrice, request.DiscountPercentage);
+
             var newProduct = new Product()
             {
                 Receipt = receipt,
@@ -56,8 +58,10 @@ namespace DivvyUp.Web.Services
                 Divisible = request.Divisible,
                 MaxQuantity = request.Divisible ? request.MaxQuantity : 1,
                 AvailableQuantity = request.Divisible ? request.MaxQuantity : 1,
-                CompensationPrice = request.Divisible ? request.Price : 0,
-                Settled = false,
+                CompensationPrice = request.Divisible ? totalPrice : 0,
+                PurchasedQuantity = request.PurchasedQuantity,
+                DiscountPercentage = request.DiscountPercentage,
+                TotalPrice = totalPrice
             };
 
             _dbContext.Products.Add(newProduct);
@@ -94,11 +98,17 @@ namespace DivvyUp.Web.Services
                 _dbContext.PersonProducts.RemoveRange(personProducts);
             }
 
+            var totalPrice = _managementService.CalculateTotalPrice(request.Price, request.PurchasedQuantity, request.AdditionalPrice, request.DiscountPercentage);
+
             product.Name = request.Name;
             product.Price = request.Price;
             product.Divisible = request.Divisible;
             product.MaxQuantity = request.Divisible ? request.MaxQuantity : 1;
-            product.CompensationPrice = request.Divisible ? request.Price : 0;
+            product.CompensationPrice = request.Divisible ? totalPrice : 0;
+            product.AdditionalPrice = request.AdditionalPrice;
+            product.PurchasedQuantity = request.PurchasedQuantity;
+            product.DiscountPercentage = request.DiscountPercentage;
+            product.TotalPrice = totalPrice;
 
             _dbContext.Products.Update(product);
             await _dbContext.SaveChangesAsync();
@@ -129,6 +139,7 @@ namespace DivvyUp.Web.Services
                 throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być większa od 1 gdy produkt jest podzielny");
             }
 
+            var totalPrice = _managementService.CalculateTotalPrice(request.Price, request.PurchasedQuantity, request.AdditionalPrice, request.DiscountPercentage);
             var newProduct = new Product()
             {
                 Receipt = receipt,
@@ -137,7 +148,11 @@ namespace DivvyUp.Web.Services
                 Divisible = request.Divisible,
                 MaxQuantity = request.Divisible ? request.MaxQuantity : 1,
                 AvailableQuantity = request.Divisible ? request.MaxQuantity : 1,
-                CompensationPrice = request.Divisible ? request.Price : 0,
+                CompensationPrice = request.Divisible ? totalPrice : 0,
+                AdditionalPrice = request.AdditionalPrice,
+                PurchasedQuantity = request.PurchasedQuantity,
+                DiscountPercentage = request.DiscountPercentage,
+                TotalPrice = totalPrice,
                 Settled = false,
             };
 
@@ -185,6 +200,7 @@ namespace DivvyUp.Web.Services
                 throw new DException(HttpStatusCode.BadRequest, "Maksymalna ilość musi być większa od 1 gdy produkt jest podzielny");
             }
 
+            var totalPrice = _managementService.CalculateTotalPrice(request.Price, request.PurchasedQuantity, request.AdditionalPrice, request.DiscountPercentage);
             var newProduct = new Product()
             {
                 Receipt = receipt,
@@ -193,7 +209,11 @@ namespace DivvyUp.Web.Services
                 Divisible = true,
                 MaxQuantity = request.MaxQuantity,
                 AvailableQuantity = request.MaxQuantity,
-                CompensationPrice = request.Price,
+                CompensationPrice = totalPrice,
+                AdditionalPrice = request.AdditionalPrice,
+                PurchasedQuantity = request.PurchasedQuantity,
+                DiscountPercentage = request.DiscountPercentage,
+                TotalPrice = totalPrice,
                 Settled = false,
             };
 
@@ -248,11 +268,16 @@ namespace DivvyUp.Web.Services
 
             bool previousDivisible = product.Divisible;
 
+            var totalPrice = _managementService.CalculateTotalPrice(request.Price, request.PurchasedQuantity, request.AdditionalPrice, request.DiscountPercentage);
             product.Name = request.Name;
             product.Price = request.Price;
             product.Divisible = request.Divisible;
             product.MaxQuantity = request.Divisible ? request.MaxQuantity : 1;
-            product.CompensationPrice = request.Divisible ? request.Price : 0;
+            product.CompensationPrice = request.Divisible ? totalPrice : 0;
+            product.AdditionalPrice = request.AdditionalPrice;
+            product.PurchasedQuantity = request.PurchasedQuantity;
+            product.DiscountPercentage = request.DiscountPercentage;
+            product.TotalPrice = totalPrice;
             _dbContext.Products.Update(product);
             await _dbContext.SaveChangesAsync();
 
@@ -264,7 +289,7 @@ namespace DivvyUp.Web.Services
                 {
                     PersonId = personId,
                     ProductId = product.Id,
-                    PartOfPrice = product.Price,
+                    PartOfPrice = product.TotalPrice,
                     Quantity = 1,
                     Compensation = true,
                     Settled = false,
@@ -392,5 +417,6 @@ namespace DivvyUp.Web.Services
             productDto.Persons = personProducts.Select(pp => _mapper.Map<PersonDto>(pp.Person)).ToList();
             return productDto;
         }
+
     }
 }

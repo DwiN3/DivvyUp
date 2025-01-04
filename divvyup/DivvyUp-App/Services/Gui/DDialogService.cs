@@ -2,6 +2,8 @@
 using DivvyUp_App.BaseComponents.DDialog.Loan;
 using DivvyUp_App.BaseComponents.DDialog.Person;
 using DivvyUp_App.BaseComponents.DDialog.PersonProduct;
+using DivvyUp_App.BaseComponents.DDialog.Product;
+using DivvyUp_App.BaseComponents.DDialog.Receipt;
 using DivvyUp_App.BaseComponents.DDialog.User;
 using DivvyUp_Shared.Dtos.Entity;
 using Radzen;
@@ -130,6 +132,48 @@ namespace DivvyUp_App.Services.Gui
             );
 
             return result as List<PersonDto>;
+        }
+
+        public async Task OpenReceiptDetailsDialog(bool edit,ReceiptDto receipt)
+        {
+            var result = await _dialogService.OpenAsync<DDialogReceiptDetailsCard>(
+                "Rabat do rachunku",
+                new Dictionary<string, object>
+                {
+                    { "Editable", edit },
+                    { "Receipt", receipt }
+                    
+                },
+                new DialogOptions
+                {
+                    Width = "40%",
+                    Height = "40%",
+                    CloseDialogOnEsc = false,
+                    CloseDialogOnOverlayClick = false,
+                    ShowClose = false,
+                }
+            );
+        }
+
+        public async Task OpenProductDetailsDialog(bool edit, ProductDto product)
+        {
+            var result = await _dialogService.OpenAsync<DDialogProductDetailsCard>(
+                "Detale produktu",
+                new Dictionary<string, object>
+                {
+                    { "Editable", edit },
+                    { "Product", product }
+
+                },
+                new DialogOptions
+                {
+                    Width = "60%",
+                    Height = "60%",
+                    CloseDialogOnEsc = false,
+                    CloseDialogOnOverlayClick = false,
+                    ShowClose = false,
+                }
+            );
         }
     }
 }

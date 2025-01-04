@@ -6,6 +6,7 @@
         public string Name { get; set; }
         public DateOnly Date { get; set; }
         public decimal TotalPrice { get; set; }
+        public int DiscountPercentage { get; set; }
         public bool Settled { get; set; }
 
         public ReceiptDto()
@@ -14,15 +15,17 @@
             Name = string.Empty;
             Date = DateOnly.FromDateTime(DateTime.Now);
             TotalPrice = 0;
+            DiscountPercentage = 0;
             Settled = false;
         }
 
-        public ReceiptDto(int id, string name, DateOnly date, decimal totalPrice, bool settled)
+        public ReceiptDto(int id, string name, DateOnly date, decimal totalPrice, bool settled, int discountPercentage)
         {
             Id = id;
             Name = name;
             Date = date;
             TotalPrice = totalPrice;
+            DiscountPercentage = discountPercentage;
             Settled = settled;
         }
     }

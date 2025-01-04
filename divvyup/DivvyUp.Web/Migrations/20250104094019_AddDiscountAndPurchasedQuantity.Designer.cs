@@ -3,6 +3,7 @@ using System;
 using DivvyUp.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DivvyUp.Web.Migrations
 {
     [DbContext(typeof(DivvyUpDBContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250104094019_AddDiscountAndPurchasedQuantity")]
+    partial class AddDiscountAndPurchasedQuantity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +183,7 @@ namespace DivvyUp.Web.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("compensation_price");
 
-                    b.Property<int>("DiscountPercentage")
+                    b.Property<int?>("DiscountPercentage")
                         .HasColumnType("integer")
                         .HasColumnName("discount_percentage");
 
@@ -236,10 +239,6 @@ namespace DivvyUp.Web.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date")
                         .HasColumnName("date");
-
-                    b.Property<int>("DiscountPercentage")
-                        .HasColumnType("integer")
-                        .HasColumnName("discount_percentage");
 
                     b.Property<string>("Name")
                         .IsRequired()

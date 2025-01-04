@@ -62,7 +62,7 @@
                 <RadzenCheckBox style="opacity: 0.6; " class="grid-button" Value="@receipt.Settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ReceiptDto.Name)" Title="Nazwa" Width="30%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.Name)" Title="Nazwa" Width="23%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="receipt">
                 <div style="@(receipt.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
                     @receipt.Name
@@ -82,14 +82,26 @@
                 <RadzenDatePicker @bind-Value="@receipt.Date" ShowCalendarWeek DateFormat="@Format.DateFormat" Style="width: 100%;" />
             </EditTemplate>
         </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(ReceiptDto.DiscountPercentage)" Title="Rabat" Width="8%" TextAlign="TextAlign.Start" Frozen="true">
+            <Template Context="receipt">
+                <div style="@(receipt.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
+                    @receipt.DiscountPercentage.ToString(Format.ProcFormat)
+                </div>
+            </Template>
+            <EditTemplate Context="receipt">
+                <RadzenNumeric @bind-Value="@receipt.DiscountPercentage" Min="0" Max="100" Format="@Format.ProcFormat" />
+            </EditTemplate>
+        </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.TotalPrice)" Title="Kwota" Width="20%" TextAlign="TextAlign.Start" Frozen="true">
-            <Template Context="receipt">                
+            <Template Context="receipt">               
                 <div style="@(receipt.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
                     <b>@receipt.TotalPrice.ToString(Format.PriceFormat)</b>
                 </div>
             </Template>
-            <EditTemplate>
-                -
+            <EditTemplate Context="receipt">
+                <div style="@(receipt.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
+                    <b>@receipt.TotalPrice.ToString(Format.PriceFormat)</b>
+                </div>
             </EditTemplate>
         </RadzenDataGridColumn>
     </Columns>

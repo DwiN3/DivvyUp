@@ -29,7 +29,7 @@
                 <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="calculate" Text="Ustaw wyrównanie odpowiedniej osobie" Click="@SetAutoCompensation" Visible="@NormalView" />
                 @if (NormalView)
                 {
-                    <div style="position: absolute; right: 10px;">
+                    <div style="position: absolute; right: 15px;">
                         @* Pozostałe części: <b> @Product?.AvailableQuantity </b> *@
                         Kwota wyrównania: <b> @Product?.CompensationPrice.ToString(Format.PriceFormat) </b>
                     </div>

@@ -13,7 +13,10 @@
         public int MaxQuantity { get; set; }
         public int AvailableQuantity { get; set; }
 
-        public decimal TotalPrice => Price + AdditionalPrice;
+        public int PurchasedQuantity { get; set; }
+        public int DiscountPercentage { get; set; }
+        public decimal TotalPrice { get; set; }
+
         public bool isNew => Id == 0;
 
         public List<PersonDto> Persons { get; set; }
@@ -30,9 +33,12 @@
             Settled = false;
             MaxQuantity = 1;
             AvailableQuantity = 1;
+            PurchasedQuantity = 1;
+            DiscountPercentage = 0;
+            TotalPrice = Price;
         }
 
-        public ProductDto(int id, int receiptId, string name, decimal price, decimal additionalPrice, decimal compensationPrice, bool divisible, bool settled, int maxQuantity, int availableQuantity)
+        public ProductDto(int id, int receiptId, string name, decimal price, decimal additionalPrice, decimal compensationPrice, bool divisible, bool settled, int maxQuantity, int availableQuantity, int purchasedQuantity, int discountPercentage, decimal totalPrice)
         {
             Id = id;
             ReceiptId = receiptId;
@@ -44,6 +50,9 @@
             Settled = settled;
             MaxQuantity = maxQuantity;
             AvailableQuantity = availableQuantity;
+            PurchasedQuantity = purchasedQuantity;
+            DiscountPercentage = discountPercentage;
+            TotalPrice = totalPrice;
         }
     }
 }

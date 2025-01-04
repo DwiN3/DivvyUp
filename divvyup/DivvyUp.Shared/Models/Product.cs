@@ -40,6 +40,15 @@ namespace DivvyUp_Shared.Models
         [Column("compensation_price")]
         public decimal CompensationPrice { get; set; }
 
+        [Column("discount_percentage")]
+        public int DiscountPercentage { get; set; }
+
+        [Column("purchased_quantity")]
+        public int PurchasedQuantity { get; set; }
+
+        [Column("total_price")]
+        public decimal TotalPrice { get; set; }
+
         [Column("is_settled")]
         public bool Settled { get; set; }
     }

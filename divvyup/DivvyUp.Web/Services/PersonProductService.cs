@@ -55,7 +55,7 @@ namespace DivvyUp.Web.Services
                 Product = product,
                 Quantity = request.Quantity,
                 Compensation = isPersonProductCompensation == null ? true : false,
-                PartOfPrice = await _managementService.CalculatePartOfPrice(request.Quantity,product.MaxQuantity, product.Price),
+                PartOfPrice = await _managementService.CalculatePartOfPrice(request.Quantity,product.MaxQuantity, product.TotalPrice),
                 Settled = false,
             };
             _dbContext.PersonProducts.Add(newPersonProduct);
@@ -78,7 +78,7 @@ namespace DivvyUp.Web.Services
 
             personProduct.Quantity = request.Quantity;
             personProduct.Person = person;
-            personProduct.PartOfPrice = await _managementService.CalculatePartOfPrice(request.Quantity, product.MaxQuantity, product.Price);
+            personProduct.PartOfPrice = await _managementService.CalculatePartOfPrice(request.Quantity, product.MaxQuantity, product.TotalPrice);
             _dbContext.PersonProducts.Update(personProduct);
 
             await _dbContext.SaveChangesAsync();

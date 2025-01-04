@@ -19,6 +19,9 @@ namespace DivvyUp.Web.Mappers
                 .ForMember(dest => dest.AvailableQuantity, opt => opt.MapFrom(src => src.AvailableQuantity))
                 .ForMember(dest => dest.CompensationPrice, opt => opt.MapFrom(src => src.CompensationPrice))
                 .ForMember(dest => dest.Settled, opt => opt.MapFrom(src => src.Settled))
+                .ForMember(dest => dest.DiscountPercentage, opt => opt.MapFrom(src => src.DiscountPercentage))
+                .ForMember(dest => dest.PurchasedQuantity, opt => opt.MapFrom(src => src.PurchasedQuantity))
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
                 .ForMember(dest => dest.Persons, opt => opt.Ignore())
                 ;
         }
