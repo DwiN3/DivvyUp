@@ -109,7 +109,16 @@ namespace DivvyUp.Web.EntityManager
 
                 if (updateBalance)
                 {
-                    person.LoanBalance = await CalculateBalance(person);
+                    if (person.UserAccount)
+                    {
+                        person.LoanBalance = await _dbContext.Loans
+                            .Where(l => !l.Settled)
+                            .SumAsync(l => !l.Lent ? l.Amount : - l.Amount);
+                    }
+                    else
+                    {
+                        person.LoanBalance = await CalculateBalance(person);
+                    }
                 }
             }
 

@@ -18,6 +18,8 @@ namespace DivvyUp_App.Components.Person
         private DNotificationService DNotificationService { get; set; }
         [Inject]
         private DDialogService DDialogService { get; set; }
+        [Inject]
+        private NavigationManager Navigation { get; set; }
 
         [Parameter] 
         public GridMode GridMode { get; set; } = GridMode.Normal;
@@ -112,10 +114,17 @@ namespace DivvyUp_App.Components.Person
             }
         }
 
-        private async Task ManageLoanPerson(int personId, string personName)
+        private async Task ManageLoanPerson(int personId, string personName, bool isUsername)
         {
-            await DDialogService.OpenLoanDialog(personId, personName);
-            await LoadGrid();
+            if (isUsername)
+            {
+                Navigation.NavigateTo("/loan");
+            }
+            else
+            {
+                await DDialogService.OpenLoanDialog(personId, personName);
+                await LoadGrid();
+            }
         }
 
         private async Task ManagePersonProduct(int personId)

@@ -61,12 +61,9 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonDto.LoanBalance)" Title="Bilans pożyczek" Width="10%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
             <Template Context="person">
-                @if (!person.UserAccount)
-                {
-                    <RadzenButton ButtonStyle="@(person.LoanBalance >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" style="width: 100%; text-align: left !important; text-transform: lowercase !important;" Click="async () => { await ManageLoanPerson(person.Id, person.FullName); }">
-                        @person.LoanBalance.ToString(Format.PriceFormat)
-                    </RadzenButton>
-                }
+                <RadzenButton ButtonStyle="@(person.LoanBalance >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" style="width: 100%; text-align: left !important; text-transform: lowercase !important;" Click="async () => { await ManageLoanPerson(person.Id, person.FullName, person.UserAccount); }">
+                    @person.LoanBalance.ToString(Format.PriceFormat)
+                </RadzenButton>
             </Template>
             <EditTemplate>
                 -
