@@ -7,7 +7,7 @@
         <div class="form-section">
             <div class="section">
                 <b class="name-section">Ilość sztuk</b>
-                <RadzenNumeric @bind-Value="@Product.PurchasedQuantity" Min="0" ReadOnly="@(!Editable)" Format="@Format.PurchasedQuantityFormat" />
+                <RadzenNumeric @bind-Value="@Product.PurchasedQuantity" Min="1" ReadOnly="@(!Editable)" Format="@Format.PurchasedQuantityFormat" />
             </div>
             <div class="section">
                 <b class="name-section">Dodatkowa opłata</b>
@@ -21,7 +21,7 @@
     </div>
 </div>
 <footer class="footer">
-    <RadzenButton Text="@(Editable ? "Zapisz" : "Zamnij")" ButtonStyle="@(Editable ? ButtonStyle.Success : ButtonStyle.Primary)" Click="@(() => DialogService.Close())" />
+    <RadzenButton Text="@(Editable ? "Zapisz" : "Zamknij")" ButtonStyle="@(Editable ? ButtonStyle.Success : ButtonStyle.Primary)" Click="@(() => DialogService.Close())" />
 </footer>
 
 @code {

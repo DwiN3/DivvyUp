@@ -25,7 +25,7 @@ namespace DivvyUp_App.Components.Register
         {
             try
             {
-                //await UserService.Register(RegisterData);
+                await UserService.Register(RegisterData);
                 DNotificationService.ShowNotification("Pomyślnie utworzono użytkownika", NotificationSeverity.Success);
                 Navigation.NavigateTo("/login");
             }
