@@ -44,5 +44,15 @@ namespace DivvyUp_App.Components.Login
             {
             }
         }
+
+        void OnSubmit(LoginUserDto model)
+        {
+            SignUp();
+        }
+
+        void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+        {
+
+        }
     }
 }

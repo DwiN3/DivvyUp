@@ -109,5 +109,80 @@ namespace DivvyUp.Web.Tests.IntegrationTests
             var responseContent = await addProductResponse.Content.ReadAsStringAsync();
             Assert.Contains("Maksymalna liczba podzielności produktu musi być równa 1 gdy produkt jest niepodzielny", responseContent);
         }
+
+        [Fact]
+        public async Task AddProduct_WithInvalidDiscountPercentage_ShouldReturnBadRequest()
+        {
+            // Arrange
+            var addProductRequest = new AddEditProductDto() { Name = "TestProduct", Price = 10, DiscountPercentage = 110};
+            var url = ApiRoute.PRODUCT_ROUTES.ADD
+                .Replace(ApiRoute.ARG_RECEIPT, _receiptTest.Id.ToString());
+            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put, addProductRequest);
+
+            // Act
+            var addProductResponse = await _client.SendAsync(requestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, addProductResponse.StatusCode);
+            var responseContent = await addProductResponse.Content.ReadAsStringAsync();
+            Assert.Contains("Wartość procentowa jest błędnie ustawiona", responseContent);
+        }
+
+        [Fact]
+        public async Task AddProduct_WithInvalidPurchasedQuantity_ShouldReturnBadRequest()
+        {
+            // Arrange
+            var addProductRequest = new AddEditProductDto() { Name = "TestProduct", Price = 10, PurchasedQuantity = -2 };
+            var url = ApiRoute.PRODUCT_ROUTES.ADD
+                .Replace(ApiRoute.ARG_RECEIPT, _receiptTest.Id.ToString());
+            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put, addProductRequest);
+
+            // Act
+            var addProductResponse = await _client.SendAsync(requestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, addProductResponse.StatusCode);
+            var responseContent = await addProductResponse.Content.ReadAsStringAsync();
+            Assert.Contains("Liczba sztuk produktu nie może być ujemna", responseContent);
+        }
+
+        [Fact]
+        public async Task AddProduct_CalculateTotalPrice_ShouldCalculateCorrectly()
+        {
+            // Arrange
+            var addProductRequest = new AddEditProductDto()
+            {
+                Name = "TestProduct", 
+                Price = 25,
+                PurchasedQuantity = 4, 
+                DiscountPercentage = 15,
+                AdditionalPrice = 2.50m
+            };
+            var url = ApiRoute.PRODUCT_ROUTES.ADD
+                .Replace(ApiRoute.ARG_RECEIPT, _receiptTest.Id.ToString());
+            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Put, addProductRequest);
+
+            // Act
+            var addProductResponse = await _client.SendAsync(requestMessage);
+
+            // Assert
+            addProductResponse.EnsureSuccessStatusCode();
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+                var product = dbContext.Products
+                    .Include(p => p.Receipt)
+                    .Where(p => p.Name.Equals(addProductRequest.Name))
+                    .FirstOrDefault();
+
+                Assert.NotNull(product);
+                Assert.Equal(addProductRequest.Name, product.Name);
+                Assert.Equal(addProductRequest.Price, product.Price);
+                Assert.Equal(addProductRequest.AdditionalPrice, product.AdditionalPrice);
+                Assert.Equal(addProductRequest.PurchasedQuantity, product.PurchasedQuantity);
+                Assert.Equal(addProductRequest.DiscountPercentage, product.DiscountPercentage);
+                Assert.Equal(87.50m , product.TotalPrice);
+            }
+        }
     }
 }

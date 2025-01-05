@@ -1,5 +1,6 @@
 ﻿using DivvyUp.Web.Validation;
 using DivvyUp_Shared.Exceptions;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace DivvyUp.Web.Tests.UnitTests
@@ -60,6 +61,23 @@ namespace DivvyUp.Web.Tests.UnitTests
             var exception = Assert.Throws<DException>(() => _validator.IsCorrectDataRange(dateFrom, dateTo));
             Assert.Equal(HttpStatusCode.BadRequest, exception.Status);
             Assert.Equal("Zakres dat jest źle ustawiony", exception.Message);
+        }
+
+        [Fact]
+        public void IsCorrectPercentageRange_WhenValueIsOutOfRange_ShouldThrowException()
+        {
+            // Arrange
+            var value = -5;
+
+            // Act
+            var exception = Assert.Throws<DException>(() =>
+            {
+                _validator.IsCorrectPercentageRange(value);
+            });
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, exception.Status);
+            Assert.Equal("Wartość procentowa jest błędnie ustawiona", exception.Message);
         }
     }
 }

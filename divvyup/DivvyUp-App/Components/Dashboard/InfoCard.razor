@@ -4,7 +4,7 @@
 
 <RadzenStack Style="color: white; overflow: auto; padding: 20px; height: 100%;">
     <h1 class="tile-title" style="margin-bottom: 20px;">
-        Witaj, <span style="font-weight: bold; color: #ffeb3b;">@PersonUser.Name</span>
+        Witaj, <span style="font-weight: bold; color: #ffeb3b;">@User.Username</span>
     </h1>
     <div style="display: flex; flex-direction: column; gap: 15px;">
         <div class="info-row">
@@ -34,13 +34,17 @@
     [Inject] 
     private IPersonService PersonService { get; set; } = null!;
 
+    [Inject] private IUserService UserService { get; set; } = null!;
+
     [Parameter]
     public EventCallback OnLoadComplete { get; set; }
 
     private PersonDto PersonUser { get; set; } = new();
+    private UserDto User { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
+        User = await UserService.GetUser();
         PersonUser = await PersonService.GetUserPerson();
         await OnLoadComplete.InvokeAsync();
     }

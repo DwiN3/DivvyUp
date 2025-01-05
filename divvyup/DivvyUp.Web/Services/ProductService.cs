@@ -33,9 +33,12 @@ namespace DivvyUp.Web.Services
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
             _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
+            _validator.IsMinusValue(request.AdditionalPrice, "Dodatkowa opłata nie może być ujemna");
+            _validator.IsMinusValue(request.PurchasedQuantity, "Liczba sztuk produktu nie może być ujemna");
             _validator.IsNull(request.MaxQuantity, "Maksymalna liczba części jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+            _validator.IsCorrectPercentageRange(request.DiscountPercentage);
             var user = await _managementService.GetUser();
             var receipt = await _managementService.GetReceipt(user, receiptId);
 
@@ -59,6 +62,7 @@ namespace DivvyUp.Web.Services
                 MaxQuantity = request.Divisible ? request.MaxQuantity : 1,
                 AvailableQuantity = request.Divisible ? request.MaxQuantity : 1,
                 CompensationPrice = request.Divisible ? totalPrice : 0,
+                AdditionalPrice = request.AdditionalPrice,
                 PurchasedQuantity = request.PurchasedQuantity,
                 DiscountPercentage = request.DiscountPercentage,
                 TotalPrice = totalPrice
@@ -75,9 +79,12 @@ namespace DivvyUp.Web.Services
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
             _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
+            _validator.IsMinusValue(request.AdditionalPrice, "Dodatkowa opłata nie może być ujemna");
+            _validator.IsMinusValue(request.PurchasedQuantity, "Liczba sztuk produktu nie może być ujemna");
             _validator.IsNull(request.MaxQuantity, "Maksymalna liczba części jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(productId, "Brak identyfikatora produktu");
+            _validator.IsCorrectPercentageRange(request.DiscountPercentage);
             var user = await _managementService.GetUser();
             var product = await _managementService.GetProduct(user, productId);
 
@@ -124,9 +131,12 @@ namespace DivvyUp.Web.Services
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
             _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
+            _validator.IsMinusValue(request.AdditionalPrice, "Dodatkowa opłata nie może być ujemna");
+            _validator.IsMinusValue(request.PurchasedQuantity, "Liczba sztuk produktu nie może być ujemna");
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+            _validator.IsCorrectPercentageRange(request.DiscountPercentage);
             var user = await _managementService.GetUser();
             var receipt = await _managementService.GetReceipt(user, receiptId);
 
@@ -184,10 +194,13 @@ namespace DivvyUp.Web.Services
             _validator.IsNull(request, "Nie przekazano danych");
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
+            _validator.IsMinusValue(request.AdditionalPrice, "Dodatkowa opłata nie może być ujemna");
+            _validator.IsMinusValue(request.PurchasedQuantity, "Liczba sztuk produktu nie może być ujemna");
             _validator.IsNull(request.Price, "Cena jest wymagana");
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(receiptId, "Brak identyfikatora rachunku");
+            _validator.IsCorrectPercentageRange(request.DiscountPercentage);
             var user = await _managementService.GetUser();
             var receipt = await _managementService.GetReceipt(user, receiptId);
 
@@ -251,9 +264,12 @@ namespace DivvyUp.Web.Services
             _validator.IsEmpty(request.Name, "Nazwa produktu jest wymagana");
             _validator.IsNull(request.Price, "Cena jest wymagana");
             _validator.IsMinusValue(request.Price, "Cena nie może być ujemna");
+            _validator.IsMinusValue(request.AdditionalPrice, "Dodatkowa opłata nie może być ujemna");
+            _validator.IsMinusValue(request.PurchasedQuantity, "Liczba sztuk produktu nie może być ujemna");
             _validator.IsNull(request.MaxQuantity, "Maksymalna ilość jest wymagana");
             _validator.IsNull(request.Divisible, "Informacja o podzielności jest wymagana");
             _validator.IsNull(productId, "Brak identyfikatora produktu");
+            _validator.IsCorrectPercentageRange(request.DiscountPercentage);
             var user = await _managementService.GetUser();
             var product = await _managementService.GetProduct(user, productId);
 

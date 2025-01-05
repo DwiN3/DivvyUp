@@ -157,21 +157,6 @@ namespace DivvyUp.Web.Tests.UnitTests
         }
 
         [Fact]
-        public async Task CalculatePartOfPrice_ShouldReturnCorrectResult()
-        {
-            // Arrange
-            int quantity = 2;
-            int maxQuantity = 10;
-            decimal price = 100m;
-
-            // Act
-            var result = await _service.CalculatePartOfPrice(quantity, maxQuantity, price);
-
-            // Assert
-            Assert.Equal(20.00m, result);
-        }
-
-        [Fact]
         public async Task UpdatePartPricesPersonProduct_ShouldUpdatePersonProductPrices_WhenValidProductIsPassed()
         {
             // Arrange
@@ -246,6 +231,93 @@ namespace DivvyUp.Web.Tests.UnitTests
             var compensationPrice = product.Price - personProduct.PartOfPrice;
             Assert.Equal(availableQuantity, updatedProduct.AvailableQuantity);
             Assert.Equal(compensationPrice, updatedProduct.CompensationPrice);
+        }
+
+        [Fact]
+        public async Task CalculatePartOfPrice_ShouldReturnCorrectResult()
+        {
+            // Arrange
+            int quantity = 2;
+            int maxQuantity = 10;
+            decimal price = 100m;
+
+            // Act
+            var result = await _service.CalculatePartOfPrice(quantity, maxQuantity, price);
+
+            // Assert
+            Assert.Equal(20.00m, result);
+        }
+
+        [Fact]
+        public async Task CalculateTotalPrice_AddAditionalPrice_ShouldCalculateCorrectly()
+        {
+            // Arrange
+            decimal price = 100.00m;
+            int purchasedQuantity = 1;
+            decimal additionalPrice = 25.00m;
+            int discountPercentage = 0;
+            
+
+            // Act
+            var result = _service.CalculateTotalPrice(price, purchasedQuantity, additionalPrice, discountPercentage);
+
+            // Assert
+            Assert.Equal(125.00m, result);
+        }
+
+        [Fact]
+        public async Task CalculateTotalPrice_ChangePurchasedQuantity_ShouldCalculateCorrectly()
+        {
+            // Arrange
+            decimal price = 70.50m;
+            int purchasedQuantity = 3;
+            decimal additionalPrice = 0.00m;
+            int discountPercentage = 0;
+
+
+            // Act
+            var result = _service.CalculateTotalPrice(price, purchasedQuantity, additionalPrice, discountPercentage);
+
+            // Assert
+            Assert.Equal(211.50m, result);
+        }
+
+        [Fact]
+        public async Task CalculateTotalPrice_ChangeDiscountPercentage_ShouldCalculateCorrectly()
+        {
+            // Arrange
+            decimal price = 80.00m;
+            int purchasedQuantity = 1;
+            decimal additionalPrice = 0.00m;
+            int discountPercentage = 10;
+
+
+            // Act
+            var result = _service.CalculateTotalPrice(price, purchasedQuantity, additionalPrice, discountPercentage);
+
+            // Assert
+            Assert.Equal(72.00m, result);
+        }
+
+        [Fact]
+        public async Task CalculateTotalPrice_ShouldCalculateCorrectly()
+        {
+            // Arrange
+            decimal price = 100.00m;
+            int purchasedQuantity = 2;
+            decimal additionalPrice = 2.50m;
+            int discountPercentage = 25;
+
+
+            // Act
+            decimal basePrice = price * purchasedQuantity;
+            decimal discount = basePrice * discountPercentage / 100;
+            decimal priceAfterDiscount = basePrice - discount;
+            decimal expectedTotalPrice = priceAfterDiscount + additionalPrice;
+            var result = _service.CalculateTotalPrice(price, purchasedQuantity, additionalPrice, discountPercentage);
+
+            // Assert
+            Assert.Equal(expectedTotalPrice, result);
         }
     }
 }

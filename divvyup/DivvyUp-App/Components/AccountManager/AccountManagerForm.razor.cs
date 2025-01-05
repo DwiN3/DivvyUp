@@ -96,5 +96,15 @@ namespace DivvyUp_App.Components.AccountManager
             {
             }
         }
+
+        void OnSubmit(EditUserDto model)
+        {
+            SaveChanges();
+        }
+
+        void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+        {
+
+        }
     }
 }

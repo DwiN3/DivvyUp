@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using DivvyUp_Shared.Exceptions;
 using DivvyUp_Shared.Interfaces;
+using System.Text.Json;
 
 namespace DivvyUp_App.Components.Register
 {
@@ -22,30 +23,48 @@ namespace DivvyUp_App.Components.Register
 
         private async Task CreateAccount()
         {
-            if (RegisterData.Password.Equals(RePassword))
+            try
             {
-                try
-                {
-                    await UserService.Register(RegisterData);
-                    DNotificationService.ShowNotification("Pomyślnie utworzono użytkownika", NotificationSeverity.Success);
-                    Navigation.NavigateTo("/login");
-                }
-                catch (DException ex)
-                {
-                    DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
-                }
-                catch (TimeoutException)
-                {
-                    DNotificationService.ShowNotification("Błąd połączenia z serwerem", NotificationSeverity.Warning);
-                }
-                catch (Exception)
-                {
-                }
+                //await UserService.Register(RegisterData);
+                DNotificationService.ShowNotification("Pomyślnie utworzono użytkownika", NotificationSeverity.Success);
+                Navigation.NavigateTo("/login");
             }
-            else
+            catch (DException ex)
             {
-                DNotificationService.ShowNotification("Hasła są różne", NotificationSeverity.Error);
+                DNotificationService.ShowNotification(ex.Message, NotificationSeverity.Error);
             }
+            catch (TimeoutException)
+            {
+                DNotificationService.ShowNotification("Błąd połączenia z serwerem", NotificationSeverity.Warning);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        void OnSubmit(RegisterUserDto model)
+        {
+            CreateAccount();
+        }
+
+        void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+        {
+            
+        }
+
+        bool ValidateOneUpperLetter(string password)
+        {
+            return password.Any(char.IsUpper);
+        }
+        bool ValidateOneSpecialCharacter(string password)
+        {
+            const string specialCharacters = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
+            return password.Any(ch => specialCharacters.Contains(ch));
+        }
+        bool ValidateOneNumber(string password)
+        {
+            const string numbers = "0123456789";
+            return password.Any(ch => numbers.Contains(ch));
         }
     }
 }

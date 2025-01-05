@@ -1,15 +1,22 @@
-﻿<div style="height: 100%; display: flex; justify-content: center; align-items: center; background-color: #f0f0f5;">
-    <div style="width: 100%; max-width: 400px; padding: 20px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+﻿@using DivvyUp_Shared.Dtos.Request
+<div style="height: 100%; display: flex; justify-content: center; align-items: center; background-color: #f0f0f5;">
+    <RadzenTemplateForm TItem="LoginUserDto" Data=@LoginData Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit style="width: 100%; max-width: 400px; padding: 20px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
         <h2 style="text-align: center; font-size: 2.5rem; color: #686868; margin-bottom: 30px; font-weight: bold;">Zaloguj się</h2>
-        <RadzenFormField class="input" Text="Nazwa użytkownika">
-            <RadzenTextBox @bind-Value="@LoginData.Username" Style="border-radius: 8px; padding: 12px; width: 100%; box-sizing: border-box;" />
-        </RadzenFormField>
-        <RadzenFormField class="input" Text="Hasło">
-            <RadzenPassword @bind-Value="@LoginData.Password" Style="border-radius: 8px; padding: 12px; width: 100%; box-sizing: border-box;" />
-        </RadzenFormField>
-        <RadzenButton Style="width: 100%; background-color: #6a11cb; color: white; border-radius: 8px; margin-top: 20px;" Text="Zaloguj się" Click="@SignUp" />
+        <RadzenStack class="input">
+            <RadzenFormField Text="Nazwa użytkownika">
+                <RadzenTextBox @bind-Value="@LoginData.Username" class="form-input" Name="Username" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Username" Text="Nazwa jest wymagane" Style="margin-top: -10px; background: white;" Popup="false" />
+        </RadzenStack>
+        <RadzenStack class="input">
+            <RadzenFormField Text="Hasło">
+                <RadzenPassword @bind-Value="@LoginData.Password" class="form-input" Name="Password" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Password" Text="Hasło jest wymagane" Style="margin-top: -10px; background: white;" Popup="false" />
+        </RadzenStack>
+        <RadzenButton Style="width: 100%; background-color: #6a11cb; color: white; border-radius: 8px; margin-top: 20px;" Text="Zaloguj się" ButtonType="ButtonType.Submit" />
         <RadzenButton Style="width: 100%; background-color: #2575fc; color: white; border-radius: 8px; margin-top: 20px;" Text="Zarejestruj się" Click="@(() => Navigation.NavigateTo("/register"))" />
-    </div>
+    </RadzenTemplateForm>
 </div>
 
 <style>

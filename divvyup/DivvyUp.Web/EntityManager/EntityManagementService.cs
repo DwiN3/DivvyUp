@@ -113,7 +113,7 @@ namespace DivvyUp.Web.EntityManager
                     {
                         person.LoanBalance = await _dbContext.Loans
                             .Where(l => !l.Settled)
-                            .SumAsync(l => !l.Lent ? l.Amount : - l.Amount);
+                            .SumAsync(l => !l.Lent ? - l.Amount : l.Amount);
                     }
                     else
                     {
@@ -266,14 +266,14 @@ namespace DivvyUp.Web.EntityManager
             return Task.FromResult(roundedResult);
         }
 
-        public decimal CalculateTotalPrice(decimal price, int purchasedQuantity, decimal additionalPrice, decimal? discountPercentage)
+        public decimal CalculateTotalPrice(decimal price, int purchasedQuantity, decimal additionalPrice, decimal discountPercentage)
         {
             var basePrice = price * purchasedQuantity;
 
             decimal discountAmount = 0;
             if (discountPercentage != 0)
             {
-                discountAmount = basePrice * (discountPercentage.Value / 100);
+                discountAmount = basePrice * (discountPercentage / 100);
             }
 
             var totalPrice = (basePrice - discountAmount) + additionalPrice;

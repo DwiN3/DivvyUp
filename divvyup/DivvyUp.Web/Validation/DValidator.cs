@@ -37,5 +37,13 @@ namespace DivvyUp.Web.Validation
                 throw new DException(HttpStatusCode.BadRequest, "Zakres dat jest źle ustawiony");
             }
         }
+
+        public void IsCorrectPercentageRange(int percentageValue)
+        {
+            if (percentageValue < 0 || percentageValue > 100)
+            {
+                throw new DException(HttpStatusCode.BadRequest, "Wartość procentowa jest błędnie ustawiona");
+            }
+        }
     }
 }

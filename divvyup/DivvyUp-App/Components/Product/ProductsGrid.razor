@@ -72,7 +72,7 @@
                 <RadzenTextBox @bind-value="@product.Name" Style="width: 100%;"/>
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.Price)" Title="Kwota" Width="10%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.Price)" Title="Cena produktu" Width="10%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="product">
                 <div style="@(product.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
                     @product.Price.ToString(Format.PriceFormat)
@@ -82,7 +82,7 @@
                 <RadzenNumeric @bind-Value="@product.Price" Style="width: 100%;" Format="@Format.PriceFormat" Min="0" />
             </EditTemplate>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(ProductDto.TotalPrice)" Title="Kwota Łączna" Width="10%" TextAlign="TextAlign.Start" Frozen="true">
+        <RadzenDataGridColumn Property="@nameof(ProductDto.TotalPrice)" Title="Cena końcowa" Width="10%" TextAlign="TextAlign.Start" Frozen="true">
             <Template Context="product">
                 <RadzenButton Click="@(async () => await OpenDetails(false, product))" Style="width: 100%; text-align: left !important; text-transform: lowercase !important;">
                     <div style="@(product.Settled ? Format.IsSettledStyle : Format.IsNotSettledStyle)">
