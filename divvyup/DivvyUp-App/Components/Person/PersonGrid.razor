@@ -76,7 +76,7 @@
             <Template Context="person">
                 <b style="color: @(person.UnpaidAmount > 0 ? "red" : "green")"> @person.UnpaidAmount.ToString(Format.PriceFormat)</b>
                 @*
-                    <RadzenButton ButtonStyle="@(person.UnpaidAmount >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" Click="async () => { await ManagePersonProduct(person.Id); }">
+                    <RadzenButton ButtonStyle="@(person.UnpaidAmount >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" Click="async () => { await ManagePersonProduct(person.Id, person.Name); }">
                        @person.UnpaidAmount.ToString(Format.PriceFormat)
                     </RadzenButton>
                 *@

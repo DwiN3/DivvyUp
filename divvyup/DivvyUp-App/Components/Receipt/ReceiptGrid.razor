@@ -56,10 +56,10 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.Settled)" Title="Rozliczono" Width="10%" TextAlign="TextAlign.Center" Frozen="true">
             <Template Context="receipt">
-                <RadzenCheckBox class="grid-button" @bind-Value="@receipt.Settled" Change="@(async (bool Check) => await ChangeSettled(receipt.Id, receipt.Settled))" />
+                <RadzenCheckBox class="grid-button settled-active" @bind-Value="@receipt.Settled" Change="@(async (bool Check) => await ChangeSettled(receipt.Id, receipt.Settled))" />
             </Template>
             <EditTemplate Context="receipt">
-                <RadzenCheckBox style="opacity: 0.6; " class="grid-button" Value="@receipt.Settled" ReadOnly="true" />
+                <RadzenCheckBox style="opacity: 0.6; " class="grid-button settled-active" Value="@receipt.Settled" ReadOnly="true" />
             </EditTemplate>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(ReceiptDto.Name)" Title="Nazwa" Width="23%" TextAlign="TextAlign.Start" Frozen="true">

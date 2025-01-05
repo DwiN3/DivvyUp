@@ -18,10 +18,10 @@ namespace DivvyUp_App
             builder.Services.RegisterHttpClient();
             builder.Services.RegisterAppServices();
 
-#if DEBUG
+            #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();
-#endif
+            #endif
 
             return builder.Build();
         }

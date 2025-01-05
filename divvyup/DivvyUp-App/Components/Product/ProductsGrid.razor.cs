@@ -106,7 +106,7 @@ namespace DivvyUp_App.Components.Product
                         var currentEntries = productBeforeEdit.MaxQuantity - productBeforeEdit.AvailableQuantity;
                         if (productBeforeEdit.MaxQuantity > product.MaxQuantity && currentEntries > product.MaxQuantity)
                         {
-                            var personProductIds = await DDialogService.OpenProductPersonSelectDialog(product.Id, product.MaxQuantity);
+                            var personProductIds = await DDialogService.OpenProductPersonSelectDialog(product.Id, product.MaxQuantity, product.Name);
 
                             if (personProductIds != null)
                             {
@@ -192,15 +192,15 @@ namespace DivvyUp_App.Components.Product
             }
         }
 
-        private async Task ManagePerson(int productId)
+        private async Task ManagePerson(int productId, string productName)
         {
-            await DDialogService.OpenProductPersonDialog(productId);
+            await DDialogService.OpenProductPersonDialog(productId, productName);
             await LoadGrid();
         }
 
         private async Task SelectPersons(ProductDto product)
         {
-            SelectedPersons = await DDialogService.OpenPersonSelectDialog(product.MaxQuantity, SelectedPersons);
+            SelectedPersons = await DDialogService.OpenPersonSelectDialog(product.MaxQuantity, SelectedPersons, product.Name);
             if (SelectedPersons.Count() > 0)
             {
                 if (SelectedPersons.Count() > product.MaxQuantity)

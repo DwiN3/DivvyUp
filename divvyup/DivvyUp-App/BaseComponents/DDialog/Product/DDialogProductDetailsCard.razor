@@ -7,15 +7,15 @@
         <div class="form-section">
             <div class="section">
                 <b class="name-section">Ilość sztuk</b>
-                <RadzenNumeric @bind-Value="@Product.PurchasedQuantity" Min="1" ReadOnly="@(!Editable)" Format="@Format.PurchasedQuantityFormat" />
+                <RadzenNumeric @bind-Value="@Product.PurchasedQuantity" Min="1" ReadOnly="@(!Editable)" Format="@Format.PurchasedQuantityFormat"/>
             </div>
             <div class="section">
                 <b class="name-section">Dodatkowa opłata</b>
-                <RadzenNumeric @bind-Value="@Product.AdditionalPrice" Min="0" ReadOnly="@(!Editable)" Format="@Format.PriceFormat" />
+                <RadzenNumeric @bind-Value="@Product.AdditionalPrice" Min="0" ReadOnly="@(!Editable)" Format="@Format.PriceFormat"/>
             </div>
             <div class="section">
                 <b class="name-section">Wartość rabatu</b>
-                <RadzenNumeric @bind-Value="@Product.DiscountPercentage" Min="0" Max="100" Name="Rabat" ReadOnly="@(!Editable)" Format="@Format.ProcFormat" />
+                <RadzenNumeric @bind-Value="@Product.DiscountPercentage" Min="0" Max="100" Name="Rabat" ReadOnly="@(!Editable)" Format="@Format.ProcFormat"/>
             </div>
         </div>
     </div>

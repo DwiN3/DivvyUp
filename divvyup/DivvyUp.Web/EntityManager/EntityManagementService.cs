@@ -276,7 +276,7 @@ namespace DivvyUp.Web.EntityManager
                 discountAmount = basePrice * (discountPercentage / 100);
             }
 
-            var totalPrice = (basePrice - discountAmount) + additionalPrice;
+            var totalPrice = Math.Round((basePrice - discountAmount) + additionalPrice, 2);
             return totalPrice;
         }
 

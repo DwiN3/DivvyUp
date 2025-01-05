@@ -51,10 +51,10 @@ namespace DivvyUp_App.Services.Gui
             );
         }
 
-        public async Task OpenProductPersonDialog(int productId)
+        public async Task OpenProductPersonDialog(int productId, string productName)
         {
             var result = await _dialogService.OpenAsync<DDialogPersonProductCard>(
-                "Przydział osób do produktu",
+                $"Przydział osób do produktu: {productName}",
                 new Dictionary<string, object> { { "ProductId", productId } },
                 new DialogOptions()
                 {
@@ -77,10 +77,10 @@ namespace DivvyUp_App.Services.Gui
             );
         }
 
-        public async Task<List<int>> OpenProductPersonSelectDialog(int productId, int maxQuantity)
+        public async Task<List<int>> OpenProductPersonSelectDialog(int productId, int maxQuantity, string productName)
         {
             var result = await _dialogService.OpenAsync<DDialogPersonProductSelectCard>(
-                "Wybierz osoby, które zostaną przypisane do produktu",
+                $"Wybierz osoby, które zostaną przypisane do produktu: {productName}",
                 new Dictionary<string, object>
                 {
                     { "ProductId", productId },
@@ -99,10 +99,10 @@ namespace DivvyUp_App.Services.Gui
             return result as List<int>;
         }
 
-        public async Task OpenPersonProductDialog(int personId)
+        public async Task OpenPersonProductDialog(int personId, string personName)
         {
             var result = await _dialogService.OpenAsync<DDialogPersonProductFromPersonCard>(
-                "Przypisania osoby do produktów",
+                $"Przypisanie produkty dla osoby: {personName}",
                 new Dictionary<string, object> { { "PersonId", personId } },
                 new DialogOptions()
                 {
@@ -112,10 +112,10 @@ namespace DivvyUp_App.Services.Gui
             );
         }
 
-        public async Task<List<PersonDto>> OpenPersonSelectDialog(int maxQuantity, List<PersonDto> SelectedPersons)
+        public async Task<List<PersonDto>> OpenPersonSelectDialog(int maxQuantity, List<PersonDto> SelectedPersons, string productName)
         {
             var result = await _dialogService.OpenAsync<DDialogPersonSelectCard>(
-                "Wybierz osoby które zostaną wpisane do tego produktu",
+                $"Osoby przypisane do produktu: {productName}",
                 new Dictionary<string, object>
                 {
                     { "MaxQuantity", maxQuantity },
@@ -134,10 +134,10 @@ namespace DivvyUp_App.Services.Gui
             return result as List<PersonDto>;
         }
 
-        public async Task OpenReceiptDetailsDialog(bool edit,ReceiptDto receipt)
+        public async Task OpenReceiptDetailsDialog(bool edit, ReceiptDto receipt)
         {
             await _dialogService.OpenAsync<DDialogReceiptDetailsCard>(
-                "Rabat do rachunku",
+                $"Rabat do rachunku: {receipt.Name}",
                 new Dictionary<string, object>
                 {
                     { "Editable", edit },
@@ -158,7 +158,7 @@ namespace DivvyUp_App.Services.Gui
         public async Task OpenProductDetailsDialog(bool edit, ProductDto product)
         {
            await _dialogService.OpenAsync<DDialogProductDetailsCard>(
-                "Szczegóły produktu",
+               $"Szczegóły produktu: {product.Name}",
                 new Dictionary<string, object>
                 {
                     { "Editable", edit },

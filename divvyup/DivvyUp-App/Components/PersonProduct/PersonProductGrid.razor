@@ -63,10 +63,10 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.Settled)" Title="Rozliczono" Width="15%" TextAlign="TextAlign.Center" Frozen="true" Visible="@NormalView">
                 <Template Context="personProduct">
-                    <RadzenCheckBox class="grid-button" @bind-Value="@personProduct.Settled" Change="@(async (bool check) => await ChangeSettled(personProduct.Id, personProduct.Settled))" Disabled="@(!NormalView)" />
+                    <RadzenCheckBox class="grid-button settled-active" @bind-Value="@personProduct.Settled" Change="@(async (bool check) => await ChangeSettled(personProduct.Id, personProduct.Settled))" Disabled="@(!NormalView)" />
                 </Template>
                 <EditTemplate Context="personProduct">
-                    <RadzenCheckBox style="opacity: 0.6; " class="grid-button" Value="@personProduct.Settled" ReadOnly="true" />
+                    <RadzenCheckBox style="opacity: 0.6; " class="grid-button settled-active" Value="@personProduct.Settled" ReadOnly="true" />
                 </EditTemplate>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="@nameof(PersonProductDto.Compensation)" Title="Wyrównanie" Width="15%" TextAlign="TextAlign.Center" Frozen="true" Visible="@NormalView">

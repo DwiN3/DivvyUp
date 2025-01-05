@@ -127,9 +127,9 @@ namespace DivvyUp_App.Components.Person
             }
         }
 
-        private async Task ManagePersonProduct(int personId)
+        private async Task ManagePersonProduct(int personId, string personName)
         {
-            await DDialogService.OpenPersonProductDialog(personId);
+            await DDialogService.OpenPersonProductDialog(personId, personName);
             await LoadGrid();
         }
 
