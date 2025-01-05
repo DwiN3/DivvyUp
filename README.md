@@ -5,34 +5,40 @@ Aplikacja została stworzona w frameworku Blazor w .NET 8, wykorzystując kompon
 
 ## Ekrany aplikacji:
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/acabbcfb-80e1-4efe-8f32-1daa8d3d9e9c" width="100%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/bc377c19-7b83-4dd6-b096-f890cfc1a595" width="100%" height="auto"/>
 </div>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/3f9c25e8-c8fc-47e5-8ec6-cb0fbad6c4d4" width="100%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/ee052f4b-5ae4-4646-94c9-dcde7d4edfdd" width="100%" height="auto"/>
 </div>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/dfe30227-ab54-40cb-b5eb-17514f69e3fb" width="100%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/ffa35f7b-5812-4bb4-bc45-e0bc5d39c4e2" width="100%" height="auto"/>
 </div>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/497125c7-65b4-40d2-9271-a95ea9ee9f4a" width="100%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/19f8429c-23e5-4e90-8bcb-3523a5ccf7ff" width="100%" height="auto"/>
 </div>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/1a508a30-1bd5-4945-99f3-6c65b6860b32" width="100%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/c6f300f1-ab9b-408f-a31d-d4fb089d9624" width="100%" height="auto"/>
 </div>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/5f99101e-6c86-4a21-b32f-63bbab0059ab" width="100%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/79b72355-cbe4-4cbf-b651-9728afc8a922" width="100%" height="auto"/>
 </div>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/28baf118-86e1-49d9-9f26-be3153de52f9" width="100%" height="auto"/>
+  <img src="https://github.com/user-attachments/assets/c52dd637-f025-4a98-b43a-5d0fa284abb7" width="100%" height="auto"/>
+</div>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/0ca90185-abba-4867-8b40-3f188c5b719c" width="100%" height="auto"/>
+</div>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/7a11b1f7-3db1-4dc0-aff3-d3b919022800" width="100%" height="auto"/>
 </div>
 <br>
 
 ## Struktura projektu
 
-- [DivvyUp-App](https://github.com/DwiN3/DivvyUp/tree/develop/divvyup/DivvyUp-App) – Główna aplikacja desktopowa.
-- [DivvyUp.Shared](https://github.com/DwiN3/DivvyUp/tree/develop/divvyup/DivvyUp.Shared) – Wspólna logika i modele danych.
-- [DivvyUp.Web.Tests](https://github.com/DwiN3/DivvyUp/tree/develop/divvyup/DivvyUp.Web.Tests) – Testy jednostkowe i integracyjne.
-- [DivvyUp.Web](https://github.com/DwiN3/DivvyUp/tree/develop/divvyup/DivvyUp.Web) – Web API aplikacji.
+- [DivvyUp-App](https://github.com/DwiN3/DivvyUp/tree/main/divvyup/DivvyUp-App) – Główna aplikacja desktopowa.
+- [DivvyUp.Shared](https://github.com/DwiN3/DivvyUp/tree/main/divvyup/DivvyUp.Shared) – Wspólna logika i modele danych.
+- [DivvyUp.Web](https://github.com/DwiN3/DivvyUp/tree/main/divvyup/DivvyUp.Web) – Web API aplikacji.
+- [DivvyUp.Web.Tests](https://github.com/DwiN3/DivvyUp/tree/main/divvyup/DivvyUp.Web.Tests) – Testy jednostkowe i integracyjne.
 <br>
 
 ## Autor:
