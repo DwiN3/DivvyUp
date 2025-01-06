@@ -17,6 +17,7 @@ namespace DivvyUp.Web.Mappers
                 .ForMember(dest => dest.Compensation, opt => opt.MapFrom(src => src.Compensation))
                 .ForMember(dest => dest.Settled, opt => opt.MapFrom(src => src.Settled))
                 .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.Person))
+                .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
                 ;
         }
     }

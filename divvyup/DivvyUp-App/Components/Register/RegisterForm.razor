@@ -1,19 +1,19 @@
 ﻿@using DivvyUp_Shared.Dtos.Request
-<div style="height: 100%; display: flex; justify-content: center; align-items: center; background-color: #f0f0f5;">
-    <RadzenTemplateForm TItem="RegisterUserDto" Data=@RegisterData Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit style="width: 100%; max-width: 400px; padding: 20px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-        <h2 style="text-align: center; font-size: 2.5rem; color: #686868; margin-bottom: 30px; font-weight: bold;">Zarejestruj się</h2>
+<div class="main-container">
+    <RadzenTemplateForm TItem="RegisterUserDto" Data="@RegisterData" Submit="@OnSubmit" InvalidSubmit="@OnInvalidSubmit" class="form-container">
+        <h2 class="custom-header">Zarejestruj się</h2>
         <RadzenStack class="input">
             <RadzenFormField Text="Nazwa użytkownika">
                 <RadzenTextBox @bind-Value="@RegisterData.Username" class="form-input" Name="Username" />
             </RadzenFormField>
-            <RadzenRequiredValidator Component="Username" Text="Nazwa jest wymagany" Style="margin-top: -10px; background: white;" Popup="false" />
-            <RadzenLengthValidator Component="Username" Min="5" Max="20" Text="Nazwa musi się składać z 8 - 15 liter " Style="margin-top: -10px; background: white;" Popup="false" />
+            <RadzenRequiredValidator Component="Username" Text="Nazwa jest wymagany" Popup="false" class="custom-validator" />
+            <RadzenLengthValidator Component="Username" Min="5" Max="20" Text="Nazwa musi się składać z 8 - 15 liter" Popup="false" class="custom-validator" />
         </RadzenStack>
         <RadzenStack class="input">
             <RadzenFormField Text="Imię">
                 <RadzenTextBox @bind-Value="@RegisterData.Name" class="form-input" Name="Name" />
             </RadzenFormField>
-            <RadzenRequiredValidator Component="Name" Text="Imię jest wymagany" Style="margin-top: -10px; background: white;" Popup="false" />
+            <RadzenRequiredValidator Component="Name" Text="Imię jest wymagany" Popup="false" class="custom-validator" />
         </RadzenStack>
         <RadzenFormField class="input" Text="Nazwisko">
             <RadzenTextBox @bind-Value="@RegisterData.Surname" class="form-input"/>
@@ -22,27 +22,27 @@
             <RadzenFormField Text="Email">
                 <RadzenTextBox @bind-Value="@RegisterData.Email" class="form-input" Name="Email" />
             </RadzenFormField>
-            <RadzenRequiredValidator Component="Email" Text="Email jest wymagany" Style="margin-top: -10px; background: white;" Popup="false" />
-            <RadzenEmailValidator Component="Email" Text="Email jest nie poprawny" Style="margin-top: -10px; background: white;" Popup="false" />
+            <RadzenRequiredValidator Component="Email" Text="Email jest wymagany" Popup="false" class="custom-validator" />
+            <RadzenEmailValidator Component="Email" Text="Email jest nie poprawny" Popup="false" class="custom-validator" />
         </RadzenStack>
         <RadzenStack class="input">
             <RadzenFormField Text="Hasło">
                 <RadzenPassword @bind-Value="@RegisterData.Password" class="form-input" Name="Password"/>
             </RadzenFormField>
-            <RadzenLengthValidator Component="Password" Min="8" Max="16" Text="Hasło musi się składać z 8 - 15 liter " Style="margin-top: -10px; background: white;" Popup="false" />
-            <RadzenCustomValidator Component="Password" Validator="@(() => ValidateOneUpperLetter(RegisterData.Password))" Text="Hasło musi zawierać jedną dużą literę" Style=" margin-top: -10px; background: white;" Popup="false" />
-            <RadzenCustomValidator Component="Password" Validator="@(() => ValidateOneSpecialCharacter(RegisterData.Password))" Text="Hasło musi zawierać jeden znak specjalny" Style="margin-top: -10px; background: white;" Popup="false" />
-            <RadzenCustomValidator Component="Password" Validator="@(() => ValidateOneNumber(RegisterData.Password))" Text="Hasło musi zawierać jedną liczbę" Style="margin-top: -10px; background: white;" Popup="false" />
+            <RadzenLengthValidator Component="Password" Min="8" Max="16" Text="Hasło musi się składać z 8 - 15 liter " Popup="false" class="custom-validator" />
+            <RadzenCustomValidator Component="Password" Validator="@(() => ValidateOneUpperLetter(RegisterData.Password))" Text="Hasło musi zawierać jedną dużą literę" Popup="false" class="custom-validator" />
+            <RadzenCustomValidator Component="Password" Validator="@(() => ValidateOneSpecialCharacter(RegisterData.Password))" Text="Hasło musi zawierać jeden znak specjalny" Popup="false" class="custom-validator" />
+            <RadzenCustomValidator Component="Password" Validator="@(() => ValidateOneNumber(RegisterData.Password))" Text="Hasło musi zawierać jedną liczbę" Popup="false" class="custom-validator" />
         </RadzenStack>
         <RadzenStack class="input">
             <RadzenFormField Text="Powtórz Hasło">
                 <RadzenPassword @bind-Value="@RePassword" class="form-input" Name="RePassword" />
             </RadzenFormField>
-            <RadzenRequiredValidator Component="RePassword" Text="Potwierdź hasło" Popup="false" Style="margin-top: -10px; background: white;" />
-            <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(RePassword)) Value=@RegisterData.Password Component="RePassword" Text="Hasła się różnią" Style="margin-top: -10px; background: white;" Popup="false" />
+            <RadzenRequiredValidator Component="RePassword" Text="Potwierdź hasło" Popup="false" class="custom-validator" />
+            <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(RePassword)) Value=@RegisterData.Password Component="RePassword" Text="Hasła się różnią" Popup="false" class="custom-validator" />
         </RadzenStack>
-        <RadzenButton Style="width: 100%; background-color: #6a11cb; color: white; border-radius: 8px; margin-top: 20px;" Text="Stwórz konto" ButtonType="ButtonType.Submit" />
-        <RadzenButton Style="width: 100%; background-color: #2575fc; color: white; border-radius: 8px; margin-top: 20px;" Text="Wróć do logowania" Click="@(() => Navigation.NavigateTo("/login"))"/>
+        <RadzenButton class="custom-button" Style="background-color: #6a11cb; margin-top: 20px;" Text="Stwórz konto" ButtonType="ButtonType.Submit" />
+        <RadzenButton class="custom-button" Style="background-color: #2575fc; margin-top: 10px;" Text="Wróć do logowania" Click="@(() => Navigation.NavigateTo("/login"))" />
     </RadzenTemplateForm>
 </div>
 
@@ -78,10 +78,50 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    .form-input{
+    .form-input {
         border-radius: 8px;
         padding: 12px;
         width: 100%;
         box-sizing: border-box;
+    }
+
+    .custom-validator {
+        margin-top: -12px;
+        display: inline-block;
+        color: var(--rz-form-error-color);
+        font-size: var(--rz-form-error-font-size);
+        padding: var(--rz-validator-text-padding);
+    }
+
+    .main-container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f0f5;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-header {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #686868;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    .custom-button {
+        width: 100%;
+        background-color: #2575fc;
+        color: white;
+        border-radius: 8px;
     }
 </style>

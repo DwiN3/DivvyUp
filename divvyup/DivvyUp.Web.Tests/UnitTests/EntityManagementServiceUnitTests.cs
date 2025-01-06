@@ -303,21 +303,17 @@ namespace DivvyUp.Web.Tests.UnitTests
         public async Task CalculateTotalPrice_ShouldCalculateCorrectly()
         {
             // Arrange
-            decimal price = 100.00m;
+            decimal price = 10.00m;
             int purchasedQuantity = 2;
-            decimal additionalPrice = 2.50m;
-            int discountPercentage = 25;
+            decimal additionalPrice = 0.50m;
+            int discountPercentage = 10;
 
 
             // Act
-            decimal basePrice = price * purchasedQuantity;
-            decimal discount = basePrice * discountPercentage / 100;
-            decimal priceAfterDiscount = basePrice - discount;
-            decimal expectedTotalPrice = priceAfterDiscount + additionalPrice;
             var result = _service.CalculateTotalPrice(price, purchasedQuantity, additionalPrice, discountPercentage);
 
             // Assert
-            Assert.Equal(expectedTotalPrice, result);
+            Assert.Equal(18.50m, result);
         }
     }
 }
