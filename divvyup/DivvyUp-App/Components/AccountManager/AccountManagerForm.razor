@@ -8,15 +8,15 @@
                     <b class="name-section">Nazwa</b>
                     <RadzenTextBox class="section-input" @bind-Value="@EditData.Username" Style="padding: 12px;" Name="Username"/>
                 </div>
-                <RadzenRequiredValidator Component="Username" Text="Nazwa jest wymagana" Style="margin-top: -10px; background: white;" Popup="false" />
-                    <RadzenLengthValidator Component="Username" Min="4" Max="20" Text="Nazwa musi się składać z 4 - 20 liter " Style="margin-top: -10px; background: white;" Popup="false" />
+                    <RadzenRequiredValidator Component="Username" Text="Nazwa jest wymagana" class="custom-validator" Popup="false" />
+                    <RadzenLengthValidator Component="Username" Min="4" Max="20" Text="Nazwa musi się składać z 4 - 20 liter " class="custom-validator" Popup="false" />
             </RadzenStack>
             <RadzenStack>
                 <div class="section">
                     <b class="name-section">Imię</b>
                     <RadzenTextBox class="section-input" @bind-Value="@EditData.Name" Style="padding: 12px;" Name="Name"/>
                 </div>
-                <RadzenRequiredValidator Component="Name" Text="Imię jest wymagana" Style="margin-top: -10px; background: white;" Popup="false" />
+                    <RadzenRequiredValidator Component="Name" Text="Imię jest wymagana" class="custom-validator" Popup="false" />
             </RadzenStack>
             <div class="section">
                 <b class="name-section">Nazwisko</b>
@@ -27,15 +27,15 @@
                     <b class="name-section">Email</b>
                     <RadzenTextBox class="section-input" @bind-Value="@EditData.Email" Style="padding: 12px;" Name="Email"/>
                 </div>
-                <RadzenRequiredValidator Component="Email" Text="Email jest wymagana" Style="margin-top: -10px; background: white;" Popup="false" />
-                <RadzenEmailValidator Component="Email" Text="Email jest nie poprawny" Style="margin-top: -10px; background: white;" Popup="false" />
+                    <RadzenRequiredValidator Component="Email" Text="Email jest wymagana" class="custom-validator" Popup="false" />
+                    <RadzenEmailValidator Component="Email" Text="Email jest nie poprawny" class="custom-validator" Popup="false" />
             </RadzenStack>
             <div class="button-section" style="justify-content: center;">
-                <RadzenButton class="du-button" Style="margin-top: 20px; width: 100%; background-color: #4caf50; color: white; border-radius: 8px;" Text="Zapisz" ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" />
+                <RadzenButton class="du-button" Style="width: 100%; background-color: #4caf50;" Text="Zapisz" ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" />
             </div>
             <div class="button-section">
-                <RadzenButton class="du-button" Style="margin-top: 20px; width: 48%; background-color: #6a11cb; color: white; border-radius: 8px;" Text="Zmień hasło" ButtonStyle="ButtonStyle.Light" Click="ChangePassword"/>
-                <RadzenButton class="du-button" Style="margin-top: 20px; width: 48%; background-color: #d32f2f; color: white; border-radius: 8px;" Text="Usuń konto" ButtonStyle="ButtonStyle.Danger" Click="RemoveUser"/>
+                <RadzenButton class="du-button" Style="color: white; width: 48%; background-color: #6a11cb;" Text="Zmień hasło" ButtonStyle="ButtonStyle.Light" Click="ChangePassword"/>
+                <RadzenButton class="du-button" Style="width: 48%; background-color: #d32f2f;" Text="Usuń konto" ButtonStyle="ButtonStyle.Danger" Click="RemoveUser"/>
             </div>
             </RadzenTemplateForm>
         </RadzenFieldset>
@@ -71,6 +71,12 @@
         font-size: 1rem;
     }
 
+    .du-button {
+        margin-top: 20px;
+        color: white;
+        border-radius: 8px;
+    }
+
     .button-section {
         display: flex;
         justify-content: space-between;
@@ -93,4 +99,5 @@
         border-color: #6a11cb;
         background-color: #ffffff;
     }
+
 </style>

@@ -1,6 +1,6 @@
 ﻿using DivvyUp.Web.Validation;
 using DivvyUp_Shared.Exceptions;
-using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json.Linq;
 using System.Net;
 
 namespace DivvyUp.Web.Tests.UnitTests
@@ -20,8 +20,13 @@ namespace DivvyUp.Web.Tests.UnitTests
             // Arrange
             object obj = null;
 
+            // Act
+            var exception = Assert.Throws<DException>(() =>
+            {
+                _validator.IsNull(obj, "Object is null");
+            });
+
             // Act && Assert
-            var exception = Assert.Throws<DException>(() => _validator.IsNull(obj, "Object is null"));
             Assert.Equal(HttpStatusCode.BadRequest, exception.Status);
             Assert.Equal("Object is null", exception.Message);
         }
@@ -32,8 +37,13 @@ namespace DivvyUp.Web.Tests.UnitTests
             // Arrange
             var str = string.Empty;
 
-            // Act && Assert
-            var exception = Assert.Throws<DException>(() => _validator.IsEmpty(str, "String is empty"));
+            // Act
+            var exception = Assert.Throws<DException>(() =>
+            {
+                _validator.IsEmpty(str, "String is empty");
+            });
+
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, exception.Status);
             Assert.Equal("String is empty", exception.Message);
         }
@@ -44,8 +54,13 @@ namespace DivvyUp.Web.Tests.UnitTests
             // Arrange
             var value = -10.00m;
 
-            // Act && Assert
-            var exception = Assert.Throws<DException>(() => _validator.IsMinusValue(value, "Value is minus"));
+            // Act
+            var exception = Assert.Throws<DException>(() =>
+            {
+                _validator.IsMinusValue(value, "Value is minus");
+            });
+
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, exception.Status);
             Assert.Equal("Value is minus", exception.Message);
         }
@@ -57,8 +72,13 @@ namespace DivvyUp.Web.Tests.UnitTests
             DateOnly dateFrom = new DateOnly(2024, 12, 24);
             DateOnly dateTo = new DateOnly(2024, 12, 7);
 
-            // Act && Assert
-            var exception = Assert.Throws<DException>(() => _validator.IsCorrectDataRange(dateFrom, dateTo));
+            // Act
+            var exception = Assert.Throws<DException>(() =>
+            {
+                _validator.IsCorrectDataRange(dateFrom, dateTo);
+            });
+
+            //Assert
             Assert.Equal(HttpStatusCode.BadRequest, exception.Status);
             Assert.Equal("Zakres dat jest źle ustawiony", exception.Message);
         }

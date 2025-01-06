@@ -15,6 +15,8 @@ namespace DivvyUp_App.Components.PersonProduct
         private IPersonProductService PersonProductService { get; set; }
         [Inject]
         private DNotificationService DNotificationService { get; set; }
+        [Inject]
+        private DDialogService DDialogService { get; set; }
 
         [Parameter]
         public int PersonId { get; set; }
@@ -76,6 +78,12 @@ namespace DivvyUp_App.Components.PersonProduct
             catch (Exception)
             {
             }
+        }
+
+        private async Task OpenPersonProductList(int productId, string productName)
+        {
+            await DDialogService.OpenProductPersonDialog(productId, productName);
+            await LoadGrid();
         }
     }
 }

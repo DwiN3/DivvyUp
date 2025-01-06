@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using DivvyUp_Shared.Models;
+using DivvyUp_Shared.Dtos.Request;
 
 namespace DivvyUp.Web.Tests.IntegrationTests
 {
@@ -135,6 +136,42 @@ namespace DivvyUp.Web.Tests.IntegrationTests
 
                 Assert.Null(receipt);
                 Assert.Null(product);
+            }
+        }
+
+        [Fact]
+        public async Task EditReceipt_ChangeDiscountPercentage_WithValid_ShouldSucceed()
+        {
+            // Arrange
+            var editReceipt = new AddEditReceiptDto()
+            {
+                Name = "TestReceipt",
+                DiscountPercentage = 15
+            };
+            var url = ApiRoute.RECEIPT_ROUTES.EDIT
+                .Replace(ApiRoute.ARG_RECEIPT, _receiptTest.Id.ToString());
+            var requestMessage = _testHelper.CreateRequestWithToken(url, _userToken, HttpMethod.Patch, editReceipt);
+
+            // Act
+            var editResponse = await _client.SendAsync(requestMessage);
+
+            // Assert
+            editResponse.EnsureSuccessStatusCode();
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<DivvyUpDBContext>();
+                var receipt = dbContext.Receipts
+                    .Where(p => p.Id == _receiptTest.Id)
+                    .FirstOrDefault();
+
+                var product = dbContext.Products
+                    .Where(p => p.Id == _productTest.Id)
+                    .FirstOrDefault();
+
+                Assert.NotNull(receipt);
+                Assert.NotNull(product);
+                Assert.Equal(editReceipt.DiscountPercentage, receipt.DiscountPercentage);
+                Assert.Equal(editReceipt.DiscountPercentage, product.DiscountPercentage);
             }
         }
     }

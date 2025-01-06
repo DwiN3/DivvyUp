@@ -74,12 +74,9 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(PersonDto.UnpaidAmount)" Title="Kwota aktualna" Width="10%" TextAlign="TextAlign.Start" Frozen="true" Visible="@NormalView">
             <Template Context="person">
-                <b style="color: @(person.UnpaidAmount > 0 ? "red" : "green")"> @person.UnpaidAmount.ToString(Format.PriceFormat)</b>
-                @*
-                    <RadzenButton ButtonStyle="@(person.UnpaidAmount >= 0 ? ButtonStyle.Success : ButtonStyle.Danger)" Click="async () => { await ManagePersonProduct(person.Id, person.Name); }">
-                       @person.UnpaidAmount.ToString(Format.PriceFormat)
-                    </RadzenButton>
-                *@
+                <RadzenButton ButtonStyle="@(person.UnpaidAmount == 0 ? ButtonStyle.Success : ButtonStyle.Danger)" style="width: 100%; text-align: left !important; text-transform: lowercase !important;" Click="async () => { await ManagePersonProduct(person.Id, person.Name); }">
+                   @person.UnpaidAmount.ToString(Format.PriceFormat)
+                </RadzenButton>
             </Template>
             <EditTemplate>
                 -
