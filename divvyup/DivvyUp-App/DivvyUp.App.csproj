@@ -28,7 +28,7 @@
         <ApplicationId>com.dwin.divvyupapp</ApplicationId>
 
         <!-- Versions -->
-        <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+        <ApplicationDisplayVersion>1</ApplicationDisplayVersion>
         <ApplicationVersion>1</ApplicationVersion>
         <WindowsPackageType>None</WindowsPackageType>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
