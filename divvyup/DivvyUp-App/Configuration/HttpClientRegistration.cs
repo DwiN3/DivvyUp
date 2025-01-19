@@ -10,7 +10,7 @@ namespace DivvyUp_App.Configuration
             {
                 var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
                 var httpClient = httpClientFactory.CreateClient();
-                httpClient.BaseAddress = new Uri("http://localhost:5000");
+                httpClient.BaseAddress = new Uri("http://localhost:5185");
                 return new DHttpClient(httpClient);
             });
             services.AddHttpClient();
