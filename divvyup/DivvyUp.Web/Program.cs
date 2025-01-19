@@ -9,11 +9,14 @@ namespace DivvyUp.Web
     {
         public static void Main(string[] args)
         {
+            var builder = WebApplication.CreateBuilder(args);
+            // Do wygenerowania pliku exe
+            /*
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-            {
-                // Do wygenerowania pliku exe
-                //EnvironmentName = "Development" 
-            });
+               {
+                  EnvironmentName = "Development" 
+               });
+            */
             builder.Services.AddServices();
             builder.Services.AddMapper();
             builder.Services.AddSwaggerGenConfiguration();
