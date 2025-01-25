@@ -1,5 +1,6 @@
 ﻿using DivvyUp.Web.Data;
 using DivvyUp_Shared.Exceptions;
+using DivvyUp_Shared.Interfaces;
 using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -8,10 +9,10 @@ namespace DivvyUp.Web.EntityManager
 {
     public class EntityManagementService
     {
-        private readonly DivvyUpDBContext _dbContext;
+        private readonly IDivvyUpDBContext _dbContext;
         private readonly UserContext _userContext;
 
-        public EntityManagementService(DivvyUpDBContext dbContext, UserContext userContext)
+        public EntityManagementService(IDivvyUpDBContext dbContext, UserContext userContext)
         {
             _dbContext = dbContext;
             _userContext = userContext;

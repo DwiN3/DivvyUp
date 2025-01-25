@@ -18,13 +18,13 @@ namespace DivvyUp.Web.Services
 {
     public class UserService : IUserService
     {
-        private readonly DivvyUpDBContext _dbContext;
+        private readonly IDivvyUpDBContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly EntityManagementService _managementService;
         private readonly DValidator _validator;
         private readonly IMapper _mapper;
 
-        public UserService(DivvyUpDBContext dbContext, IConfiguration configuration, EntityManagementService managementService, DValidator validator, IMapper mapper)
+        public UserService(IDivvyUpDBContext dbContext, IConfiguration configuration, EntityManagementService managementService, DValidator validator, IMapper mapper)
         {
             _dbContext = dbContext;
             _configuration = configuration;

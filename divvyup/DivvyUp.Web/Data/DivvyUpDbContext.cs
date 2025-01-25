@@ -1,9 +1,10 @@
-﻿using DivvyUp_Shared.Models;
+﻿using DivvyUp_Shared.Interfaces;
+using DivvyUp_Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DivvyUp.Web.Data
 {
-    public class DivvyUpDBContext : DbContext
+    public class DivvyUpDBContext : DbContext, IDivvyUpDBContext
     {
         public DivvyUpDBContext(DbContextOptions<DivvyUpDBContext> options) : base(options)
         {
