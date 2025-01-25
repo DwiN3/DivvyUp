@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Security.Claims;
 using DivvyUp_Shared.Exceptions;
+using DivvyUp_Shared.Interfaces;
 using DivvyUp_Shared.Models;
 
 namespace DivvyUp.Web.Data
@@ -8,9 +9,9 @@ namespace DivvyUp.Web.Data
     public class UserContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly DivvyUpDBContext _dbContext;
+        private readonly IDivvyUpDBContext _dbContext;
 
-        public UserContext(IHttpContextAccessor httpContextAccessor, DivvyUpDBContext dbContext)
+        public UserContext(IHttpContextAccessor httpContextAccessor, IDivvyUpDBContext dbContext)
         {
             _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;

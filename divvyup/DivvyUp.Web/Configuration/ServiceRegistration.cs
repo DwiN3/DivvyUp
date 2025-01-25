@@ -16,6 +16,7 @@ namespace DivvyUp.Web.Configuration
             services.AddScoped<UserContext>();
             services.AddScoped<DValidator>();
             services.AddScoped<EntityManagementService>();
+            services.AddScoped<IDivvyUpDBContext, DivvyUpDBContext>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IReceiptService, ReceiptService>();

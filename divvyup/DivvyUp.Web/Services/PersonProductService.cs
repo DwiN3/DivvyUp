@@ -14,12 +14,12 @@ namespace DivvyUp.Web.Services
 {
     public class PersonProductService : IPersonProductService
     {
-        private readonly DivvyUpDBContext _dbContext;
+        private readonly IDivvyUpDBContext _dbContext;
         private readonly EntityManagementService _managementService;
         private readonly DValidator _validator;
         private readonly IMapper _mapper;
 
-        public PersonProductService(DivvyUpDBContext dbContext, EntityManagementService managementService, DValidator validator, IMapper mapper)
+        public PersonProductService(IDivvyUpDBContext dbContext, EntityManagementService managementService, DValidator validator, IMapper mapper)
         {
             _dbContext = dbContext;
             _managementService = managementService;

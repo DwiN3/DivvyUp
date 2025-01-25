@@ -14,12 +14,12 @@ namespace DivvyUp.Web.Services
 {
     public class ReceiptService : IReceiptService
     {
-        private readonly DivvyUpDBContext _dbContext;
+        private readonly IDivvyUpDBContext _dbContext;
         private readonly EntityManagementService _managementService;
         private readonly DValidator _validator;
         private readonly IMapper _mapper;
 
-        public ReceiptService(DivvyUpDBContext dbContext, EntityManagementService managementService, DValidator validator, IMapper mapper)
+        public ReceiptService(IDivvyUpDBContext dbContext, EntityManagementService managementService, DValidator validator, IMapper mapper)
         {
             _dbContext = dbContext;
             _managementService = managementService;
@@ -74,7 +74,7 @@ namespace DivvyUp.Web.Services
                     product.TotalPrice = totalPrice;
                 }
 
-                _dbContext.UpdateRange(products);
+                _dbContext.Products.UpdateRange(products);
                 await _dbContext.SaveChangesAsync();
 
                 await _managementService.UpdatePartPricesPersonProduct(products);

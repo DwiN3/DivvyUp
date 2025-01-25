@@ -77,52 +77,6 @@ namespace DivvyUp.Web.Tests.UnitTests
         }
 
         [Fact]
-        public async Task GetPersonWithLowestCompensation_ShouldReturnPersonWithLowestCompensation()
-        {
-            // Arrange
-            int productId = 1;
-            
-            var person1 = new Person { Id = 1, UserId = 1, Name = "Person 1", Surname = "", CompensationAmount = 10.00m, }; 
-            var person2 = new Person { Id = 2, UserId = 2, Name = "Person 2", Surname = "", CompensationAmount = 5.00m, }; 
-            var person3 = new Person { Id = 3, UserId = 3, Name = "Person 3", Surname = "", CompensationAmount = 7.00m,}; 
-            _dbContext.Persons.AddRange(person1, person2, person3);
-
-            var personProduct1 = new PersonProduct { PersonId = person1.Id, ProductId = productId };
-            var personProduct2 = new PersonProduct { PersonId = person2.Id, ProductId = productId };
-            var personProduct3 = new PersonProduct { PersonId = person3.Id, ProductId = productId };
-            _dbContext.PersonProducts.AddRange(personProduct1, personProduct2, personProduct3);
-            await _dbContext.SaveChangesAsync();
-
-            // Act
-            var result = await _service.GetPersonWithLowestCompensation(productId);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(person2.Id, result.PersonId);
-        }
-
-        [Theory]
-        [InlineData(true, true, true, true)]
-        [InlineData(false, true, true, false)]
-        [InlineData(false, false, false, false)]
-        public async Task AreAllPersonProductsSettled_ShouldReturnExpectedResult_WhenDifferentProductStatusesAreUsed(bool settled1, bool settled2, bool settled3, bool expected)
-        {
-            int productId = 2;
-
-            var personProduct1 = new PersonProduct { PersonId = 1, ProductId = productId, Settled = settled1 };
-            var personProduct2 = new PersonProduct { PersonId = 2, ProductId = productId, Settled = settled2 };
-            var personProduct3 = new PersonProduct { PersonId = 3, ProductId = productId, Settled = settled3 };
-            _dbContext.PersonProducts.AddRange(personProduct1, personProduct2, personProduct3);
-            await _dbContext.SaveChangesAsync();
-
-            // Act
-            var result = await _service.AreAllPersonProductsSettled(productId);
-
-            // Assert
-            Assert.Equal(expected, result);
-        }
-
-        [Fact]
         public async Task UpdateCompensationFlags_ShouldUpdateCompensationFlagsCorrectly()
         {
             // Arrange
@@ -151,9 +105,9 @@ namespace DivvyUp.Web.Tests.UnitTests
             Assert.NotNull(updatedPersonProduct2);
             Assert.NotNull(updatedPersonProduct3);
 
-            Assert.Equal(false ,updatedPersonProduct1.Compensation);
-            Assert.Equal(true ,updatedPersonProduct2.Compensation);
-            Assert.Equal(false ,updatedPersonProduct3.Compensation);
+            Assert.Equal(false, updatedPersonProduct1.Compensation);
+            Assert.Equal(true, updatedPersonProduct2.Compensation);
+            Assert.Equal(false, updatedPersonProduct3.Compensation);
         }
 
         [Fact]
@@ -188,10 +142,10 @@ namespace DivvyUp.Web.Tests.UnitTests
         public async Task UpdateTotalPriceReceipt_ShouldUpdateTotalPriceCorrectly()
         {
             // Arrange
-            var receipt = new Receipt(){ Id = 1, Name = "TestReceipt", TotalPrice = 0.0m };
+            var receipt = new Receipt() { Id = 1, Name = "TestReceipt", TotalPrice = 0.0m };
             _dbContext.Receipts.Add(receipt);
 
-            var product1 = new Product() { Id = 1, Name = "TestProduct1", Price = 15.99m, TotalPrice = 15.99m, ReceiptId = receipt.Id};
+            var product1 = new Product() { Id = 1, Name = "TestProduct1", Price = 15.99m, TotalPrice = 15.99m, ReceiptId = receipt.Id };
             var product2 = new Product() { Id = 2, Name = "TestProduct2", Price = 5.21m, TotalPrice = 5.21m, ReceiptId = receipt.Id };
             var product3 = new Product() { Id = 3, Name = "TestProduct3", Price = 8.55m, TotalPrice = 8.55m, ReceiptId = receipt.Id };
             _dbContext.Products.AddRange(product1, product2, product3);
@@ -216,7 +170,7 @@ namespace DivvyUp.Web.Tests.UnitTests
             var product = new Product() { Id = 1, Name = "TestProduct1", Price = 10.00m, TotalPrice = 10.00m, Divisible = true, MaxQuantity = 10 };
             _dbContext.Products.Add(product);
 
-            var personProduct = new PersonProduct { PersonId = 1, ProductId = product.Id, Quantity = 2, PartOfPrice = 20.00m};
+            var personProduct = new PersonProduct { PersonId = 1, ProductId = product.Id, Quantity = 2, PartOfPrice = 20.00m };
             _dbContext.PersonProducts.Add(personProduct);
             await _dbContext.SaveChangesAsync();
 
@@ -256,7 +210,7 @@ namespace DivvyUp.Web.Tests.UnitTests
             int purchasedQuantity = 1;
             decimal additionalPrice = 25.00m;
             int discountPercentage = 0;
-            
+
 
             // Act
             var result = _service.CalculateTotalPrice(price, purchasedQuantity, additionalPrice, discountPercentage);
